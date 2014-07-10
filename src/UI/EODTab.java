@@ -28,6 +28,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class EODTab extends javax.swing.JFrame {
 
+    RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    IngredientDAOInterface inImp = new IngredientDAOImplementation();
+    RawDAOInterface rwImp = new RawDAOImplementation();
+
     /**
      * Creates new form EODTab
      */
@@ -311,9 +315,7 @@ public class EODTab extends javax.swing.JFrame {
      */
     /* Prepare Table */
     private void prepareTable() {
-        RecipeDAOInterface rcImp = new RecipeDAOImplementation();
-        IngredientDAOInterface inImp = new IngredientDAOImplementation();
-        RawDAOInterface rmImp = new RawDAOImplementation();
+
         ArrayList<RecipeBean> avRecipes = new ArrayList<RecipeBean>();
         ArrayList<RawBean> avRaw = new ArrayList<RawBean>();
         int i, j;
@@ -326,8 +328,8 @@ public class EODTab extends javax.swing.JFrame {
         for (i = 0; i < avRecipes.size(); i++) {
             RecipeBean rc = avRecipes.get(i);
             ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
-            ingredients = inImp.getAllIngredients(rc);
-            rc.setIngredients(ingredients);
+            ingredients = rc.getIngredients();
+
             Object[] rec = {"<html><p style = 'color:red'><b>" + rc.getRecipe() + "</b></p></html>", "<html><p style = 'color:red'><b>" + String.format("%.2f", rc.computeStock()) + "</b></p></html>"};
             recipeModel.addRow(rec);
 
@@ -342,10 +344,9 @@ public class EODTab extends javax.swing.JFrame {
         recipeTable.setModel(recipeModel);
 
         // raw material stock
-        
         DefaultTableModel rawModel = new DefaultTableModel(cols, 0);
         DefaultTableModel notificationModel = new DefaultTableModel(cols, 0);
-        avRaw = rmImp.getRawByStatus("available");
+        avRaw = rwImp.getRawByStatus("available");
 
         for (i = 0; i < avRaw.size(); i++) {
             RawBean rm = avRaw.get(i);
@@ -368,7 +369,6 @@ public class EODTab extends javax.swing.JFrame {
         System.out.println(recipeTable.getRowSelectionAllowed());
     }
 
-    
     /**
      * < -- JANERYS FUNCTIONS END -- > *
      */
