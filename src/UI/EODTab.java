@@ -30,7 +30,7 @@ public class EODTab extends javax.swing.JFrame {
 
     RecipeDAOInterface rcImp = new RecipeDAOImplementation();
     IngredientDAOInterface inImp = new IngredientDAOImplementation();
-    RawDAOInterface rmImp = new RawDAOImplementation();
+    RawDAOInterface rwImp = new RawDAOImplementation();
 
     /**
      * Creates new form EODTab
