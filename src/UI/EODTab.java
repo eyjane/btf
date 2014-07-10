@@ -346,7 +346,7 @@ public class EODTab extends javax.swing.JFrame {
         // raw material stock
         DefaultTableModel rawModel = new DefaultTableModel(cols, 0);
         DefaultTableModel notificationModel = new DefaultTableModel(cols, 0);
-        avRaw = rmImp.getRawByStatus("available");
+        avRaw = rwImp.getRawByStatus("available");
 
         for (i = 0; i < avRaw.size(); i++) {
             RawBean rm = avRaw.get(i);
