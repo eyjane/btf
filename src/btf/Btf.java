@@ -12,6 +12,9 @@ import DAO.Implementation.IngredientDAOImplementation;
 import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Interface.IngredientDAOInterface;
 import DAO.Interface.RecipeDAOInterface;
+import UI.CreatePassword;
+import UI.Login;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -86,8 +89,17 @@ public class Btf {
        System.out.println("ACTUAL PRICE: " + gRC.getActualPrice());
        System.out.println("STOCK: " + gRC.computeStock());
        
-       
-
+       //<--- CLARK'S CODE STARTS HERE --->
+       //check if there's already a password
+       File f = new File("btf.xml");
+       if(f.exists()){
+            System.out.println("File existed");
+            new Login().setVisible(true);
+       } else{
+            System.out.println("File not found!");
+            new CreatePassword().setVisible(true);
+       }
+        //<--- CLARK'S CODE ENDS HERE --->
     }
     
 }
