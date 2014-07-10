@@ -15,26 +15,19 @@ import java.util.Date;
 public class TransactionBean {
     private int transactionID;
     private Date date;
-    private RawBean raw;
-    private String type;
+     private String type;
     
     public TransactionBean(){
         
     }
     
-    public TransactionBean(float a, Date d, RawBean r, String t){
-        
+    public TransactionBean(Date d, RawBean r, String t){
         date = d;
-        raw = r;
         type = t;
     }
 
     public Date getDate() {
         return date;
-    }
-
-    public RawBean getRaw() {
-        return raw;
     }
 
     public int getTransactionID() {
@@ -47,10 +40,6 @@ public class TransactionBean {
     
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public void setRaw(RawBean raw) {
-        this.raw = raw;
     }
 
     public void setTransactionID(int transactionID) {
