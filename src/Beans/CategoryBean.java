@@ -62,6 +62,9 @@ public class CategoryBean {
         this.aRecipes = new ArrayList<RecipeBean>(aRecipes);
     }
     
-    
+    @Override
+    public String toString(){
+        return category;
+    }
     
 }
