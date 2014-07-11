@@ -1,22 +1,61 @@
 package UI;
 
+import Beans.CategoryBean;
+import Beans.IngredientBean;
+import Beans.RecipeBean;
+import Beans.SalesBean;
+import DAO.Implementation.RecipeDAOImplementation;
+import DAO.Implementation.SalesDAOImplementation;
+import DAO.Implementation.TransactionDAOImplementation;
+import DAO.Interface.RecipeDAOInterface;
+import DAO.Interface.SalesDAOInterface;
+import DAO.Interface.TransactionDAOInterface;
+import java.awt.Component;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JComponent;
+import javax.swing.JTable;
+import javax.swing.TransferHandler;
+import static javax.swing.TransferHandler.COPY_OR_MOVE;
+import static javax.swing.TransferHandler.MOVE;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Evy
  */
 public class SALES extends javax.swing.JFrame {
 
+    private RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    private SalesDAOInterface tcImp = new SalesDAOImplementation();
+    private ArrayList<RecipeBean> avRecipes;
+
     /**
      * Creates new form SALES
      */
-    public SALES() {
+    public SALES() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        String laf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(laf);
         initComponents();
+        errorLabel.setVisible(false);
+        errorLabel1.setVisible(false);
+        prepareTable();
+
     }
 
     /**
@@ -31,20 +70,33 @@ public class SALES extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        recipeTable = new javax.swing.JTable(){
+            public boolean isCellEditable(int row, int c){
+                return false;
+            }
+        };
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        enterSales = new javax.swing.JButton();
+        salesField = new javax.swing.JTextField();
+        complimentaryField = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        nameLabel = new javax.swing.JLabel();
+        errorLabel = new javax.swing.JLabel();
+        errorLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        submitSales = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Recipe Table");
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        jLabel1.setText("SALES");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 15, -1, -1));
+
+        recipeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -55,7 +107,14 @@ public class SALES extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        recipeTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                recipeTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(recipeTable);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 79, 529, 129));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Recipe Information"));
 
@@ -63,103 +122,243 @@ public class SALES extends javax.swing.JFrame {
 
         jLabel3.setText("Sales:");
 
-        jButton1.setText("ENTER");
+        enterSales.setText("ENTER");
+        enterSales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enterSalesActionPerformed(evt);
+            }
+        });
 
-        jTextField1.setText("jTextField1");
+        salesField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                salesFieldActionPerformed(evt);
+            }
+        });
 
-        jTextField2.setText("jTextField2");
+        jLabel4.setText("Compliment: ");
+
+        nameLabel.setText(" ");
+
+        errorLabel.setForeground(new java.awt.Color(204, 0, 51));
+        errorLabel.setText("ERROR: Please enter valid number");
+
+        errorLabel1.setForeground(new java.awt.Color(204, 0, 51));
+        errorLabel1.setText("ERROR: Please enter valid number");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-                            .addComponent(jTextField2))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(enterSales)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(complimentaryField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(errorLabel1))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(90, 90, 90)
+                        .addComponent(salesField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(errorLabel)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(nameLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addComponent(jButton1))
+                    .addComponent(salesField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(errorLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(complimentaryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(errorLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(enterSales))
         );
 
-        jButton2.setText("SUBMIT");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(59, 214, -1, -1));
+
+        jLabel5.setText("Drag and Drop to re-arrange recipes");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 51, -1, -1));
+
+        submitSales.setText("SUBMIT");
+        submitSales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                submitSalesActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel1.add(submitSales, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 420, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void submitSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitSalesActionPerformed
+        int rcount = recipeTable.getRowCount();
+        int i;
+        
+        for(i=0; i<rcount;i++){
+            SalesBean sbean = new SalesBean();
+            SalesBean cbean = new SalesBean();
+            int rID = Integer.parseInt(recipeTable.getModel().getValueAt(i, 0).toString());
+            float sales = Float.parseFloat(recipeTable.getModel().getValueAt(i, 2).toString());
+            float compliment = Float.parseFloat(recipeTable.getModel().getValueAt(i, 3).toString());
+            
+            RecipeBean rbean = rcImp.getRecipeBean(rID);
+            
+            //add sales
+            sbean.setOrder(i+1);
+            sbean.setType("sales");
+            tcImp.addSales(sbean, rbean, sales);
+            
+            //add compliment
+            cbean.setOrder(i+1);
+            cbean.setType("complimentary");
+            tcImp.addSales(cbean, rbean, compliment);
+        }
+    }//GEN-LAST:event_submitSalesActionPerformed
 
+    private void salesFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_salesFieldActionPerformed
+
+    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
+        try {
+            int rselect = recipeTable.getSelectedRow();
+
+            //recipeIDLabel.setText(String.valueOf(r.getRecipeID()));
+            nameLabel.setText(recipeTable.getModel().getValueAt(rselect, 1).toString());
+            salesField.setText(recipeTable.getModel().getValueAt(rselect, 2).toString());
+            complimentaryField.setText(recipeTable.getModel().getValueAt(rselect, 3).toString());
+
+            //CategoryBean ct = (CategoryBean)categoryBox.getSelectedItem();
+            //System.out.println("SELECTED " + ct.getCategoryID());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_recipeTableMouseClicked
+
+    private void enterSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterSalesActionPerformed
+        String sales = salesField.getText().toString();
+        String compliment = complimentaryField.getText().toString();
+        int rselected = recipeTable.getSelectedRow();
+        
+        if (rselected < 0) {
+            return;
+        }
+        if (isNumber(sales)) {
+            recipeTable.getModel().setValueAt(sales, rselected, 2);
+            errorLabel.setVisible(false);
+        } else {
+            errorLabel.setVisible(true);
+        }
+        
+        if(isNumber(compliment)){
+            recipeTable.getModel().setValueAt(compliment, rselected, 3);
+            errorLabel1.setVisible(false);
+        }else {
+            errorLabel1.setVisible(true);
+        }
+    }//GEN-LAST:event_enterSalesActionPerformed
+
+    
+    /*** <--- JANERYS CODE STARTS HERE ---> ***/
+    
+    //check if number
+    private boolean isNumber(String s) {
+        try {
+            Float.parseFloat(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    /* PREPARE TABLE */
+    public void prepareTable() {
+        avRecipes = new ArrayList<RecipeBean>();
+
+        String rCategory = null;
+        int i, j;
+
+        avRecipes = rcImp.getRecipeByStatus("available");
+
+        String cols[] = {"Recipe ID", "Recipe", "Sales", "Compliment"};
+        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
+        //System.out.println(avRecipes.get(1).getRecipe());
+
+        for (RecipeBean r : avRecipes) {
+            Object[] data = {r.getRecipeID(), r.getRecipe(), "0", "0"};
+            recipeModel.addRow(data);
+        }
+
+        recipeTable.setModel(recipeModel);
+        recipeTable.getColumnModel().getColumn(0).setMinWidth(0);
+        recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        
+        recipeTable.setDragEnabled(true);
+        recipeTable.setTransferHandler(new SALES.TableTransferHandler());
+        adjustTable(recipeTable);
+
+    }
+
+    /* ADJUST TABLE TO MAX WIDTH*/
+    private void adjustTable(JTable table) {
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = tableColumn.getMaxWidth();
+
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+
+                //  We've exceeded the maximum width, no need to check other rows
+                if (preferredWidth >= maxWidth) {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+    }
+    /*** <--- JANERYS CODE ENDS HERE ---> ***/
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -190,22 +389,200 @@ public class SALES extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SALES().setVisible(true);
+                try {
+                    new SALES().setVisible(true);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(SALES.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(SALES.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(SALES.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(SALES.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
+        
+    }
+    /*** <--- CODE CREDITS: http://www.java2s.com/Code/Java/Swing-JFC/ExtendedDnDDragandDropDemo.htm ---> ***/
+    /*
+ * StringTransferHandler.java is used by the 1.4 ExtendedDnDDemo.java example.
+ */
+abstract class StringTransferHandler extends TransferHandler {
+
+    protected abstract String exportString(JComponent c);
+
+    protected abstract void importString(JComponent c, String str);
+
+    protected abstract void cleanup(JComponent c, boolean remove);
+
+    protected Transferable createTransferable(JComponent c) {
+        return new StringSelection(exportString(c));
     }
 
+    public int getSourceActions(JComponent c) {
+        return COPY_OR_MOVE;
+    }
+
+    public boolean importData(JComponent c, Transferable t) {
+        if (canImport(c, t.getTransferDataFlavors())) {
+            try {
+                String str = (String) t
+                        .getTransferData(DataFlavor.stringFlavor);
+                importString(c, str);
+                return true;
+            } catch (UnsupportedFlavorException ufe) {
+            } catch (IOException ioe) {
+            }
+        }
+
+        return false;
+    }
+
+    protected void exportDone(JComponent c, Transferable data, int action) {
+        cleanup(c, action == MOVE);
+    }
+
+    public boolean canImport(JComponent c, DataFlavor[] flavors) {
+        for (int i = 0; i < flavors.length; i++) {
+            if (DataFlavor.stringFlavor.equals(flavors[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+/*
+ * TableTransferHandler.java is used by the 1.4 ExtendedDnDDemo.java example.
+ */
+class TableTransferHandler extends StringTransferHandler {
+
+    private int[] rows = null;
+
+    private int addIndex = -1; //Location where items were added
+
+    private int addCount = 0; //Number of items added.
+
+    protected String exportString(JComponent c) {
+        //System.out.println("export");
+        JTable table = (JTable) c;
+        rows = table.getSelectedRows();
+        int colCount = table.getColumnCount();
+
+        StringBuffer buff = new StringBuffer();
+
+        for (int i = 0; i < rows.length; i++) {
+            for (int j = 0; j < colCount; j++) {
+                Object val = table.getValueAt(rows[i], j);
+                buff.append(val == null ? "" : val.toString());
+                if (j != colCount - 1) {
+                    buff.append(",");
+                }
+            }
+            if (i != rows.length - 1) {
+                buff.append("\n");
+            }
+        }
+        System.out.println(rows[0]);
+
+        return buff.toString();
+    }
+
+    protected void importString(JComponent c, String str) {
+        //System.out.println("import");
+        JTable target = (JTable) c;
+        DefaultTableModel model = (DefaultTableModel) target.getModel();
+        int index = target.getSelectedRow();
+
+        //Prevent the user from dropping data back on itself.
+        //For example, if the user is moving rows #4,#5,#6 and #7 and
+        //attempts to insert the rows after row #5, this would
+        //be problematic when removing the original rows.
+        //So this is not allowed.
+        if (rows != null && index >= rows[0] - 1
+                && index <= rows[rows.length - 1] & rows.length != 1) {
+            int x = rows[0] - 1;
+            int y = rows[rows.length - 1];
+            /*System.out.println("index (target row) = " + index);
+             System.out.println("rows[0] (source row) = " + rows[0]);
+             System.out.println("x = " + x);
+             System.out.println("y = " + y);
+             System.out.println("NOT ALLOWED");*/
+            System.out.println();
+            rows = null;
+            return;
+        }
+
+        int max = model.getRowCount();
+        if (index < 0) {
+            index = max;
+        } else {
+            index++;
+            if (index > max) {
+                index = max;
+            }
+        }
+        addIndex = index;
+        //System.out.println(index);
+        String[] values = str.split("\n");
+        addCount = values.length;
+        int colCount = target.getColumnCount();
+        for (int i = 0; i < values.length && i < colCount; i++) {
+            model.insertRow(index++, values[i].split(","));
+
+        }
+    }
+
+    protected void cleanup(JComponent c, boolean remove) {
+
+        //System.out.println("clean");
+        JTable source = (JTable) c;
+        if (remove && rows != null) {
+            DefaultTableModel model = (DefaultTableModel) source.getModel();
+
+            //If we are moving items around in the same table, we
+            //need to adjust the rows accordingly, since those
+            //after the insertion point have moved.
+            if (addCount > 0) {
+                for (int i = 0; i < rows.length; i++) {
+                    if (rows[i] >= addIndex) {
+                        rows[i] += addCount;
+                    }
+                }
+            }
+
+            for (int i = rows.length - 1; i >= 0; i--) {
+                model.removeRow(rows[i]);
+
+            }
+
+        }
+        rows = null;
+        addCount = 0;
+        addIndex = -1;
+    }
+}
+    /*** <--- CODE CREDITS: http://www.java2s.com/Code/Java/Swing-JFC/ExtendedDnDDragandDropDemo.htm ---> ***/
+    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JTextField complimentaryField;
+    private javax.swing.JButton enterSales;
+    private javax.swing.JLabel errorLabel;
+    private javax.swing.JLabel errorLabel1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JTable recipeTable;
+    private javax.swing.JTextField salesField;
+    private javax.swing.JButton submitSales;
     // End of variables declaration//GEN-END:variables
 }
