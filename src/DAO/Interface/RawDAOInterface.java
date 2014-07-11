@@ -27,5 +27,5 @@ public interface RawDAOInterface {
 
     public ArrayList<RawBean> getRawByStatus(String s);
     
-    
+    public boolean restockRaw(RawBean r);
 }

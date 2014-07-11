@@ -183,5 +183,26 @@ public class RawDAOImplementation implements RawDAOInterface {
         return aRaw;
        
     }
+    
+    @Override
+    public boolean restockRaw (RawBean r) {
+        
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            String query = "UPDATE raw SET stock = ? WHERE rawID = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setFloat(1, r.getStock());
+            preparedStatement.setInt(2, r.getRawID());
+            preparedStatement.executeUpdate();
+            connection.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(RawDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return false;
+    }
 
 }
