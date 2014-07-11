@@ -70,8 +70,9 @@ public class EODTab extends javax.swing.JFrame {
         };
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        rcMgt = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        salesBtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -117,6 +118,13 @@ public class EODTab extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel2.setText("RAW MATERIAL STOCK");
 
+        rcMgt.setText("Recipe Management");
+        rcMgt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rcMgtActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -124,6 +132,7 @@ public class EODTab extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rcMgt)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -142,15 +151,17 @@ public class EODTab extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(73, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(rcMgt)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         InventoryTab.addTab("INVENTORY", jPanel5);
 
-        jButton1.setText("SALES");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        salesBtn.setText("SALES");
+        salesBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                salesBtnActionPerformed(evt);
             }
         });
 
@@ -176,7 +187,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(salesBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(623, Short.MAX_VALUE))
         );
@@ -184,7 +195,7 @@ public class EODTab extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(55, 55, 55)
-                .addComponent(jButton1)
+                .addComponent(salesBtn)
                 .addGap(51, 51, 51)
                 .addComponent(jButton2)
                 .addGap(51, 51, 51)
@@ -306,9 +317,26 @@ public class EODTab extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void salesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesBtnActionPerformed
+        this.setVisible(false);
+        try {
+            SALES saleswindow = new SALES(this);
+            saleswindow.setVisible(true);
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        
+    }//GEN-LAST:event_salesBtnActionPerformed
+
+    private void rcMgtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rcMgtActionPerformed
+        this.setVisible(false);
+        try {
+            RCManagement rcmgt = new RCManagement(this);
+            rcmgt.setVisible(true);
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_rcMgtActionPerformed
 
     /**
      * < -- JANERYS FUNCTIONS START -- > *
@@ -366,7 +394,7 @@ public class EODTab extends javax.swing.JFrame {
         rawTable.getColumn("Stock").setCellRenderer(rightRenderer);
         recipeTable.getColumn("Stock").setCellRenderer(rightRenderer);
         recipeTable.setRowSelectionAllowed(true);
-        System.out.println(recipeTable.getRowSelectionAllowed());
+        //System.out.println(recipeTable.getRowSelectionAllowed());
     }
 
     /**
@@ -419,7 +447,6 @@ public class EODTab extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane InventoryTab;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -435,6 +462,8 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable notificationTable;
     private javax.swing.JTable rawTable;
+    private javax.swing.JButton rcMgt;
     private javax.swing.JTable recipeTable;
+    private javax.swing.JButton salesBtn;
     // End of variables declaration//GEN-END:variables
 }

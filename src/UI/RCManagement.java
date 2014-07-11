@@ -48,14 +48,18 @@ public class RCManagement extends javax.swing.JFrame {
 
     private addIngredient AddIngredient;
     private AddRecipe addRecipe;
+    
+    private EODTab main;
 
     /**
      * Creates new form RCManagement
      */
-    public RCManagement() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public RCManagement(EODTab t) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
+        
+        main = t;
 
         errorLabel.setVisible(false);
         errorLabel2.setVisible(false);
@@ -103,7 +107,7 @@ public class RCManagement extends javax.swing.JFrame {
         errorLabel = new javax.swing.JLabel();
         errorLabel2 = new javax.swing.JLabel();
         errorLabel3 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -295,10 +299,10 @@ public class RCManagement extends javax.swing.JFrame {
                 .addComponent(saveRecipe))
         );
 
-        jButton6.setText("BACK");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        backBtn.setText("BACK");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                backBtnActionPerformed(evt);
             }
         });
 
@@ -318,8 +322,8 @@ public class RCManagement extends javax.swing.JFrame {
                         .addComponent(addRecipeB)
                         .addGap(6, 6, 6)
                         .addComponent(deleteRecipe))
-                    .addComponent(jButton6)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(backBtn)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 655, Short.MAX_VALUE))
                 .addGap(65, 65, 65))
         );
         jPanel1Layout.setVerticalGroup(
@@ -336,7 +340,7 @@ public class RCManagement extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
-                .addComponent(jButton6))
+                .addComponent(backBtn))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, -1));
@@ -513,9 +517,10 @@ public class RCManagement extends javax.swing.JFrame {
 
     }//GEN-LAST:event_saveRecipeActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+            this.setVisible(false);
+            main.setVisible(true);
+    }//GEN-LAST:event_backBtnActionPerformed
 
     /**
      * <--- JANERYS CODE START ---> *
@@ -634,57 +639,11 @@ public class RCManagement extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * <--- JANERYS CODE END ---> *
-     */
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RCManagement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RCManagement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RCManagement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RCManagement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new RCManagement().setVisible(true);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (UnsupportedLookAndFeelException ex) {
-                    Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel actualLabel;
     private javax.swing.JButton addRecipeB;
+    private javax.swing.JButton backBtn;
     private javax.swing.JComboBox categoryBox;
     private javax.swing.JTextField costField;
     private javax.swing.JButton deleteRecipe;
@@ -693,7 +652,6 @@ public class RCManagement extends javax.swing.JFrame {
     private javax.swing.JLabel errorLabel2;
     private javax.swing.JLabel errorLabel3;
     private javax.swing.JTable ingredientsTable;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

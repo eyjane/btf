@@ -44,14 +44,16 @@ public class SALES extends javax.swing.JFrame {
     private RecipeDAOInterface rcImp = new RecipeDAOImplementation();
     private SalesDAOInterface tcImp = new SalesDAOImplementation();
     private ArrayList<RecipeBean> avRecipes;
+    EODTab main;
 
     /**
      * Creates new form SALES
      */
-    public SALES() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public SALES(EODTab t) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
+        main = t;
         errorLabel.setVisible(false);
         errorLabel1.setVisible(false);
         prepareTable();
@@ -75,7 +77,7 @@ public class SALES extends javax.swing.JFrame {
                 return false;
             }
         };
-        jPanel2 = new javax.swing.JPanel();
+        inputPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         enterSales = new javax.swing.JButton();
@@ -87,6 +89,7 @@ public class SALES extends javax.swing.JFrame {
         errorLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         submitSales = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -116,7 +119,7 @@ public class SALES extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 79, 529, 129));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Recipe Information"));
+        inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Recipe Information"));
 
         jLabel2.setText("Name:");
 
@@ -145,49 +148,49 @@ public class SALES extends javax.swing.JFrame {
         errorLabel1.setForeground(new java.awt.Color(204, 0, 51));
         errorLabel1.setText("ERROR: Please enter valid number");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout inputPanelLayout = new javax.swing.GroupLayout(inputPanel);
+        inputPanel.setLayout(inputPanelLayout);
+        inputPanelLayout.setHorizontalGroup(
+            inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(inputPanelLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(inputPanelLayout.createSequentialGroup()
+                        .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(inputPanelLayout.createSequentialGroup()
+                        .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(enterSales)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(inputPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(complimentaryField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(errorLabel1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(inputPanelLayout.createSequentialGroup()
                         .addGap(90, 90, 90)
                         .addComponent(salesField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(errorLabel)))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        inputPanelLayout.setVerticalGroup(
+            inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(inputPanelLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(nameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(salesField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(errorLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(complimentaryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(errorLabel1))
@@ -195,7 +198,7 @@ public class SALES extends javax.swing.JFrame {
                 .addComponent(enterSales))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(59, 214, -1, -1));
+        jPanel1.add(inputPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(59, 214, -1, -1));
 
         jLabel5.setText("Drag and Drop to re-arrange recipes");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 51, -1, -1));
@@ -207,6 +210,14 @@ public class SALES extends javax.swing.JFrame {
             }
         });
         jPanel1.add(submitSales, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 420, -1, -1));
+
+        backBtn.setText("BACK");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 420, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -247,6 +258,12 @@ public class SALES extends javax.swing.JFrame {
             cbean.setType("complimentary");
             tcImp.addSales(cbean, rbean, compliment);
         }
+        
+        inputPanel.setVisible(false);
+        submitSales.setVisible(false);
+        //this.setVisible(false);
+        //main.setVisible(true);
+        
     }//GEN-LAST:event_submitSalesActionPerformed
 
     private void salesFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesFieldActionPerformed
@@ -291,6 +308,11 @@ public class SALES extends javax.swing.JFrame {
             errorLabel1.setVisible(true);
         }
     }//GEN-LAST:event_enterSalesActionPerformed
+
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+       this.setVisible(false);
+       main.setVisible(true);
+    }//GEN-LAST:event_backBtnActionPerformed
 
     
     /*** <--- JANERYS CODE STARTS HERE ---> ***/
@@ -358,52 +380,6 @@ public class SALES extends javax.swing.JFrame {
     }
     /*** <--- JANERYS CODE ENDS HERE ---> ***/
     
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SALES.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SALES.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SALES.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SALES.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new SALES().setVisible(true);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(SALES.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(SALES.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(SALES.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (UnsupportedLookAndFeelException ex) {
-                    Logger.getLogger(SALES.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        
-    }
     /*** <--- CODE CREDITS: http://www.java2s.com/Code/Java/Swing-JFC/ExtendedDnDDragandDropDemo.htm ---> ***/
     /*
  * StringTransferHandler.java is used by the 1.4 ExtendedDnDDemo.java example.
@@ -568,17 +544,18 @@ class TableTransferHandler extends StringTransferHandler {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBtn;
     private javax.swing.JTextField complimentaryField;
     private javax.swing.JButton enterSales;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel errorLabel1;
+    private javax.swing.JPanel inputPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTable recipeTable;
