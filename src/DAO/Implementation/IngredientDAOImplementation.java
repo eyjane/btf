@@ -30,7 +30,6 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
     private Connection connection;
     private DBConnectionFactory dBConnectionFactory;
 
-
     @Override
     public boolean addIngredient(RecipeBean r, IngredientBean i) {
         try {
@@ -75,8 +74,10 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
             connection = dBConnectionFactory.getConnection();
             String query = "UPDATE ingredients SET amount = ? WHERE recipeID = ? AND rawID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, r.getRecipeID());
-            preparedStatement.setInt(2, i.getRaw().getRawID());
+            
+            preparedStatement.setFloat(1, i.getAmount());
+            preparedStatement.setInt(2, r.getRecipeID());
+            preparedStatement.setInt(3, i.getRaw().getRawID());
             preparedStatement.executeUpdate();
             connection.close();
             return true;
