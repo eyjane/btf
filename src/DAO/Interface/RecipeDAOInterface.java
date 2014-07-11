@@ -21,6 +21,8 @@ public interface RecipeDAOInterface {
     public boolean deleteRecipe(RecipeBean r);
 
     public boolean editRecipe(RecipeBean r);
+    
+    public int getLatestAddedID();
 
     public RecipeBean getRecipeBean(int rID);
 
