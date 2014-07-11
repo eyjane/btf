@@ -16,14 +16,20 @@ import java.util.Date;
  */
 public interface SalesDAOInterface {
 
-    public boolean addSales(SalesBean s);
+    public boolean addSales(SalesBean s, RecipeBean r, float a);
+    
+    public ArrayList<RecipeBean> getAllSales(String d);
+    //gets the recipeBean in order
 
-    public ArrayList<SalesBean> getAllSales();
+    public float sumSalesByRecipeByDay(RecipeBean r, String d);
+    //gets quantity of sales * cost (for one recipe only)
 
-    public ArrayList<SalesBean> getTotalSalesByDay(Date d); //total per day
+    public float sumComplimentarySalesByRecipeByDay(RecipeBean r, String d);
+    //gets quantity of complimentary * actual price (for one recipe only) - only added to expenses
 
-    //public ArrayList<SalesBean> getTotalSalesByWeek(int w);
-    //public ArrayList<SalesBean> getTotalSalesByMonth(int m);
-    //public ArrayList<SalesBean> getTotalSalesByYear(int y);
-    public ArrayList<SalesBean> getSalesByRecipe(RecipeBean r); //sorted into recipes
+    public float sumExpensesByRecipeByDay(RecipeBean r, String d);
+    //gets quantity of sales * actual price (for one recipe only) - only added to expenses
+    
+    public float sumQuantityByRecipeByDay(String d, String s, RecipeBean r);
+    //gets quantity (for one recipe only) - for variance report
 }
