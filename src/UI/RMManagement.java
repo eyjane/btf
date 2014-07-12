@@ -75,29 +75,6 @@ public class RMManagement extends javax.swing.JFrame {
        });
     }
     
-    /*public boolean authenticateRM(String name){
-        boolean flag = false;
-        int count = 0;
-        for(int i = 0; i < rmImp.getRawByStatus("available").size(); i++){
-            if(name.equalsIgnoreCase(rmImp.getAllRaw().get(i).getRaw())) {
-                 JOptionPane.showMessageDialog(null, "That raw material already exists.", "Double Raw", JOptionPane.WARNING_MESSAGE);
-                 clearText();
-                 count++;
-            }
-        }
-        if(count == 0)
-            flag = true;
-        return flag;
-    }*/
-    
-    /*public void updateRaw(RawBean r) {
-        if(authenticateRM(r.getRaw())){
-            rmImp.editRaw(r);
-            ViewAllRM();
-            clearText();
-        }
-    }*/
-    
     public void clearText(){
         nameField.setText("");
         idField.setText("");
@@ -106,25 +83,6 @@ public class RMManagement extends javax.swing.JFrame {
         criticalField.setText("");
         uomField.setText("");
     }
-    
-    /*public boolean getFromTextBox(){
-        boolean flag = false;
-        if(!nameField.getText().equals("") && !priceField.getText().equals("") && !stockField.getText().equals("") 
-                && !criticalField.getText().equals("") && !uomField.getText().equals("")) {
-            String name = nameField.getText();
-            try{
-                float price = Float.parseFloat(priceField.getText());
-                float stock = Float.parseFloat(stockField.getText());
-                float critical = Float.parseFloat(criticalField.getText());
-                String uom = uomField.getText();
-                editRaw = new RawBean(name, price, stock, critical, "available", uom);
-                flag = true;
-            }catch(Exception e){
-                return flag;
-            }
-        }
-        return flag;
-    }*/
     
     public boolean authenticateRM(){
         boolean flag = true;
