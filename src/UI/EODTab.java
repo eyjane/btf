@@ -375,9 +375,19 @@ public class EODTab extends javax.swing.JFrame {
     }//GEN-LAST:event_rmMgt1ActionPerformed
 
     private void cMgt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cMgt2ActionPerformed
-        CategoryManagement ct = new CategoryManagement();
-        ct.setVisible(true);
-        dispose(); 
+        try {
+            CategoryManagement ct = new CategoryManagement();
+            ct.setVisible(true);
+            dispose(); 
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_cMgt2ActionPerformed
 
     /**

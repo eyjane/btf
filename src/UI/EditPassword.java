@@ -1,12 +1,16 @@
 package UI;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import org.w3c.dom.*;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -16,7 +20,9 @@ public class EditPassword extends javax.swing.JFrame {
     private String currentPassword;
     
     //<--- CLARK'S CODE STARTS HERE ---> 
-    public EditPassword(String _currentPassword) {
+    public EditPassword(String _currentPassword) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        String laf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(laf);
         initComponents();
         currentPassword = _currentPassword;
     }
@@ -166,9 +172,20 @@ public class EditPassword extends javax.swing.JFrame {
                         e.printStackTrace();
                     } 
                 
+                    
+                try {
                     Login l = new Login();
                     l.setVisible(true);
                     dispose();
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(EditPassword.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(EditPassword.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(EditPassword.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(EditPassword.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "The passwords that you have entered did not match.", "Incorrect Password", JOptionPane.WARNING_MESSAGE);
                 resetFields();

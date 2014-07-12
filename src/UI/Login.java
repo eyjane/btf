@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import DBConnection.DBConnectionFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
@@ -17,7 +18,9 @@ public class Login extends javax.swing.JFrame {
     private String currentPassword;
     private DBConnectionFactory dBConnectionFactory;
     
-    public Login() {
+    public Login() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        String laf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(laf);
         initComponents();
         
         try {
@@ -252,9 +255,19 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnEditPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditPasswordActionPerformed
-        EditPassword ep = new EditPassword(currentPassword);
-        ep.setVisible(true);
-        dispose();
+        try {
+            EditPassword ep = new EditPassword(currentPassword);
+            ep.setVisible(true);
+            dispose();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnEditPasswordActionPerformed
 
     public void LoginUI() {

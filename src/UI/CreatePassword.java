@@ -1,12 +1,16 @@
 package UI;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import org.w3c.dom.*;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -14,7 +18,9 @@ import javax.swing.JOptionPane;
  */
 public class CreatePassword extends javax.swing.JFrame {
     
-    public CreatePassword() {
+    public CreatePassword() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        String laf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(laf);
         initComponents();
         errorLabel1.setVisible(false);
         errorLabel2.setVisible(false);
@@ -176,9 +182,19 @@ public class CreatePassword extends javax.swing.JFrame {
               } catch(Exception e) {
                     e.printStackTrace();
               }
-               Login l = new Login();
-               l.setVisible(true);
+            try {
+                Login l = new Login();
+                l.setVisible(true);
                dispose();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CreatePassword.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(CreatePassword.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(CreatePassword.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(CreatePassword.class.getName()).log(Level.SEVERE, null, ex);
+            }
          } 
     }//GEN-LAST:event_btnCreatePasswordActionPerformed
 

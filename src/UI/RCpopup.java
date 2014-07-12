@@ -3,6 +3,8 @@ package UI;
 import Beans.RecipeBean;
 import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Interface.RecipeDAOInterface;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -15,7 +17,9 @@ public class RCpopup extends javax.swing.JFrame {
     private RecipeBean rc;
    
     //<--- CLARK'S CODE STARTS HERE --->
-    public RCpopup(CategoryManagement c) {
+    public RCpopup(CategoryManagement c) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        String laf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(laf);
         initComponents();
         cm = c;
         rcImp = new RecipeDAOImplementation();

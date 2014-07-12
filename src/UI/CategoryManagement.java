@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -27,7 +28,9 @@ public class CategoryManagement extends javax.swing.JFrame {
         private RecipeBean selectedRC;
     
     //<--- CLARK'S CODE STARTS HERE --->
-    public CategoryManagement() {
+    public CategoryManagement() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        String laf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(laf);
         initComponents();
         rcImp = new RecipeDAOImplementation();
         ctImp = new CategoryDAOImplementation();
@@ -484,8 +487,18 @@ public class CategoryManagement extends javax.swing.JFrame {
     private void btnAddRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRecipeActionPerformed
         if(selectedCat != null){
             System.out.println("Fetching...");
-            RCpopup rcp = new RCpopup(this);
-            rcp.setVisible(true);
+            try {
+                RCpopup rcp = new RCpopup(this);
+                rcp.setVisible(true);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Please select a category first.", "Blank Form", JOptionPane.WARNING_MESSAGE);
             System.out.println("Noooo");

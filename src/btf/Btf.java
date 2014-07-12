@@ -16,6 +16,9 @@ import UI.CreatePassword;
 import UI.Login;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -94,10 +97,30 @@ public class Btf {
        File f = new File("btf.xml");
        if(f.exists()){
             System.out.println("File existed");
-            new Login().setVisible(true);
+           try {
+               new Login().setVisible(true);
+           } catch (ClassNotFoundException ex) {
+               Logger.getLogger(Btf.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (InstantiationException ex) {
+               Logger.getLogger(Btf.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (IllegalAccessException ex) {
+               Logger.getLogger(Btf.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (UnsupportedLookAndFeelException ex) {
+               Logger.getLogger(Btf.class.getName()).log(Level.SEVERE, null, ex);
+           }
        } else{
             System.out.println("File not found!");
-            new CreatePassword().setVisible(true);
+           try {
+               new CreatePassword().setVisible(true);
+           } catch (ClassNotFoundException ex) {
+               Logger.getLogger(Btf.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (InstantiationException ex) {
+               Logger.getLogger(Btf.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (IllegalAccessException ex) {
+               Logger.getLogger(Btf.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (UnsupportedLookAndFeelException ex) {
+               Logger.getLogger(Btf.class.getName()).log(Level.SEVERE, null, ex);
+           }
        }
         //<--- CLARK'S CODE ENDS HERE --->
     }
