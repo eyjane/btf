@@ -22,4 +22,6 @@ public interface TransactionDAOInterface {
     
     public float getQuantityByDayByRaw(String d, String s, RawBean r); //gets quantity only
     
+    public boolean actualInput(TransactionBean t, RawBean r, float a); // type = actual
+    
 }

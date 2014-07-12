@@ -7,6 +7,7 @@ package DAO.Interface;
 
 import Beans.RawBean;
 import Beans.RecipeBean;
+import Beans.SalesBean;
 import java.util.ArrayList;
 
 /**
@@ -27,5 +28,6 @@ public interface RawDAOInterface {
 
     public ArrayList<RawBean> getRawByStatus(String s);
     
-    
+    public boolean restockRaw(RawBean r);
+
 }
