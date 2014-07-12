@@ -28,6 +28,6 @@ public interface RawDAOInterface {
 
     public ArrayList<RawBean> getRawByStatus(String s);
     
-    public boolean reduceRaw(RawBean r, SalesBean s); // accdg to sales
-    
+    public boolean restockRaw(RawBean r);
+
 }
