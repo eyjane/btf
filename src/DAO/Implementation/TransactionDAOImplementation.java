@@ -74,7 +74,9 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
     
     /* checked - GETS SUM OF ALL QUANTITY SORTED BY TYPE */
     @Override
+
     public float sumQuantityByDay(String d, String s) {
+
         try {
             String query = "select t.transaction_date, transaction_type, sum(quantity) " +
                             "from transactions t, raw r, transact tc " +
@@ -98,7 +100,7 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
         return 0;
     }
 
-    /* checked! - GETS QUANTITY ONLY */
+
     @Override
     public float getQuantityByDayByRaw(String d, String s, RawBean r) {
         try {
@@ -125,5 +127,49 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
         return 0;
     }
 
+    // Input Actual Values from manual count
+    @Override
+    public boolean actualInput(TransactionBean t, RawBean r, float a) {
+         try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            String query = "INSERT into transactions(transaction_date, transaction_type) values (?, 'Actual');";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            
+            /* create date*/
+            java.util.Date now = new java.util.Date();
+            java.sql.Date today = new java.sql.Date(now.getTime());
+
+            preparedStatement.setDate(1, today);
+            preparedStatement.setString(2, t.getType());
+            
+            preparedStatement.executeUpdate();
+            
+            
+            /* add to transact table */
+            query = "SELECT max(transactionID) from transactions;";
+            preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                int transactionID = resultSet.getInt("max(transactionID)");
+                String tquery = "INSERT into transact(transactionID, rawID, quantity) values (?, ?, ?);";
+                PreparedStatement tpreparedStatement = connection.prepareStatement(tquery);
+                tpreparedStatement.setInt(1, transactionID);
+                tpreparedStatement.setInt(2, r.getRawID());
+                tpreparedStatement.setFloat(3, a);
+                
+                tpreparedStatement.executeUpdate();
+                connection.close();
+                return true;
+            }
+            
+            connection.close();
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(TransactionDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+        
+    }
    
 }
