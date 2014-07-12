@@ -5,6 +5,9 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import javax.swing.JOptionPane;
 import DBConnection.DBConnectionFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -13,21 +16,24 @@ import DBConnection.DBConnectionFactory;
 public class Login extends javax.swing.JFrame {
     private String currentPassword;
     private DBConnectionFactory dBConnectionFactory;
-   
-    //<--- CLARK'S CODE STARTS HERE ---> 
+    
     public Login() {
         initComponents();
+        
         try {
             File fXmlFile = new File("btf.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
+
             doc.getDocumentElement().normalize();
+
             currentPassword = doc.getElementsByTagName("loginpwd").item(0).getTextContent();
             System.out.println("Password : " + currentPassword);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
         dBConnectionFactory = DBConnectionFactory.getInstance();
         portNumberField.setText(dBConnectionFactory.getUrl());
         usernameField.setText(dBConnectionFactory.getUsername());
@@ -41,7 +47,6 @@ public class Login extends javax.swing.JFrame {
         return flag;
     }
     
-    //<--- CLARK'S CODE ENDS HERE ---> 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -225,11 +230,20 @@ public class Login extends javax.swing.JFrame {
         String pwd = new String(passwordField.getPassword());
         //authenticate password
         if(authenticate(pwd) == true){
-            JOptionPane.showMessageDialog(null, "Thank you for logging in.", "Welcome", JOptionPane.INFORMATION_MESSAGE);
-            CategoryManagement ct = new CategoryManagement();
-            ct.setVisible(true);
+            try {
+                EODTab e = new EODTab();
+                e.setVisible(true);
+                dispose();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
             //close the user authentication UI
-            dispose(); 
         } else{
             JOptionPane.showMessageDialog(null, "The password that you have entered is incorrect. "
             + "Please contact the developer in case you forgot your password.", "Incorrect Password", JOptionPane.WARNING_MESSAGE);

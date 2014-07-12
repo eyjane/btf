@@ -71,6 +71,8 @@ public class EODTab extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         rcMgt = new javax.swing.JButton();
+        rmMgt1 = new javax.swing.JButton();
+        cMgt2 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         salesBtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -101,10 +103,7 @@ public class EODTab extends javax.swing.JFrame {
 
         rawTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
@@ -125,6 +124,20 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
 
+        rmMgt1.setText("Raw Material Management");
+        rmMgt1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rmMgt1ActionPerformed(evt);
+            }
+        });
+
+        cMgt2.setText("Category Management");
+        cMgt2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cMgt2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -132,13 +145,18 @@ public class EODTab extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rcMgt)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(rcMgt)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(rmMgt1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cMgt2))
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
                         .addComponent(jScrollPane1)))
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,8 +170,11 @@ public class EODTab extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(rcMgt)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rcMgt)
+                    .addComponent(rmMgt1)
+                    .addComponent(cMgt2))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         InventoryTab.addTab("INVENTORY", jPanel5);
@@ -189,7 +210,7 @@ public class EODTab extends javax.swing.JFrame {
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(salesBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(623, Short.MAX_VALUE))
+                .addContainerGap(663, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,7 +221,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addComponent(jButton2)
                 .addGap(51, 51, 51)
                 .addComponent(jButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(326, Short.MAX_VALUE))
         );
 
         InventoryTab.addTab("EOD", jPanel6);
@@ -254,7 +275,6 @@ public class EODTab extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         jLabel3.setText("LOW SUPPLY NOTIFICATION");
-        jLabel3.setFocusTraversalKeysEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -338,6 +358,28 @@ public class EODTab extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_rcMgtActionPerformed
 
+    private void rmMgt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rmMgt1ActionPerformed
+        try {
+            RMManagement rm = new RMManagement();
+            rm.setVisible(true);
+            dispose();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_rmMgt1ActionPerformed
+
+    private void cMgt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cMgt2ActionPerformed
+        CategoryManagement ct = new CategoryManagement();
+        ct.setVisible(true);
+        dispose(); 
+    }//GEN-LAST:event_cMgt2ActionPerformed
+
     /**
      * < -- JANERYS FUNCTIONS START -- > *
      */
@@ -400,6 +442,8 @@ public class EODTab extends javax.swing.JFrame {
     /**
      * < -- JANERYS FUNCTIONS END -- > *
      */
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -447,6 +491,7 @@ public class EODTab extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane InventoryTab;
+    private javax.swing.JButton cMgt2;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -464,6 +509,7 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JTable rawTable;
     private javax.swing.JButton rcMgt;
     private javax.swing.JTable recipeTable;
+    private javax.swing.JButton rmMgt1;
     private javax.swing.JButton salesBtn;
     // End of variables declaration//GEN-END:variables
 }
