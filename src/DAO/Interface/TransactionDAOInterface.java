@@ -10,6 +10,7 @@ import Beans.TransactionBean;
 import java.util.ArrayList;
 import java.util.Date;
 
+
 /**
  *
  * @author earleenjanefuentes
@@ -17,6 +18,7 @@ import java.util.Date;
 public interface TransactionDAOInterface {
 
     public boolean addTransaction(TransactionBean t, RawBean r, float a);
+<<<<<<< HEAD
 
     //public ArrayList<TransactionBean> getAllTransaction();
 
@@ -35,8 +37,17 @@ public interface TransactionDAOInterface {
     public boolean actualInput(TransactionBean t, RawBean r, float a); // type = actual
     
     public boolean usedTransfer(TransactionBean t, RawBean r, float a);
+=======
+
+    public float sumQuantityByDay(String d, String s); //gets sum of quantities by type
     
-    //public ArrayList<TransactionBean> getAllTransactionByTypeWeek(String s, int w);
-    //public ArrayList<TransactionBean> getAllTransactionByTypeMonth(String s, int m);
-    //public ArrayList<TransactionBean> getAllTransactionByTypeYear(String s, int y);
+    public float getQuantityByDayByRaw(String d, String s, RawBean r); //gets quantity only
+    
+    public boolean actualInput(TransactionBean t, RawBean r, float a); // type = actual
+    
+    public boolean usedTransfer(TransactionBean t, RawBean r, float a);
+    
+    public boolean wastages(TransactionBean t, RawBean r, float a);
+>>>>>>> reduceRaw
+    
 }
