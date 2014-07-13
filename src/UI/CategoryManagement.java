@@ -285,7 +285,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
                         .addGap(62, 62, 62)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -331,6 +331,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+<<<<<<< HEAD
                             .addComponent(jLabel3)
                             .addComponent(categoryNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(errorLabel1))
@@ -339,6 +340,13 @@ public class CategoryManagement extends javax.swing.JFrame {
                             .addComponent(btnUpdateCategory)
                             .addComponent(btnClear))
                         .addGap(22, 22, 22))))
+=======
+                            .addComponent(jButton4)
+                            .addComponent(jButton3))))
+                .addGap(28, 28, 28)
+                .addComponent(jButton5)
+                .addContainerGap(159, Short.MAX_VALUE))
+>>>>>>> actualInput
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
