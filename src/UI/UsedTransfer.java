@@ -220,13 +220,15 @@ public class UsedTransfer extends javax.swing.JFrame {
         if (submit) {
             TransactionBean t = new TransactionBean();
             RawBean r = new RawBean();
-            float q; // QUANTITY
+            float usedQ = 0, wastedQ = 0; // QUANTITY
 
             for (c = 0; c < rows; c++) {
 
                 r.setRawID(Integer.parseInt(usedTable.getValueAt(c, 0).toString()));
-                q = Float.parseFloat(usedTable.getValueAt(c, 2).toString());
-                tclmp.usedTransfer(t, r, q);
+                usedQ = Float.parseFloat(usedTable.getValueAt(c, 2).toString());
+                wastedQ = Float.parseFloat(usedTable.getValueAt(c, 2).toString());
+                tclmp.usedTransfer(t, r, usedQ);
+                tclmp.wastages(t, r, wastedQ);
             }
 
         }
