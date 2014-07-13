@@ -107,20 +107,20 @@ public class UsedTransfer extends javax.swing.JFrame {
 
         usedTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "Name", "Quantity Used"
+                "ID", "Name", "Quantity Used", "Quantity Wasted"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -208,7 +208,7 @@ public class UsedTransfer extends javax.swing.JFrame {
 
         for (c = 0; c < rows; c++) {
 
-            if(usedTable.getValueAt(c,2).toString().isEmpty()) {
+            if(usedTable.getValueAt(c,2).toString().isEmpty() || usedTable.getValueAt(c,3).toString().isEmpty()) {
 
                 submit = false;
                 errorBox.append("Row #" + c+1 + "\n");
@@ -216,6 +216,7 @@ public class UsedTransfer extends javax.swing.JFrame {
 
         }
 
+        
         if (submit) {
             TransactionBean t = new TransactionBean();
             RawBean r = new RawBean();

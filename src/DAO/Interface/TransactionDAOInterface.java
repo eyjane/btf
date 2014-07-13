@@ -26,4 +26,7 @@ public interface TransactionDAOInterface {
     public boolean actualInput(TransactionBean t, RawBean r, float a); // type = actual
     
     public boolean usedTransfer(TransactionBean t, RawBean r, float a);
+    
+    public boolean wastages(TransactionBean t, RawBean r, float a);
+    
 }
