@@ -1,5 +1,19 @@
 package UI;
 
+import Beans.RawBean;
+import DAO.Implementation.RawDAOImplementation;
+import DAO.Interface.RawDAOInterface;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,10 +29,57 @@ public class DELIVERY extends javax.swing.JFrame {
     /**
      * Creates new form DELIVERY
      */
-    public DELIVERY() {
+    
+    RawDAOInterface rmImp = new RawDAOImplementation();
+    ArrayList<RawBean> aRaw;
+    
+    public DELIVERY() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
+        String laf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(laf);
         initComponents();
+        viewRaw();
     }
+    /*
+     * <!-- KIM CODE START -> *
+     */
+    public void viewRaw() {
+        aRaw = new ArrayList<RawBean>();
+        
+        aRaw = rmImp.getAllRaw();
+        String cols[] = {"Name", "Amount"};
+        DefaultTableModel allRaw = new DefaultTableModel(cols, 0);
+        
+        for (RawBean raw : aRaw) {
+            
+            Object[] data = {raw.getRaw(), raw.getStock()};
+            allRaw.addRow(data);
+            rawTable.setModel(allRaw);
+            adjustTable(rawTable);
+        }
+    }
+    
+    private void adjustTable(JTable table){
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = tableColumn.getMaxWidth();
 
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+
+        //  We've exceeded the maximum width, no need to check other rows
+                if (preferredWidth >= maxWidth) {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,20 +92,21 @@ public class DELIVERY extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        rawTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        rmName = new javax.swing.JTextField();
+        rmAmount = new javax.swing.JTextField();
+        errorLabel = new javax.swing.JLabel();
+        errorLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Raw Materials Table");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        rawTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -55,7 +117,7 @@ public class DELIVERY extends javax.swing.JFrame {
                 "Name", "Amount"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(rawTable);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Raw Materials Information"));
 
@@ -63,47 +125,62 @@ public class DELIVERY extends javax.swing.JFrame {
 
         jLabel3.setText("Delivery:");
 
-        jButton2.setText("jButton2");
+        rmName.setText("jTextField1");
+        rmName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rmNameActionPerformed(evt);
+            }
+        });
 
-        jTextField1.setText("jTextField1");
+        rmAmount.setText("jTextField2");
 
-        jTextField2.setText("jTextField2");
+        errorLabel.setForeground(new java.awt.Color(255, 0, 1));
+        errorLabel.setText("ERROR: Required Field");
+
+        errorLabel2.setForeground(new java.awt.Color(255, 0, 1));
+        errorLabel2.setText("ERROR: Required field. Please input valid number.");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(50, 50, 50)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                            .addComponent(jTextField2))))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addGap(50, 50, 50)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(rmName, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addComponent(rmAmount))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(errorLabel)
+                    .addComponent(errorLabel2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rmName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(errorLabel))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2))
+                    .addComponent(rmAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(errorLabel2))
+                .addGap(34, 34, 34))
         );
 
         jButton1.setText("SUBMIT");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -113,7 +190,7 @@ public class DELIVERY extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -155,6 +232,50 @@ public class DELIVERY extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        boolean add = true;
+        
+        if (!rmName.getText().toString().isEmpty()) {
+            errorLabel.setVisible(false);
+        } else {
+            errorLabel.setVisible(true);
+            add = false;
+        }
+
+        if (isNumber(rmAmount.getText().toString())) {
+            errorLabel2.setVisible(false);
+        } else {
+            errorLabel2.setVisible(true);
+            add = false;
+        }
+
+        if (add) {
+            RawBean r = new RawBean();
+            r.setRaw(rmName.getText().toString());
+            r.setStock(Float.parseFloat(rmAmount.getText().toString()));
+            rmImp.restockRaw(r);
+            viewRaw();
+        }
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void rmNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rmNameActionPerformed
+        
+        
+    }//GEN-LAST:event_rmNameActionPerformed
+
+    
+    private boolean isNumber(String s) {
+        try {
+            Float.parseFloat(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -184,23 +305,35 @@ public class DELIVERY extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                new DELIVERY().setVisible(true);
+                try {
+                    new DELIVERY().setVisible(true);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(DELIVERY.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(DELIVERY.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(DELIVERY.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(DELIVERY.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel errorLabel;
+    private javax.swing.JLabel errorLabel2;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTable rawTable;
+    private javax.swing.JTextField rmAmount;
+    private javax.swing.JTextField rmName;
     // End of variables declaration//GEN-END:variables
 }
