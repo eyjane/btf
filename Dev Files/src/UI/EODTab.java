@@ -358,6 +358,15 @@ public class EODTab extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        
+        // DELIVERY
+        this.setVisible(false);
+        try {
+            DELIVERY deliveryWindow = new DELIVERY(this);
+            deliveryWindow.setVisible(true);
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void salesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesBtnActionPerformed
@@ -418,7 +427,7 @@ public class EODTab extends javax.swing.JFrame {
         
         this.setVisible(false);
         try {
-            UsedTransfer usedWindow = new UsedTransfer();
+            UsedTransfer usedWindow = new UsedTransfer(this);
             usedWindow.setVisible(true);
         }
         catch(Exception e) {
@@ -432,7 +441,7 @@ public class EODTab extends javax.swing.JFrame {
 
         this.setVisible(false);
         try {
-            ACTUALINPUT actualWindow = new ACTUALINPUT();
+            ACTUALINPUT actualWindow = new ACTUALINPUT(this);
             actualWindow.setVisible(true);
         }
         catch(Exception e) {

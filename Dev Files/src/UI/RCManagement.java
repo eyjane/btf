@@ -113,6 +113,8 @@ public class RCManagement extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         recipeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null},
@@ -131,12 +133,15 @@ public class RCManagement extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(recipeTable);
 
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 73, 655, 109));
+
         addRecipeB.setLabel("Add");
         addRecipeB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addRecipeBActionPerformed(evt);
             }
         });
+        jPanel1.add(addRecipeB, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 188, -1, -1));
 
         deleteRecipe.setLabel("Delete");
         deleteRecipe.addActionListener(new java.awt.event.ActionListener() {
@@ -144,6 +149,7 @@ public class RCManagement extends javax.swing.JFrame {
                 deleteRecipeActionPerformed(evt);
             }
         });
+        jPanel1.add(deleteRecipe, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 188, -1, -1));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recipe Info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(255, 153, 153)));
 
@@ -299,153 +305,33 @@ public class RCManagement extends javax.swing.JFrame {
                 .addComponent(saveRecipe))
         );
 
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 217, 655, -1));
+
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backBtnActionPerformed(evt);
             }
         });
+        jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 574, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel9.setText("RECIPES");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel9)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(addRecipeB)
-                        .addGap(6, 6, 6)
-                        .addComponent(deleteRecipe))
-                    .addComponent(backBtn)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 655, Short.MAX_VALUE))
-                .addGap(65, 65, 65))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jLabel9)
-                .addGap(6, 6, 6)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addRecipeB)
-                    .addComponent(deleteRecipe))
-                .addGap(6, 6, 6)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(backBtn))
-        );
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 35, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addRecipeBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeBActionPerformed
-        try {
-            addRecipe = new AddRecipe(this);
-            this.setVisible(false);
-            addRecipe.setVisible(false);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_addRecipeBActionPerformed
-
-    private void deleteRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteRecipeActionPerformed
-                                                
-        int rselect = recipeTable.getSelectedRow();
-        if (rselect < 0) {
-            return;
-        } else {
-            deleteRecipe(rselect);
-        }
-    }//GEN-LAST:event_deleteRecipeActionPerformed
-
-    private void editIngredientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editIngredientActionPerformed
-        int nrow = ingredientsTable.getRowCount();
-        //System.out.println(nrow);
-
-        int i;
-        int rid;
-
-        ArrayList<IngredientBean> aIngredient = new ArrayList<IngredientBean>();
-
-        for (i = 0; i < nrow; i++) {
-            IngredientBean ibean = new IngredientBean();
-            RawBean rbean = new RawBean();
-            rid = Integer.parseInt(ingredientsTable.getModel().getValueAt(i, 0).toString());
-            rbean = rmImp.getRaw(rid);
-            ibean.setRaw(rbean);
-            ibean.setAmount(Float.parseFloat(ingredientsTable.getModel().getValueAt(i, 2).toString()));
-            aIngredient.add(ibean);
-        }
-
-        try {
-            AddIngredient = new addIngredient(this, aIngredient);
-            AddIngredient.setVisible(true);
-            this.setVisible(false);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_editIngredientActionPerformed
-
-    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
-        ArrayList<CategoryBean> aCategory = catImp.getAllCategory();
-        try {
-            int rselect = recipeTable.getSelectedRow();
-            int rID = Integer.parseInt(recipeTable.getModel().getValueAt(rselect, 0).toString());
-            RecipeBean r = rcImp.getRecipeBean(rID);
-            //recipeIDLabel.setText(String.valueOf(r.getRecipeID()));
-            nameField.setText(r.getRecipe());
-            costField.setText(String.format("%.2f", r.getCost()));
-            actualLabel.setText(String.format("%.2f", r.getActualPrice()));
-
-            for (CategoryBean c : aCategory) {
-                categoryBox.addItem(c);
-                if (c.getCategoryID() == r.getCategory()) {
-                    categoryBox.setSelectedIndex(categoryBox.getItemCount() - 1);
-                }
-            }
-            //CategoryBean ct = (CategoryBean)categoryBox.getSelectedItem();
-            //System.out.println("SELECTED " + ct.getCategoryID());
-
-            String cols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
-            DefaultTableModel model = new DefaultTableModel(cols, 0);
-
-            for (IngredientBean rw : r.getIngredients()) {
-                RawBean rwm = rw.getRaw();
-                Object[] i = {rwm.getRawID(), rwm.getRaw(), String.format("%.2f", rw.getAmount()), rwm.getUom()};
-                model.addRow(i);
-            }
-
-            ingredientsTable.setModel(model);
-            ingredientsTable.getColumnModel().getColumn(0).setMinWidth(0);
-            ingredientsTable.getColumnModel().getColumn(0).setMaxWidth(0);
-
-            adjustTable(ingredientsTable);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_recipeTableMouseClicked
-
-    private void ingredientsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingredientsTableMouseClicked
-
-    }//GEN-LAST:event_ingredientsTableMouseClicked
-
-    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nameFieldActionPerformed
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        this.setVisible(false);
+        main.setVisible(true);
+    }//GEN-LAST:event_backBtnActionPerformed
 
     private void saveRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveRecipeActionPerformed
         boolean edit = true;
-        
+
         if(recipeTable.getSelectedRow() < 0){
             return;
         }
@@ -490,10 +376,10 @@ public class RCManagement extends javax.swing.JFrame {
             errorLabel3.setVisible(true);
             edit = false;
         }
-        
+
         if(edit){
             RecipeBean r = new RecipeBean();
-            
+
             int rID = Integer.parseInt(recipeTable.getModel().getValueAt(recipeTable.getSelectedRow(), 0).toString());
             RecipeBean rtemp = rcImp.getRecipeBean(rID);
             System.out.println("rtemp stock: " + rtemp.getStock());
@@ -504,23 +390,111 @@ public class RCManagement extends javax.swing.JFrame {
             r.setCategory(category.getCategoryID());
             r.setRcstatus("available");
             r.setStock(rtemp.getStock());
-            
+
             if(rcImp.editRecipe(r)){
                 for(IngredientBean ibean: aIngredient){
                     inImp.editIngredient(r, ibean);
                 }
-                
+
                 prepareTable();
             }
         }
-
-
     }//GEN-LAST:event_saveRecipeActionPerformed
 
-    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+    private void editIngredientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editIngredientActionPerformed
+        int nrow = ingredientsTable.getRowCount();
+        //System.out.println(nrow);
+
+        int i;
+        int rid;
+
+        ArrayList<IngredientBean> aIngredient = new ArrayList<IngredientBean>();
+
+        for (i = 0; i < nrow; i++) {
+            IngredientBean ibean = new IngredientBean();
+            RawBean rbean = new RawBean();
+            rid = Integer.parseInt(ingredientsTable.getModel().getValueAt(i, 0).toString());
+            rbean = rmImp.getRaw(rid);
+            ibean.setRaw(rbean);
+            ibean.setAmount(Float.parseFloat(ingredientsTable.getModel().getValueAt(i, 2).toString()));
+            aIngredient.add(ibean);
+        }
+
+        try {
+            AddIngredient = new addIngredient(this, aIngredient);
+            AddIngredient.setVisible(true);
             this.setVisible(false);
-            main.setVisible(true);
-    }//GEN-LAST:event_backBtnActionPerformed
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_editIngredientActionPerformed
+
+    private void ingredientsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingredientsTableMouseClicked
+
+    }//GEN-LAST:event_ingredientsTableMouseClicked
+
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nameFieldActionPerformed
+
+    private void deleteRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteRecipeActionPerformed
+
+        int rselect = recipeTable.getSelectedRow();
+        if (rselect < 0) {
+            return;
+        } else {
+            deleteRecipe(rselect);
+        }
+    }//GEN-LAST:event_deleteRecipeActionPerformed
+
+    private void addRecipeBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeBActionPerformed
+        try {
+            addRecipe = new AddRecipe(this);
+            this.setVisible(false);
+            addRecipe.setVisible(false);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_addRecipeBActionPerformed
+
+    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
+        ArrayList<CategoryBean> aCategory = catImp.getAllCategory();
+        try {
+            int rselect = recipeTable.getSelectedRow();
+            int rID = Integer.parseInt(recipeTable.getModel().getValueAt(rselect, 0).toString());
+            RecipeBean r = rcImp.getRecipeBean(rID);
+            //recipeIDLabel.setText(String.valueOf(r.getRecipeID()));
+            nameField.setText(r.getRecipe());
+            costField.setText(String.format("%.2f", r.getCost()));
+            actualLabel.setText(String.format("%.2f", r.getActualPrice()));
+
+            for (CategoryBean c : aCategory) {
+                categoryBox.addItem(c);
+                if (c.getCategoryID() == r.getCategory()) {
+                    categoryBox.setSelectedIndex(categoryBox.getItemCount() - 1);
+                }
+            }
+            //CategoryBean ct = (CategoryBean)categoryBox.getSelectedItem();
+            //System.out.println("SELECTED " + ct.getCategoryID());
+
+            String cols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
+            DefaultTableModel model = new DefaultTableModel(cols, 0);
+
+            for (IngredientBean rw : r.getIngredients()) {
+                RawBean rwm = rw.getRaw();
+                Object[] i = {rwm.getRawID(), rwm.getRaw(), String.format("%.2f", rw.getAmount()), rwm.getUom()};
+                model.addRow(i);
+            }
+
+            ingredientsTable.setModel(model);
+            ingredientsTable.getColumnModel().getColumn(0).setMinWidth(0);
+            ingredientsTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
+            adjustTable(ingredientsTable);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_recipeTableMouseClicked
 
     /**
      * <--- JANERYS CODE START ---> *
