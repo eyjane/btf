@@ -2,11 +2,16 @@ package UI;
 
 import Beans.CategoryBean;
 import Beans.IngredientBean;
+import Beans.RawBean;
 import Beans.RecipeBean;
 import Beans.SalesBean;
+import DAO.Implementation.IngredientDAOImplementation;
+import DAO.Implementation.RawDAOImplementation;
 import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Implementation.SalesDAOImplementation;
 import DAO.Implementation.TransactionDAOImplementation;
+import DAO.Interface.IngredientDAOInterface;
+import DAO.Interface.RawDAOInterface;
 import DAO.Interface.RecipeDAOInterface;
 import DAO.Interface.SalesDAOInterface;
 import DAO.Interface.TransactionDAOInterface;
@@ -42,6 +47,8 @@ import javax.swing.table.TableColumn;
 public class SALES extends javax.swing.JFrame {
 
     private RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    private RawDAOInterface rwImp = new RawDAOImplementation();
+    private IngredientDAOInterface inImp = new IngredientDAOImplementation();
     private SalesDAOInterface tcImp = new SalesDAOImplementation();
     private ArrayList<RecipeBean> avRecipes;
     EODTab main;
@@ -237,11 +244,15 @@ public class SALES extends javax.swing.JFrame {
 
     private void submitSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitSalesActionPerformed
         int rcount = recipeTable.getRowCount();
-        int i;
+        int i,j;
         
         for(i=0; i<rcount;i++){
             SalesBean sbean = new SalesBean();
             SalesBean cbean = new SalesBean();
+            float total = 0;
+            float d;
+            float a;
+            ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
             int rID = Integer.parseInt(recipeTable.getModel().getValueAt(i, 0).toString());
             float sales = Float.parseFloat(recipeTable.getModel().getValueAt(i, 2).toString());
             float compliment = Float.parseFloat(recipeTable.getModel().getValueAt(i, 3).toString());
@@ -257,6 +268,22 @@ public class SALES extends javax.swing.JFrame {
             cbean.setOrder(i+1);
             cbean.setType("complimentary");
             tcImp.addSales(cbean, rbean, compliment);
+            
+            //update rm stocks
+            total = sales + compliment;
+            ingredients = rbean.getIngredients();
+            for(j=0; j<ingredients.size(); j++){
+                d=0;
+                a=0;
+                RawBean rwbean = new RawBean();
+                rwbean = ingredients.get(j).getRaw();
+                a = rwbean.getStock(); //original stock
+                d = ingredients.get(j).getAmount() * total; //to be deducted
+                a -= d;
+                rwbean.setStock(a);
+                rwImp.editRaw(rwbean);
+            }
+            
         }
         
         inputPanel.setVisible(false);
