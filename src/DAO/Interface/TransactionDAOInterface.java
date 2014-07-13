@@ -34,6 +34,8 @@ public interface TransactionDAOInterface {
     
     public boolean actualInput(TransactionBean t, RawBean r, float a); // type = actual
     
+    public boolean usedTransfer(TransactionBean t, RawBean r, float a);
+    
     //public ArrayList<TransactionBean> getAllTransactionByTypeWeek(String s, int w);
     //public ArrayList<TransactionBean> getAllTransactionByTypeMonth(String s, int m);
     //public ArrayList<TransactionBean> getAllTransactionByTypeYear(String s, int y);
