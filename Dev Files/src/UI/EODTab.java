@@ -77,6 +77,8 @@ public class EODTab extends javax.swing.JFrame {
         salesBtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        actualBtn = new javax.swing.JButton();
+        UTWbtn = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         notificationTable = new javax.swing.JTable(){
@@ -200,28 +202,49 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
 
+        actualBtn.setText("INPUT RAW MATERIAL COUNT");
+        actualBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualBtnActionPerformed(evt);
+            }
+        });
+
+        UTWbtn.setText("USED/TRANSFERED AND WASTAGES");
+        UTWbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UTWbtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(salesBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(663, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(UTWbtn)
+                    .addComponent(actualBtn)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(salesBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(533, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(55, 55, 55)
                 .addComponent(salesBtn)
-                .addGap(51, 51, 51)
+                .addGap(36, 36, 36)
+                .addComponent(actualBtn)
+                .addGap(32, 32, 32)
+                .addComponent(UTWbtn)
+                .addGap(34, 34, 34)
                 .addComponent(jButton2)
-                .addGap(51, 51, 51)
+                .addGap(40, 40, 40)
                 .addComponent(jButton3)
-                .addContainerGap(326, Short.MAX_VALUE))
+                .addContainerGap(240, Short.MAX_VALUE))
         );
 
         InventoryTab.addTab("EOD", jPanel6);
@@ -390,6 +413,34 @@ public class EODTab extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cMgt2ActionPerformed
 
+    private void UTWbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UTWbtnActionPerformed
+        // TODO add your handling code here:
+        
+        this.setVisible(false);
+        try {
+            UsedTransfer usedWindow = new UsedTransfer();
+            usedWindow.setVisible(true);
+        }
+        catch(Exception e) {
+            System.out.println(e);
+        }
+        
+    }//GEN-LAST:event_UTWbtnActionPerformed
+
+    private void actualBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualBtnActionPerformed
+        // TODO add your handling code here:
+
+        this.setVisible(false);
+        try {
+            ACTUALINPUT actualWindow = new ACTUALINPUT();
+            actualWindow.setVisible(true);
+        }
+        catch(Exception e) {
+            System.out.println(e);
+        }
+        
+    }//GEN-LAST:event_actualBtnActionPerformed
+
     /**
      * < -- JANERYS FUNCTIONS START -- > *
      */
@@ -501,6 +552,8 @@ public class EODTab extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane InventoryTab;
+    private javax.swing.JButton UTWbtn;
+    private javax.swing.JButton actualBtn;
     private javax.swing.JButton cMgt2;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

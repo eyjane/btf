@@ -124,7 +124,7 @@ public class SALES extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(recipeTable);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 79, 529, 129));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 79, 510, 129));
 
         inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Recipe Information"));
 
@@ -182,7 +182,7 @@ public class SALES extends javax.swing.JFrame {
                         .addComponent(salesField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(errorLabel)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         inputPanelLayout.setVerticalGroup(
             inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,13 +224,15 @@ public class SALES extends javax.swing.JFrame {
                 backBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 420, -1, -1));
+        jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 420, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

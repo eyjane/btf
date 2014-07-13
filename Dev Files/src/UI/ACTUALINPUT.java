@@ -33,7 +33,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
     ArrayList<TransactionBean> aTransact;
     RawDAOInterface rmImp = new RawDAOImplementation();
     ArrayList<RawBean> aRaw;
-    
+    EODTab main; 
     /**
      * Creates new form ACTUALINPUT
      */

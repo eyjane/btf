@@ -34,7 +34,8 @@ public class UsedTransfer extends javax.swing.JFrame {
     ArrayList<TransactionBean> aTransact;
     RawDAOInterface rmImp = new RawDAOImplementation();
     ArrayList<RawBean> aRaw;
-   
+    EODTab main;
+    
     public void transactTable() {
         /*
          * FOR ACTUAL INPUT TABLE
