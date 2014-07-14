@@ -32,11 +32,15 @@ public class DELIVERY extends javax.swing.JFrame {
     
     RawDAOInterface rmImp = new RawDAOImplementation();
     ArrayList<RawBean> aRaw;
+    EODTab main;
     
-    public DELIVERY() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
+    public DELIVERY(EODTab t) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
+        main = t;
+        errorLabel.setVisible(false);
+        errorLabel2.setVisible(false);
         viewRaw();
     }
     /*
@@ -101,6 +105,7 @@ public class DELIVERY extends javax.swing.JFrame {
         errorLabel = new javax.swing.JLabel();
         errorLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -182,6 +187,13 @@ public class DELIVERY extends javax.swing.JFrame {
             }
         });
 
+        backBtn.setText("BACK");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -196,6 +208,8 @@ public class DELIVERY extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(backBtn)
+                        .addGap(42, 42, 42)
                         .addComponent(jButton1)
                         .addGap(16, 16, 16)))
                 .addContainerGap())
@@ -210,7 +224,9 @@ public class DELIVERY extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(backBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -266,6 +282,13 @@ public class DELIVERY extends javax.swing.JFrame {
         
     }//GEN-LAST:event_rmNameActionPerformed
 
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        main.setVisible(true);
+        
+    }//GEN-LAST:event_backBtnActionPerformed
+
     
     private boolean isNumber(String s) {
         try {
@@ -278,13 +301,13 @@ public class DELIVERY extends javax.swing.JFrame {
     
     /**
      * @param args the command line arguments
-     */
+     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+         
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -303,7 +326,7 @@ public class DELIVERY extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the form 
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -321,8 +344,9 @@ public class DELIVERY extends javax.swing.JFrame {
             }
         });
     }
-
+*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBtn;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel errorLabel2;
     private javax.swing.JButton jButton1;
