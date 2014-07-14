@@ -39,6 +39,11 @@ public class EditPassword extends javax.swing.JFrame {
         if(!currentPassword.equals(_newpassword)){
             if(_newpassword.equals(_retype))
                 flag = true;
+            else {
+                JOptionPane.showMessageDialog(null, "The passwords that you have entered did not match.", "Incorrect Password", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+                JOptionPane.showMessageDialog(null, "Your new password cannot be the same as your current password.", "Same Password", JOptionPane.WARNING_MESSAGE);
         }
         return flag;
     }
@@ -186,10 +191,7 @@ public class EditPassword extends javax.swing.JFrame {
                 } catch (UnsupportedLookAndFeelException ex) {
                     Logger.getLogger(EditPassword.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "The passwords that you have entered did not match.", "Incorrect Password", JOptionPane.WARNING_MESSAGE);
-                resetFields();
-            }
+            } 
         } else{
             JOptionPane.showMessageDialog(null, "The password that you have entered is incorrect. "
             + "Please contact the developer in case you forgot your password.", "Incorrect Password", JOptionPane.WARNING_MESSAGE);
