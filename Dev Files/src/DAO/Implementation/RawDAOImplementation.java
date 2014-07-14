@@ -74,7 +74,7 @@ public class RawDAOImplementation implements RawDAOInterface {
         try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "UPDATE raw SET raw = ?, price = ?, stock = ? uom = ?, critical = ? WHERE rawID = ?;";
+            String query = "UPDATE raw SET raw = ?, price = ?, stock = ?, uom = ?, critical = ? WHERE rawID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, r.getRaw());
             preparedStatement.setFloat(2, r.getPrice());
