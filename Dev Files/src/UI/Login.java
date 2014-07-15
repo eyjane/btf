@@ -5,6 +5,7 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import javax.swing.JOptionPane;
 import DBConnection.DBConnectionFactory;
+import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -42,7 +43,7 @@ public class Login extends javax.swing.JFrame {
         usernameField.setText(dBConnectionFactory.getUsername());
         pwordField.setText(dBConnectionFactory.getPassword());
     }
-
+    
     public boolean authenticate(String _password) {
         boolean flag = false;
         if(currentPassword.equals(_password))
