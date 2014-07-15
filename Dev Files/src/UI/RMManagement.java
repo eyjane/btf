@@ -90,6 +90,12 @@ public class RMManagement extends javax.swing.JFrame {
         stockField.setText("");
         criticalField.setText("");
         uomField.setText("");
+        errorLabel.setVisible(false);
+        errorLabel1.setVisible(false);
+        errorLabel2.setVisible(false);
+        errorLabel3.setVisible(false);
+        errorLabel4.setVisible(false);
+        errorLabel5.setVisible(false);
         btnSave.setEnabled(false);
         btnAdd.setEnabled(true);
     }
@@ -115,29 +121,47 @@ public class RMManagement extends javax.swing.JFrame {
                 }
             }
         }
-        if(priceField.getText().equals("") || Float.parseFloat(priceField.getText()) < 0) {
+        if(!priceField.getText().equals("") && isNumber(priceField.getText())) {
+            if(Float.parseFloat(priceField.getText()) > 0) {
+                errorLabel2.setVisible(false);
+                editRaw.setPrice(Float.parseFloat(priceField.getText()));
+            }
+            else {
+                errorLabel2.setVisible(true);
+                flag = false;
+            }
+        }
+        else {
             errorLabel2.setVisible(true);
             flag = false;
         }
-        else {
-            errorLabel2.setVisible(false);
-            editRaw.setPrice(Float.parseFloat(priceField.getText()));
+        if(!stockField.getText().equals("") && isNumber(stockField.getText())) {
+            if(Float.parseFloat(stockField.getText()) > 0) {
+                errorLabel3.setVisible(false);
+                editRaw.setStock(Float.parseFloat(stockField.getText()));
+            }
+            else {
+                errorLabel3.setVisible(true);
+                flag = false;
+            }
         }
-        if(stockField.getText().equals("") || Float.parseFloat(stockField.getText()) < 0) {
+        else {
             errorLabel3.setVisible(true);
             flag = false;
         }
-        else {
-            errorLabel3.setVisible(false);
-            editRaw.setStock(Float.parseFloat(stockField.getText()));
+        if(!criticalField.getText().equals("") && isNumber(criticalField.getText())) {
+            if(Float.parseFloat(criticalField.getText()) > 0) {
+                errorLabel4.setVisible(false);
+                editRaw.setCritical(Float.parseFloat(criticalField.getText()));
+            }
+            else {
+                errorLabel4.setVisible(true);
+                flag = false;
+            }
         }
-        if(criticalField.getText().equals("") || Float.parseFloat(criticalField.getText()) < 0) {
+        else {
             errorLabel4.setVisible(true);
             flag = false;
-        }
-        else {
-            errorLabel4.setVisible(false);
-            editRaw.setCritical(Float.parseFloat(criticalField.getText()));
         }
         if(uomField.getText().equals("")) {
             errorLabel5.setVisible(true);
@@ -151,6 +175,14 @@ public class RMManagement extends javax.swing.JFrame {
         return flag;
     }
     
+    public boolean isNumber(String s) {
+        try {
+            Float.parseFloat(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
     //<--- CLARK'S CODE ENDS HERE --->
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -440,12 +472,6 @@ public class RMManagement extends javax.swing.JFrame {
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         clearText();
-        errorLabel.setVisible(false);
-        errorLabel1.setVisible(false);
-        errorLabel2.setVisible(false);
-        errorLabel3.setVisible(false);
-        errorLabel4.setVisible(false);
-        errorLabel5.setVisible(false);
     }//GEN-LAST:event_btnClearActionPerformed
 
 
