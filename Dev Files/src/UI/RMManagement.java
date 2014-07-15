@@ -60,6 +60,7 @@ public class RMManagement extends javax.swing.JFrame {
        rmTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
         public void valueChanged(ListSelectionEvent event) {
             try {
+            clearText();
             DefaultTableModel defaultTableModel = (DefaultTableModel) rmTable.getModel();
             if (rmTable.getSelectedRow() >= 0) {
                 idField.setText(defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0).toString());
@@ -70,6 +71,7 @@ public class RMManagement extends javax.swing.JFrame {
                 uomField.setText((String) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 6));
                 selectedRaw = rmImp.getRaw((int) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0));
                 btnSave.setEnabled(true);
+                btnAdd.setEnabled(false);
             } else {
                 selectedRaw = null;
                 btnSave.setEnabled(false);
@@ -89,6 +91,7 @@ public class RMManagement extends javax.swing.JFrame {
         criticalField.setText("");
         uomField.setText("");
         btnSave.setEnabled(false);
+        btnAdd.setEnabled(true);
     }
     
     public boolean authenticateRM(){
@@ -104,14 +107,15 @@ public class RMManagement extends javax.swing.JFrame {
             errorLabel.setVisible(false);
             editRaw.setRaw(nameField.getText());
             for(int i = 0; i < rmImp.getRawByStatus("available").size(); i++){
-                if(nameField.getText().equalsIgnoreCase(rmImp.getAllRaw().get(i).getRaw())) {
+                if(nameField.getText().equalsIgnoreCase(rmImp.getAllRaw().get(i).getRaw()) && 
+                        Integer.parseInt(idField.getText()) != rmImp.getAllRaw().get(i).getRawID()) {
                      errorLabel1.setVisible(true);
                      errorLabel.setVisible(true);
                      flag = false;
                 }
             }
         }
-        if(priceField.getText().equals("")) {
+        if(priceField.getText().equals("") || Float.parseFloat(priceField.getText()) < 0) {
             errorLabel2.setVisible(true);
             flag = false;
         }
@@ -119,7 +123,7 @@ public class RMManagement extends javax.swing.JFrame {
             errorLabel2.setVisible(false);
             editRaw.setPrice(Float.parseFloat(priceField.getText()));
         }
-        if(stockField.getText().equals("")) {
+        if(stockField.getText().equals("") || Float.parseFloat(stockField.getText()) < 0) {
             errorLabel3.setVisible(true);
             flag = false;
         }
@@ -127,7 +131,7 @@ public class RMManagement extends javax.swing.JFrame {
             errorLabel3.setVisible(false);
             editRaw.setStock(Float.parseFloat(stockField.getText()));
         }
-        if(criticalField.getText().equals("")) {
+        if(criticalField.getText().equals("") || Float.parseFloat(criticalField.getText()) < 0) {
             errorLabel4.setVisible(true);
             flag = false;
         }
@@ -216,14 +220,19 @@ public class RMManagement extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Raw Material Info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(255, 153, 153)));
         jPanel2.setMinimumSize(new java.awt.Dimension(620, 236));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("ID:");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
 
         jLabel2.setText("Name:");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 56, -1, -1));
 
         jLabel3.setText("Price:");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 82, -1, -1));
 
         jLabel4.setText("Stock:");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 108, -1, -1));
 
         idField.setEditable(false);
         idField.addActionListener(new java.awt.event.ActionListener() {
@@ -231,12 +240,16 @@ public class RMManagement extends javax.swing.JFrame {
                 idFieldActionPerformed(evt);
             }
         });
+        jPanel2.add(idField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 27, 109, -1));
 
         nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nameFieldActionPerformed(evt);
             }
         });
+        jPanel2.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 53, 109, -1));
+        jPanel2.add(priceField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 79, 109, -1));
+        jPanel2.add(stockField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 105, 109, -1));
 
         btnSave.setText("Update");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -244,28 +257,39 @@ public class RMManagement extends javax.swing.JFrame {
                 btnSaveActionPerformed(evt);
             }
         });
+        jPanel2.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(539, 195, -1, -1));
 
         jLabel10.setText("Critical:");
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 134, -1, -1));
 
         jLabel12.setText("Unit of Measurement:");
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
+        jPanel2.add(criticalField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 131, 109, -1));
+        jPanel2.add(uomField, new org.netbeans.lib.awtextra.AbsoluteConstraints(144, 157, 79, -1));
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel.setText("Duplicate name exists.");
+        jPanel2.add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(353, 56, -1, -1));
 
         errorLabel2.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel2.setText("ERROR: Required field. Please input valid number.");
+        jPanel2.add(errorLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 82, -1, -1));
 
         errorLabel3.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel3.setText("ERROR: Required field. Please input valid number.");
+        jPanel2.add(errorLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 108, -1, -1));
 
         errorLabel4.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel4.setText("ERROR: Required field. Please input valid number.");
+        jPanel2.add(errorLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 134, -1, -1));
 
         errorLabel5.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel5.setText("ERROR: Required field.");
+        jPanel2.add(errorLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(233, 160, -1, -1));
 
         errorLabel1.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel1.setText("ERROR: Required field.");
+        jPanel2.add(errorLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 56, -1, -1));
 
         btnAdd.setLabel("Add");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -273,6 +297,7 @@ public class RMManagement extends javax.swing.JFrame {
                 btnAddActionPerformed(evt);
             }
         });
+        jPanel2.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(388, 195, -1, -1));
 
         btnDelete.setLabel("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -280,6 +305,7 @@ public class RMManagement extends javax.swing.JFrame {
                 btnDeleteActionPerformed(evt);
             }
         });
+        jPanel2.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(457, 195, -1, -1));
 
         btnClear.setText("Clear");
         btnClear.addActionListener(new java.awt.event.ActionListener() {
@@ -287,102 +313,7 @@ public class RMManagement extends javax.swing.JFrame {
                 btnClearActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(uomField, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(errorLabel5))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
-                        .addGap(55, 55, 55)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(idField)
-                            .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE))
-                        .addGap(10, 10, 10)
-                        .addComponent(errorLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(errorLabel))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnClear)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnAdd))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jLabel4))
-                                        .addGap(56, 56, 56)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(stockField)
-                                                .addComponent(priceField, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE))
-                                            .addComponent(criticalField, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jLabel10))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(errorLabel2)
-                                    .addComponent(errorLabel3)
-                                    .addComponent(errorLabel4))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSave))))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorLabel1)
-                    .addComponent(errorLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(stockField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(criticalField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(uomField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12)
-                    .addComponent(errorLabel5))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave)
-                    .addComponent(btnAdd)
-                    .addComponent(btnDelete)
-                    .addComponent(btnClear))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel2.add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 195, -1, -1));
 
         btnBack.setText("BACK");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
@@ -399,12 +330,13 @@ public class RMManagement extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBack)
-                    .addComponent(jLabel9)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnBack)
+                        .addComponent(jLabel9)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(14, 14, 14))
         );
         jPanel1Layout.setVerticalGroup(
