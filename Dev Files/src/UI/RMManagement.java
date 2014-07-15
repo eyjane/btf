@@ -163,7 +163,7 @@ public class RMManagement extends javax.swing.JFrame {
             errorLabel4.setVisible(true);
             flag = false;
         }
-        if(uomField.getText().equals("")) {
+        if(uomField.getText().equals("") || isNumber(uomField.getText())) {
             errorLabel5.setVisible(true);
             flag = false;
         }
