@@ -231,14 +231,7 @@ public class RecipeDAOImplementation implements RecipeDAOInterface{
 
             while (resultSet.next()) {
                 RecipeBean r = new RecipeBean();
-                r.setRecipeID(resultSet.getInt("recipeID"));
-                r.setRecipe(resultSet.getString("recipe"));
-                r.setCost(resultSet.getFloat("cost"));
-                r.setCategory(resultSet.getInt("categoryID"));
-                r.setStock(resultSet.getFloat("stock"));
-                r.setRcstatus(resultSet.getString("rcstatus"));
-                ingredients = iImp.getAllIngredients(r);
-                r.setIngredients(ingredients);
+                r = getRecipeBean(resultSet.getInt("recipeID"));
                 aRecipes.add(r);
             }
             connection.close();
