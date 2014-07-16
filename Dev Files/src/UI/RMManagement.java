@@ -111,6 +111,7 @@ public class RMManagement extends javax.swing.JFrame {
         }
         else {
             errorLabel.setVisible(false);
+            errorLabel1.setVisible(false);
             editRaw.setRaw(nameField.getText());
             for(int i = 0; i < rmImp.getRawByStatus("available").size(); i++){
                 if(nameField.getText().equalsIgnoreCase(rmImp.getAllRaw().get(i).getRaw()) && 
