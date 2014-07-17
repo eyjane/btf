@@ -348,6 +348,12 @@ public class RCManagement extends javax.swing.JFrame {
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         this.setVisible(false);
+        try {
+            main = new EODTab();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        
         main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 
