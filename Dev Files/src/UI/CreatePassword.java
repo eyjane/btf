@@ -176,7 +176,7 @@ public class CreatePassword extends javax.swing.JFrame {
                 StreamResult result = new StreamResult(new File("btf.xml"));
 
                 transformer.transform(source, result);
-
+                JOptionPane.showMessageDialog(null, "Succesfully added password!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println("File saved!");
 
               } catch(Exception e) {
