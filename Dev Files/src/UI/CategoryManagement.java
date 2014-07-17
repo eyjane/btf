@@ -37,6 +37,10 @@ public class CategoryManagement extends javax.swing.JFrame {
         selectedCat = new CategoryBean();
         selectedRC = new RecipeBean();
         errorLabel1.setVisible(false);
+        errorLabel2.setVisible(false);
+        btnUpdateCategory.setEnabled(false);
+        btnAddRecipe.setEnabled(false);
+        btnDeleteRecipe.setEnabled(false);
         ViewAllCategories();
     }
     
@@ -70,10 +74,18 @@ public class CategoryManagement extends javax.swing.JFrame {
             try {
             DefaultTableModel defaultTableModel = (DefaultTableModel) categoryTable.getModel();
             if (categoryTable.getSelectedRow() >= 0) {
-                selectedCat.setCategoryID((int) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0));
-                selectedCat.setCategory((String) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 1));
-                categoryNameField.setText(selectedCat.getCategory());
-                categoryIDField.setText(Integer.toString(selectedCat.getCategoryID()));
+                /*selectedCat.setCategoryID((int) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0));
+                selectedCat.setCategory((String) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 1));*/
+                categoryIDField.setText(defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0).toString());
+                categoryNameField.setText((String) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 1));
+                selectedCat = ctImp.getCategory((int) (defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0)));
+                btnUpdateCategory.setEnabled(true);
+                btnAddRecipe.setEnabled(true);
+                btnAddCategory.setEnabled(false);    
+                if(selectedCat.getCategoryID() == 1) 
+                    btnDeleteRecipe.setEnabled(false);
+                else
+                    btnDeleteRecipe.setEnabled(true);            
                 ViewAllRecipes(selectedCat);
             } else 
                     selectedCat = null;
@@ -88,20 +100,18 @@ public class CategoryManagement extends javax.swing.JFrame {
        DefaultTableModel defaultModel = initializeRecipeTable();
        c.setaRecipes(rcImp.getRecipeByCategory(c));
        for (int i = 0; i < c.getaRecipes().size(); i++) {
-            defaultModel.addRow(new Object[] {c.getaRecipes().get(i).getRecipeID(), c.getaRecipes().get(i).getRecipe(),               
-            c.getaRecipes().get(i).getCost(), c.getaRecipes().get(i).getStock(), c.getaRecipes().get(i).getRcstatus()});
+           if(c.getaRecipes().get(i).getRcstatus().equalsIgnoreCase("available")) {
+               defaultModel.addRow(new Object[] {c.getaRecipes().get(i).getRecipeID(), c.getaRecipes().get(i).getRecipe(),               
+               c.getaRecipes().get(i).getCost(), c.getaRecipes().get(i).getStock(), c.getaRecipes().get(i).getRcstatus()});
+           }
        }
        recipeTable.setModel(defaultModel);
-       categoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+       recipeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
         public void valueChanged(ListSelectionEvent event) {
             try {
             DefaultTableModel defaultTableModel = (DefaultTableModel) recipeTable.getModel();
             if (recipeTable.getSelectedRow() >= 0) {
-                selectedRC.setRecipeID((int) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 0));
-                selectedRC.setRecipe((String) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 1));
-                selectedRC.setCost((float) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 2));
-                selectedRC.setStock((float) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 3));
-                selectedRC.setRcstatus((String) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 4));
+                selectedRC = rcImp.getRecipeBean((int) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 0));
             } else
                 selectedRC = null;
             } catch (Exception err) {
@@ -111,36 +121,34 @@ public class CategoryManagement extends javax.swing.JFrame {
        });
     }
     
-    public boolean authenticateCategory(String name){
-        boolean flag = false;
-        int count = 0;
-        for(int i = 0; i < ctImp.getAllCategory().size(); i++){
-            if(name.equalsIgnoreCase(ctImp.getAllCategory().get(i).getCategory())) {
-                JOptionPane.showMessageDialog(null, "That category already exists.", "Double Category", JOptionPane.WARNING_MESSAGE);
-                clearText();
-                count++;
-            } 
+    public boolean authenticateCategory(){
+        boolean flag = true;
+        selectedCat = new CategoryBean();
+        if(categoryNameField.getText().equals("")) {
+            errorLabel1.setVisible(true);
+            flag = false;
         }
-        if(count == 0)
-            flag = true;
-        return flag;
-    }
-    
-    public void updateCategory(CategoryBean c) throws SQLException, ClassNotFoundException {
-        if(c.getCategory().equalsIgnoreCase("")) {
-          errorLabel1.setVisible(true);
-          clearText();
-        } else if(authenticateCategory(c.getCategory())){
+        else {
+            selectedCat.setCategory(categoryNameField.getText());
             errorLabel1.setVisible(false);
-            ctImp.editCategory(c);
-            ViewAllCategories();
-            clearText();
+            for(int i = 0; i < ctImp.getAllCategory().size(); i++){
+                if(categoryNameField.getText().equalsIgnoreCase(ctImp.getAllCategory().get(i).getCategory())) {
+                    errorLabel1.setVisible(true);
+                    errorLabel2.setVisible(true);
+                    flag = false;
+                } 
+            }
         }
+        return flag;
     }
     
     public void clearText(){
         categoryNameField.setText("");
         categoryIDField.setText("");
+        errorLabel1.setVisible(false);
+        errorLabel2.setVisible(false);
+        btnUpdateCategory.setEnabled(false);
+        btnAddCategory.setEnabled(true);
         recipeTable.setModel(initializeRecipeTable());
     }
     
@@ -157,8 +165,6 @@ public class CategoryManagement extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         categoryTable = new javax.swing.JTable();
-        btnAddCategory = new javax.swing.JButton();
-        btnDeleteCategory = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -172,6 +178,9 @@ public class CategoryManagement extends javax.swing.JFrame {
         btnUpdateCategory = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         errorLabel1 = new javax.swing.JLabel();
+        btnAddCategory = new javax.swing.JButton();
+        btnDeleteCategory = new javax.swing.JButton();
+        errorLabel2 = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -197,34 +206,27 @@ public class CategoryManagement extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        categoryTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(categoryTable);
         categoryTable.getColumnModel().getColumn(0).setResizable(false);
         categoryTable.getColumnModel().getColumn(1).setResizable(false);
 
-        btnAddCategory.setText("Add");
-        btnAddCategory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddCategoryActionPerformed(evt);
-            }
-        });
-
-        btnDeleteCategory.setText("Delete");
-        btnDeleteCategory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteCategoryActionPerformed(evt);
-            }
-        });
-
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Category"));
         jPanel2.setPreferredSize(new java.awt.Dimension(703, 400));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setText("ID:");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 27, -1, -1));
 
         jLabel3.setText("Name:");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 68, -1, -1));
 
         jLabel4.setText("RECIPES");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(632, 27, -1, -1));
 
         categoryIDField.setEditable(false);
+        jPanel2.add(categoryIDField, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 27, 125, -1));
+        jPanel2.add(categoryNameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 65, 125, -1));
 
         recipeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -235,18 +237,22 @@ public class CategoryManagement extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        recipeTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(recipeTable);
         recipeTable.getColumnModel().getColumn(0).setResizable(false);
         recipeTable.getColumnModel().getColumn(1).setResizable(false);
         recipeTable.getColumnModel().getColumn(2).setResizable(false);
         recipeTable.getColumnModel().getColumn(3).setResizable(false);
+        recipeTable.getColumnModel().getColumn(4).setResizable(false);
+
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 53, 534, 130));
 
         btnAddRecipe.setText("Add");
         btnAddRecipe.addActionListener(new java.awt.event.ActionListener() {
@@ -254,6 +260,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                 btnAddRecipeActionPerformed(evt);
             }
         });
+        jPanel2.add(btnAddRecipe, new org.netbeans.lib.awtextra.AbsoluteConstraints(834, 191, -1, -1));
 
         btnDeleteRecipe.setText("Delete");
         btnDeleteRecipe.addActionListener(new java.awt.event.ActionListener() {
@@ -261,6 +268,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                 btnDeleteRecipeActionPerformed(evt);
             }
         });
+        jPanel2.add(btnDeleteRecipe, new org.netbeans.lib.awtextra.AbsoluteConstraints(891, 191, -1, -1));
 
         btnUpdateCategory.setText("Update");
         btnUpdateCategory.addActionListener(new java.awt.event.ActionListener() {
@@ -268,6 +276,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                 btnUpdateCategoryActionPerformed(evt);
             }
         });
+        jPanel2.add(btnUpdateCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(318, 191, -1, -1));
 
         btnClear.setText("Clear");
         btnClear.addActionListener(new java.awt.event.ActionListener() {
@@ -275,74 +284,31 @@ public class CategoryManagement extends javax.swing.JFrame {
                 btnClearActionPerformed(evt);
             }
         });
+        jPanel2.add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 191, -1, -1));
 
         errorLabel1.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel1.setText("ERROR: Required field.");
+        jPanel2.add(errorLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 68, -1, -1));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(62, 62, 62)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(categoryIDField)
-                            .addComponent(categoryNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(errorLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(290, 290, 290))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnUpdateCategory)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnClear)
-                        .addGap(239, 239, 239)
-                        .addComponent(btnAddRecipe)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDeleteRecipe)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(categoryIDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAddRecipe)
-                            .addComponent(btnDeleteRecipe))
-                        .addContainerGap(18, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(categoryNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(errorLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnUpdateCategory)
-                            .addComponent(btnClear))
-                        .addGap(22, 22, 22))))
-        );
+        btnAddCategory.setText("Add");
+        btnAddCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddCategoryActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnAddCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(192, 191, -1, -1));
+
+        btnDeleteCategory.setText("Delete");
+        btnDeleteCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteCategoryActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnDeleteCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(249, 191, -1, -1));
+
+        errorLabel2.setForeground(new java.awt.Color(255, 0, 51));
+        errorLabel2.setText("Duplicate name exists.");
+        jPanel2.add(errorLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(318, 68, -1, -1));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -354,14 +320,8 @@ public class CategoryManagement extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 970, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(btnAddCategory)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnDeleteCategory)))
-                        .addGap(0, 836, Short.MAX_VALUE)))
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -371,12 +331,8 @@ public class CategoryManagement extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddCategory)
-                    .addComponent(btnDeleteCategory))
-                .addGap(31, 31, 31)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         btnBack.setText("BACK");
@@ -392,7 +348,7 @@ public class CategoryManagement extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 990, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addContainerGap()
                 .addComponent(btnBack)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -409,14 +365,9 @@ public class CategoryManagement extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCategoryActionPerformed
-        String name = categoryNameField.getText();
-        if(name.equals("")) {
-          errorLabel1.setVisible(true);
-          clearText();
-        } else if(authenticateCategory(name)){
-            errorLabel1.setVisible(false);
+        if(authenticateCategory()){
             try{
-                ctImp.addCategory(new CategoryBean(name, new ArrayList<RecipeBean>()));
+                ctImp.addCategory(selectedCat);
                 ViewAllCategories();
                 clearText();
             } catch(Exception err){
@@ -426,14 +377,18 @@ public class CategoryManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddCategoryActionPerformed
 
     private void btnUpdateCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateCategoryActionPerformed
-       String name = categoryNameField.getText();
        try {
-            if(!name.equals("")) {
-                selectedCat.setCategory(categoryNameField.getText());
-                updateCategory(selectedCat);
-            } else {
-                JOptionPane.showMessageDialog(null, "Please select an entry to modify.", "Blank Form", JOptionPane.WARNING_MESSAGE);
-            }
+            if(!categoryIDField.getText().equals("") && !categoryIDField.getText().equals("1")) {
+                if(authenticateCategory()) {
+                    selectedCat.setCategoryID(Integer.parseInt(categoryIDField.getText()));
+                    ctImp.editCategory(selectedCat);
+                    ViewAllCategories();
+                    clearText();
+                } 
+            } else if(categoryIDField.getText().equals("1")) 
+                JOptionPane.showMessageDialog(null, "You cannot change the name of this category.", "Try Again", JOptionPane.WARNING_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(null, "Please select and entry to update.", "Blank Form", JOptionPane.WARNING_MESSAGE);
         } catch (Exception err) {
             err.printStackTrace();
         }
@@ -460,7 +415,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                     }
                     clearText();
                 } else if(categoryIDField.getText().equals("1"))
-                    JOptionPane.showMessageDialog(null, "You cannot delete the category", "Try Again", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "You cannot delete the category.", "Try Again", JOptionPane.WARNING_MESSAGE);
             } else
                 JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
         }   catch (Exception err) {
@@ -486,7 +441,6 @@ public class CategoryManagement extends javax.swing.JFrame {
 
     private void btnAddRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRecipeActionPerformed
         if(selectedCat != null){
-            System.out.println("Fetching...");
             try {
                 RCpopup rcp = new RCpopup(this);
                 rcp.setVisible(true);
@@ -501,7 +455,6 @@ public class CategoryManagement extends javax.swing.JFrame {
             }
         } else {
             JOptionPane.showMessageDialog(null, "Please select a category first.", "Blank Form", JOptionPane.WARNING_MESSAGE);
-            System.out.println("Noooo");
         }
             
     }//GEN-LAST:event_btnAddRecipeActionPerformed
@@ -534,6 +487,7 @@ public class CategoryManagement extends javax.swing.JFrame {
     private javax.swing.JTextField categoryNameField;
     private javax.swing.JTable categoryTable;
     private javax.swing.JLabel errorLabel1;
+    private javax.swing.JLabel errorLabel2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
