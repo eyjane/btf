@@ -129,6 +129,7 @@ public class CategoryManagement extends javax.swing.JFrame {
         else {
             selectedCat.setCategory(categoryNameField.getText());
             errorLabel1.setVisible(false);
+            errorLabel2.setVisible(false);
             for(int i = 0; i < ctImp.getAllCategory().size(); i++){
                 if(categoryNameField.getText().equalsIgnoreCase(ctImp.getAllCategory().get(i).getCategory())) {
                     errorLabel1.setVisible(true);
@@ -270,7 +271,7 @@ public class CategoryManagement extends javax.swing.JFrame {
         });
         jPanel2.add(btnDeleteRecipe, new org.netbeans.lib.awtextra.AbsoluteConstraints(891, 191, -1, -1));
 
-        btnUpdateCategory.setText("Update");
+        btnUpdateCategory.setText("Save");
         btnUpdateCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateCategoryActionPerformed(evt);
@@ -368,6 +369,7 @@ public class CategoryManagement extends javax.swing.JFrame {
         if(authenticateCategory()){
             try{
                 ctImp.addCategory(selectedCat);
+                JOptionPane.showMessageDialog(null, "Successfully added a new category!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 ViewAllCategories();
                 clearText();
             } catch(Exception err){
@@ -382,6 +384,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                 if(authenticateCategory()) {
                     selectedCat.setCategoryID(Integer.parseInt(categoryIDField.getText()));
                     ctImp.editCategory(selectedCat);
+                    JOptionPane.showMessageDialog(null, "Successfully updated the category!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     ViewAllCategories();
                     clearText();
                 } 
@@ -411,6 +414,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                             rcImp.editRecipe(rc);
                         }
                         ctImp.deleteCategory(selectedCat);
+                        JOptionPane.showMessageDialog(null, "Successfully deleted the category!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         ViewAllCategories();
                     }
                     clearText();

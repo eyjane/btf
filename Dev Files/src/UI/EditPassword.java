@@ -173,24 +173,26 @@ public class EditPassword extends javax.swing.JFrame {
                         DOMSource source = new DOMSource(doc);
                         StreamResult result = new StreamResult(new File(filepath));
                         transformer.transform(source, result);
+                        
+                        JOptionPane.showMessageDialog(null, "Succesfully changed password!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     } catch (Exception e) {
                         e.printStackTrace();
                     } 
                 
                     
                 try {
-                    Login l = new Login();
-                    l.setVisible(true);
-                    dispose();
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(EditPassword.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(EditPassword.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(EditPassword.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (UnsupportedLookAndFeelException ex) {
-                    Logger.getLogger(EditPassword.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                EODTab e = new EODTab();
+                e.setVisible(true);
+                dispose();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
             } 
         } else{
             JOptionPane.showMessageDialog(null, "The password that you have entered is incorrect. "
