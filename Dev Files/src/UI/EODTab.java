@@ -358,13 +358,13 @@ public class EODTab extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        
+
         // DELIVERY
         this.setVisible(false);
         try {
             DELIVERY deliveryWindow = new DELIVERY(this);
             deliveryWindow.setVisible(true);
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -374,10 +374,10 @@ public class EODTab extends javax.swing.JFrame {
         try {
             SALES saleswindow = new SALES(this);
             saleswindow.setVisible(true);
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
-        
+
     }//GEN-LAST:event_salesBtnActionPerformed
 
     private void rcMgtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rcMgtActionPerformed
@@ -385,7 +385,7 @@ public class EODTab extends javax.swing.JFrame {
         try {
             RCManagement rcmgt = new RCManagement(this);
             rcmgt.setVisible(true);
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }//GEN-LAST:event_rcMgtActionPerformed
@@ -410,7 +410,7 @@ public class EODTab extends javax.swing.JFrame {
         try {
             CategoryManagement ct = new CategoryManagement();
             ct.setVisible(true);
-            dispose(); 
+            dispose();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -424,16 +424,15 @@ public class EODTab extends javax.swing.JFrame {
 
     private void UTWbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UTWbtnActionPerformed
         // TODO add your handling code here:
-        
+
         this.setVisible(false);
         try {
             UsedTransfer usedWindow = new UsedTransfer(this);
             usedWindow.setVisible(true);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
-        
+
     }//GEN-LAST:event_UTWbtnActionPerformed
 
     private void actualBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualBtnActionPerformed
@@ -443,11 +442,10 @@ public class EODTab extends javax.swing.JFrame {
         try {
             ACTUALINPUT actualWindow = new ACTUALINPUT(this);
             actualWindow.setVisible(true);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
-        
+
     }//GEN-LAST:event_actualBtnActionPerformed
 
     /**
@@ -465,20 +463,21 @@ public class EODTab extends javax.swing.JFrame {
         DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
         avRecipes = rcImp.getRecipeByStatus("available");
 
-        for (i = 0; i < avRecipes.size(); i++) {
-            RecipeBean rc = avRecipes.get(i);
-            ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
-            ingredients = rc.getIngredients();
+        if (avRecipes != null) {
+            for (i = 0; i < avRecipes.size(); i++) {
+                RecipeBean rc = avRecipes.get(i);
+                ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
+                ingredients = rc.getIngredients();
 
-            Object[] rec = {"<html><p style = 'color:red'><b>" + rc.getRecipe() + "</b></p></html>", "<html><p style = 'color:red'><b>" + String.format("%.2f", rc.computeStock()) + "</b></p></html>"};
-            recipeModel.addRow(rec);
+                Object[] rec = {"<html><p style = 'color:red'><b>" + rc.getRecipe() + "</b></p></html>", "<html><p style = 'color:red'><b>" + String.format("%.2f", rc.computeStock()) + "</b></p></html>"};
+                recipeModel.addRow(rec);
 
-            for (j = 0; j < ingredients.size(); j++) {
-                RawBean raw = ingredients.get(j).getRaw();
-                Object[] rawm = {"     " + ingredients.get(j).getAmount() + " " + raw.getUom() + " of " + raw.getRaw(), String.format("%.2f", raw.getStock())};
-                recipeModel.addRow(rawm);
+                for (j = 0; j < ingredients.size(); j++) {
+                    RawBean raw = ingredients.get(j).getRaw();
+                    Object[] rawm = {"     " + ingredients.get(j).getAmount() + " " + raw.getUom() + " of " + raw.getRaw(), String.format("%.2f", raw.getStock())};
+                    recipeModel.addRow(rawm);
+                }
             }
-
         }
 
         recipeTable.setModel(recipeModel);
@@ -488,18 +487,20 @@ public class EODTab extends javax.swing.JFrame {
         DefaultTableModel notificationModel = new DefaultTableModel(cols, 0);
         avRaw = rwImp.getRawByStatus("available");
 
-        for (i = 0; i < avRaw.size(); i++) {
-            RawBean rm = avRaw.get(i);
-            Object[] raw = {rm.getRaw(), String.format("%.2f", rm.getStock())};
-            if (rm.isCritical()) {
-                notificationModel.addRow(raw);
+        if (avRaw != null) {
+            for (i = 0; i < avRaw.size(); i++) {
+                RawBean rm = avRaw.get(i);
+                Object[] raw = {rm.getRaw(), String.format("%.2f", rm.getStock())};
+                if (rm.isCritical()) {
+                    notificationModel.addRow(raw);
+                }
+                rawModel.addRow(raw);
             }
-            rawModel.addRow(raw);
         }
 
         rawTable.setModel(rawModel);
-
-        notificationTable.setModel(rawModel);
+        notificationTable.setModel(notificationModel);
+        
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
         notificationTable.getColumn("Stock").setCellRenderer(rightRenderer);
@@ -512,8 +513,6 @@ public class EODTab extends javax.swing.JFrame {
     /**
      * < -- JANERYS FUNCTIONS END -- > *
      */
-    
-    
     /**
      * @param args the command line arguments
      */
