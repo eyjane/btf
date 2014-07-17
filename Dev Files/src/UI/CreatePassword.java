@@ -183,17 +183,17 @@ public class CreatePassword extends javax.swing.JFrame {
                     e.printStackTrace();
               }
             try {
-                Login l = new Login();
-                l.setVisible(true);
-               dispose();
+                EODTab e = new EODTab();
+                e.setVisible(true);
+                dispose();
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(CreatePassword.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InstantiationException ex) {
-                Logger.getLogger(CreatePassword.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(CreatePassword.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnsupportedLookAndFeelException ex) {
-                Logger.getLogger(CreatePassword.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
          } 
     }//GEN-LAST:event_btnCreatePasswordActionPerformed

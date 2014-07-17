@@ -119,7 +119,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        btnEditPassword.setText("Edit");
+        btnEditPassword.setText("Change Password");
         btnEditPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditPasswordActionPerformed(evt);
