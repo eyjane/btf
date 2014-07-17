@@ -74,8 +74,6 @@ public class CategoryManagement extends javax.swing.JFrame {
             try {
             DefaultTableModel defaultTableModel = (DefaultTableModel) categoryTable.getModel();
             if (categoryTable.getSelectedRow() >= 0) {
-                /*selectedCat.setCategoryID((int) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0));
-                selectedCat.setCategory((String) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 1));*/
                 categoryIDField.setText(defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0).toString());
                 categoryNameField.setText((String) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 1));
                 selectedCat = ctImp.getCategory((int) (defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0)));

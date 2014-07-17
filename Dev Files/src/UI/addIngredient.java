@@ -293,7 +293,7 @@ public class addIngredient extends javax.swing.JFrame {
         if (rawTable.getSelectedRow() < 0) {
             return;
         }
-        if (isNumber(quantity)) {
+        if (isNumber(quantity) && Float.parseFloat(quantity) > 0) {
             int rselect = rawTable.getSelectedRow();
             addIngredient(rselect, Float.parseFloat(quantity));
             errorLabel.setVisible(false);
@@ -317,7 +317,7 @@ public class addIngredient extends javax.swing.JFrame {
         if (ingredientTable.getSelectedRow() < 0) {
             return;
         }
-        if (isNumber(quantity)) {
+        if (isNumber(quantity) && Float.parseFloat(quantity) > 0) {
             int rselect = ingredientTable.getSelectedRow();
             editQuantity(rselect, Float.parseFloat(quantity));
             errorLabel1.setVisible(false);

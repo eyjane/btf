@@ -157,14 +157,11 @@ public class RCManagement extends javax.swing.JFrame {
 
         jLabel6.setText("Ingredients:");
 
-        nameField.setText("   ");
         nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nameFieldActionPerformed(evt);
             }
         });
-
-        costField.setText("   ");
 
         ingredientsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -351,6 +348,12 @@ public class RCManagement extends javax.swing.JFrame {
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         this.setVisible(false);
+        try {
+            main = new EODTab();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        
         main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 
@@ -387,7 +390,7 @@ public class RCManagement extends javax.swing.JFrame {
             edit = false;
         }
 
-        if (!costField.getText().toString().isEmpty()) {
+        if (!costField.getText().toString().isEmpty() && isNumber(costField.getText().toString()) && Float.parseFloat(costField.getText().toString()) > 0) {
             errorLabel2.setVisible(false);
         } else {
             errorLabel2.setVisible(true);
@@ -640,6 +643,16 @@ public class RCManagement extends javax.swing.JFrame {
             tableColumn.setPreferredWidth(preferredWidth);
         }
     }
+    
+    private boolean isNumber(String s) {
+        try {
+            Float.parseFloat(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    /*** <--- JANERYS CODE ENDS ---> ***/
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

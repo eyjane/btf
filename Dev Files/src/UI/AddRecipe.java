@@ -264,7 +264,7 @@ public class AddRecipe extends javax.swing.JFrame {
             add = false;
         }
 
-        if (isNumber(costField.getText().toString())) {
+        if (isNumber(costField.getText().toString()) && Float.parseFloat(costField.getText().toString()) > 0) {
             errorLabel2.setVisible(false);
         } else {
             errorLabel2.setVisible(true);
