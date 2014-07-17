@@ -147,6 +147,8 @@ public class CategoryManagement extends javax.swing.JFrame {
         errorLabel2.setVisible(false);
         btnUpdateCategory.setEnabled(false);
         btnAddCategory.setEnabled(true);
+        btnAddRecipe.setEnabled(false);
+        btnDeleteRecipe.setEnabled(false);
         recipeTable.setModel(initializeRecipeTable());
     }
     
