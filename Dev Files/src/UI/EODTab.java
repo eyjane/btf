@@ -126,7 +126,7 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
 
-        rmMgt1.setText("Raw Material Management");
+        rmMgt1.setText("Manage Raw Materials");
         rmMgt1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rmMgt1ActionPerformed(evt);

@@ -284,13 +284,13 @@ public class RMManagement extends javax.swing.JFrame {
         jPanel2.add(priceField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 79, 109, -1));
         jPanel2.add(stockField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 105, 109, -1));
 
-        btnSave.setText("Update");
+        btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
             }
         });
-        jPanel2.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(539, 195, -1, -1));
+        jPanel2.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 200, -1, -1));
 
         jLabel10.setText("Critical:");
         jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 134, -1, -1));
@@ -324,13 +324,13 @@ public class RMManagement extends javax.swing.JFrame {
         errorLabel1.setText("ERROR: Required field.");
         jPanel2.add(errorLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 56, -1, -1));
 
-        btnAdd.setLabel("Add");
+        btnAdd.setText("Add Raw Material");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(388, 195, -1, -1));
+        jPanel2.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, -1, -1));
 
         btnDelete.setLabel("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -338,7 +338,7 @@ public class RMManagement extends javax.swing.JFrame {
                 btnDeleteActionPerformed(evt);
             }
         });
-        jPanel2.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(457, 195, -1, -1));
+        jPanel2.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 200, -1, -1));
 
         btnClear.setText("Clear");
         btnClear.addActionListener(new java.awt.event.ActionListener() {
@@ -406,6 +406,7 @@ public class RMManagement extends javax.swing.JFrame {
          if(authenticateRM()) {
             try{
                 rmImp.addRaw(editRaw);
+                JOptionPane.showMessageDialog(null, "Raw material successfully added!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 ViewAllRM();
                 clearText();
             } catch(Exception err){
@@ -420,6 +421,7 @@ public class RMManagement extends javax.swing.JFrame {
                 if(!idField.getText().equals("")) {
                     if(JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this raw material?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
                             rmImp.deleteRaw(selectedRaw);
+                            JOptionPane.showMessageDialog(null, "Successfully deleted raw material!", "Success", JOptionPane.INFORMATION_MESSAGE);
                             ViewAllRM();
                     }
                     clearText();
@@ -445,6 +447,7 @@ public class RMManagement extends javax.swing.JFrame {
                 if(authenticateRM()) {
                     editRaw.setRawID(Integer.parseInt(idField.getText()));
                     rmImp.editRaw(editRaw);
+                    JOptionPane.showMessageDialog(null, "Raw material successfully updated!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     ViewAllRM();
                     clearText();
                 } 
