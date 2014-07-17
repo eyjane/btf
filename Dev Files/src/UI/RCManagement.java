@@ -132,7 +132,7 @@ public class RCManagement extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(recipeTable);
 
-        addRecipeB.setLabel("Add");
+        addRecipeB.setText("Add Recipe");
         addRecipeB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addRecipeBActionPerformed(evt);
@@ -317,9 +317,9 @@ public class RCManagement extends javax.swing.JFrame {
                     .addComponent(jLabel9)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 655, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(76, 76, 76)
+                        .addComponent(addRecipeB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteRecipe))
-                    .addComponent(addRecipeB)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 655, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(backBtn)))
         );
@@ -332,10 +332,9 @@ public class RCManagement extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(addRecipeB)
                         .addComponent(deleteRecipe))
-                    .addComponent(addRecipeB)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -538,6 +537,7 @@ public class RCManagement extends javax.swing.JFrame {
         RecipeBean drecipe = rcImp.getRecipeBean(rID);
         
         if(rcImp.deleteRecipe(drecipe)){
+            JOptionPane.showMessageDialog(null, "Recipe successfully deleted!");
             TableModel model = recipeTable.getModel();
             DefaultTableModel rmodel = (DefaultTableModel) model;
             
