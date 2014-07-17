@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -420,6 +421,7 @@ public class RCManagement extends javax.swing.JFrame {
             r.setStock(rtemp.getStock());
 
             if(rcImp.editRecipe(r)){
+                JOptionPane.showMessageDialog(null, "Recipe successfully edited!");
                 for(IngredientBean ibean: aIngredient){
                     inImp.editIngredient(r, ibean);
                 }

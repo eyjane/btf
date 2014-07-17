@@ -301,9 +301,9 @@ public class AddRecipe extends javax.swing.JFrame {
                     inImp.addIngredient(r, i);
                 }
 
-                /*
+                
                  JOptionPane.showMessageDialog(null, "Recipe successfully added!");
-                 nameField.setText("");
+                 /*nameField.setText("");
                  costField.setText("");
                  stockField.setText("");
                  categoryBox.setSelectedIndex(0);
@@ -313,7 +313,6 @@ public class AddRecipe extends javax.swing.JFrame {
                 rcman.setVisible(true);
                 this.setVisible(false);
                 rcman.prepareTable();
-
             }
         }
     }//GEN-LAST:event_addRecipeActionPerformed
