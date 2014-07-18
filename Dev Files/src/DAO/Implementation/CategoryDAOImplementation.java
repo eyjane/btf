@@ -30,10 +30,9 @@ public class CategoryDAOImplementation implements CategoryDAOInterface {
         try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "INSERT into category(categoryID, category) values (?,?);";
+            String query = "INSERT into category(category) values (?);";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, c.getCategoryID());
-            preparedStatement.setString(2, c.getCategory());
+            preparedStatement.setString(1, c.getCategory());
             preparedStatement.executeUpdate();
             connection.close();
             return true;

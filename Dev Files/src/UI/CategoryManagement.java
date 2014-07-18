@@ -209,8 +209,10 @@ public class CategoryManagement extends javax.swing.JFrame {
         });
         categoryTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(categoryTable);
-        categoryTable.getColumnModel().getColumn(0).setResizable(false);
-        categoryTable.getColumnModel().getColumn(1).setResizable(false);
+        if (categoryTable.getColumnModel().getColumnCount() > 0) {
+            categoryTable.getColumnModel().getColumn(0).setResizable(false);
+            categoryTable.getColumnModel().getColumn(1).setResizable(false);
+        }
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Category"));
         jPanel2.setPreferredSize(new java.awt.Dimension(703, 400));
@@ -247,11 +249,13 @@ public class CategoryManagement extends javax.swing.JFrame {
         });
         recipeTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(recipeTable);
-        recipeTable.getColumnModel().getColumn(0).setResizable(false);
-        recipeTable.getColumnModel().getColumn(1).setResizable(false);
-        recipeTable.getColumnModel().getColumn(2).setResizable(false);
-        recipeTable.getColumnModel().getColumn(3).setResizable(false);
-        recipeTable.getColumnModel().getColumn(4).setResizable(false);
+        if (recipeTable.getColumnModel().getColumnCount() > 0) {
+            recipeTable.getColumnModel().getColumn(0).setResizable(false);
+            recipeTable.getColumnModel().getColumn(1).setResizable(false);
+            recipeTable.getColumnModel().getColumn(2).setResizable(false);
+            recipeTable.getColumnModel().getColumn(3).setResizable(false);
+            recipeTable.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 53, 534, 130));
 
@@ -277,7 +281,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                 btnUpdateCategoryActionPerformed(evt);
             }
         });
-        jPanel2.add(btnUpdateCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(318, 191, -1, -1));
+        jPanel2.add(btnUpdateCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 190, -1, -1));
 
         btnClear.setText("Clear");
         btnClear.addActionListener(new java.awt.event.ActionListener() {
@@ -305,7 +309,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                 btnDeleteCategoryActionPerformed(evt);
             }
         });
-        jPanel2.add(btnDeleteCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(249, 191, -1, -1));
+        jPanel2.add(btnDeleteCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 190, -1, -1));
 
         errorLabel2.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel2.setText("Duplicate name exists.");
@@ -319,7 +323,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 970, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 970, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -328,7 +332,7 @@ public class CategoryManagement extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(9, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
