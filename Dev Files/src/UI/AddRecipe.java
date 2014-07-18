@@ -52,7 +52,7 @@ public class AddRecipe extends javax.swing.JFrame {
         initComponents();
         errorLabel.setVisible(false);
         errorLabel2.setVisible(false);
-        errorLabel3.setVisible(false);
+        inError.setVisible(false);
         errorLabel4.setVisible(false);
         prepareCombo();
 
@@ -91,7 +91,7 @@ public class AddRecipe extends javax.swing.JFrame {
         cancel = new javax.swing.JButton();
         errorLabel = new javax.swing.JLabel();
         errorLabel2 = new javax.swing.JLabel();
-        errorLabel3 = new javax.swing.JLabel();
+        inError = new javax.swing.JLabel();
         errorLabel4 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -200,9 +200,9 @@ public class AddRecipe extends javax.swing.JFrame {
         errorLabel2.setText("ERROR: Required field. Please input valid number.");
         getContentPane().add(errorLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 110, -1, -1));
 
-        errorLabel3.setForeground(new java.awt.Color(255, 0, 51));
-        errorLabel3.setText("ERROR: Recipe must have at least one ingredient.");
-        getContentPane().add(errorLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 400, -1, -1));
+        inError.setForeground(new java.awt.Color(255, 0, 51));
+        inError.setText("ERROR: Recipe must have at least one ingredient.");
+        getContentPane().add(inError, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 400, -1, -1));
 
         errorLabel4.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel4.setText("ERROR: Required field. Please input valid number.");
@@ -272,10 +272,10 @@ public class AddRecipe extends javax.swing.JFrame {
         }
 
         if (!(aIngredient.isEmpty())) {
-            errorLabel3.setVisible(false);
+            inError.setVisible(false);
 
         } else {
-            errorLabel3.setVisible(true);
+            inError.setVisible(true);
             add = false;
         }
 
@@ -378,6 +378,10 @@ public class AddRecipe extends javax.swing.JFrame {
             return false;
         }
     }
+    
+    public void inErrorV(boolean b){
+        inError.setVisible(b);
+    }
 
     /**
      * * <--- JANERYS CODE ENDS HERE ---> **
@@ -396,8 +400,8 @@ public class AddRecipe extends javax.swing.JFrame {
     private javax.swing.JButton editIngredient;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel errorLabel2;
-    private javax.swing.JLabel errorLabel3;
     private javax.swing.JLabel errorLabel4;
+    private javax.swing.JLabel inError;
     private javax.swing.JTable ingredientsTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

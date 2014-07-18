@@ -64,7 +64,7 @@ public class RCManagement extends javax.swing.JFrame {
 
         errorLabel.setVisible(false);
         errorLabel2.setVisible(false);
-        errorLabel3.setVisible(false);
+        inError.setVisible(false);
         prepareTable();
     }
 
@@ -107,7 +107,7 @@ public class RCManagement extends javax.swing.JFrame {
         nameLabel = new javax.swing.JLabel();
         errorLabel = new javax.swing.JLabel();
         errorLabel2 = new javax.swing.JLabel();
-        errorLabel3 = new javax.swing.JLabel();
+        inError = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
 
@@ -206,8 +206,8 @@ public class RCManagement extends javax.swing.JFrame {
         errorLabel2.setForeground(new java.awt.Color(255, 0, 102));
         errorLabel2.setText("ERROR: Required field. Please input valid number.");
 
-        errorLabel3.setForeground(new java.awt.Color(255, 0, 102));
-        errorLabel3.setText("ERROR: Recipe must have at least one ingredient.");
+        inError.setForeground(new java.awt.Color(255, 0, 102));
+        inError.setText("ERROR: Recipe must have at least one ingredient.");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -225,7 +225,7 @@ public class RCManagement extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(editIngredient)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(errorLabel3))
+                                .addComponent(inError))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
@@ -292,7 +292,7 @@ public class RCManagement extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(editIngredient)
-                    .addComponent(errorLabel3))
+                    .addComponent(inError))
                 .addGap(17, 17, 17)
                 .addComponent(saveRecipe))
         );
@@ -318,7 +318,7 @@ public class RCManagement extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 655, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(addRecipeB)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
                         .addComponent(deleteRecipe))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 655, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(backBtn)))
@@ -332,12 +332,10 @@ public class RCManagement extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(addRecipeB)
-                        .addComponent(deleteRecipe))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(addRecipeB)
+                    .addComponent(deleteRecipe))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(backBtn))
         );
 
@@ -398,10 +396,10 @@ public class RCManagement extends javax.swing.JFrame {
         }
 
         if (!(aIngredient.isEmpty())) {
-            errorLabel3.setVisible(false);
+            inError.setVisible(false);
 
         } else {
-            errorLabel3.setVisible(true);
+            inError.setVisible(true);
             edit = false;
         }
 
@@ -421,10 +419,7 @@ public class RCManagement extends javax.swing.JFrame {
 
             if(rcImp.editRecipe(r)){
                 JOptionPane.showMessageDialog(null, "Recipe successfully edited!");
-                for(IngredientBean ibean: aIngredient){
-                    inImp.editIngredient(r, ibean);
-                }
-
+                updateIngredient(r, aIngredient);
                 prepareTable();
             }
         }
@@ -532,6 +527,20 @@ public class RCManagement extends javax.swing.JFrame {
      * <--- JANERYS CODE START ---> *
      */
     
+    private void updateIngredient(RecipeBean r, ArrayList<IngredientBean> in){
+       ArrayList<IngredientBean> orig = inImp.getAllIngredients(r);
+       int i;
+       //delete all ingredients
+       
+       for (i=0; i < orig.size(); i++){
+           inImp.deleteIngredient(r, orig.get(i));
+       }
+       //add ingredients
+       for(i=0; i < in.size(); i++){
+           inImp.addIngredient(r, in.get(i));
+       }
+        
+    }
     private void deleteRecipe(int r) {
         int rID = Integer.parseInt(recipeTable.getModel().getValueAt(r, 0).toString());
         RecipeBean drecipe = rcImp.getRecipeBean(rID);
@@ -551,10 +560,6 @@ public class RCManagement extends javax.swing.JFrame {
             iModel.setRowCount(0);
             prepareTable();
         }
-        
-        
-        
-        
     }
     public void computeActual(ArrayList<IngredientBean> aIngredient) {
         RecipeBean rtemp = new RecipeBean();
@@ -654,6 +659,11 @@ public class RCManagement extends javax.swing.JFrame {
             return false;
         }
     }
+    
+    public void inErrorV(boolean b){
+        inError.setVisible(b);
+    }
+
     /*** <--- JANERYS CODE ENDS ---> ***/
 
 
@@ -667,7 +677,7 @@ public class RCManagement extends javax.swing.JFrame {
     private javax.swing.JButton editIngredient;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel errorLabel2;
-    private javax.swing.JLabel errorLabel3;
+    private javax.swing.JLabel inError;
     private javax.swing.JTable ingredientsTable;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
