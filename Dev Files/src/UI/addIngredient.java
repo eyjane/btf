@@ -328,6 +328,7 @@ public class addIngredient extends javax.swing.JFrame {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         int nrow = ingredientTable.getRowCount();
+        
         //System.out.println(nrow);
         int i;
         int rid;
@@ -349,10 +350,20 @@ public class addIngredient extends javax.swing.JFrame {
             ar.setVisible(true);
             ar.prepareCombo();
             ar.computeActual();
+            if(nrow == 0){
+                ar.inErrorV(true);
+            }else{
+                ar.inErrorV(false);
+            }
         } else {
             rcm.setVisible(true);
             rcm.reloadIngredients(ai);
             rcm.computeActual(ai);
+            if(nrow == 0){
+                rcm.inErrorV(true);
+            }else{
+                rcm.inErrorV(false);
+            }
         }
     }//GEN-LAST:event_saveButtonActionPerformed
 
