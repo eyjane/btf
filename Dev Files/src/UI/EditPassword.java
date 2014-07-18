@@ -37,10 +37,14 @@ public class EditPassword extends javax.swing.JFrame {
     public boolean authenticateNewPasswords(String _newpassword, String _retype){
         boolean flag = false;
         if(!currentPassword.equals(_newpassword)){
-            if(_newpassword.equals(_retype))
-                flag = true;
-            else {
-                JOptionPane.showMessageDialog(null, "The passwords that you have entered did not match.", "Incorrect Password", JOptionPane.WARNING_MESSAGE);
+            if(!_newpassword.equals("") || !_retype.equals("")) {
+                if(_newpassword.equals(_retype))
+                    flag = true;
+                else {
+                    JOptionPane.showMessageDialog(null, "The passwords that you have entered did not match.", "Incorrect Password", JOptionPane.WARNING_MESSAGE);
+                }
+            } else {
+                    JOptionPane.showMessageDialog(null, "Your new password cannot be null.", "Null Password", JOptionPane.WARNING_MESSAGE);
             }
         } else {
                 JOptionPane.showMessageDialog(null, "Your new password cannot be the same as your current password.", "Same Password", JOptionPane.WARNING_MESSAGE);
