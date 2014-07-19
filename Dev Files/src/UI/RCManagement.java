@@ -49,7 +49,7 @@ public class RCManagement extends javax.swing.JFrame {
 
     private addIngredient AddIngredient;
     private AddRecipe addRecipe;
-    
+
     private EODTab main;
 
     /**
@@ -59,7 +59,7 @@ public class RCManagement extends javax.swing.JFrame {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
-        
+
         main = t;
 
         nameError.setVisible(false);
@@ -348,10 +348,10 @@ public class RCManagement extends javax.swing.JFrame {
         this.setVisible(false);
         try {
             main = new EODTab();
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
-        
+
         main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 
@@ -360,7 +360,7 @@ public class RCManagement extends javax.swing.JFrame {
         ArrayList<RecipeBean> avRecipe = rcImp.getAllRecipe();
         int j;
 
-        if(recipeTable.getSelectedRow() < 0){
+        if (recipeTable.getSelectedRow() < 0) {
             return;
         }
 
@@ -383,20 +383,22 @@ public class RCManagement extends javax.swing.JFrame {
             }
         }
 
-        
         if (!nameField.getText().toString().isEmpty()) {
-            for (j = 0; j < avRecipe.size(); j++) {
-                if (avRecipe.get(j).getRecipe().equalsIgnoreCase(nameField.getText().toString())) {
-                    nameError.setText("ERROR: Duplicate entry.");
-                    nameError.setVisible(true);
-                    edit = false;
-                    break;
+            if (avRecipe != null) {
+                for (j = 0; j < avRecipe.size(); j++) {
+                    if (avRecipe.get(j).getRecipe().equalsIgnoreCase(nameField.getText().toString())) {
+                        nameError.setText("ERROR: Duplicate entry.");
+                        nameError.setVisible(true);
+                        edit = false;
+                        break;
+                    }
                 }
             }
-            if(edit){
+            if (edit) {
                 nameError.setVisible(false);
             }
-        }else {
+
+        } else {
             nameError.setVisible(true);
             nameError.setText("ERROR: Required Field");
             edit = false;
@@ -417,7 +419,7 @@ public class RCManagement extends javax.swing.JFrame {
             edit = false;
         }
 
-        if(edit){
+        if (edit) {
             RecipeBean r = new RecipeBean();
 
             int rID = Integer.parseInt(recipeTable.getModel().getValueAt(recipeTable.getSelectedRow(), 0).toString());
@@ -431,7 +433,7 @@ public class RCManagement extends javax.swing.JFrame {
             r.setRcstatus("available");
             r.setStock(rtemp.getStock());
 
-            if(rcImp.editRecipe(r)){
+            if (rcImp.editRecipe(r)) {
                 JOptionPane.showMessageDialog(null, "Recipe successfully edited!");
                 updateIngredient(r, aIngredient);
                 prepareTable();
@@ -442,8 +444,8 @@ public class RCManagement extends javax.swing.JFrame {
     private void editIngredientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editIngredientActionPerformed
         int nrow = ingredientsTable.getRowCount();
         //System.out.println(nrow);
-        
-        if(recipeTable.getSelectedRow() == -1){
+
+        if (recipeTable.getSelectedRow() == -1) {
             return;
         }
         int i;
@@ -540,30 +542,30 @@ public class RCManagement extends javax.swing.JFrame {
     /**
      * <--- JANERYS CODE START ---> *
      */
-    
-    private void updateIngredient(RecipeBean r, ArrayList<IngredientBean> in){
-       ArrayList<IngredientBean> orig = inImp.getAllIngredients(r);
-       int i;
-       //delete all ingredients
-       
-       for (i=0; i < orig.size(); i++){
-           inImp.deleteIngredient(r, orig.get(i));
-       }
-       //add ingredients
-       for(i=0; i < in.size(); i++){
-           inImp.addIngredient(r, in.get(i));
-       }
-        
+    private void updateIngredient(RecipeBean r, ArrayList<IngredientBean> in) {
+        ArrayList<IngredientBean> orig = inImp.getAllIngredients(r);
+        int i;
+        //delete all ingredients
+
+        for (i = 0; i < orig.size(); i++) {
+            inImp.deleteIngredient(r, orig.get(i));
+        }
+        //add ingredients
+        for (i = 0; i < in.size(); i++) {
+            inImp.addIngredient(r, in.get(i));
+        }
+
     }
+
     private void deleteRecipe(int r) {
         int rID = Integer.parseInt(recipeTable.getModel().getValueAt(r, 0).toString());
         RecipeBean drecipe = rcImp.getRecipeBean(rID);
-        
-        if(rcImp.deleteRecipe(drecipe)){
+
+        if (rcImp.deleteRecipe(drecipe)) {
             JOptionPane.showMessageDialog(null, "Recipe successfully deleted!");
             TableModel model = recipeTable.getModel();
             DefaultTableModel rmodel = (DefaultTableModel) model;
-            
+
             rmodel.removeRow(r);
             recipeTable.setModel(rmodel);
             nameField.setText("");
@@ -575,6 +577,7 @@ public class RCManagement extends javax.swing.JFrame {
             prepareTable();
         }
     }
+
     public void computeActual(ArrayList<IngredientBean> aIngredient) {
         RecipeBean rtemp = new RecipeBean();
         rtemp.setIngredients(aIngredient);
@@ -635,9 +638,9 @@ public class RCManagement extends javax.swing.JFrame {
         recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
 
         adjustTable(recipeTable);
-        
-      String icols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
-      DefaultTableModel model = new DefaultTableModel(icols, 0);
+
+        String icols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
+        DefaultTableModel model = new DefaultTableModel(icols, 0);
 
     }
 
@@ -664,7 +667,7 @@ public class RCManagement extends javax.swing.JFrame {
             tableColumn.setPreferredWidth(preferredWidth);
         }
     }
-    
+
     private boolean isNumber(String s) {
         try {
             Float.parseFloat(s);
@@ -673,13 +676,14 @@ public class RCManagement extends javax.swing.JFrame {
             return false;
         }
     }
-    
-    public void inErrorV(boolean b){
+
+    public void inErrorV(boolean b) {
         inError.setVisible(b);
     }
 
-    /*** <--- JANERYS CODE ENDS ---> ***/
-
+    /**
+     * * <--- JANERYS CODE ENDS ---> **
+     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel actualLabel;
