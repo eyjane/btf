@@ -260,18 +260,22 @@ public class AddRecipe extends javax.swing.JFrame {
         int j;
 
         if (!nameField.getText().toString().isEmpty()) {
-            for (j = 0; j < avRecipe.size(); j++) {
-                if (avRecipe.get(j).getRecipe().equalsIgnoreCase(nameField.getText().toString())) {
-                    nameError.setText("ERROR: Duplicate entry.");
-                    nameError.setVisible(true);
-                    add = false;
-                    break;
+            if (avRecipe != null) {
+                for (j = 0; j < avRecipe.size(); j++) {
+                    if (avRecipe.get(j).getRecipe().equalsIgnoreCase(nameField.getText().toString())) {
+                        nameError.setText("ERROR: Duplicate entry.");
+                        nameError.setVisible(true);
+                        add = false;
+                        break;
+                    }
                 }
             }
-            if(add){
+
+            if (add) {
                 nameError.setVisible(false);
             }
-        }else {
+
+        } else {
             nameError.setVisible(true);
             nameError.setText("ERROR: Required Field");
             add = false;
