@@ -393,8 +393,9 @@ public class RCManagement extends javax.swing.JFrame {
                        System.out.println("recipe: " + avRecipe.get(j).getRecipe());
                        
                    } else {
-                      // System.out.println("HERE " + avRecipe.get(j).getRecipe());
-                        if (avRecipe.get(j).getRecipe().equalsIgnoreCase(nameField.getText().toString())) {
+                       //System.out.println("HERE " + avRecipe.get(j).getRecipe());
+                       String cur = avRecipe.get(j).getRecipe();
+                        if (cur.equalsIgnoreCase(nameField.getText().toString())) {
                             
                             nameError.setText("ERROR: Duplicate entry.");
                             nameError.setVisible(true);
