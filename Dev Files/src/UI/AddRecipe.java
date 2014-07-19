@@ -261,7 +261,7 @@ public class AddRecipe extends javax.swing.JFrame {
 
         if (!nameField.getText().toString().isEmpty()) {
             for (j = 0; j < avRecipe.size(); j++) {
-                if (avRecipe.get(j).getRecipe().equals(nameField.getText().toString())) {
+                if (avRecipe.get(j).getRecipe().equalsIgnoreCase(nameField.getText().toString())) {
                     nameError.setText("ERROR: Duplicate entry.");
                     nameError.setVisible(true);
                     add = false;
