@@ -257,11 +257,11 @@ public class AddRecipe extends javax.swing.JFrame {
     private void addRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeActionPerformed
         boolean add = true;
         ArrayList<RecipeBean> avRecipe = rcImp.getAllRecipe();
-        int i;
+        int j;
 
         if (!nameField.getText().toString().isEmpty()) {
-            for (i = 0; i < avRecipe.size(); i++) {
-                if (avRecipe.get(i).getRecipe().equals(nameField.getText().toString())) {
+            for (j = 0; j < avRecipe.size(); j++) {
+                if (avRecipe.get(j).getRecipe().equals(nameField.getText().toString())) {
                     nameError.setText("ERROR: Duplicate entry.");
                     nameError.setVisible(true);
                     add = false;
