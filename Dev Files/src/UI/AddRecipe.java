@@ -281,7 +281,8 @@ public class AddRecipe extends javax.swing.JFrame {
             add = false;
         }
 
-        if (isNumber(costField.getText().toString()) && Float.parseFloat(costField.getText().toString()) > 0) {
+        String cost = costField.getText().toString();
+        if ((!costField.getText().toString().isEmpty()) && isNumber(cost) && Float.parseFloat(cost) > 0) {
             errorLabel2.setVisible(false);
         } else {
             errorLabel2.setVisible(true);
@@ -296,7 +297,8 @@ public class AddRecipe extends javax.swing.JFrame {
             add = false;
         }
 
-        if (isNumber(stockField.getText().toString())) {
+        String stock = stockField.getText().toString();
+        if ((!stockField.getText().isEmpty()) && isNumber(stock) && Float.parseFloat(stock) > 0) {
             errorLabel4.setVisible(false);
         } else {
             errorLabel4.setVisible(true);
