@@ -359,6 +359,7 @@ public class RCManagement extends javax.swing.JFrame {
         boolean edit = true;
         ArrayList<RecipeBean> avRecipe = rcImp.getAllRecipe();
         int j;
+        String o;
 
         if (recipeTable.getSelectedRow() < 0) {
             return;
@@ -383,9 +384,13 @@ public class RCManagement extends javax.swing.JFrame {
             }
         }
 
+        o = nameField.getText().toString();
         if (!nameField.getText().toString().isEmpty()) {
             if (avRecipe != null) {
                 for (j = 0; j < avRecipe.size(); j++) {
+                    if(o.equalsIgnoreCase(avRecipe.get(j).getRecipe())){
+                        continue;
+                    }
                     if (avRecipe.get(j).getRecipe().equalsIgnoreCase(nameField.getText().toString())) {
                         nameError.setText("ERROR: Duplicate entry.");
                         nameError.setVisible(true);
@@ -404,7 +409,8 @@ public class RCManagement extends javax.swing.JFrame {
             edit = false;
         }
 
-        if (!costField.getText().toString().isEmpty() && isNumber(costField.getText().toString()) && Float.parseFloat(costField.getText().toString()) > 0) {
+        String cost = costField.getText().toString();
+        if ((!costField.getText().toString().isEmpty()) && isNumber(cost) && Float.parseFloat(cost) > 0) {
             errorLabel2.setVisible(false);
         } else {
             errorLabel2.setVisible(true);
