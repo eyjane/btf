@@ -62,7 +62,7 @@ public class RCManagement extends javax.swing.JFrame {
         
         main = t;
 
-        errorLabel.setVisible(false);
+        nameError.setVisible(false);
         errorLabel2.setVisible(false);
         inError.setVisible(false);
         prepareTable();
@@ -105,7 +105,7 @@ public class RCManagement extends javax.swing.JFrame {
         saveRecipe = new javax.swing.JButton();
         actualLabel = new javax.swing.JLabel();
         nameLabel = new javax.swing.JLabel();
-        errorLabel = new javax.swing.JLabel();
+        nameError = new javax.swing.JLabel();
         errorLabel2 = new javax.swing.JLabel();
         inError = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
@@ -200,8 +200,8 @@ public class RCManagement extends javax.swing.JFrame {
 
         nameLabel.setText("  ");
 
-        errorLabel.setForeground(new java.awt.Color(255, 0, 102));
-        errorLabel.setText("ERROR: Required field.");
+        nameError.setForeground(new java.awt.Color(255, 0, 102));
+        nameError.setText("ERROR: Required field.");
 
         errorLabel2.setForeground(new java.awt.Color(255, 0, 102));
         errorLabel2.setText("ERROR: Required field. Please input valid number.");
@@ -240,7 +240,7 @@ public class RCManagement extends javax.swing.JFrame {
                                             .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(errorLabel))
+                                                .addComponent(nameError))
                                             .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                     .addComponent(actualLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -266,7 +266,7 @@ public class RCManagement extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorLabel))
+                    .addComponent(nameError))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(139, 139, 139)
@@ -357,6 +357,8 @@ public class RCManagement extends javax.swing.JFrame {
 
     private void saveRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveRecipeActionPerformed
         boolean edit = true;
+        ArrayList<RecipeBean> avRecipe = rcImp.getAllRecipe();
+        int j;
 
         if(recipeTable.getSelectedRow() < 0){
             return;
@@ -381,10 +383,22 @@ public class RCManagement extends javax.swing.JFrame {
             }
         }
 
+        
         if (!nameField.getText().toString().isEmpty()) {
-            errorLabel.setVisible(false);
-        } else {
-            errorLabel.setVisible(true);
+            for (j = 0; j < avRecipe.size(); j++) {
+                if (avRecipe.get(j).getRecipe().equalsIgnoreCase(nameField.getText().toString())) {
+                    nameError.setText("ERROR: Duplicate entry.");
+                    nameError.setVisible(true);
+                    edit = false;
+                    break;
+                }
+            }
+            if(edit){
+                nameError.setVisible(false);
+            }
+        }else {
+            nameError.setVisible(true);
+            nameError.setText("ERROR: Required Field");
             edit = false;
         }
 
@@ -675,7 +689,6 @@ public class RCManagement extends javax.swing.JFrame {
     private javax.swing.JTextField costField;
     private javax.swing.JButton deleteRecipe;
     private javax.swing.JButton editIngredient;
-    private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel errorLabel2;
     private javax.swing.JLabel inError;
     private javax.swing.JTable ingredientsTable;
@@ -689,6 +702,7 @@ public class RCManagement extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel nameError;
     private javax.swing.JTextField nameField;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTable recipeTable;
