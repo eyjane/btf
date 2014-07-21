@@ -332,6 +332,9 @@ public class DELIVERY extends javax.swing.JFrame {
         int col = rawTable.getSelectedColumn();
         int row = rawTable.getSelectedRow();
         
+        String select = rawTable.getValueAt(row,col).toString();
+        
+        rmName.setText(select);
         
     }//GEN-LAST:event_rawTableMouseClicked
 
