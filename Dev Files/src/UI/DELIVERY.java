@@ -43,6 +43,7 @@ public class DELIVERY extends javax.swing.JFrame {
         errorLabel.setVisible(false);
         errorLabel2.setVisible(false);
         success.setVisible(false);
+        inputMsg.setVisible(false);
         viewRaw();
     }
     /*
@@ -111,6 +112,7 @@ public class DELIVERY extends javax.swing.JFrame {
         rmAmount = new javax.swing.JTextField();
         errorLabel = new javax.swing.JLabel();
         errorLabel2 = new javax.swing.JLabel();
+        inputMsg = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         success = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
@@ -164,6 +166,8 @@ public class DELIVERY extends javax.swing.JFrame {
         errorLabel2.setForeground(new java.awt.Color(255, 0, 1));
         errorLabel2.setText("ERROR: Required field. Please input valid number.");
 
+        inputMsg.setText("* Input new amount above.");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -174,13 +178,16 @@ public class DELIVERY extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
                 .addGap(50, 50, 50)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(rmName, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                    .addComponent(rmAmount))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(errorLabel)
-                    .addComponent(errorLabel2))
+                    .addComponent(inputMsg)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(rmName, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                            .addComponent(rmAmount))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(errorLabel)
+                            .addComponent(errorLabel2))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -196,7 +203,9 @@ public class DELIVERY extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(rmAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(errorLabel2))
-                .addGap(34, 34, 34))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(inputMsg)
+                .addGap(14, 14, 14))
         );
 
         jLabel4.setText("jLabel4");
@@ -234,16 +243,16 @@ public class DELIVERY extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addGap(357, 357, 357)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(262, 262, 262)
-                .addComponent(success)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(backBtn)
                 .addGap(43, 43, 43)
                 .addComponent(submitBtn)
                 .addGap(24, 24, 24))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(267, 267, 267)
+                .addComponent(success)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,9 +266,9 @@ public class DELIVERY extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel4))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addComponent(success)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(backBtn)
                     .addComponent(submitBtn))
@@ -335,6 +344,7 @@ public class DELIVERY extends javax.swing.JFrame {
         String select = rawTable.getValueAt(row,col).toString();
         
         rmName.setText(select);
+        inputMsg.setVisible(true);
         
     }//GEN-LAST:event_rawTableMouseClicked
 
@@ -398,6 +408,7 @@ public class DELIVERY extends javax.swing.JFrame {
     private javax.swing.JButton backBtn;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel errorLabel2;
+    private javax.swing.JLabel inputMsg;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
