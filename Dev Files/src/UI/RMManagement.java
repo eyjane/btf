@@ -177,13 +177,18 @@ public class RMManagement extends javax.swing.JFrame {
         });
         jPanel2.add(idField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 27, 200, -1));
 
+        nameField.setEditable(false);
         nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nameFieldActionPerformed(evt);
             }
         });
         jPanel2.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 53, 200, -1));
+
+        priceField.setEditable(false);
         jPanel2.add(priceField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 79, 200, -1));
+
+        stockField.setEditable(false);
         jPanel2.add(stockField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 105, 200, -1));
 
         jLabel10.setText("Critical:");
@@ -191,7 +196,11 @@ public class RMManagement extends javax.swing.JFrame {
 
         jLabel12.setText("Unit of Measurement:");
         jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
+
+        criticalField.setEditable(false);
         jPanel2.add(criticalField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 131, 200, -1));
+
+        uomField.setEditable(false);
         jPanel2.add(uomField, new org.netbeans.lib.awtextra.AbsoluteConstraints(144, 157, 170, -1));
 
         btnBack.setText("Back");
