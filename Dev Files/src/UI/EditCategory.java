@@ -316,7 +316,7 @@ public class EditCategory extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Successfully edited the category!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 cm.setVisible(true);
                 cm.ViewAllCategories();
-                cm.setCategoryField(cat.getCategory());
+                cm.setCategoryField(cat);
                 cm.ViewAllRecipes(cat);
                 dispose();
             } catch(Exception err){

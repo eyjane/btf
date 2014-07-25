@@ -117,8 +117,9 @@ public class CategoryManagement extends javax.swing.JFrame {
         return selectedCat;
     }
     
-    public void setCategoryField(String name){
-        categoryNameField.setText(name);
+    public void setCategoryField(CategoryBean cat){
+        categoryIDField.setText(Integer.toString(cat.getCategoryID()));
+        categoryNameField.setText(cat.getCategory());
     }
     
     //<--- CLARK'S CODE ENDS HERE --->
