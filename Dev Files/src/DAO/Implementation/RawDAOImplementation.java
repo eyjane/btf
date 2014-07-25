@@ -122,6 +122,27 @@ public class RawDAOImplementation implements RawDAOInterface {
     }
 
     @Override
+    public int getLatestAddedID(){
+         int r = 0;
+         
+        try {
+            String query = "select max(rawID) from raw";
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                r = resultSet.getInt("max(rawID)");
+            }
+            
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RawDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return r;
+    }
+    
+    @Override
     public ArrayList<RawBean> getAllRaw() {
        ArrayList<RawBean> aRaw = new ArrayList<RawBean>();
         

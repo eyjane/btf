@@ -3,7 +3,6 @@ package UI;
 import Beans.RawBean;
 import DAO.Implementation.RawDAOImplementation;
 import DAO.Interface.RawDAOInterface;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -20,20 +19,12 @@ import javax.swing.table.DefaultTableModel;
 public class RMManagement extends javax.swing.JFrame {
     private RawDAOInterface rmImp = new RawDAOImplementation();
     private RawBean selectedRaw = new RawBean();
-    private RawBean editRaw = new RawBean();
 
     //<--- CLARK'S CODE STARTS HERE --->
     public RMManagement() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
-        errorLabel.setVisible(false);
-        errorLabel1.setVisible(false);
-        errorLabel2.setVisible(false);
-        errorLabel3.setVisible(false);
-        errorLabel4.setVisible(false);
-        errorLabel5.setVisible(false);
-        btnSave.setEnabled(false);
         ViewAllRM();
     }
     
@@ -70,17 +61,23 @@ public class RMManagement extends javax.swing.JFrame {
                 criticalField.setText(defaultTableModel.getValueAt(rmTable.getSelectedRow(), 4).toString());
                 uomField.setText((String) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 6));
                 selectedRaw = rmImp.getRaw((int) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0));
-                btnSave.setEnabled(true);
-                btnAdd.setEnabled(false);
             } else {
                 selectedRaw = null;
-                btnSave.setEnabled(false);
               }
             } catch (Exception err) {
                 err.printStackTrace();
             } 
         }
        });
+    }
+    
+    public void setFields(RawBean r){
+        idField.setText(Integer.toString(r.getRawID()));
+        nameField.setText(r.getRaw());
+        priceField.setText(Float.toString(r.getPrice()));
+        stockField.setText(Float.toString(r.getStock()));
+        criticalField.setText(Float.toString(r.getCritical()));
+        uomField.setText(r.getUom());
     }
     
     public void clearText(){
@@ -90,101 +87,13 @@ public class RMManagement extends javax.swing.JFrame {
         stockField.setText("");
         criticalField.setText("");
         uomField.setText("");
-        errorLabel.setVisible(false);
-        errorLabel1.setVisible(false);
-        errorLabel2.setVisible(false);
-        errorLabel3.setVisible(false);
-        errorLabel4.setVisible(false);
-        errorLabel5.setVisible(false);
-        btnSave.setEnabled(false);
-        btnAdd.setEnabled(true);
     }
     
-    public boolean authenticateRM(){
-        boolean flag = true;
-        editRaw = new RawBean();
-        int count = 0;
-        
-        if(nameField.getText().equals("")) {
-            errorLabel1.setVisible(true);
-            flag = false;
-        }
-        else {
-            errorLabel.setVisible(false);
-            errorLabel1.setVisible(false);
-            editRaw.setRaw(nameField.getText());
-            for(int i = 0; i < rmImp.getRawByStatus("available").size(); i++){
-                if(nameField.getText().equalsIgnoreCase(rmImp.getAllRaw().get(i).getRaw()) && 
-                        Integer.parseInt(idField.getText()) != rmImp.getAllRaw().get(i).getRawID()) {
-                     errorLabel1.setVisible(true);
-                     errorLabel.setVisible(true);
-                     flag = false;
-                }
-            }
-        }
-        if(!priceField.getText().equals("") && isNumber(priceField.getText())) {
-            if(Float.parseFloat(priceField.getText()) > 0) {
-                errorLabel2.setVisible(false);
-                editRaw.setPrice(Float.parseFloat(priceField.getText()));
-            }
-            else {
-                errorLabel2.setVisible(true);
-                flag = false;
-            }
-        }
-        else {
-            errorLabel2.setVisible(true);
-            flag = false;
-        }
-        if(!stockField.getText().equals("") && isNumber(stockField.getText())) {
-            if(Float.parseFloat(stockField.getText()) > 0) {
-                errorLabel3.setVisible(false);
-                editRaw.setStock(Float.parseFloat(stockField.getText()));
-            }
-            else {
-                errorLabel3.setVisible(true);
-                flag = false;
-            }
-        }
-        else {
-            errorLabel3.setVisible(true);
-            flag = false;
-        }
-        if(!criticalField.getText().equals("") && isNumber(criticalField.getText())) {
-            if(Float.parseFloat(criticalField.getText()) > 0) {
-                errorLabel4.setVisible(false);
-                editRaw.setCritical(Float.parseFloat(criticalField.getText()));
-            }
-            else {
-                errorLabel4.setVisible(true);
-                flag = false;
-            }
-        }
-        else {
-            errorLabel4.setVisible(true);
-            flag = false;
-        }
-        if(uomField.getText().equals("") || isNumber(uomField.getText())) {
-            errorLabel5.setVisible(true);
-            flag = false;
-        }
-        else {
-            errorLabel5.setVisible(false);
-            editRaw.setUom(uomField.getText());
-        }
-        editRaw.setRmstatus("available");
-        return flag;
-    }
-    
-    public boolean isNumber(String s) {
-        try {
-            Float.parseFloat(s);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public RawBean getRaw(){
+        return selectedRaw;
     }
     //<--- CLARK'S CODE ENDS HERE --->
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -205,22 +114,15 @@ public class RMManagement extends javax.swing.JFrame {
         nameField = new javax.swing.JTextField();
         priceField = new javax.swing.JTextField();
         stockField = new javax.swing.JTextField();
-        btnSave = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         criticalField = new javax.swing.JTextField();
         uomField = new javax.swing.JTextField();
-        errorLabel = new javax.swing.JLabel();
-        errorLabel2 = new javax.swing.JLabel();
-        errorLabel3 = new javax.swing.JLabel();
-        errorLabel4 = new javax.swing.JLabel();
-        errorLabel5 = new javax.swing.JLabel();
-        errorLabel1 = new javax.swing.JLabel();
-        btnAdd = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
-        btnClear = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
+        btnAdd = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -273,82 +175,26 @@ public class RMManagement extends javax.swing.JFrame {
                 idFieldActionPerformed(evt);
             }
         });
-        jPanel2.add(idField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 27, 109, -1));
+        jPanel2.add(idField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 27, 200, -1));
 
         nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nameFieldActionPerformed(evt);
             }
         });
-        jPanel2.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 53, 109, -1));
-        jPanel2.add(priceField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 79, 109, -1));
-        jPanel2.add(stockField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 105, 109, -1));
-
-        btnSave.setText("Save");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 200, -1, -1));
+        jPanel2.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 53, 200, -1));
+        jPanel2.add(priceField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 79, 200, -1));
+        jPanel2.add(stockField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 105, 200, -1));
 
         jLabel10.setText("Critical:");
         jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 134, -1, -1));
 
         jLabel12.setText("Unit of Measurement:");
         jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
-        jPanel2.add(criticalField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 131, 109, -1));
-        jPanel2.add(uomField, new org.netbeans.lib.awtextra.AbsoluteConstraints(144, 157, 79, -1));
+        jPanel2.add(criticalField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 131, 200, -1));
+        jPanel2.add(uomField, new org.netbeans.lib.awtextra.AbsoluteConstraints(144, 157, 170, -1));
 
-        errorLabel.setForeground(new java.awt.Color(255, 0, 51));
-        errorLabel.setText("Duplicate name exists.");
-        jPanel2.add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(353, 56, -1, -1));
-
-        errorLabel2.setForeground(new java.awt.Color(255, 0, 51));
-        errorLabel2.setText("ERROR: Required field. Please input valid number.");
-        jPanel2.add(errorLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 82, -1, -1));
-
-        errorLabel3.setForeground(new java.awt.Color(255, 0, 51));
-        errorLabel3.setText("ERROR: Required field. Please input valid number.");
-        jPanel2.add(errorLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 108, -1, -1));
-
-        errorLabel4.setForeground(new java.awt.Color(255, 0, 51));
-        errorLabel4.setText("ERROR: Required field. Please input valid number.");
-        jPanel2.add(errorLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 134, -1, -1));
-
-        errorLabel5.setForeground(new java.awt.Color(255, 0, 51));
-        errorLabel5.setText("ERROR: Required field.");
-        jPanel2.add(errorLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(233, 160, -1, -1));
-
-        errorLabel1.setForeground(new java.awt.Color(255, 0, 51));
-        errorLabel1.setText("ERROR: Required field.");
-        jPanel2.add(errorLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 56, -1, -1));
-
-        btnAdd.setText("Add Raw Material");
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, -1, -1));
-
-        btnDelete.setLabel("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 200, -1, -1));
-
-        btnClear.setText("Clear");
-        btnClear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClearActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 195, -1, -1));
-
-        btnBack.setText("BACK");
+        btnBack.setText("Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
@@ -358,18 +204,51 @@ public class RMManagement extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel9.setText("RAW MATERIALS");
 
+        btnAdd.setText("Add Raw Material");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnEdit.setText("Edit Raw Material");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setText("Delete Raw Material");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(btnBack)
-                        .addComponent(jLabel9)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnBack))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnAdd)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEdit)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDelete))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel9)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(14, 14, 14))
         );
         jPanel1Layout.setVerticalGroup(
@@ -379,11 +258,16 @@ public class RMManagement extends javax.swing.JFrame {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd)
+                    .addComponent(btnEdit)
+                    .addComponent(btnDelete))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBack)
-                .addGap(151, 151, 151))
+                .addGap(126, 126, 126))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -394,24 +278,25 @@ public class RMManagement extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-         if(authenticateRM()) {
-            try{
-                rmImp.addRaw(editRaw);
-                JOptionPane.showMessageDialog(null, "Raw material successfully added!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                ViewAllRM();
-                clearText();
-            } catch(Exception err){
-                err.printStackTrace();
-            }
+         try {
+            AddRawMaterial r = new AddRawMaterial(this);
+            r.setVisible(true);
+            this.setVisible(false);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -423,8 +308,8 @@ public class RMManagement extends javax.swing.JFrame {
                             rmImp.deleteRaw(selectedRaw);
                             JOptionPane.showMessageDialog(null, "Successfully deleted raw material!", "Success", JOptionPane.INFORMATION_MESSAGE);
                             ViewAllRM();
+                            clearText();
                     }
-                    clearText();
                 } 
             } else
                 JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
@@ -433,30 +318,21 @@ public class RMManagement extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void idFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_idFieldActionPerformed
-
-    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nameFieldActionPerformed
-
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         try {
-            if(!idField.getText().equals("")) {
-                if(authenticateRM()) {
-                    editRaw.setRawID(Integer.parseInt(idField.getText()));
-                    rmImp.editRaw(editRaw);
-                    JOptionPane.showMessageDialog(null, "Raw material successfully updated!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    ViewAllRM();
-                    clearText();
-                } 
-            } else
-                JOptionPane.showMessageDialog(null, "Please select and entry to update.", "Blank Form", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception err) {
-            err.printStackTrace();
+            EditRawMaterial r = new EditRawMaterial(this);
+            r.setVisible(true);
+            this.setVisible(false);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnSaveActionPerformed
+    }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         try {
@@ -474,24 +350,21 @@ public class RMManagement extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_btnBackActionPerformed
 
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        clearText();
-    }//GEN-LAST:event_btnClearActionPerformed
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nameFieldActionPerformed
+
+    private void idFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idFieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JTextField criticalField;
-    private javax.swing.JLabel errorLabel;
-    private javax.swing.JLabel errorLabel1;
-    private javax.swing.JLabel errorLabel2;
-    private javax.swing.JLabel errorLabel3;
-    private javax.swing.JLabel errorLabel4;
-    private javax.swing.JLabel errorLabel5;
     private javax.swing.JTextField idField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

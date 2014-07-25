@@ -21,7 +21,9 @@ public interface CategoryDAOInterface {
     public boolean editCategory(CategoryBean c);
 
     public CategoryBean getCategory(int c);
-
+    
+    public int getLatestAddedID();
+    
     public ArrayList<CategoryBean> getAllCategory();
 
 }

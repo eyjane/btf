@@ -101,7 +101,28 @@ public class CategoryDAOImplementation implements CategoryDAOInterface {
         }
         return ct;
     }
-
+    
+    @Override
+    public int getLatestAddedID(){
+         int r = 0;
+         
+        try {
+            String query = "select max(categoryID) from category";
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                r = resultSet.getInt("max(categoryID)");
+            }
+            
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return r;
+    }
+    
     @Override
     public ArrayList<CategoryBean> getAllCategory() {
         ArrayList<CategoryBean> aCategory = new ArrayList<CategoryBean>();
