@@ -355,7 +355,7 @@ public class AddRawMaterial extends javax.swing.JFrame {
             try{
                 rwImp.addRaw(raw);
                 raw.setRawID(rwImp.getLatestAddedID());
-                JOptionPane.showMessageDialog(null, "Raw material successfully added!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Successfully added the physical count!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 rm.setVisible(true);
                 rm.ViewAllRM();
                 rm.setFields(raw);

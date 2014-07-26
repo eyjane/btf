@@ -22,6 +22,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -44,7 +45,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         main = t;
         errorName.setVisible(false);
         errorCount.setVisible(false);
-        transactTable();
+        displayTable();
     }
 
     /*
@@ -62,6 +63,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jDialog1 = new javax.swing.JDialog();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -89,6 +91,19 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             }
         ));
         jScrollPane2.setViewportView(jTable1);
+
+        jDialog1.setType(java.awt.Window.Type.POPUP);
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -290,7 +305,13 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         
         if (submit) {
             
-            
+            RawBean r = new RawBean();
+            String raw = rmName.getText().toString();
+            Float amt = Float.parseFloat(rmCount.getText().toString());
+            r.setRaw(raw);
+            r.setStock(amt);
+            rmImp.editRaw(r);
+            JOptionPane.showMessageDialog(null, "Successfully added the physical count!", "Success!", JOptionPane.INFORMATION_MESSAGE);
             
         }
 
@@ -337,7 +358,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
      *  TABLE SET UP
      */
     
-    public void transactTable() {
+    public void displayTable() {
         aTransact = new ArrayList<>();
         aRaw = new ArrayList<>();
         
@@ -442,6 +463,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
     private javax.swing.JLabel errorCount;
     private javax.swing.JLabel errorName;
     private javax.swing.JTable inputTable;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
