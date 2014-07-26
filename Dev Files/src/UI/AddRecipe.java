@@ -260,24 +260,29 @@ public class AddRecipe extends javax.swing.JFrame {
         int j;
 
         if (!nameField.getText().toString().isEmpty()) {
-            for (j = 0; j < avRecipe.size(); j++) {
-                if (avRecipe.get(j).getRecipe().equals(nameField.getText().toString())) {
-                    nameError.setText("ERROR: Duplicate entry.");
-                    nameError.setVisible(true);
-                    add = false;
-                    break;
+            if (avRecipe != null) {
+                for (j = 0; j < avRecipe.size(); j++) {
+                    if (avRecipe.get(j).getRecipe().equalsIgnoreCase(nameField.getText().toString())) {
+                        nameError.setText("ERROR: Duplicate entry.");
+                        nameError.setVisible(true);
+                        add = false;
+                        break;
+                    }
                 }
             }
-            if(add){
+
+            if (add) {
                 nameError.setVisible(false);
             }
-        }else {
+
+        } else {
             nameError.setVisible(true);
             nameError.setText("ERROR: Required Field");
             add = false;
         }
 
-        if (isNumber(costField.getText().toString()) && Float.parseFloat(costField.getText().toString()) > 0) {
+        String cost = costField.getText().toString();
+        if ((!costField.getText().toString().isEmpty()) && isNumber(cost) && Float.parseFloat(cost) > 0) {
             errorLabel2.setVisible(false);
         } else {
             errorLabel2.setVisible(true);
@@ -292,7 +297,8 @@ public class AddRecipe extends javax.swing.JFrame {
             add = false;
         }
 
-        if (isNumber(stockField.getText().toString())) {
+        String stock = stockField.getText().toString();
+        if ((!stockField.getText().isEmpty()) && isNumber(stock) && Float.parseFloat(stock) > 0) {
             errorLabel4.setVisible(false);
         } else {
             errorLabel4.setVisible(true);

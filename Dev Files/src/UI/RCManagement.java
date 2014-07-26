@@ -49,7 +49,7 @@ public class RCManagement extends javax.swing.JFrame {
 
     private addIngredient AddIngredient;
     private AddRecipe addRecipe;
-    
+
     private EODTab main;
 
     /**
@@ -59,10 +59,10 @@ public class RCManagement extends javax.swing.JFrame {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
-        
+
         main = t;
 
-        errorLabel.setVisible(false);
+        nameError.setVisible(false);
         errorLabel2.setVisible(false);
         inError.setVisible(false);
         prepareTable();
@@ -105,7 +105,7 @@ public class RCManagement extends javax.swing.JFrame {
         saveRecipe = new javax.swing.JButton();
         actualLabel = new javax.swing.JLabel();
         nameLabel = new javax.swing.JLabel();
-        errorLabel = new javax.swing.JLabel();
+        nameError = new javax.swing.JLabel();
         errorLabel2 = new javax.swing.JLabel();
         inError = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
@@ -200,8 +200,8 @@ public class RCManagement extends javax.swing.JFrame {
 
         nameLabel.setText("  ");
 
-        errorLabel.setForeground(new java.awt.Color(255, 0, 102));
-        errorLabel.setText("ERROR: Required field.");
+        nameError.setForeground(new java.awt.Color(255, 0, 102));
+        nameError.setText("ERROR: Required field.");
 
         errorLabel2.setForeground(new java.awt.Color(255, 0, 102));
         errorLabel2.setText("ERROR: Required field. Please input valid number.");
@@ -240,7 +240,7 @@ public class RCManagement extends javax.swing.JFrame {
                                             .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(errorLabel))
+                                                .addComponent(nameError))
                                             .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                     .addComponent(actualLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -266,7 +266,7 @@ public class RCManagement extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorLabel))
+                    .addComponent(nameError))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(139, 139, 139)
@@ -348,17 +348,20 @@ public class RCManagement extends javax.swing.JFrame {
         this.setVisible(false);
         try {
             main = new EODTab();
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
-        
+
         main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void saveRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveRecipeActionPerformed
         boolean edit = true;
+        ArrayList<RecipeBean> avRecipe = rcImp.getAllRecipe();
+        int j;
+        String o;
 
-        if(recipeTable.getSelectedRow() < 0){
+        if (recipeTable.getSelectedRow() < 0) {
             return;
         }
 
@@ -381,14 +384,39 @@ public class RCManagement extends javax.swing.JFrame {
             }
         }
 
+        o = recipeTable.getModel().getValueAt(recipeTable.getSelectedRow(), 1).toString();
         if (!nameField.getText().toString().isEmpty()) {
-            errorLabel.setVisible(false);
+            if (avRecipe != null) {
+                for (j = 0; j < avRecipe.size(); j++) {
+                   if (o.equalsIgnoreCase(avRecipe.get(j).getRecipe())) {
+                       System.out.println("O: " + o);
+                       System.out.println("recipe: " + avRecipe.get(j).getRecipe());
+                       
+                   } else {
+                       //System.out.println("HERE " + avRecipe.get(j).getRecipe());
+                       String cur = avRecipe.get(j).getRecipe();
+                        if (cur.equalsIgnoreCase(nameField.getText().toString())) {
+                            
+                            nameError.setText("ERROR: Duplicate entry.");
+                            nameError.setVisible(true);
+                            edit = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (edit) {
+                nameError.setVisible(false);
+            }
+
         } else {
-            errorLabel.setVisible(true);
+            nameError.setVisible(true);
+            nameError.setText("ERROR: Required Field");
             edit = false;
         }
 
-        if (!costField.getText().toString().isEmpty() && isNumber(costField.getText().toString()) && Float.parseFloat(costField.getText().toString()) > 0) {
+        String cost = costField.getText().toString();
+        if ((!costField.getText().toString().isEmpty()) && isNumber(cost) && Float.parseFloat(cost) > 0) {
             errorLabel2.setVisible(false);
         } else {
             errorLabel2.setVisible(true);
@@ -403,7 +431,7 @@ public class RCManagement extends javax.swing.JFrame {
             edit = false;
         }
 
-        if(edit){
+        if (edit) {
             RecipeBean r = new RecipeBean();
 
             int rID = Integer.parseInt(recipeTable.getModel().getValueAt(recipeTable.getSelectedRow(), 0).toString());
@@ -417,7 +445,7 @@ public class RCManagement extends javax.swing.JFrame {
             r.setRcstatus("available");
             r.setStock(rtemp.getStock());
 
-            if(rcImp.editRecipe(r)){
+            if (rcImp.editRecipe(r)) {
                 JOptionPane.showMessageDialog(null, "Recipe successfully edited!");
                 updateIngredient(r, aIngredient);
                 prepareTable();
@@ -428,8 +456,8 @@ public class RCManagement extends javax.swing.JFrame {
     private void editIngredientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editIngredientActionPerformed
         int nrow = ingredientsTable.getRowCount();
         //System.out.println(nrow);
-        
-        if(recipeTable.getSelectedRow() == -1){
+
+        if (recipeTable.getSelectedRow() == -1) {
             return;
         }
         int i;
@@ -526,30 +554,30 @@ public class RCManagement extends javax.swing.JFrame {
     /**
      * <--- JANERYS CODE START ---> *
      */
-    
-    private void updateIngredient(RecipeBean r, ArrayList<IngredientBean> in){
-       ArrayList<IngredientBean> orig = inImp.getAllIngredients(r);
-       int i;
-       //delete all ingredients
-       
-       for (i=0; i < orig.size(); i++){
-           inImp.deleteIngredient(r, orig.get(i));
-       }
-       //add ingredients
-       for(i=0; i < in.size(); i++){
-           inImp.addIngredient(r, in.get(i));
-       }
-        
+    private void updateIngredient(RecipeBean r, ArrayList<IngredientBean> in) {
+        ArrayList<IngredientBean> orig = inImp.getAllIngredients(r);
+        int i;
+        //delete all ingredients
+
+        for (i = 0; i < orig.size(); i++) {
+            inImp.deleteIngredient(r, orig.get(i));
+        }
+        //add ingredients
+        for (i = 0; i < in.size(); i++) {
+            inImp.addIngredient(r, in.get(i));
+        }
+
     }
+
     private void deleteRecipe(int r) {
         int rID = Integer.parseInt(recipeTable.getModel().getValueAt(r, 0).toString());
         RecipeBean drecipe = rcImp.getRecipeBean(rID);
-        
-        if(rcImp.deleteRecipe(drecipe)){
+
+        if (rcImp.deleteRecipe(drecipe)) {
             JOptionPane.showMessageDialog(null, "Recipe successfully deleted!");
             TableModel model = recipeTable.getModel();
             DefaultTableModel rmodel = (DefaultTableModel) model;
-            
+
             rmodel.removeRow(r);
             recipeTable.setModel(rmodel);
             nameField.setText("");
@@ -561,6 +589,7 @@ public class RCManagement extends javax.swing.JFrame {
             prepareTable();
         }
     }
+
     public void computeActual(ArrayList<IngredientBean> aIngredient) {
         RecipeBean rtemp = new RecipeBean();
         rtemp.setIngredients(aIngredient);
@@ -621,9 +650,9 @@ public class RCManagement extends javax.swing.JFrame {
         recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
 
         adjustTable(recipeTable);
-        
-      String icols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
-      DefaultTableModel model = new DefaultTableModel(icols, 0);
+
+        String icols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
+        DefaultTableModel model = new DefaultTableModel(icols, 0);
 
     }
 
@@ -650,7 +679,7 @@ public class RCManagement extends javax.swing.JFrame {
             tableColumn.setPreferredWidth(preferredWidth);
         }
     }
-    
+
     private boolean isNumber(String s) {
         try {
             Float.parseFloat(s);
@@ -659,13 +688,14 @@ public class RCManagement extends javax.swing.JFrame {
             return false;
         }
     }
-    
-    public void inErrorV(boolean b){
+
+    public void inErrorV(boolean b) {
         inError.setVisible(b);
     }
 
-    /*** <--- JANERYS CODE ENDS ---> ***/
-
+    /**
+     * * <--- JANERYS CODE ENDS ---> **
+     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel actualLabel;
@@ -675,7 +705,6 @@ public class RCManagement extends javax.swing.JFrame {
     private javax.swing.JTextField costField;
     private javax.swing.JButton deleteRecipe;
     private javax.swing.JButton editIngredient;
-    private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel errorLabel2;
     private javax.swing.JLabel inError;
     private javax.swing.JTable ingredientsTable;
@@ -689,6 +718,7 @@ public class RCManagement extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel nameError;
     private javax.swing.JTextField nameField;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTable recipeTable;
