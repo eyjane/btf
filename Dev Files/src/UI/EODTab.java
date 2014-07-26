@@ -202,7 +202,7 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
 
-        actualBtn.setText("INPUT RAW MATERIAL COUNT");
+        actualBtn.setText("EOD");
         actualBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 actualBtnActionPerformed(evt);
