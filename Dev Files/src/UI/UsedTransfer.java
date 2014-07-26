@@ -48,8 +48,8 @@ public class UsedTransfer extends javax.swing.JFrame {
             
             Object[] data = {raw.getRawID(), raw.getRaw(), null};
             actualTable.addRow(data);
-            usedTable.setModel(actualTable);
-            adjustTable(usedTable);
+            rmTable.setModel(actualTable);
+            adjustTable(rmTable);
         }
     }
     
@@ -99,33 +99,37 @@ public class UsedTransfer extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        usedTable = new javax.swing.JTable();
+        rmTable = new javax.swing.JTable();
         submitUsed = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        errorBox = new javax.swing.JTextArea();
         backBtn = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        nameLabel = new javax.swing.JLabel();
+        rmName = new javax.swing.JTextField();
+        countLabel = new javax.swing.JLabel();
+        rmCount = new javax.swing.JTextField();
+        errorName = new javax.swing.JLabel();
+        errorCount = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Used Materials");
 
-        usedTable.setModel(new javax.swing.table.DefaultTableModel(
+        rmTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "ID", "Name", "Quantity Used", "Quantity Wasted"
+                "ID", "Name", "Quantity in Stock"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Float.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, true
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -136,19 +140,14 @@ public class UsedTransfer extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(usedTable);
+        jScrollPane1.setViewportView(rmTable);
 
-        submitUsed.setText("SUBMIT");
+        submitUsed.setText("REDUCE");
         submitUsed.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submitUsedActionPerformed(evt);
             }
         });
-
-        errorBox.setEditable(false);
-        errorBox.setColumns(20);
-        errorBox.setRows(5);
-        jScrollPane2.setViewportView(errorBox);
 
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -157,35 +156,72 @@ public class UsedTransfer extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setForeground(new java.awt.Color(255, 0, 1));
-        jLabel2.setText("ERRORS:");
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Reduce Quantity"));
+        jPanel2.setToolTipText("");
+
+        nameLabel.setText("Name:");
+
+        countLabel.setText("Amount:");
+
+        errorName.setForeground(new java.awt.Color(255, 0, 1));
+        errorName.setText("ERROR: Required Field");
+
+        errorCount.setForeground(new java.awt.Color(255, 0, 1));
+        errorCount.setText("ERROR: Required field. Please input valid number.");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nameLabel)
+                    .addComponent(countLabel))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(rmName)
+                    .addComponent(rmCount, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(errorName)
+                    .addComponent(errorCount))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nameLabel)
+                    .addComponent(rmName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(errorName))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(countLabel)
+                    .addComponent(rmCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(errorCount))
+                .addContainerGap(140, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 536, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1))
-                        .addContainerGap())
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(backBtn)
-                        .addGap(42, 42, 42)
-                        .addComponent(submitUsed)
-                        .addGap(236, 236, 236))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(123, 123, 123))
+                        .addGap(18, 18, 18)
+                        .addComponent(submitUsed))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,18 +230,13 @@ public class UsedTransfer extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addGap(37, 37, 37)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(submitUsed)
                     .addComponent(backBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(102, 102, 102))))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -220,7 +251,7 @@ public class UsedTransfer extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 23, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -231,15 +262,14 @@ public class UsedTransfer extends javax.swing.JFrame {
         
         boolean submit = true;
 
-        int rows = usedTable.getRowCount();
+        int rows = rmTable.getRowCount();
         int c = 0;
 
         for (c = 0; c < rows; c++) {
 
-            if(usedTable.getValueAt(c,2).toString().isEmpty() || usedTable.getValueAt(c,3).toString().isEmpty()) {
+            if(rmTable.getValueAt(c,2).toString().isEmpty() || rmTable.getValueAt(c,3).toString().isEmpty()) {
 
                 submit = false;
-                errorBox.append("Empty: Row #" + c+1 + "\n");
             }
 
         }
@@ -250,13 +280,12 @@ public class UsedTransfer extends javax.swing.JFrame {
             RawBean r = new RawBean();
             float usedQ = 0, wastedQ = 0; // QUANTITY
 
-            errorBox.append("No errors found.");
             
             for (c = 0; c < rows; c++) {
 
-                r.setRawID(Integer.parseInt(usedTable.getValueAt(c, 0).toString()));
-                usedQ = Float.parseFloat(usedTable.getValueAt(c, 2).toString());
-                wastedQ = Float.parseFloat(usedTable.getValueAt(c, 2).toString());
+                r.setRawID(Integer.parseInt(rmTable.getValueAt(c, 0).toString()));
+                usedQ = Float.parseFloat(rmTable.getValueAt(c, 2).toString());
+                wastedQ = Float.parseFloat(rmTable.getValueAt(c, 2).toString());
                 tclmp.usedTransfer(t, r, usedQ);
                 tclmp.wastages(t, r, wastedQ);
             }
@@ -332,13 +361,17 @@ public class UsedTransfer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JTextArea errorBox;
+    private javax.swing.JLabel countLabel;
+    private javax.swing.JLabel errorCount;
+    private javax.swing.JLabel errorName;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JTextField rmCount;
+    private javax.swing.JTextField rmName;
+    private javax.swing.JTable rmTable;
     private javax.swing.JButton submitUsed;
-    private javax.swing.JTable usedTable;
     // End of variables declaration//GEN-END:variables
 }
