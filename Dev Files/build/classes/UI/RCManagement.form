@@ -167,7 +167,7 @@
                                                   <Group type="102" attributes="0">
                                                       <Component id="nameField" min="-2" pref="255" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="errorLabel" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="nameError" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -207,7 +207,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="nameField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="errorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="nameError" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
@@ -356,7 +356,7 @@
                 <Property name="text" type="java.lang.String" value="  "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="errorLabel">
+            <Component class="javax.swing.JLabel" name="nameError">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="66" green="0" red="ff" type="rgb"/>

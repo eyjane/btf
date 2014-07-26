@@ -50,7 +50,7 @@ public class AddRecipe extends javax.swing.JFrame {
         this.rcman = r;
 
         initComponents();
-        errorLabel.setVisible(false);
+        nameError.setVisible(false);
         errorLabel2.setVisible(false);
         inError.setVisible(false);
         errorLabel4.setVisible(false);
@@ -89,7 +89,7 @@ public class AddRecipe extends javax.swing.JFrame {
         nameLabel = new javax.swing.JLabel();
         addRecipe = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
-        errorLabel = new javax.swing.JLabel();
+        nameError = new javax.swing.JLabel();
         errorLabel2 = new javax.swing.JLabel();
         inError = new javax.swing.JLabel();
         errorLabel4 = new javax.swing.JLabel();
@@ -192,9 +192,9 @@ public class AddRecipe extends javax.swing.JFrame {
         });
         getContentPane().add(cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 440, -1, -1));
 
-        errorLabel.setForeground(new java.awt.Color(255, 0, 51));
-        errorLabel.setText("ERROR: Required field.");
-        getContentPane().add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, -1, -1));
+        nameError.setForeground(new java.awt.Color(255, 0, 51));
+        nameError.setText("ERROR: Required field.");
+        getContentPane().add(nameError, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, -1, -1));
 
         errorLabel2.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel2.setText("ERROR: Required field. Please input valid number.");
@@ -256,15 +256,33 @@ public class AddRecipe extends javax.swing.JFrame {
 
     private void addRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeActionPerformed
         boolean add = true;
+        ArrayList<RecipeBean> avRecipe = rcImp.getAllRecipe();
+        int j;
 
         if (!nameField.getText().toString().isEmpty()) {
-            errorLabel.setVisible(false);
+            if (avRecipe != null) {
+                for (j = 0; j < avRecipe.size(); j++) {
+                    if (avRecipe.get(j).getRecipe().equalsIgnoreCase(nameField.getText().toString())) {
+                        nameError.setText("ERROR: Duplicate entry.");
+                        nameError.setVisible(true);
+                        add = false;
+                        break;
+                    }
+                }
+            }
+
+            if (add) {
+                nameError.setVisible(false);
+            }
+
         } else {
-            errorLabel.setVisible(true);
+            nameError.setVisible(true);
+            nameError.setText("ERROR: Required Field");
             add = false;
         }
 
-        if (isNumber(costField.getText().toString()) && Float.parseFloat(costField.getText().toString()) > 0) {
+        String cost = costField.getText().toString();
+        if ((!costField.getText().toString().isEmpty()) && isNumber(cost) && Float.parseFloat(cost) > 0) {
             errorLabel2.setVisible(false);
         } else {
             errorLabel2.setVisible(true);
@@ -279,7 +297,8 @@ public class AddRecipe extends javax.swing.JFrame {
             add = false;
         }
 
-        if (isNumber(stockField.getText().toString())) {
+        String stock = stockField.getText().toString();
+        if ((!stockField.getText().isEmpty()) && isNumber(stock) && Float.parseFloat(stock) > 0) {
             errorLabel4.setVisible(false);
         } else {
             errorLabel4.setVisible(true);
@@ -301,9 +320,8 @@ public class AddRecipe extends javax.swing.JFrame {
                     inImp.addIngredient(r, i);
                 }
 
-                
-                 JOptionPane.showMessageDialog(null, "Recipe successfully added!");
-                 /*nameField.setText("");
+                JOptionPane.showMessageDialog(null, "Recipe successfully added!");
+                /*nameField.setText("");
                  costField.setText("");
                  stockField.setText("");
                  categoryBox.setSelectedIndex(0);
@@ -378,8 +396,8 @@ public class AddRecipe extends javax.swing.JFrame {
             return false;
         }
     }
-    
-    public void inErrorV(boolean b){
+
+    public void inErrorV(boolean b) {
         inError.setVisible(b);
     }
 
@@ -389,7 +407,6 @@ public class AddRecipe extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel actualLabel;
@@ -398,7 +415,6 @@ public class AddRecipe extends javax.swing.JFrame {
     private javax.swing.JComboBox categoryBox;
     private javax.swing.JTextField costField;
     private javax.swing.JButton editIngredient;
-    private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel errorLabel2;
     private javax.swing.JLabel errorLabel4;
     private javax.swing.JLabel inError;
@@ -414,6 +430,7 @@ public class AddRecipe extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel nameError;
     private javax.swing.JTextField nameField;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField stockField;

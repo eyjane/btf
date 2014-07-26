@@ -57,7 +57,7 @@ public class RecipeBean {
     public float computeStock(){
         int i;
         float s = 0;
-        float lowest = ingredients.get(0).getRaw().getStock()/ingredients.get(1).getAmount();
+        float lowest = ingredients.get(0).getRaw().getStock()/ingredients.get(0).getAmount();
         
         for(IngredientBean in: ingredients){
             RawBean r = in.getRaw();

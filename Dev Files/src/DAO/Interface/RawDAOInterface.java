@@ -23,6 +23,8 @@ public interface RawDAOInterface {
     public boolean editRaw(RawBean r);
 
     public RawBean getRaw(int r);
+    
+    public int getLatestAddedID();
 
     public ArrayList<RawBean> getAllRaw();
 
