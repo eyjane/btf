@@ -53,11 +53,12 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
                 int transactionID = resultSet.getInt("max(transactionID)");
-                String tquery = "INSERT into transact(transactionID, rawID, quantity) values (?, ?, ?);";
+                String tquery = "INSERT into transact(transactionID, rawID, quantity, price) values (?, ?, ?, ?);";
                 PreparedStatement tpreparedStatement = connection.prepareStatement(tquery);
                 tpreparedStatement.setInt(1, transactionID);
                 tpreparedStatement.setInt(2, r.getRawID());
                 tpreparedStatement.setFloat(3, a);
+                tpreparedStatement.setFloat(4, r.getPrice());
                 
                 tpreparedStatement.executeUpdate();
                 connection.close();
@@ -70,6 +71,29 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
             Logger.getLogger(TransactionDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+    
+    @Override
+    public ArrayList<String> getAllDates(){
+        ArrayList<String> aDates = new ArrayList<String>();
+        try {
+            float x = 0;
+            String query = "select distinct(transaction_date) "
+                    + "from transactions;";
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+               aDates.add(resultSet.getString("transaction_date"));
+            }
+            connection.close();
+            return aDates;
+        } catch (SQLException ex) {
+            Logger.getLogger(TransactionDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aDates;
     }
     
     /* checked - GETS SUM OF ALL QUANTITY SORTED BY TYPE */
@@ -133,7 +157,7 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
          try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "INSERT into transactions(transaction_date, transaction_type) values (?, 'Actual');";
+            String query = "INSERT into transactions(transaction_date, transaction_type) values (?, 'actual');";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             
             /* create date*/
@@ -152,11 +176,13 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
                 int transactionID = resultSet.getInt("max(transactionID)");
-                String tquery = "INSERT into transact(transactionID, rawID, quantity) values (?, ?, ?);";
+                String tquery = "INSERT into transact(transactionID, rawID, quantity, price) values (?, ?, ?, ?);";
                 PreparedStatement tpreparedStatement = connection.prepareStatement(tquery);
                 tpreparedStatement.setInt(1, transactionID);
                 tpreparedStatement.setInt(2, r.getRawID());
                 tpreparedStatement.setFloat(3, a);
+                tpreparedStatement.setFloat(4, r.getPrice());
+                
                 
                 tpreparedStatement.executeUpdate();
                 connection.close();
@@ -179,7 +205,7 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
          try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "INSERT into transactions(transaction_date, transaction_type) values (?, 'Used');";
+            String query = "INSERT into transactions(transaction_date, transaction_type) values (?, 'used');";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             
             /* create date*/
@@ -198,11 +224,13 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
                 int transactionID = resultSet.getInt("max(transactionID)");
-                String tquery = "INSERT into transact(transactionID, rawID, quantity) values (?, ?, ?);";
+                String tquery = "INSERT into transact(transactionID, rawID, quantity, price) values (?, ?, ?, ?);";
                 PreparedStatement tpreparedStatement = connection.prepareStatement(tquery);
                 tpreparedStatement.setInt(1, transactionID);
                 tpreparedStatement.setInt(2, r.getRawID());
                 tpreparedStatement.setFloat(3, a);
+                tpreparedStatement.setFloat(4, r.getPrice());
+                
                 
                 tpreparedStatement.executeUpdate();
                 connection.close();
@@ -225,7 +253,7 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
          try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "INSERT into transactions(transaction_date, transaction_type) values (?, 'Wastage');";
+            String query = "INSERT into transactions(transaction_date, transaction_type) values (?, 'wastage');";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             
             /* create date*/
@@ -244,11 +272,13 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
                 int transactionID = resultSet.getInt("max(transactionID)");
-                String tquery = "INSERT into transact(transactionID, rawID, quantity) values (?, ?, ?);";
+                String tquery = "INSERT into transact(transactionID, rawID, quantity, price) values (?, ?, ?, ?);";
                 PreparedStatement tpreparedStatement = connection.prepareStatement(tquery);
                 tpreparedStatement.setInt(1, transactionID);
                 tpreparedStatement.setInt(2, r.getRawID());
                 tpreparedStatement.setFloat(3, a);
+                tpreparedStatement.setFloat(4, r.getPrice());
+                
                 
                 tpreparedStatement.executeUpdate();
                 connection.close();
