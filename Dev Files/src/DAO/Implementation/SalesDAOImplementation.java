@@ -44,7 +44,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             preparedStatement.setDate(1, today);
             preparedStatement.setString(2, s.getType());
             preparedStatement.setInt(3, s.getOrder());
-
+           
             preparedStatement.executeUpdate();
 
             /* add to sold table */
@@ -53,12 +53,14 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 int salesID = resultSet.getInt("max(salesID)");
-                String squery = "INSERT into sold(salesID, recipeID, quantity) values (?, ?, ?);";
+                String squery = "INSERT into sold(salesID, recipeID, quantity, price, actual) values (?, ?, ?, ?, ?);";
                 PreparedStatement spreparedStatement = connection.prepareStatement(squery);
                 spreparedStatement.setInt(1, salesID);
                 spreparedStatement.setInt(2, r.getRecipeID());
                 spreparedStatement.setFloat(3, a);
-
+                spreparedStatement.setFloat(4, r.getCost());
+                spreparedStatement.setFloat(5, r.getActualPrice());
+                
                 spreparedStatement.executeUpdate();
                 connection.close();
                 return true;
@@ -81,10 +83,10 @@ public class SalesDAOImplementation implements SalesDAOInterface {
         try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "select distinct r.recipeID, recipe, cost, stock, rcstatus, categoryID, ordernum "
+            String query = "select distinct r.recipeID, recipe, price, stock, rcstatus, categoryID, ordernum "
                     + "from sales s, sold sd, recipe r "
-                    + "where r.recipeID = sd.recipeID and s.salesID = sd.salesID and sales_date = ?;"
-                    + "order by 7";
+                    + "where r.recipeID = sd.recipeID and s.salesID = sd.salesID and sales_date = ? "
+                    + "order by 7;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, d);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -94,7 +96,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
                 ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
                 r.setRecipeID(resultSet.getInt("recipeID"));
                 r.setRecipe(resultSet.getString("recipe"));
-                r.setCost(resultSet.getFloat("cost"));
+                r.setCost(resultSet.getFloat("price"));
                 r.setStock(resultSet.getFloat("stock"));
                 r.setRcstatus(resultSet.getString("rcstatus"));
                 r.setCategory(resultSet.getInt("categoryID"));
@@ -114,9 +116,10 @@ public class SalesDAOImplementation implements SalesDAOInterface {
     }
 
     @Override
-    public float sumSalesByRecipeByDay(RecipeBean r, String d) {
+    public float getSalesByRecipeByDay(RecipeBean r, String d) {
         try {
-            String query = "select recipeID, quantity "
+            float s =0;
+            String query = "select recipeID, quantity, price "
                     + "from sales s, sold sd "
                     + "where recipeID = ? and s.salesID = sd.salesID and sales_date = ? and sales_type= 'sales';";
             dBConnectionFactory = DBConnectionFactory.getInstance();
@@ -128,22 +131,22 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 float x = resultSet.getFloat("quantity");
-                float s = x * r.getCost();
-                connection.close();
-                return s;
-
+                float y = resultSet.getFloat("price");
+                s = x * y;
             }
             connection.close();
+            return s;
         } catch (SQLException ex) {
-            Logger.getLogger(TransactionDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SalesDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
 
     @Override
-    public float sumComplimentarySalesByRecipeByDay(RecipeBean r, String d) {
+    public float getComplimentarySalesByRecipeByDay(RecipeBean r, String d) {
         try {
-            String query = "select recipeID, quantity "
+            float s = 0;
+            String query = "select recipeID, quantity, price "
                     + "from sales s, sold sd "
                     + "where recipeID = ? and s.salesID = sd.salesID and sales_date = ? and sales_type= 'complimentary';";
             dBConnectionFactory = DBConnectionFactory.getInstance();
@@ -155,22 +158,22 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 float x = resultSet.getFloat("quantity");
-                float s = x * r.getActualPrice();
-                connection.close();
-                return s;
-
+                float y = resultSet.getFloat("price");
+                s = x * y;
             }
             connection.close();
+            return s;
         } catch (SQLException ex) {
-            Logger.getLogger(TransactionDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SalesDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
 
     @Override
-    public float sumExpensesByRecipeByDay(RecipeBean r, String d) {
+    public float getExpensesByRecipeByDay(RecipeBean r, String d) {
         try {
-            String query = "select recipeID, quantity "
+            float s = 0;
+            String query = "select recipeID, quantity, actual "
                     + "from sales s, sold sd "
                     + "where recipeID = ? and s.salesID = sd.salesID and sales_date = ? and sales_type= 'sales';";
             dBConnectionFactory = DBConnectionFactory.getInstance();
@@ -182,21 +185,21 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 float x = resultSet.getFloat("quantity");
-                float s = x * r.getActualPrice();
-                connection.close();
-                return s;
-
+                float y = resultSet.getFloat("actual");
+                s = x * y;
             }
             connection.close();
+            return s;
         } catch (SQLException ex) {
-            Logger.getLogger(TransactionDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SalesDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
 
     @Override
-    public float sumQuantityByRecipeByDay(String d, String s, RecipeBean r) {
+    public float getQuantityByRecipeByDay(String d, String s, RecipeBean r) {
         try {
+            float x = 0;
             String query = "select recipeID, quantity "
                     + "from sales s, sold sd "
                     + "where recipeID = ? and s.salesID = sd.salesID and sales_date = ? and sales_type= ?;";
@@ -209,16 +212,37 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                float x = resultSet.getFloat("quantity");
-                connection.close();
-                return x;
-
+               x = resultSet.getFloat("quantity");
             }
             connection.close();
+            return x;
         } catch (SQLException ex) {
-            Logger.getLogger(TransactionDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SalesDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
+    }
+    
+    @Override
+    public ArrayList<String> getAllDates(){
+        ArrayList<String> aDates = new ArrayList<String>();
+        try {
+            float x = 0;
+            String query = "select distinct(sales_date) "
+                    + "from sales;";
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+               aDates.add(resultSet.getString("sales_date"));
+            }
+            connection.close();
+            return aDates;
+        } catch (SQLException ex) {
+            Logger.getLogger(SalesDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aDates;
     }
 
 }
