@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.6" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -124,10 +124,16 @@
                     </Column>
                   </TableColumnModel>
                 </Property>
+                <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
+                  <JTableSelectionModel selectionMode="0"/>
+                </Property>
                 <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="rmTableMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -165,9 +171,11 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="countLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="typeLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="type" max="32767" attributes="0"/>
                           <Component id="rmName" max="32767" attributes="0"/>
                           <Component id="rmCount" pref="123" max="32767" attributes="0"/>
                       </Group>
@@ -195,7 +203,12 @@
                           <Component id="rmCount" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="errorCount" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="140" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="type" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="typeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="102" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -229,6 +242,22 @@
                   <Color blue="1" green="0" red="ff" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="ERROR: Required field. Please input valid number."/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="type">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="3">
+                    <StringItem index="0" value="Used"/>
+                    <StringItem index="1" value="Transferred"/>
+                    <StringItem index="2" value="Wastage"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="typeLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Type:"/>
               </Properties>
             </Component>
           </SubComponents>

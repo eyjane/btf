@@ -41,7 +41,7 @@ public class UsedTransfer extends javax.swing.JFrame {
          * FOR ACTUAL INPUT TABLE
          */
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"ID", "Name", "Quantity Used"};
+        String cols[] = {"ID", "Name", "Quantity"};
         DefaultTableModel actualTable = new DefaultTableModel(cols,0);
         
         for (RawBean raw : aRaw) {
@@ -109,6 +109,8 @@ public class UsedTransfer extends javax.swing.JFrame {
         rmCount = new javax.swing.JTextField();
         errorName = new javax.swing.JLabel();
         errorCount = new javax.swing.JLabel();
+        type = new javax.swing.JComboBox();
+        typeLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -140,6 +142,12 @@ public class UsedTransfer extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        rmTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        rmTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rmTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(rmTable);
 
         submitUsed.setText("REDUCE");
@@ -169,6 +177,10 @@ public class UsedTransfer extends javax.swing.JFrame {
         errorCount.setForeground(new java.awt.Color(255, 0, 1));
         errorCount.setText("ERROR: Required field. Please input valid number.");
 
+        type.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Used", "Transferred", "Wastage" }));
+
+        typeLabel.setText("Type:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -177,9 +189,11 @@ public class UsedTransfer extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(nameLabel)
-                    .addComponent(countLabel))
+                    .addComponent(countLabel)
+                    .addComponent(typeLabel))
                 .addGap(27, 27, 27)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(type, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rmName)
                     .addComponent(rmCount, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
@@ -201,7 +215,11 @@ public class UsedTransfer extends javax.swing.JFrame {
                     .addComponent(countLabel)
                     .addComponent(rmCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(errorCount))
-                .addContainerGap(140, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(typeLabel))
+                .addContainerGap(102, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -262,35 +280,7 @@ public class UsedTransfer extends javax.swing.JFrame {
         
         boolean submit = true;
 
-        int rows = rmTable.getRowCount();
-        int c = 0;
-
-        for (c = 0; c < rows; c++) {
-
-            if(rmTable.getValueAt(c,2).toString().isEmpty() || rmTable.getValueAt(c,3).toString().isEmpty()) {
-
-                submit = false;
-            }
-
-        }
-
         
-        if (submit) {
-            TransactionBean t = new TransactionBean();
-            RawBean r = new RawBean();
-            float usedQ = 0, wastedQ = 0; // QUANTITY
-
-            
-            for (c = 0; c < rows; c++) {
-
-                r.setRawID(Integer.parseInt(rmTable.getValueAt(c, 0).toString()));
-                usedQ = Float.parseFloat(rmTable.getValueAt(c, 2).toString());
-                wastedQ = Float.parseFloat(rmTable.getValueAt(c, 2).toString());
-                tclmp.usedTransfer(t, r, usedQ);
-                tclmp.wastages(t, r, wastedQ);
-            }
-
-        }
         
     }//GEN-LAST:event_submitUsedActionPerformed
 
@@ -299,6 +289,17 @@ public class UsedTransfer extends javax.swing.JFrame {
         this.setVisible(false);
         main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
+
+    private void rmTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rmTableMouseClicked
+        // TODO add your handling code here:
+        
+        int col = rmTable.getSelectedColumn();
+        int row = rmTable.getSelectedRow();
+        
+        String name = rmTable.getValueAt(row, col).toString();
+        rmName.setText(name);
+        
+    }//GEN-LAST:event_rmTableMouseClicked
 
     /*
      *  check if number!
@@ -373,5 +374,7 @@ public class UsedTransfer extends javax.swing.JFrame {
     private javax.swing.JTextField rmName;
     private javax.swing.JTable rmTable;
     private javax.swing.JButton submitUsed;
+    private javax.swing.JComboBox type;
+    private javax.swing.JLabel typeLabel;
     // End of variables declaration//GEN-END:variables
 }
