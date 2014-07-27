@@ -99,7 +99,9 @@ public class SALES extends javax.swing.JFrame {
         backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(956, 555));
 
+        jPanel1.setPreferredSize(new java.awt.Dimension(956, 555));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
@@ -124,7 +126,7 @@ public class SALES extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(recipeTable);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 79, 510, 129));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 79, 880, 129));
 
         inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Recipe Information"));
 
@@ -173,7 +175,7 @@ public class SALES extends javax.swing.JFrame {
                             .addComponent(enterSales)
                             .addGroup(inputPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(28, 28, 28)
                                 .addComponent(complimentaryField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(errorLabel1))
@@ -201,11 +203,11 @@ public class SALES extends javax.swing.JFrame {
                     .addComponent(complimentaryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(errorLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addComponent(enterSales))
         );
 
-        jPanel1.add(inputPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(59, 214, -1, -1));
+        jPanel1.add(inputPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 460, 160));
 
         jLabel5.setText("Drag and Drop to re-arrange recipes");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 51, -1, -1));
@@ -216,7 +218,7 @@ public class SALES extends javax.swing.JFrame {
                 submitSalesActionPerformed(evt);
             }
         });
-        jPanel1.add(submitSales, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 420, -1, -1));
+        jPanel1.add(submitSales, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 440, 140, -1));
 
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -224,21 +226,21 @@ public class SALES extends javax.swing.JFrame {
                 backBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 420, -1, -1));
+        jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 10, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 932, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
