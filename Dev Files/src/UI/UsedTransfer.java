@@ -116,39 +116,16 @@ public class UsedTransfer extends javax.swing.JFrame {
 
         jLabel1.setText("Used Materials");
 
-        rmTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "ID", "Name", "Quantity in Stock"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        rmTable.setColumnSelectionAllowed(true);
         rmTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        rmTable.getTableHeader().setReorderingAllowed(false);
         rmTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 rmTableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(rmTable);
+        rmTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         submitUsed.setText("REDUCE");
         submitUsed.addActionListener(new java.awt.event.ActionListener() {
@@ -200,7 +177,7 @@ public class UsedTransfer extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(errorName)
                     .addComponent(errorCount))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,8 +206,8 @@ public class UsedTransfer extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(backBtn)
@@ -280,7 +257,46 @@ public class UsedTransfer extends javax.swing.JFrame {
         
         boolean submit = true;
 
+        if(rmName.getText().toString().isEmpty()) {
+            
+            errorName.setVisible(true);
+            submit = false;
+        }
         
+        if(!rmCount.getText().toString().isEmpty()) {
+            
+            if(!isNumber(rmCount.getText().toString())) {
+            
+                errorCount.setVisible(true);
+                submit = false;
+            
+            }
+            
+        }
+        else {
+            
+           errorCount.setVisible(true);
+           submit = false; 
+        }
+        
+        if(submit) {
+            
+            String st = type.getSelectedItem().toString();
+            String name = rmName.getText().toString();
+            float q = Float.parseFloat(rmCount.getText().toString());
+            
+            // REDUCE FROM RAW TABLE
+            
+            
+            float s = rmImp.getStock(st);
+            float deduct = s - q;
+            
+            
+            // ADD TRANSACTION
+            TransactionBean t = new TransactionBean();
+            t.setType(st);
+            
+        }
         
     }//GEN-LAST:event_submitUsedActionPerformed
 

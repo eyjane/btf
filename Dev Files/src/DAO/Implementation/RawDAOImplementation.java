@@ -122,6 +122,30 @@ public class RawDAOImplementation implements RawDAOInterface {
     }
 
     @Override
+    public float getStock(String s) {
+        
+        float stock = 0;
+        
+        try {
+            String query = "select stock from raw where raw = ?";
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, s);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            stock = resultSet.getFloat("stock");
+            
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RecipeDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return stock;
+    }
+    
+    @Override
     public int getLatestAddedID(){
          int r = 0;
          

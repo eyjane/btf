@@ -25,7 +25,9 @@ public interface RawDAOInterface {
     public RawBean getRaw(int r);
     
     public int getLatestAddedID();
-
+    
+    public float getStock(String s);
+    
     public ArrayList<RawBean> getAllRaw();
 
     public ArrayList<RawBean> getRawByStatus(String s);
