@@ -290,7 +290,7 @@ public class UsedTransfer extends javax.swing.JFrame {
             
             float s = rmImp.getStock(st);
             float deduct = s - q;
-            
+            rmImp.updateStock(name, deduct);
             
             // ADD TRANSACTION
             TransactionBean t = new TransactionBean();
