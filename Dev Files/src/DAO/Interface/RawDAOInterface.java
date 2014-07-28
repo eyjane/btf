@@ -35,5 +35,7 @@ public interface RawDAOInterface {
     public boolean restockRaw(RawBean r);
     
     public boolean updateStock (String s, float a);
+    
+    public int getIDbyRaw (String s);
 
 }

@@ -280,7 +280,7 @@ public class UsedTransfer extends javax.swing.JFrame {
         }
         
         if(submit) {
-            
+            RawBean r = new RawBean();
             String st = type.getSelectedItem().toString();
             String name = rmName.getText().toString();
             float q = Float.parseFloat(rmCount.getText().toString());
@@ -295,7 +295,11 @@ public class UsedTransfer extends javax.swing.JFrame {
             // ADD TRANSACTION
             TransactionBean t = new TransactionBean();
             t.setType(st);
-            
+            int id = rmImp.getIDbyRaw(name);
+            /*
+             *  t.setrawID(id); // raw material name            *  
+             *  tcImp.addTransaction(t, r, q);
+             */
         }
         
     }//GEN-LAST:event_submitUsedActionPerformed

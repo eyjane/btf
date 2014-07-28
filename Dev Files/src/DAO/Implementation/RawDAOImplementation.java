@@ -271,4 +271,30 @@ public class RawDAOImplementation implements RawDAOInterface {
         
         return false;
     }
+    
+    @Override
+    public int getIDbyRaw (String s) {
+        int id = 0;
+        
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            String query = "SELECT rawID FROM raw WHERE raw = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, s);
+            ResultSet resultSet = preparedStatement.executeQuery(query);
+            
+            id = resultSet.getInt("rawID");
+            
+            connection.close();
+            return id;
+        } catch (SQLException ex) {
+            Logger.getLogger(RawDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return id;
+        
+        
+    }
 }
