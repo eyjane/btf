@@ -296,10 +296,8 @@ public class UsedTransfer extends javax.swing.JFrame {
             TransactionBean t = new TransactionBean();
             t.setType(st);
             int id = rmImp.getIDbyRaw(name);
-            /*
-             *  t.setrawID(id); // raw material name            *  
-             *  tcImp.addTransaction(t, r, q);
-             */
+            r.setRawID(id);
+            tclmp.addTransaction(t, r, q);
         }
         
     }//GEN-LAST:event_submitUsedActionPerformed
