@@ -6,13 +6,23 @@
 
 package UI;
 
+import Beans.IngredientBean;
+import Beans.RecipeBean;
+import Beans.SalesBean;
+import DAO.Implementation.SalesDAOImplementation;
+import DAO.Interface.IngredientDAOInterface;
+import DAO.Interface.RecipeDAOInterface;
+import DAO.Interface.SalesDAOInterface;
 import java.awt.Component;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Date;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -22,7 +32,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class GrossIncome extends javax.swing.JFrame {
 
-    ArrayList grossIncome = new ArrayList();
+    ArrayList<SalesBean> grossIncome = new ArrayList<SalesBean>();
+    SalesDAOInterface sImp = new SalesDAOImplementation();
     
     /**
      * Creates new form GrossIncome
@@ -170,8 +181,11 @@ public class GrossIncome extends javax.swing.JFrame {
      */
    
     public void GITable() {
-        
-        
+       RecipeBean r = new RecipeBean(); 
+       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date todayDate = new Date();
+       String today = t.format(todayDate);
+       //grossIncome = sImp.sumSalesByRecipeByDay(r, today);
         
     }
     
