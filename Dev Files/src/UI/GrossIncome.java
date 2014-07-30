@@ -77,7 +77,7 @@ public class GrossIncome extends javax.swing.JFrame {
                 {null, null}
             },
             new String [] {
-                "Recipe", "Sales (PHP)"
+                "Recipe", "Gross Income"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -89,7 +89,6 @@ public class GrossIncome extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(grossIncomeTable);
-        grossIncomeTable.getColumnModel().getColumn(1).setResizable(false);
 
         jButton1.setText("BACK");
 
@@ -101,9 +100,17 @@ public class GrossIncome extends javax.swing.JFrame {
                 {null, null}
             },
             new String [] {
-                "Recipe", "Sales (PHP)"
+                "Recipe", "Expenses"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(expensesTable);
 
         netIncomeTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -114,9 +121,17 @@ public class GrossIncome extends javax.swing.JFrame {
                 {null, null}
             },
             new String [] {
-                "Recipe", "Sales (PHP)"
+                "Recipe", "Net Income"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane3.setViewportView(netIncomeTable);
 
         jLabel1.setText("Gross Income");
@@ -188,7 +203,7 @@ public class GrossIncome extends javax.swing.JFrame {
        String today = t.format(todayDate);
        
        aSales = sImp.getAllSales(today);
-       String cols[] = {"Name", "Sales"};
+       String cols[] = {"Name", "Gross Income"};
        DefaultTableModel actualTable = new DefaultTableModel(cols,0);
         
        for(RecipeBean sale : aSales) {
@@ -210,7 +225,7 @@ public class GrossIncome extends javax.swing.JFrame {
        String today = t.format(todayDate);
        
        aSales = sImp.getAllSales(today);
-       String cols[] = {"Name", "Sales"};
+       String cols[] = {"Name", "Expenses"};
        DefaultTableModel actualTable = new DefaultTableModel(cols,0);
         
        for(RecipeBean sale : aSales) {
@@ -225,7 +240,24 @@ public class GrossIncome extends javax.swing.JFrame {
     }
     
     public void netTable() {
+       
+        RecipeBean r = new RecipeBean(); 
+       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date todayDate = new Date();
+       String today = t.format(todayDate);
+       
+       aSales = sImp.getAllSales(today);
+       String cols[] = {"Name", "Net Income"};
+       DefaultTableModel actualTable = new DefaultTableModel(cols,0);
         
+       for(RecipeBean sale : aSales) {
+           
+           r.setRecipeID(sale.getRecipeID());
+           Object[] data = {sale.getRecipe(), sImp.sumSalesByRecipeByDay(r, today) - sImp.sumExpensesByRecipeByDay(r, today)};
+           actualTable.addRow(data);
+           netIncomeTable.setModel(actualTable);
+           adjustTable(netIncomeTable);
+       }
         
         
     }
