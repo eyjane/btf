@@ -32,7 +32,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class GrossIncome extends javax.swing.JFrame {
 
-    ArrayList<SalesBean> grossIncome = new ArrayList<SalesBean>();
+    ArrayList<RecipeBean> aSales = new ArrayList<RecipeBean>();
     SalesDAOInterface sImp = new SalesDAOImplementation();
     
     /**
@@ -185,8 +185,11 @@ public class GrossIncome extends javax.swing.JFrame {
        DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
        Date todayDate = new Date();
        String today = t.format(todayDate);
-       //grossIncome = sImp.sumSalesByRecipeByDay(r, today);
-        
+       
+       aSales = sImp.getAllSales(today);
+       
+       
+       
     }
     
     private void adjustTable(JTable table){

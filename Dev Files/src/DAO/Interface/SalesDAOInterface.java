@@ -33,5 +33,5 @@ public interface SalesDAOInterface {
     public float sumQuantityByRecipeByDay(String d, String s, RecipeBean r);
     //gets quantity (for one recipe only) - for variance report
     
-     public ArrayList sumSalesPerRecipe(RecipeBean r, String d);
+    public ArrayList sumSalesPerRecipe(RecipeBean r, String d);
 }
