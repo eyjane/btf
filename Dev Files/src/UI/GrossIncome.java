@@ -187,6 +187,17 @@ public class GrossIncome extends javax.swing.JFrame {
        String today = t.format(todayDate);
        
        aSales = sImp.getAllSales(today);
+       String cols[] = {"Name", "Sales"};
+       DefaultTableModel actualTable = new DefaultTableModel(cols,0);
+        
+       for(RecipeBean sale : aSales) {
+           
+           r.setRecipeID(sale.getRecipeID());
+           Object[] data = {sale.getRecipe(), sImp.sumSalesByRecipeByDay(r, today)};
+           actualTable.addRow(data);
+           grossIncomeTable.setModel(actualTable);
+           adjustTable(grossIncomeTable);
+       }
        
        
        

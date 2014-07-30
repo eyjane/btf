@@ -220,33 +220,5 @@ public class SalesDAOImplementation implements SalesDAOInterface {
         }
         return 0;
     }
-
-   @Override
-    public ArrayList<SalesBean> sumSalesPerRecipe(RecipeBean r, String d) {
-       ArrayList<SalesBean> sumSales = new ArrayList(); 
-       try {
-            String query = "SELECT recipe.recipe AS Recipe, (sold.quantity * recipe.cost) AS sales" +
-"FROM sales JOIN sold JOIN recipe" +
-"WHERE sold.recipeID = recipe.recipeID AND sales.salesID = sold.salesID AND sales.sales_date = ?";
-            dBConnectionFactory = DBConnectionFactory.getInstance();
-            connection = dBConnectionFactory.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, r.getRecipeID());
-            preparedStatement.setString(2, d);
-            
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-               SalesBean s = new SalesBean();
-               r.setRecipe(resultSet.getString("Recipe"));
-               s.setRecipe(r);
-               //s.setOrder(resultSet.);
-                
-            }
-            connection.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(TransactionDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return sumSales;
-    } 
     
 }
