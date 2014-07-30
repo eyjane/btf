@@ -40,6 +40,7 @@ public class GrossIncome extends javax.swing.JFrame {
      */
     public GrossIncome() {
         initComponents();
+        GITable();
     }
 
     /**
@@ -198,9 +199,35 @@ public class GrossIncome extends javax.swing.JFrame {
            grossIncomeTable.setModel(actualTable);
            adjustTable(grossIncomeTable);
        }
+      
+    }
+    
+    public void expTable() {
+        
+       RecipeBean r = new RecipeBean(); 
+       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date todayDate = new Date();
+       String today = t.format(todayDate);
        
-       
-       
+       aSales = sImp.getAllSales(today);
+       String cols[] = {"Name", "Sales"};
+       DefaultTableModel actualTable = new DefaultTableModel(cols,0);
+        
+       for(RecipeBean sale : aSales) {
+           
+           r.setRecipeID(sale.getRecipeID());
+           Object[] data = {sale.getRecipe(), sImp.sumExpensesByRecipeByDay(r, today)};
+           actualTable.addRow(data);
+           expensesTable.setModel(actualTable);
+           adjustTable(expensesTable);
+       }
+        
+    }
+    
+    public void netTable() {
+        
+        
+        
     }
     
     private void adjustTable(JTable table){
