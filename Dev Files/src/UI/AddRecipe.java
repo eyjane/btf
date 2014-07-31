@@ -345,7 +345,7 @@ public class AddRecipe extends javax.swing.JFrame {
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         rcman.setVisible(true);
-        this.setVisible(false);
+        dispose();
     }//GEN-LAST:event_cancelActionPerformed
 
     /**
