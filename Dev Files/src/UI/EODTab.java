@@ -341,11 +341,13 @@ public class EODTab extends javax.swing.JFrame {
     private void rcMgtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rcMgtActionPerformed
         this.setVisible(false);
         try {
-            RCManagement rcmgt = new RCManagement(this);
+            RCManagement rcmgt = new RCManagement();
             rcmgt.setVisible(true);
         } catch (Exception e) {
             System.out.println(e);
         }
+        
+        dispose();
     }//GEN-LAST:event_rcMgtActionPerformed
 
     private void rmMgt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rmMgt1ActionPerformed

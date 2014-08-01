@@ -21,15 +21,18 @@ public interface SalesDAOInterface {
     public ArrayList<RecipeBean> getAllSales(String d);
     //gets the recipeBean in order
 
-    public float sumSalesByRecipeByDay(RecipeBean r, String d);
+    public float getSalesByRecipeByDay(RecipeBean r, String d);
     //gets quantity of sales * cost (for one recipe only)
 
-    public float sumComplimentarySalesByRecipeByDay(RecipeBean r, String d);
+    public float getComplimentarySalesByRecipeByDay(RecipeBean r, String d);
     //gets quantity of complimentary * actual price (for one recipe only) - only added to expenses
 
-    public float sumExpensesByRecipeByDay(RecipeBean r, String d);
+    public float getExpensesByRecipeByDay(RecipeBean r, String d);
     //gets quantity of sales * actual price (for one recipe only) - only added to expenses
     
-    public float sumQuantityByRecipeByDay(String d, String s, RecipeBean r);
+    public float getQuantityByRecipeByDay(String d, String s, RecipeBean r);
     //gets quantity (for one recipe only) - for variance report
+    
+    public ArrayList<String> getAllDates();
+    //gets dates w/ sales
 }

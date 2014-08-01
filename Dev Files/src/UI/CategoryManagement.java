@@ -196,7 +196,30 @@ public class CategoryManagement extends javax.swing.JFrame {
         });
         categoryTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(categoryTable);
+<<<<<<< HEAD
         categoryTable.getColumnModel().getColumn(0).setResizable(false);
+=======
+        if (categoryTable.getColumnModel().getColumnCount() > 0) {
+            categoryTable.getColumnModel().getColumn(0).setResizable(false);
+            categoryTable.getColumnModel().getColumn(1).setResizable(false);
+        }
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Category"));
+        jPanel2.setPreferredSize(new java.awt.Dimension(703, 400));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setText("ID:");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 27, -1, -1));
+
+        jLabel3.setText("Name:");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 68, -1, -1));
+
+        jLabel4.setText("RECIPES");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 30, -1, -1));
+
+        categoryIDField.setEditable(false);
+        jPanel2.add(categoryIDField, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 27, 200, -1));
+>>>>>>> 6c0a442f72064677b7549a8e6343965cbb662229
 
         jButton1.setText("Add A Category");
 
@@ -204,8 +227,48 @@ public class CategoryManagement extends javax.swing.JFrame {
 
         jButton3.setText("Delete This Category");
 
+<<<<<<< HEAD
         jLabel9.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel9.setText("CATEGORY");
+=======
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        recipeTable.setToolTipText("");
+        recipeTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(recipeTable);
+        if (recipeTable.getColumnModel().getColumnCount() > 0) {
+            recipeTable.getColumnModel().getColumn(0).setResizable(false);
+            recipeTable.getColumnModel().getColumn(1).setResizable(false);
+            recipeTable.getColumnModel().getColumn(2).setResizable(false);
+            recipeTable.getColumnModel().getColumn(3).setResizable(false);
+            recipeTable.getColumnModel().getColumn(4).setResizable(false);
+        }
+
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(364, 50, 580, 130));
+
+        btnAddCategory.setText("Add Category");
+        btnAddCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddCategoryActionPerformed(evt);
+            }
+        });
+
+        btnDeleteCategory.setText("Delete Category");
+        btnDeleteCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteCategoryActionPerformed(evt);
+            }
+        });
+
+        btnEditCategory.setText("Edit Category");
+        btnEditCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditCategoryActionPerformed(evt);
+            }
+        });
+>>>>>>> 6c0a442f72064677b7549a8e6343965cbb662229
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -229,6 +292,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+<<<<<<< HEAD
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -238,6 +302,15 @@ public class CategoryManagement extends javax.swing.JFrame {
                         .addGap(0, 132, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
+=======
+                    .addComponent(btnDeleteCategory)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAddCategory)
+                        .addComponent(btnEditCategory)))
+                .addGap(12, 12, 12)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
+>>>>>>> 6c0a442f72064677b7549a8e6343965cbb662229
         );
 
         btnBack.setText("BACK");

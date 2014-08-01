@@ -29,7 +29,7 @@ public class addIngredient extends javax.swing.JFrame {
 
     private RawDAOInterface rwImp = new RawDAOImplementation();
     private AddRecipe ar;
-    private RCManagement rcm;
+    private EditRecipe rcm;
     private ArrayList<IngredientBean> ai;
 
     /**
@@ -52,7 +52,7 @@ public class addIngredient extends javax.swing.JFrame {
         //System.out.println("Opened from addrecipe");
     }
 
-    public addIngredient(RCManagement r, ArrayList<IngredientBean> i) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public addIngredient(EditRecipe r, ArrayList<IngredientBean> i) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
