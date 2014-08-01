@@ -10,6 +10,7 @@ import Beans.IngredientBean;
 import Beans.RecipeBean;
 import Beans.SalesBean;
 import DAO.Implementation.SalesDAOImplementation;
+import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Interface.IngredientDAOInterface;
 import DAO.Interface.RecipeDAOInterface;
 import DAO.Interface.SalesDAOInterface;
@@ -40,16 +41,24 @@ public class GrossIncome extends javax.swing.JFrame {
 
     ArrayList<RecipeBean> aSales = new ArrayList<RecipeBean>();
     SalesDAOInterface sImp = new SalesDAOImplementation();
-    
+    RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    EODTab main;
     /**
      * Creates new form GrossIncome
      */
-    public GrossIncome() {
+    public GrossIncome(EODTab t) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
+        String laf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(laf);
         initComponents();
+        main = t;
         GITable();
         expTable();
         netTable();
-        makeGIChart();
+        
+    }
+
+    private GrossIncome() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -69,9 +78,9 @@ public class GrossIncome extends javax.swing.JFrame {
         expensesTable = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         netIncomeTable = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        grossIncomeLabel = new javax.swing.JLabel();
+        expensesLabel = new javax.swing.JLabel();
+        netLabel = new javax.swing.JLabel();
         jPanelChart = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -95,9 +104,16 @@ public class GrossIncome extends javax.swing.JFrame {
                 "Recipe", "Gross Income"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Float.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -149,11 +165,26 @@ public class GrossIncome extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(netIncomeTable);
 
-        jLabel1.setText("Gross Income");
+        grossIncomeLabel.setText("Gross Income");
+        grossIncomeLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                grossIncomeLabelMouseClicked(evt);
+            }
+        });
 
-        jLabel2.setText("Expenses");
+        expensesLabel.setText("Expenses");
+        expensesLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                expensesLabelMouseClicked(evt);
+            }
+        });
 
-        jLabel4.setText("Net Income");
+        netLabel.setText("Net Income");
+        netLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                netLabelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelChartLayout = new javax.swing.GroupLayout(jPanelChart);
         jPanelChart.setLayout(jPanelChartLayout);
@@ -175,11 +206,11 @@ public class GrossIncome extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(114, 114, 114)
-                .addComponent(jLabel1)
+                .addComponent(grossIncomeLabel)
                 .addGap(251, 251, 251)
-                .addComponent(jLabel2)
+                .addComponent(expensesLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
+                .addComponent(netLabel)
                 .addGap(180, 180, 180))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -201,10 +232,10 @@ public class GrossIncome extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
+                    .addComponent(grossIncomeLabel)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel4)))
+                        .addComponent(expensesLabel)
+                        .addComponent(netLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -228,23 +259,41 @@ public class GrossIncome extends javax.swing.JFrame {
         
     }//GEN-LAST:event_formWindowActivated
 
+    private void grossIncomeLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grossIncomeLabelMouseClicked
+        // TODO add your handling code here:
+        makeGIChart();
+    }//GEN-LAST:event_grossIncomeLabelMouseClicked
+
+    private void expensesLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_expensesLabelMouseClicked
+        // TODO add your handling code here:
+        makeExpChart();
+    }//GEN-LAST:event_expensesLabelMouseClicked
+
+    private void netLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_netLabelMouseClicked
+        // TODO add your handling code here:
+        makeNetChart();
+    }//GEN-LAST:event_netLabelMouseClicked
+
     /*
      *  <!-- KIM CODE STARTS HERE -->
      */
    
     public void GITable() {
        RecipeBean r = new RecipeBean(); 
-       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       /*DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
        Date todayDate = new Date();
-       String today = t.format(todayDate);
+       String today = t.format(todayDate);*/
+       
+       String today = "2014-07-01";
        
        aSales = sImp.getAllSales(today);
        String cols[] = {"Name", "Gross Income"};
        DefaultTableModel actualTable = new DefaultTableModel(cols,0);
-        
+
        for(RecipeBean sale : aSales) {
            
-           r.setRecipeID(sale.getRecipeID());
+           r = rcImp.getRecipeBean(sale.getRecipeID());
+           System.out.println(r.getRecipeID());
            Object[] data = {sale.getRecipe(), sImp.sumSalesByRecipeByDay(r, today)};
            actualTable.addRow(data);
            grossIncomeTable.setModel(actualTable);
@@ -423,6 +472,7 @@ public class GrossIncome extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new GrossIncome().setVisible(true);
             }
@@ -430,17 +480,17 @@ public class GrossIncome extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel expensesLabel;
     private javax.swing.JTable expensesTable;
+    private javax.swing.JLabel grossIncomeLabel;
     private javax.swing.JTable grossIncomeTable;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanelChart;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable netIncomeTable;
+    private javax.swing.JLabel netLabel;
     // End of variables declaration//GEN-END:variables
 }

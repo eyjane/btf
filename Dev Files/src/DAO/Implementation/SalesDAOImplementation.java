@@ -83,8 +83,8 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             connection = dBConnectionFactory.getConnection();
             String query = "select distinct r.recipeID, recipe, cost, stock, rcstatus, categoryID, ordernum "
                     + "from sales s, sold sd, recipe r "
-                    + "where r.recipeID = sd.recipeID and s.salesID = sd.salesID and sales_date = ?;"
-                    + "order by 7";
+                    + "where r.recipeID = sd.recipeID and s.salesID = sd.salesID and sales_date = ?;";
+                    //+ "order by 7";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, d);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -92,7 +92,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             while (resultSet.next()) {
                 RecipeBean r = new RecipeBean();
                 ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
-                r.setRecipeID(resultSet.getInt("recipeID"));
+                r.setRecipeID(resultSet.getInt("r.recipeID"));
                 r.setRecipe(resultSet.getString("recipe"));
                 r.setCost(resultSet.getFloat("cost"));
                 r.setStock(resultSet.getFloat("stock"));
@@ -116,9 +116,9 @@ public class SalesDAOImplementation implements SalesDAOInterface {
     @Override
     public float sumSalesByRecipeByDay(RecipeBean r, String d) {
         try {
-            String query = "select recipeID, quantity "
+            String query = "select sd.recipeID, quantity "
                     + "from sales s, sold sd "
-                    + "where recipeID = ? and s.salesID = sd.salesID and sales_date = ? and sales_type= 'sales';";
+                    + "where sd.recipeID = ? and s.salesID = sd.salesID and sales_date = ? and sales_type= 'sales';";
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);

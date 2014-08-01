@@ -79,7 +79,7 @@ public class EODTab extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         actualBtn = new javax.swing.JButton();
         UTWbtn = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        reportBtn = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         notificationTable = new javax.swing.JTable(){
             public boolean isCellEditable(int row, int column){
@@ -266,10 +266,15 @@ public class EODTab extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jButton4.setText("REPORT");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        reportBtn.setText("REPORT");
+        reportBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportBtnMouseClicked(evt);
+            }
+        });
+        reportBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                reportBtnActionPerformed(evt);
             }
         });
 
@@ -310,7 +315,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(101, 101, 101)
-                        .addComponent(jButton4))
+                        .addComponent(reportBtn))
                     .addComponent(jLabel3)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31))
@@ -325,7 +330,7 @@ public class EODTab extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4))
+                        .addComponent(reportBtn))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(49, 49, 49)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -348,9 +353,18 @@ public class EODTab extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void reportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+        
+         this.setVisible(false);
+        try {
+            GrossIncome grossWindow = new GrossIncome(this);
+            grossWindow.setVisible(true);
+        } catch (Exception e) {
+            System.out.println("Error found: " + e);
+        }
+        
+    }//GEN-LAST:event_reportBtnActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
@@ -447,6 +461,10 @@ public class EODTab extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_actualBtnActionPerformed
+
+    private void reportBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportBtnMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reportBtnMouseClicked
 
     /**
      * < -- JANERYS FUNCTIONS START -- > *
@@ -565,7 +583,6 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JButton cMgt2;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -580,6 +597,7 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JTable rawTable;
     private javax.swing.JButton rcMgt;
     private javax.swing.JTable recipeTable;
+    private javax.swing.JButton reportBtn;
     private javax.swing.JButton rmMgt1;
     private javax.swing.JButton salesBtn;
     // End of variables declaration//GEN-END:variables
