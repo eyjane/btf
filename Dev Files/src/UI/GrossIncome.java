@@ -385,14 +385,15 @@ public class GrossIncome extends javax.swing.JFrame {
         }
         
         JFreeChart grossChart = ChartFactory.createPieChart("Gross Income", objDataset, true, true, false); // makes chart
+        jPanelChart.setLayout(new java.awt.BorderLayout());
         ChartPanel chartPanel = new ChartPanel(grossChart);
-        jPanelChart.setLayout(new BorderLayout());
-        jPanelChart.add(chartPanel, BorderLayout.NORTH);
+        jPanelChart.add(chartPanel, BorderLayout.CENTER);
+        jPanelChart.validate();
        
-        JFrame frame = new JFrame();
+        /*JFrame frame = new JFrame();
         frame.add(jPanelChart);
         frame.pack();
-        frame.setVisible(true);
+        frame.setVisible(true);*/
         
     }
     
@@ -407,15 +408,12 @@ public class GrossIncome extends javax.swing.JFrame {
             
         }
         
-        JFreeChart expChart = ChartFactory.createPieChart("Gross Income", objDataset, true, true, false); // makes chart
+        JFreeChart expChart = ChartFactory.createPieChart("Expenses", objDataset, true, true, false); // makes chart
+        jPanelChart.setLayout(new java.awt.BorderLayout());
         ChartPanel chartPanel = new ChartPanel(expChart);
-        jPanelChart.setLayout(new BorderLayout());
-        jPanelChart.add(chartPanel, BorderLayout.NORTH);
-       
-        JFrame frame = new JFrame();
-        frame.add(jPanelChart);
-        frame.pack();
-        frame.setVisible(true);
+        jPanelChart.add(chartPanel, BorderLayout.CENTER);
+        jPanelChart.validate();
+      
         
     }
     
@@ -430,16 +428,12 @@ public class GrossIncome extends javax.swing.JFrame {
             
         }
         
-        JFreeChart netChart = ChartFactory.createPieChart("Gross Income", objDataset, true, true, false); // makes chart
+        JFreeChart netChart = ChartFactory.createPieChart("Net Income", objDataset, true, true, false); // makes chart
+        jPanelChart.setLayout(new java.awt.BorderLayout());
         ChartPanel chartPanel = new ChartPanel(netChart);
-        jPanelChart.setLayout(new BorderLayout());
-        jPanelChart.add(chartPanel, BorderLayout.NORTH);
+        jPanelChart.add(chartPanel, BorderLayout.CENTER);
+        jPanelChart.validate();
        
-        JFrame frame = new JFrame();
-        frame.add(jPanelChart);
-        frame.pack();
-        frame.setVisible(true);
-        
     }
     
     /*
