@@ -293,7 +293,6 @@ public class GrossIncome extends javax.swing.JFrame {
        for(RecipeBean sale : aSales) {
            
            r = rcImp.getRecipeBean(sale.getRecipeID());
-           System.out.println(r.getRecipeID());
            Object[] data = {sale.getRecipe(), sImp.sumSalesByRecipeByDay(r, today)};
            actualTable.addRow(data);
            grossIncomeTable.setModel(actualTable);
@@ -305,9 +304,11 @@ public class GrossIncome extends javax.swing.JFrame {
     public void expTable() {
         
        RecipeBean r = new RecipeBean(); 
-       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+        /*DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
        Date todayDate = new Date();
-       String today = t.format(todayDate);
+       String today = t.format(todayDate);*/
+       
+       String today = "2014-07-01";
        
        aSales = sImp.getAllSales(today);
        String cols[] = {"Name", "Expenses"};
@@ -315,7 +316,7 @@ public class GrossIncome extends javax.swing.JFrame {
         
        for(RecipeBean sale : aSales) {
            
-           r.setRecipeID(sale.getRecipeID());
+           r = rcImp.getRecipeBean(sale.getRecipeID());
            Object[] data = {sale.getRecipe(), sImp.sumExpensesByRecipeByDay(r, today)};
            actualTable.addRow(data);
            expensesTable.setModel(actualTable);
@@ -326,10 +327,12 @@ public class GrossIncome extends javax.swing.JFrame {
     
     public void netTable() {
        
-        RecipeBean r = new RecipeBean(); 
-       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       RecipeBean r = new RecipeBean(); 
+        /*DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
        Date todayDate = new Date();
-       String today = t.format(todayDate);
+       String today = t.format(todayDate);*/
+       
+       String today = "2014-07-01";
        
        aSales = sImp.getAllSales(today);
        String cols[] = {"Name", "Net Income"};
@@ -337,7 +340,7 @@ public class GrossIncome extends javax.swing.JFrame {
         
        for(RecipeBean sale : aSales) {
            
-           r.setRecipeID(sale.getRecipeID());
+           r = rcImp.getRecipeBean(sale.getRecipeID());
            Object[] data = {sale.getRecipe(), sImp.sumSalesByRecipeByDay(r, today) - sImp.sumExpensesByRecipeByDay(r, today)};
            actualTable.addRow(data);
            netIncomeTable.setModel(actualTable);
