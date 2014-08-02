@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 package UI;
 
 import Beans.CategoryBean;
@@ -29,31 +28,17 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
->>>>>>> 6c0a442f72064677b7549a8e6343965cbb662229
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-<<<<<<< HEAD
 
-package UI;
-
-=======
->>>>>>> 6c0a442f72064677b7549a8e6343965cbb662229
 /**
  *
  * @author Evy
  */
 public class EditRecipe extends javax.swing.JFrame {
-
-<<<<<<< HEAD
-    /**
-     * Creates new form EditRecipe
-     */
-    public EditRecipe() {
-        initComponents();
-=======
     private RecipeDAOInterface rcImp = new RecipeDAOImplementation();
     private CategoryDAOInterface catImp = new CategoryDAOImplementation();
     private RawDAOInterface rmImp = new RawDAOImplementation();
@@ -65,6 +50,12 @@ public class EditRecipe extends javax.swing.JFrame {
 
     private addIngredient AddIngredient;
     private AddRecipe addRecipe;
+    /**
+     * Creates new form EditRecipe
+     */
+    public EditRecipe() {
+        initComponents();
+    
 
     /**
      * Creates new form RCManagement
@@ -78,7 +69,6 @@ public class EditRecipe extends javax.swing.JFrame {
         errorLabel2.setVisible(false);
         inError.setVisible(false);
         prepareTable();
->>>>>>> 6c0a442f72064677b7549a8e6343965cbb662229
     }
 
     /**
@@ -350,22 +340,22 @@ public class EditRecipe extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
-    }//GEN-LAST:event_nameFieldActionPerformed
+    }                                         
 
     private void categoryBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_categoryBoxActionPerformed
 
-    private void ingredientsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingredientsTableMouseClicked
+    private void ingredientsTableMouseClicked(java.awt.event.MouseEvent evt) {                                              
 
-    }//GEN-LAST:event_ingredientsTableMouseClicked
+    }                                             
 
-    private void editIngredientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editIngredientActionPerformed
+    private void editIngredientActionPerformed(java.awt.event.ActionEvent evt) {                                               
         int nrow = ingredientsTable.getRowCount();
         //System.out.println(nrow);
-=======
+
 
         saveRecipe.setText("SAVE");
         saveRecipe.addActionListener(new java.awt.event.ActionListener() {
@@ -515,7 +505,7 @@ public class EditRecipe extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, -1));
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         this.setVisible(false);
@@ -543,12 +533,10 @@ public class EditRecipe extends javax.swing.JFrame {
 
         //get all ingredients
         int nrow = ingredientsTable.getRowCount();
->>>>>>> 6c0a442f72064677b7549a8e6343965cbb662229
 
         int i;
         int rid;
 
-<<<<<<< HEAD
 /*        aIngredient = new ArrayList<IngredientBean>();
 =======
         ArrayList<IngredientBean> aIngredient = new ArrayList<IngredientBean>();
@@ -679,10 +667,10 @@ public class EditRecipe extends javax.swing.JFrame {
 //        this.setVisible(false);
     }//GEN-LAST:event_cancelActionPerformed
 
-    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
+    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {                                         
  /*       ArrayList<CategoryBean> aCategory = catImp.getAllCategory();
 =======
-    }//GEN-LAST:event_editIngredientActionPerformed
+    }                                              
 
     private void ingredientsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingredientsTableMouseClicked
 
@@ -780,10 +768,9 @@ public class EditRecipe extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JLabel actualLabel;
     private javax.swing.JButton cancel;
-=======
             ingredientsTable.setModel(model);
             ingredientsTable.getColumnModel().getColumn(0).setMinWidth(0);
             ingredientsTable.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -792,7 +779,7 @@ public class EditRecipe extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e);
         }
-    }//GEN-LAST:event_recipeTableMouseClicked
+    }                                        
 
     /**
      * <--- JANERYS CODE START ---> *

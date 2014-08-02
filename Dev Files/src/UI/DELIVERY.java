@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -61,11 +60,6 @@ public class DELIVERY extends javax.swing.JFrame {
             rawTable.setModel(allRaw);
             adjustTable(rawTable);
         }
-        
-        rawTable.setColumnSelectionAllowed(true);
-        rawTable.setRowSelectionAllowed(true);
-        rawTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
     }
     
     private void adjustTable(JTable table){
@@ -110,11 +104,10 @@ public class DELIVERY extends javax.swing.JFrame {
         rmAmount = new javax.swing.JTextField();
         errorLabel = new javax.swing.JLabel();
         errorLabel2 = new javax.swing.JLabel();
-        submitBtn = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(956, 555));
 
         jPanel1.setPreferredSize(new java.awt.Dimension(956, 555));
 
@@ -130,20 +123,7 @@ public class DELIVERY extends javax.swing.JFrame {
             new String [] {
                 "Name", "Amount"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        rawTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rawTableMouseClicked(evt);
-            }
-        });
+        ));
         jScrollPane1.setViewportView(rawTable);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Raw Materials Information"));
@@ -152,11 +132,14 @@ public class DELIVERY extends javax.swing.JFrame {
 
         jLabel3.setText("Delivery:");
 
+        rmName.setText("jTextField1");
         rmName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rmNameActionPerformed(evt);
             }
         });
+
+        rmAmount.setText("jTextField2");
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 1));
         errorLabel.setText("ERROR: Required Field");
@@ -199,10 +182,10 @@ public class DELIVERY extends javax.swing.JFrame {
                 .addGap(34, 34, 34))
         );
 
-        submitBtn.setText("SUBMIT");
-        submitBtn.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("SUBMIT");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                submitBtnActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -224,17 +207,7 @@ public class DELIVERY extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-<<<<<<< HEAD
                         .addGap(0, 0, Short.MAX_VALUE)))
-=======
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(backBtn)
-                        .addGap(42, 42, 42)
-                        .addComponent(submitBtn)
-                        .addGap(16, 16, 16)))
->>>>>>> 6c0a442f72064677b7549a8e6343965cbb662229
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -254,15 +227,9 @@ public class DELIVERY extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-<<<<<<< HEAD
                     .addComponent(backBtn)
                     .addComponent(jButton1))
                 .addContainerGap())
-=======
-                    .addComponent(submitBtn)
-                    .addComponent(backBtn))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
->>>>>>> 6c0a442f72064677b7549a8e6343965cbb662229
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -283,7 +250,7 @@ public class DELIVERY extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         boolean add = true;
         
@@ -310,7 +277,7 @@ public class DELIVERY extends javax.swing.JFrame {
         }
         
         
-    }//GEN-LAST:event_submitBtnActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void rmNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rmNameActionPerformed
         
@@ -323,15 +290,6 @@ public class DELIVERY extends javax.swing.JFrame {
         main.setVisible(true);
         
     }//GEN-LAST:event_backBtnActionPerformed
-
-    private void rawTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rawTableMouseClicked
-        // TODO add your handling code here:
-        
-        int col = rawTable.getSelectedColumn();
-        int row = rawTable.getSelectedRow();
-        
-        
-    }//GEN-LAST:event_rawTableMouseClicked
 
     
     private boolean isNumber(String s) {
@@ -393,6 +351,7 @@ public class DELIVERY extends javax.swing.JFrame {
     private javax.swing.JButton backBtn;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel errorLabel2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -402,6 +361,5 @@ public class DELIVERY extends javax.swing.JFrame {
     private javax.swing.JTable rawTable;
     private javax.swing.JTextField rmAmount;
     private javax.swing.JTextField rmName;
-    private javax.swing.JButton submitBtn;
     // End of variables declaration//GEN-END:variables
 }
