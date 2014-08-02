@@ -26,6 +26,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -152,6 +153,7 @@ public class EODTab extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        recipeTable.setName("Recipe Stock"); // NOI18N
         jScrollPane2.setViewportView(recipeTable);
 
         jPanel5.add(jScrollPane2);
@@ -165,6 +167,7 @@ public class EODTab extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        rawTable.setName("Raw Material Stock"); // NOI18N
         jScrollPane1.setViewportView(rawTable);
 
         jPanel5.add(jScrollPane1);
@@ -403,8 +406,12 @@ public class EODTab extends javax.swing.JFrame {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
-            String path = dateFormat.format(d) + " btf.xls" ;
-            exportToExcel(rawTable, path);
+            String path = dateFormat.format(d) + " btf.xlsx" ;
+            
+            ArrayList<JTable> tables = new ArrayList<JTable>();
+            tables.add(rawTable);
+            tables.add(recipeTable);
+            exportToExcel(tables, path);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -414,25 +421,38 @@ public class EODTab extends javax.swing.JFrame {
     /**
      * < -- CLARK'S FUNCTIONS START -- > *
      */
-    private static void exportToExcel(JTable table, String path) throws FileNotFoundException, IOException {
+    private void exportToExcel(ArrayList<JTable> tables, String path) throws FileNotFoundException, IOException {
         new WorkbookFactory();
         Workbook wb = new XSSFWorkbook(); //Excel workbook
-        Sheet sheet = wb.createSheet("Raw Materials"); //WorkSheet
-        Row row = sheet.createRow(2); //Row created at line 3
-        TableModel model = table.getModel(); //Table model
+        CellStyle style = wb.createCellStyle();
+        Font font = wb.createFont();
+        font.setColor(HSSFColor.RED.index);
+        style.setFont(font);
+        for(int i = 0; i < tables.size(); i++){
+            JTable table = tables.get(i);
+            Sheet sheet = wb.createSheet(table.getName()); //WorkSheet
+            sheet.setColumnWidth(0, 15000);
+            Row row = sheet.createRow(2); //Row created at line 3
+            TableModel model = table.getModel(); //Table model
 
-
-        Row headerRow = sheet.createRow(0); //Create row at line 0
-        for(int headings = 0; headings < model.getColumnCount(); headings++){ //For each column
-            headerRow.createCell(headings).setCellValue(model.getColumnName(headings));//Write column name
-        }
-
-        for(int rows = 0; rows < model.getRowCount(); rows++){ //For each table row
-            for(int cols = 0; cols < table.getColumnCount(); cols++){ //For each table column
-                row.createCell(cols).setCellValue(model.getValueAt(rows, cols).toString()); //Write value
+            Row headerRow = sheet.createRow(0); //Create row at line 0
+            for(int headings = 0; headings < model.getColumnCount(); headings++){ //For each column
+                headerRow.createCell(headings).setCellValue(model.getColumnName(headings));//Write column name
             }
-            //Set the row to the next one in the sequence 
-            row = sheet.createRow((rows + 3)); 
+
+            for(int rows = 0; rows < model.getRowCount(); rows++){ //For each table row
+                for(int cols = 0; cols < table.getColumnCount(); cols++){ //For each table column
+                    String text = model.getValueAt(rows, cols).toString();
+                    Cell cell = row.createCell(cols); //create cell
+                    if(checkHTML(text)){
+                        cell.setCellStyle(style);
+                        text = parseHTML(text);
+                    }
+                    cell.setCellValue(text); //Write value
+                }
+                //Set the row to the next one in the sequence 
+                row = sheet.createRow((rows + 3)); 
+            }
         }
         //wb.setSheetName(wb.getSheetIndex(sheet), "Raw Materials");
         try{
@@ -448,7 +468,26 @@ public class EODTab extends javax.swing.JFrame {
             e.printStackTrace();
         }
         
-        }   
+    }
+    
+    public boolean checkHTML(String str){
+        boolean hasHTML = false;
+        if(str.contains("<html>")){
+            hasHTML = true;
+        }
+        return hasHTML;
+    }
+    
+    public String parseHTML(String str){
+        String temp = "";
+        temp = str.replace("<html><p style = 'color:red'><b>", "");
+        System.out.println(temp);
+        temp = temp.replace("</b></p></html>", "");
+        System.out.println(temp);
+        //int index = str.indexOf("(");
+        //System.out.println(temp.substring(0, index));
+        return temp;
+    }
     /**
      * < -- CLARK'S FUNCTIONS END -- > *
      */
@@ -548,7 +587,17 @@ public class EODTab extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EODTab().setVisible(true);
+                try {
+                    new EODTab().setVisible(true);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
