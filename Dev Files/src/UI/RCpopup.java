@@ -3,9 +3,11 @@ package UI;
 import Beans.RecipeBean;
 import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Interface.RecipeDAOInterface;
+import java.util.ArrayList;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -13,22 +15,40 @@ import javax.swing.table.DefaultTableModel;
  */
 public class RCpopup extends javax.swing.JFrame {
     private RecipeDAOInterface rcImp;
-    private CategoryManagement cm;
-    private RecipeBean rc;
+    private EditCategory ec;
+    private AddCategory ac;
+    private ArrayList<RecipeBean> ar;
+    private ArrayList<RecipeBean> a;
    
     //<--- CLARK'S CODE STARTS HERE --->
-    public RCpopup(CategoryManagement c) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public RCpopup(EditCategory c, ArrayList<RecipeBean> rb) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
-        cm = c;
+        ec = c;
         rcImp = new RecipeDAOImplementation();
+        ar = rb;
+        a = rcImp.getRecipeByStatus("available");
+        //jLabel3.setText("Recipes of category " + ec.getCategory().getCategory() + " :");
         ViewAllRecipes();
+        //ViewCatRecipes();
+    }
+    
+    public RCpopup(AddCategory c, ArrayList<RecipeBean> rb) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        String laf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(laf);
+        initComponents();
+        ac = c;
+        ar = rb;
+        rcImp = new RecipeDAOImplementation();
+        a = rcImp.getRecipeByStatus("available");
+        //jLabel3.setText("Recipes of category " + c.getCategory() + ":");
+        ViewAllRecipes();
+        //ViewCatRecipes();
     }
     
     public DefaultTableModel initializeRecipeTable(){
         DefaultTableModel defaultTableModel = new DefaultTableModel();
-        defaultTableModel.addColumn("ID");
         defaultTableModel.addColumn("Name");
         defaultTableModel.addColumn("Cost");
         defaultTableModel.addColumn("Stock");
@@ -38,29 +58,31 @@ public class RCpopup extends javax.swing.JFrame {
     
     public void ViewAllRecipes(){
        DefaultTableModel defaultModel = initializeRecipeTable();
-       for (int i = 0; i < rcImp.getRecipeByStatus("available").size(); i++) {
-            defaultModel.addRow(new Object[] {rcImp.getRecipeByStatus("available").get(i).getRecipeID(), rcImp.getRecipeByStatus("available").get(i).getRecipe(),               
-            rcImp.getRecipeByStatus("available").get(i).getCost(), rcImp.getRecipeByStatus("available").get(i).getStock(), rcImp.getRecipeByStatus("available").get(i).getRcstatus()});
+       for (int i = 0; i < a.size(); i++) {
+           boolean flag = true;
+           for (int j = 0; j < ar.size(); j++) {
+               if(a.get(i).getRecipe().equals(ar.get(j).getRecipe())){
+                    flag = false;
+               }
+           }
+           if(flag == true){
+                defaultModel.addRow(new Object[] {a.get(i).getRecipe(),               
+                a.get(i).getCost(), a.get(i).getStock(), a.get(i).getRcstatus()});
+           }
        }
        recipeTable.setModel(defaultModel);
     }
     
-    public RecipeBean getSelectedRecipe(){
-        rc = new RecipeBean();
-        try {
-            DefaultTableModel defaultTableModel = (DefaultTableModel) recipeTable.getModel();
-            if (recipeTable.getSelectedRow() >= 0) {
-                rc.setRecipeID((int) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 0));
-                rc.setRecipe((String) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 1));
-                rc.setCost((float) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 2));
-                rc.setStock((float) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 3));
-                rc.setRcstatus((String) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 4));
-            } else
-                rc = null;
-        } catch (Exception err) {
-            err.printStackTrace();
-        } 
-        return rc;
+    public void addRecipe(int r){
+        int rID = Integer.parseInt(recipeTable.getModel().getValueAt(r, 0).toString());
+        RecipeBean rb = rcImp.getRecipeBean(rID);
+        ar.add(rb);
+        Object[] recipe = {rb.getRecipeID(), rb.getRecipe(), rb.getCost(), rb.getStock(), rb.getRcstatus()};
+        
+        TableModel model = recipeTable.getModel();
+        DefaultTableModel table = (DefaultTableModel) model;
+        table.removeRow(r);
+        recipeTable.setModel(table);
     }
     
     //<--- CLARK'S CODE ENDS HERE --->
@@ -164,13 +186,32 @@ public class RCpopup extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRecipeActionPerformed
-        getSelectedRecipe().setCategory(cm.getCategory().getCategoryID());
-        rcImp.editRecipe(rc);
-        cm.ViewAllRecipes(cm.getCategory());
-        dispose();
+        int select = recipeTable.getSelectedRow();
+        if (select < 0) {
+            return;
+        } else {
+            addRecipe(select);
+            try{
+                if (ac != null) {
+                    ac.setVisible(true);
+                    ac.ViewAllRecipes(ar);
+                } else {
+                    ec.setVisible(true);
+                    ec.ViewAllRecipes(ar);
+                }
+                dispose();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
     }//GEN-LAST:event_btnAddRecipeActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        if (ac != null) {
+            ac.setVisible(true);
+        } else {
+            ec.setVisible(true);
+        }
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 

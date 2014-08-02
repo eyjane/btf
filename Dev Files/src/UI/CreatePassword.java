@@ -159,6 +159,8 @@ public class CreatePassword extends javax.swing.JFrame {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }catch(Exception e){
+                e.printStackTrace();
             }
          } 
     }//GEN-LAST:event_btnCreatePasswordActionPerformed

@@ -56,6 +56,11 @@ public class RMManagement extends javax.swing.JFrame {
             try {
             clearText();
             DefaultTableModel defaultTableModel = (DefaultTableModel) rmTable.getModel();
+            if (rmTable.getSelectedRow() >= 0) {
+                selectedRaw = rmImp.getRaw((int) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0));
+            } else {
+                selectedRaw = null;
+              }
             } catch (Exception err) {
                 err.printStackTrace();
             } 
@@ -81,6 +86,10 @@ public class RMManagement extends javax.swing.JFrame {
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    public RawBean getRaw(){
+        return selectedRaw;
     }
     //<--- CLARK'S CODE ENDS HERE --->
     @SuppressWarnings("unchecked")
@@ -176,12 +185,11 @@ public class RMManagement extends javax.swing.JFrame {
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         this.setVisible(false);
         try {
-      //      main = new EODTab();
+            EODTab main = new EODTab();
+            main.setVisible(true);
         } catch (Exception e) {
             System.out.println(e);
         }
-
-      //  main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 
 

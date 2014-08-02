@@ -365,7 +365,7 @@ public class EditRawMaterial extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Raw material successfully edited!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 rm.setVisible(true);
                 rm.ViewAllRM();
-                rm.setFields(raw);
+                //rm.setFields(raw);
                 dispose();
             } catch(Exception err){
                 err.printStackTrace();
