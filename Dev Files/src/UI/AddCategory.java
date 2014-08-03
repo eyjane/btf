@@ -308,7 +308,7 @@ public class AddCategory extends javax.swing.JFrame {
                 cm.setVisible(true);
                 cm.ViewAllCategories();
                 //cm.setCategoryField(cat);
-                cm.ViewAllRecipes(cat);
+                //cm.ViewAllRecipes(cat);
                 dispose();
             } catch(Exception err){
                 err.printStackTrace();

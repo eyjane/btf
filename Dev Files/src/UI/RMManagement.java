@@ -1,8 +1,11 @@
 package UI;
 
 import Beans.RawBean;
+import Beans.RecipeBean;
 import DAO.Implementation.RawDAOImplementation;
+import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Interface.RawDAOInterface;
+import DAO.Interface.RecipeDAOInterface;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,8 +22,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class RMManagement extends javax.swing.JFrame {
     private RawDAOInterface rmImp = new RawDAOImplementation();
-    private RawBean selectedRaw = new RawBean();
-    private RawBean editRaw = new RawBean();
+    private RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    private RawBean selectedRaw = null;
 
     //<--- CLARK'S CODE STARTS HERE --->
     public RMManagement() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
@@ -54,7 +57,6 @@ public class RMManagement extends javax.swing.JFrame {
        rmTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
         public void valueChanged(ListSelectionEvent event) {
             try {
-            clearText();
             DefaultTableModel defaultTableModel = (DefaultTableModel) rmTable.getModel();
             if (rmTable.getSelectedRow() >= 0) {
                 selectedRaw = rmImp.getRaw((int) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0));
@@ -68,16 +70,13 @@ public class RMManagement extends javax.swing.JFrame {
        });
     }
     
-    public void clearText(){
-        }
-    
-    public boolean authenticateRM(){
+    /*public boolean authenticateRM(){
         boolean flag = true;
         editRaw = new RawBean();
         int count = 0;
         return false;
         
-        }
+        } */
     
     public boolean isNumber(String s) {
         try {
@@ -86,6 +85,15 @@ public class RMManagement extends javax.swing.JFrame {
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    public boolean authenticateDelete() {
+        boolean flag = true;
+        ArrayList<RecipeBean> recipeTemp = null;
+        recipeTemp = rcImp.getRecipeByRawMaterial(selectedRaw);
+        if(recipeTemp.size() > 0)
+            flag = false;
+        return flag;
     }
     
     public RawBean getRaw(){
@@ -104,9 +112,9 @@ public class RMManagement extends javax.swing.JFrame {
             }
         };
         jLabel9 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnDeleteRM = new javax.swing.JButton();
+        btnAddRM = new javax.swing.JButton();
+        btnEditRM = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -121,11 +129,11 @@ public class RMManagement extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Name", "Price", "Stock", "Critical", "Status", "UOM"
+                "Name", "Price", "Stock", "Critical", "Status", "UOM"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -139,7 +147,6 @@ public class RMManagement extends javax.swing.JFrame {
         rmTable.getColumnModel().getColumn(3).setResizable(false);
         rmTable.getColumnModel().getColumn(4).setResizable(false);
         rmTable.getColumnModel().getColumn(5).setResizable(false);
-        rmTable.getColumnModel().getColumn(6).setResizable(false);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 710, 430));
 
@@ -147,14 +154,29 @@ public class RMManagement extends javax.swing.JFrame {
         jLabel9.setText("RAW MATERIALS");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, -1, -1));
 
-        jButton1.setText("Delete This Raw Material");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 182, 50));
+        btnDeleteRM.setText("Delete This Raw Material");
+        btnDeleteRM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteRMActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnDeleteRM, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 182, 50));
 
-        jButton2.setText("Add A Raw Material");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 182, 50));
+        btnAddRM.setText("Add A Raw Material");
+        btnAddRM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddRMActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAddRM, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 182, 50));
 
-        jButton3.setText("Edit A Raw Material");
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 182, 50));
+        btnEditRM.setText("Edit A Raw Material");
+        btnEditRM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditRMActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEditRM, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 182, 50));
 
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -192,12 +214,65 @@ public class RMManagement extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_backBtnActionPerformed
 
+    private void btnAddRMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRMActionPerformed
+        try {
+            AddRawMaterial r = new AddRawMaterial(this);
+            r.setVisible(true);
+            this.setVisible(false);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnAddRMActionPerformed
+
+    private void btnEditRMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditRMActionPerformed
+        if(selectedRaw != null) {
+            try {
+                EditRawMaterial r = new EditRawMaterial(this);
+                r.setVisible(true);
+                this.setVisible(false);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         } else if(selectedRaw == null)
+            JOptionPane.showMessageDialog(null, "Please select an entry to edit.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+    }//GEN-LAST:event_btnEditRMActionPerformed
+
+    private void btnDeleteRMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteRMActionPerformed
+        try {
+            if(selectedRaw != null){
+                if(authenticateDelete()) {
+                    if(JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this raw material?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+                            rmImp.deleteRaw(selectedRaw);
+                            JOptionPane.showMessageDialog(null, "Successfully deleted raw material!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            ViewAllRM();
+                    }
+                } else if(!authenticateDelete())
+                    JOptionPane.showMessageDialog(null, "You cannot delete a raw material that's in use.", "Error Deleting", JOptionPane.WARNING_MESSAGE);
+            } else if(selectedRaw == null)
+                JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+        }   catch (Exception err) {
+            err.printStackTrace();
+        }
+    }//GEN-LAST:event_btnDeleteRMActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnAddRM;
+    private javax.swing.JButton btnDeleteRM;
+    private javax.swing.JButton btnEditRM;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
