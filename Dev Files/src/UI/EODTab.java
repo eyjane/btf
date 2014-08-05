@@ -358,8 +358,8 @@ public class EODTab extends javax.swing.JFrame {
         
          this.setVisible(false);
         try {
-            GrossIncome grossWindow = new GrossIncome(this);
-            grossWindow.setVisible(true);
+            REPORT reportWindow = new REPORT(this);
+            reportWindow.setVisible(true);
         } catch (Exception e) {
             System.out.println("Error found: " + e);
         }
