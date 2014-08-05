@@ -9,19 +9,30 @@ import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Interface.IngredientDAOInterface;
 import DAO.Interface.RawDAOInterface;
 import DAO.Interface.RecipeDAOInterface;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  *
  * @author Evy
@@ -53,7 +64,13 @@ public class EODTab extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        notificationTable = new javax.swing.JTable(){
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        jLabel3 = new javax.swing.JLabel();
         InventoryTab = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -73,12 +90,13 @@ public class EODTab extends javax.swing.JFrame {
         rcMgt = new javax.swing.JButton();
         rmMgt1 = new javax.swing.JButton();
         cMgt2 = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         salesBtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         actualBtn = new javax.swing.JButton();
         UTWbtn = new javax.swing.JButton();
+<<<<<<< HEAD
         reportBtn = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         notificationTable = new javax.swing.JTable(){
@@ -87,196 +105,19 @@ public class EODTab extends javax.swing.JFrame {
             }
         };
         jLabel3 = new javax.swing.JLabel();
+=======
+        jPanel3 = new javax.swing.JPanel();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        recipeTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(recipeTable);
-
-        rawTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(rawTable);
-
-        jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
-        jLabel1.setText("RECIPE STOCK");
-
-        jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
-        jLabel2.setText("RAW MATERIAL STOCK");
-
-        rcMgt.setText("Recipe Management");
-        rcMgt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rcMgtActionPerformed(evt);
-            }
-        });
-
-        rmMgt1.setText("Manage Raw Materials");
-        rmMgt1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rmMgt1ActionPerformed(evt);
-            }
-        });
-
-        cMgt2.setText("Category Management");
-        cMgt2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cMgt2ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(rcMgt)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rmMgt1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cMgt2))
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1)))
-                .addContainerGap(85, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rcMgt)
-                    .addComponent(rmMgt1)
-                    .addComponent(cMgt2))
-                .addContainerGap(47, Short.MAX_VALUE))
-        );
-
-        InventoryTab.addTab("INVENTORY", jPanel5);
-
-        salesBtn.setText("SALES");
-        salesBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                salesBtnActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("DELIVERY");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("EOD");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        actualBtn.setText("INPUT RAW MATERIAL COUNT");
-        actualBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                actualBtnActionPerformed(evt);
-            }
-        });
-
-        UTWbtn.setText("USED/TRANSFERED AND WASTAGES");
-        UTWbtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UTWbtnActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(UTWbtn)
-                    .addComponent(actualBtn)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(salesBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(533, Short.MAX_VALUE))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(salesBtn)
-                .addGap(36, 36, 36)
-                .addComponent(actualBtn)
-                .addGap(32, 32, 32)
-                .addComponent(UTWbtn)
-                .addGap(34, 34, 34)
-                .addComponent(jButton2)
-                .addGap(40, 40, 40)
-                .addComponent(jButton3)
-                .addContainerGap(240, Short.MAX_VALUE))
-        );
-
-        InventoryTab.addTab("EOD", jPanel6);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(InventoryTab, javax.swing.GroupLayout.PREFERRED_SIZE, 779, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addComponent(InventoryTab, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        reportBtn.setText("REPORT");
-        reportBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                reportBtnMouseClicked(evt);
-            }
-        });
-        reportBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reportBtnActionPerformed(evt);
-            }
-        });
+        jPanel1.setLayout(null);
 
         notificationTable.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
         notificationTable.setForeground(new java.awt.Color(255, 51, 51));
@@ -301,9 +142,171 @@ public class EODTab extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(notificationTable);
 
+        jPanel1.add(jScrollPane3);
+        jScrollPane3.setBounds(660, 150, 256, 444);
+
         jLabel3.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         jLabel3.setText("LOW SUPPLY NOTIFICATION");
+        jPanel1.add(jLabel3);
+        jLabel3.setBounds(660, 110, 253, 24);
 
+        jPanel5.setOpaque(false);
+        jPanel5.setLayout(null);
+
+        recipeTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        recipeTable.setName("Recipe Stock"); // NOI18N
+        jScrollPane2.setViewportView(recipeTable);
+
+        jPanel5.add(jScrollPane2);
+        jScrollPane2.setBounds(160, 50, 452, 160);
+
+        rawTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        rawTable.setName("Raw Material Stock"); // NOI18N
+        jScrollPane1.setViewportView(rawTable);
+
+        jPanel5.add(jScrollPane1);
+        jScrollPane1.setBounds(160, 270, 452, 170);
+
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        jLabel1.setText("RECIPE STOCK");
+        jPanel5.add(jLabel1);
+        jLabel1.setBounds(167, 16, 179, 32);
+
+        jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        jLabel2.setText("RAW MATERIAL STOCK");
+        jPanel5.add(jLabel2);
+        jLabel2.setBounds(170, 230, 279, 32);
+
+        rcMgt.setText("Recipe Management");
+        rcMgt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rcMgtActionPerformed(evt);
+            }
+        });
+        jPanel5.add(rcMgt);
+        rcMgt.setBounds(0, 20, 160, 50);
+
+        rmMgt1.setText("Manage Raw Materials");
+        rmMgt1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rmMgt1ActionPerformed(evt);
+            }
+        });
+        jPanel5.add(rmMgt1);
+        rmMgt1.setBounds(0, 90, 160, 50);
+
+        cMgt2.setText("Category Management");
+        cMgt2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cMgt2ActionPerformed(evt);
+            }
+        });
+        jPanel5.add(cMgt2);
+        cMgt2.setBounds(0, 160, 160, 50);
+
+        btnExport.setText("Export");
+        btnExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btnExport);
+        btnExport.setBounds(0, 230, 160, 50);
+
+        InventoryTab.addTab("INVENTORY", jPanel5);
+
+        jPanel6.setOpaque(false);
+        jPanel6.setLayout(null);
+
+        salesBtn.setText("SALES");
+        salesBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                salesBtnActionPerformed(evt);
+            }
+        });
+        jPanel6.add(salesBtn);
+        salesBtn.setBounds(0, 160, 160, 50);
+
+        jButton2.setText("DELIVERY");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel6.add(jButton2);
+        jButton2.setBounds(0, 20, 160, 50);
+
+        actualBtn.setText("INPUT RAW MATERIAL COUNT");
+        actualBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualBtnActionPerformed(evt);
+            }
+        });
+        jPanel6.add(actualBtn);
+        actualBtn.setBounds(0, 90, 160, 50);
+
+        UTWbtn.setText("USED/TRANSFERED AND WASTAGES");
+        UTWbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UTWbtnActionPerformed(evt);
+            }
+        });
+        jPanel6.add(UTWbtn);
+        UTWbtn.setBounds(0, 230, 160, 50);
+
+        InventoryTab.addTab("EOD", jPanel6);
+
+        jPanel3.setOpaque(false);
+        jPanel3.setLayout(null);
+
+<<<<<<< HEAD
+        reportBtn.setText("REPORT");
+        reportBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportBtnMouseClicked(evt);
+            }
+        });
+        reportBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportBtnActionPerformed(evt);
+            }
+        });
+=======
+        jButton7.setText("Expenses");
+        jPanel3.add(jButton7);
+        jButton7.setBounds(0, 30, 160, 50);
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
+
+        jButton8.setText("Gross Income");
+        jPanel3.add(jButton8);
+        jButton8.setBounds(0, 100, 160, 50);
+
+        jButton9.setText("Net Income");
+        jPanel3.add(jButton9);
+        jButton9.setBounds(0, 170, 160, 50);
+
+        jButton10.setText("EXPORT");
+        jPanel3.add(jButton10);
+        jButton10.setBounds(0, 310, 160, 50);
+
+<<<<<<< HEAD
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -336,23 +339,41 @@ public class EODTab extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(68, Short.MAX_VALUE))
         );
+=======
+        jButton1.setText("Variance");
+        jPanel3.add(jButton1);
+        jButton1.setBounds(0, 240, 160, 50);
+
+        InventoryTab.addTab("REPORT", jPanel3);
+
+        jPanel1.add(InventoryTab);
+        InventoryTab.setBounds(0, 130, 640, 480);
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Background.png"))); // NOI18N
+        jLabel7.setText("jLabel7");
+        jPanel1.add(jLabel7);
+        jLabel7.setBounds(0, 0, 960, 710);
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 955, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+<<<<<<< HEAD
     private void reportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportBtnActionPerformed
         // TODO add your handling code here:
         
@@ -394,16 +415,16 @@ public class EODTab extends javax.swing.JFrame {
 
     }//GEN-LAST:event_salesBtnActionPerformed
 
+=======
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
     private void rcMgtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rcMgtActionPerformed
         this.setVisible(false);
         try {
-            RCManagement rcmgt = new RCManagement();
+            RCManagement rcmgt = new RCManagement(this);
             rcmgt.setVisible(true);
         } catch (Exception e) {
             System.out.println(e);
         }
-        
-        dispose();
     }//GEN-LAST:event_rcMgtActionPerformed
 
     private void rmMgt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rmMgt1ActionPerformed
@@ -438,18 +459,28 @@ public class EODTab extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cMgt2ActionPerformed
 
-    private void UTWbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UTWbtnActionPerformed
-        // TODO add your handling code here:
-
+    private void salesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesBtnActionPerformed
         this.setVisible(false);
         try {
-            UsedTransfer usedWindow = new UsedTransfer(this);
-            usedWindow.setVisible(true);
+            SALES saleswindow = new SALES(this);
+            saleswindow.setVisible(true);
         } catch (Exception e) {
             System.out.println(e);
         }
+    }//GEN-LAST:event_salesBtnActionPerformed
 
-    }//GEN-LAST:event_UTWbtnActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+
+        // DELIVERY
+        this.setVisible(false);
+        try {
+            DELIVERY deliveryWindow = new DELIVERY(this);
+            deliveryWindow.setVisible(true);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void actualBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualBtnActionPerformed
         // TODO add your handling code here:
@@ -461,13 +492,117 @@ public class EODTab extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e);
         }
-
     }//GEN-LAST:event_actualBtnActionPerformed
 
+<<<<<<< HEAD
     private void reportBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportBtnMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_reportBtnMouseClicked
 
+=======
+    private void UTWbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UTWbtnActionPerformed
+        // TODO add your handling code here:
+
+        this.setVisible(false);
+        try {
+            UsedTransfer usedWindow = new UsedTransfer(this);
+            usedWindow.setVisible(true);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_UTWbtnActionPerformed
+
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String path = dateFormat.format(d) + " btf.xlsx" ;
+            
+            ArrayList<JTable> tables = new ArrayList<JTable>();
+            tables.add(rawTable);
+            tables.add(recipeTable);
+            exportToExcel(tables, path);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnExportActionPerformed
+    /**
+     * < -- CLARK'S FUNCTIONS START -- > *
+     */
+    private void exportToExcel(ArrayList<JTable> tables, String path) throws FileNotFoundException, IOException {
+        new WorkbookFactory();
+        Workbook wb = new XSSFWorkbook(); //Excel workbook
+        CellStyle style = wb.createCellStyle();
+        Font font = wb.createFont();
+        font.setColor(HSSFColor.RED.index);
+        style.setFont(font);
+        for(int i = 0; i < tables.size(); i++){
+            JTable table = tables.get(i);
+            Sheet sheet = wb.createSheet(table.getName()); //WorkSheet
+            sheet.setColumnWidth(0, 15000);
+            Row row = sheet.createRow(2); //Row created at line 3
+            TableModel model = table.getModel(); //Table model
+
+            Row headerRow = sheet.createRow(0); //Create row at line 0
+            for(int headings = 0; headings < model.getColumnCount(); headings++){ //For each column
+                headerRow.createCell(headings).setCellValue(model.getColumnName(headings));//Write column name
+            }
+
+            for(int rows = 0; rows < model.getRowCount(); rows++){ //For each table row
+                for(int cols = 0; cols < table.getColumnCount(); cols++){ //For each table column
+                    String text = model.getValueAt(rows, cols).toString();
+                    Cell cell = row.createCell(cols); //create cell
+                    if(checkHTML(text)){
+                        cell.setCellStyle(style);
+                        text = parseHTML(text);
+                    }
+                    cell.setCellValue(text); //Write value
+                }
+                //Set the row to the next one in the sequence 
+                row = sheet.createRow((rows + 3)); 
+            }
+        }
+        //wb.setSheetName(wb.getSheetIndex(sheet), "Raw Materials");
+        try{
+            File file = new File(path);
+            if(!file.exists()) {
+                file.createNewFile();
+            } 
+            FileOutputStream fileOut =  new FileOutputStream(file, false);
+            wb.write(fileOut);//Save the file     
+            fileOut.close();
+            System.out.println("SUCCESS");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+    }
+    
+    public boolean checkHTML(String str){
+        boolean hasHTML = false;
+        if(str.contains("<html>")){
+            hasHTML = true;
+        }
+        return hasHTML;
+    }
+    
+    public String parseHTML(String str){
+        String temp = "";
+        temp = str.replace("<html><p style = 'color:red'><b>", "");
+        System.out.println(temp);
+        temp = temp.replace("</b></p></html>", "");
+        System.out.println(temp);
+        //int index = str.indexOf("(");
+        //System.out.println(temp.substring(0, index));
+        return temp;
+    }
+    /**
+     * < -- CLARK'S FUNCTIONS END -- > *
+     */
+    
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
     /**
      * < -- JANERYS FUNCTIONS START -- > *
      */
@@ -582,14 +717,24 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JTabbedPane InventoryTab;
     private javax.swing.JButton UTWbtn;
     private javax.swing.JButton actualBtn;
+    private javax.swing.JButton btnExport;
     private javax.swing.JButton cMgt2;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
+<<<<<<< HEAD
     private javax.swing.JButton jButton3;
+=======
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;

@@ -184,7 +184,7 @@ public class AddCategory extends javax.swing.JFrame {
         recipeTable.getColumnModel().getColumn(3).setResizable(false);
         recipeTable.getColumnModel().getColumn(4).setResizable(false);
 
-        editRecipes.setText("Edit Recipes");
+        editRecipes.setText("Add Recipes");
         editRecipes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editRecipesActionPerformed(evt);
@@ -307,7 +307,7 @@ public class AddCategory extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Successfully added a new category!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 cm.setVisible(true);
                 cm.ViewAllCategories();
-                cm.setCategoryField(cat);
+                //cm.setCategoryField(cat);
                 cm.ViewAllRecipes(cat);
                 dispose();
             } catch(Exception err){

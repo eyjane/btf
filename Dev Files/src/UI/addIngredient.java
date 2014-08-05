@@ -40,7 +40,7 @@ public class addIngredient extends javax.swing.JFrame {
         prepareTable();
     }
 
-    public addIngredient(AddRecipe a, ArrayList<IngredientBean> i) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public addIngredient(AddRecipe a, ArrayList<IngredientBean> i, String r) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
@@ -49,10 +49,11 @@ public class addIngredient extends javax.swing.JFrame {
         this.ar = a;
         this.ai = i;
         prepareTable();
+        recipeLabel.setText(r);
         //System.out.println("Opened from addrecipe");
     }
 
-    public addIngredient(EditRecipe r, ArrayList<IngredientBean> i) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public addIngredient(EditRecipe r, ArrayList<IngredientBean> i, String rn) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
@@ -61,6 +62,7 @@ public class addIngredient extends javax.swing.JFrame {
         this.rcm = r;
         this.ai = i;
         prepareTable();
+        recipeLabel.setText(rn);
        // System.out.println("Opened from rcmanagement");
     }
 
@@ -99,6 +101,7 @@ public class addIngredient extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         errorLabel = new javax.swing.JLabel();
         errorLabel1 = new javax.swing.JLabel();
+        recipeLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,7 +116,7 @@ public class addIngredient extends javax.swing.JFrame {
         jScrollPane1.setViewportView(ingredientTable);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
-        jLabel1.setText("Add Ingredients");
+        jLabel1.setText("Ingredients");
 
         rawTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -155,7 +158,7 @@ public class addIngredient extends javax.swing.JFrame {
             }
         });
 
-        deleteIngredient.setText("Delete");
+        deleteIngredient.setText("Remove");
         deleteIngredient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteIngredientActionPerformed(evt);
@@ -186,6 +189,9 @@ public class addIngredient extends javax.swing.JFrame {
         errorLabel1.setForeground(new java.awt.Color(204, 0, 51));
         errorLabel1.setText("ERROR: Please enter valid number");
 
+        recipeLabel.setForeground(new java.awt.Color(204, 0, 51));
+        recipeLabel.setText("Recipe Name");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -211,20 +217,25 @@ public class addIngredient extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel1))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editField, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editQuantity)
-                        .addGap(18, 18, 18)
-                        .addComponent(deleteIngredient))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorLabel1))
-                .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(editField, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(editQuantity)
+                                .addGap(18, 18, 18)
+                                .addComponent(deleteIngredient))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(errorLabel1))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(recipeLabel)
+                        .addGap(25, 25, 25))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(16, 16, 16)
@@ -235,7 +246,9 @@ public class addIngredient extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(recipeLabel))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -296,6 +309,7 @@ public class addIngredient extends javax.swing.JFrame {
         if (isNumber(quantity) && Float.parseFloat(quantity) > 0) {
             int rselect = rawTable.getSelectedRow();
             addIngredient(rselect, Float.parseFloat(quantity));
+            quantityField.setText("");
             errorLabel.setVisible(false);
         } else {
             errorLabel.setVisible(true);
@@ -511,6 +525,7 @@ public class addIngredient extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField quantityField;
     private javax.swing.JTable rawTable;
+    private javax.swing.JLabel recipeLabel;
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
 }
