@@ -41,6 +41,7 @@ public class DELIVERY extends javax.swing.JFrame {
         main = t;
         errorLabel.setVisible(false);
         errorLabel2.setVisible(false);
+        success.setVisible(false);
         viewRaw();
     }
     /*
@@ -104,8 +105,14 @@ public class DELIVERY extends javax.swing.JFrame {
         rmAmount = new javax.swing.JTextField();
         errorLabel = new javax.swing.JLabel();
         errorLabel2 = new javax.swing.JLabel();
+<<<<<<< HEAD
+        jLabel4 = new javax.swing.JLabel();
+        success = new javax.swing.JLabel();
+=======
         jButton1 = new javax.swing.JButton();
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
         backBtn = new javax.swing.JButton();
+        submitBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -121,7 +128,7 @@ public class DELIVERY extends javax.swing.JFrame {
                 {null, null}
             },
             new String [] {
-                "Name", "Amount"
+                "Name", "Current Amount"
             }
         ));
         jScrollPane1.setViewportView(rawTable);
@@ -182,17 +189,30 @@ public class DELIVERY extends javax.swing.JFrame {
                 .addGap(34, 34, 34))
         );
 
+<<<<<<< HEAD
+        jLabel4.setText("jLabel4");
+
+        success.setText("Delivery information was successfully added.");
+=======
         jButton1.setText("SUBMIT");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
 
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backBtnActionPerformed(evt);
+            }
+        });
+
+        submitBtn.setText("SUBMIT");
+        submitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitBtnActionPerformed(evt);
             }
         });
 
@@ -207,6 +227,24 @@ public class DELIVERY extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
+<<<<<<< HEAD
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(357, 357, 357)))
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(262, 262, 262)
+                .addComponent(success)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(backBtn)
+                .addGap(43, 43, 43)
+                .addComponent(submitBtn)
+                .addGap(24, 24, 24))
+=======
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -215,12 +253,28 @@ public class DELIVERY extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addGap(51, 51, 51))
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
+<<<<<<< HEAD
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addComponent(success)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(backBtn)
+                    .addComponent(submitBtn))
+=======
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -229,6 +283,7 @@ public class DELIVERY extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(backBtn)
                     .addComponent(jButton1))
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
                 .addContainerGap())
         );
 
@@ -243,8 +298,13 @@ public class DELIVERY extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+<<<<<<< HEAD
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 36, Short.MAX_VALUE))
+=======
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
         );
 
         pack();
@@ -273,6 +333,7 @@ public class DELIVERY extends javax.swing.JFrame {
             r.setRaw(rmName.getText().toString());
             r.setStock(Float.parseFloat(rmAmount.getText().toString()));
             rmImp.restockRaw(r);
+            success.setVisible(true);
             viewRaw();
         }
         
@@ -291,6 +352,20 @@ public class DELIVERY extends javax.swing.JFrame {
         
     }//GEN-LAST:event_backBtnActionPerformed
 
+<<<<<<< HEAD
+    private void rawTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rawTableMouseClicked
+        // TODO add your handling code here:
+        
+        int col = rawTable.getSelectedColumn();
+        int row = rawTable.getSelectedRow();
+        
+        String select = rawTable.getValueAt(row, col).toString();
+        rmName.setText(select);
+        
+    }//GEN-LAST:event_rawTableMouseClicked
+
+=======
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
     
     private boolean isNumber(String s) {
         try {
@@ -355,11 +430,17 @@ public class DELIVERY extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable rawTable;
     private javax.swing.JTextField rmAmount;
     private javax.swing.JTextField rmName;
+<<<<<<< HEAD
+    private javax.swing.JButton submitBtn;
+    private javax.swing.JLabel success;
+=======
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
     // End of variables declaration//GEN-END:variables
 }

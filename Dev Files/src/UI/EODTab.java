@@ -96,6 +96,16 @@ public class EODTab extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         actualBtn = new javax.swing.JButton();
         UTWbtn = new javax.swing.JButton();
+<<<<<<< HEAD
+        reportBtn = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        notificationTable = new javax.swing.JTable(){
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        jLabel3 = new javax.swing.JLabel();
+=======
         jPanel3 = new javax.swing.JPanel();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
@@ -103,6 +113,7 @@ public class EODTab extends javax.swing.JFrame {
         jButton10 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -265,9 +276,23 @@ public class EODTab extends javax.swing.JFrame {
         jPanel3.setOpaque(false);
         jPanel3.setLayout(null);
 
+<<<<<<< HEAD
+        reportBtn.setText("REPORT");
+        reportBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportBtnMouseClicked(evt);
+            }
+        });
+        reportBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportBtnActionPerformed(evt);
+            }
+        });
+=======
         jButton7.setText("Expenses");
         jPanel3.add(jButton7);
         jButton7.setBounds(0, 30, 160, 50);
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
 
         jButton8.setText("Gross Income");
         jPanel3.add(jButton8);
@@ -281,6 +306,40 @@ public class EODTab extends javax.swing.JFrame {
         jPanel3.add(jButton10);
         jButton10.setBounds(0, 310, 160, 50);
 
+<<<<<<< HEAD
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(101, 101, 101)
+                        .addComponent(reportBtn))
+                    .addComponent(jLabel3)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(80, 80, 80)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(reportBtn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(68, Short.MAX_VALUE))
+        );
+=======
         jButton1.setText("Variance");
         jPanel3.add(jButton1);
         jButton1.setBounds(0, 240, 160, 50);
@@ -294,6 +353,7 @@ public class EODTab extends javax.swing.JFrame {
         jLabel7.setText("jLabel7");
         jPanel1.add(jLabel7);
         jLabel7.setBounds(0, 0, 960, 710);
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -313,6 +373,50 @@ public class EODTab extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+<<<<<<< HEAD
+    private void reportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportBtnActionPerformed
+        // TODO add your handling code here:
+        
+         this.setVisible(false);
+        try {
+            REPORT reportWindow = new REPORT(this);
+            reportWindow.setVisible(true);
+        } catch (Exception e) {
+            System.out.println("Error found: " + e);
+        }
+        
+    }//GEN-LAST:event_reportBtnActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+
+        // DELIVERY
+        this.setVisible(false);
+        try {
+            DELIVERY deliveryWindow = new DELIVERY(this);
+            deliveryWindow.setVisible(true);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void salesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesBtnActionPerformed
+        this.setVisible(false);
+        try {
+            SALES saleswindow = new SALES(this);
+            saleswindow.setVisible(true);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }//GEN-LAST:event_salesBtnActionPerformed
+
+=======
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
     private void rcMgtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rcMgtActionPerformed
         this.setVisible(false);
         try {
@@ -390,6 +494,12 @@ public class EODTab extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_actualBtnActionPerformed
 
+<<<<<<< HEAD
+    private void reportBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportBtnMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reportBtnMouseClicked
+
+=======
     private void UTWbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UTWbtnActionPerformed
         // TODO add your handling code here:
 
@@ -492,6 +602,7 @@ public class EODTab extends javax.swing.JFrame {
      * < -- CLARK'S FUNCTIONS END -- > *
      */
     
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
     /**
      * < -- JANERYS FUNCTIONS START -- > *
      */
@@ -611,9 +722,13 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
+<<<<<<< HEAD
+    private javax.swing.JButton jButton3;
+=======
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -629,6 +744,7 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JTable rawTable;
     private javax.swing.JButton rcMgt;
     private javax.swing.JTable recipeTable;
+    private javax.swing.JButton reportBtn;
     private javax.swing.JButton rmMgt1;
     private javax.swing.JButton salesBtn;
     // End of variables declaration//GEN-END:variables

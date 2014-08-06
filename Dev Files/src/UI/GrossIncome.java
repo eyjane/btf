@@ -1,22 +1,79 @@
 /*
+<<<<<<< HEAD
+ * BACKUP WITH ALL CHARTS AND TABLES
+=======
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
  */
 
 package UI;
 
+<<<<<<< HEAD
+import Beans.IngredientBean;
+import Beans.RecipeBean;
+import Beans.SalesBean;
+import DAO.Implementation.SalesDAOImplementation;
+import DAO.Implementation.RecipeDAOImplementation;
+import DAO.Interface.IngredientDAOInterface;
+import DAO.Interface.RecipeDAOInterface;
+import DAO.Interface.SalesDAOInterface;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.Date;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.ChartPanel;
+=======
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
 /**
  *
  * @author Evy
  */
 public class GrossIncome extends javax.swing.JFrame {
 
+<<<<<<< HEAD
+    ArrayList<RecipeBean> aSales = new ArrayList<RecipeBean>();
+    SalesDAOInterface sImp = new SalesDAOImplementation();
+    RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    EODTab main;
+    /**
+     * Creates new form GrossIncome
+     */
+    public GrossIncome(EODTab t) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
+        String laf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(laf);
+        initComponents();
+        main = t;
+        GITable();
+        expTable();
+        netTable();
+        
+    }
+
+    private GrossIncome() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+=======
     /**
      * Creates new form GrossIncome
      */
     public GrossIncome() {
         initComponents();
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
     }
 
     /**
@@ -30,15 +87,141 @@ public class GrossIncome extends javax.swing.JFrame {
 
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
+<<<<<<< HEAD
+        grossIncomeTable = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        expensesTable = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        netIncomeTable = new javax.swing.JTable();
+        grossIncomeLabel = new javax.swing.JLabel();
+        expensesLabel = new javax.swing.JLabel();
+        netLabel = new javax.swing.JLabel();
+        jPanelChart = new javax.swing.JPanel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
+=======
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(956, 555));
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
 
         jLabel3.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
         jLabel3.setText("Gross Income");
 
+<<<<<<< HEAD
+        grossIncomeTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Recipe", "Gross Income"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Float.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(grossIncomeTable);
+
+        jButton1.setText("BACK");
+
+        expensesTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Recipe", "Expenses"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(expensesTable);
+
+        netIncomeTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Recipe", "Net Income"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(netIncomeTable);
+
+        grossIncomeLabel.setText("Gross Income");
+        grossIncomeLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                grossIncomeLabelMouseClicked(evt);
+            }
+        });
+
+        expensesLabel.setText("Expenses");
+        expensesLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                expensesLabelMouseClicked(evt);
+            }
+        });
+
+        netLabel.setText("Net Income");
+        netLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                netLabelMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelChartLayout = new javax.swing.GroupLayout(jPanelChart);
+        jPanelChart.setLayout(jPanelChartLayout);
+        jPanelChartLayout.setHorizontalGroup(
+            jPanelChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanelChartLayout.setVerticalGroup(
+            jPanelChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 353, Short.MAX_VALUE)
+        );
+
+=======
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -54,11 +237,36 @@ public class GrossIncome extends javax.swing.JFrame {
 
         jButton1.setText("BACK");
 
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+<<<<<<< HEAD
+                .addComponent(jButton1)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(114, 114, 114)
+                .addComponent(grossIncomeLabel)
+                .addGap(251, 251, 251)
+                .addComponent(expensesLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(netLabel)
+                .addGap(180, 180, 180))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanelChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(73, Short.MAX_VALUE))
+=======
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
@@ -67,22 +275,234 @@ public class GrossIncome extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jButton1)
                 .addGap(0, 0, Short.MAX_VALUE))
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
+<<<<<<< HEAD
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(grossIncomeLabel)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(expensesLabel)
+                        .addComponent(netLabel)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanelChart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+=======
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addContainerGap(42, Short.MAX_VALUE))
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+<<<<<<< HEAD
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        
+        
+        
+    }//GEN-LAST:event_formWindowActivated
+
+    private void grossIncomeLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grossIncomeLabelMouseClicked
+        // TODO add your handling code here:
+        makeGIChart();
+    }//GEN-LAST:event_grossIncomeLabelMouseClicked
+
+    private void expensesLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_expensesLabelMouseClicked
+        // TODO add your handling code here:
+        makeExpChart();
+    }//GEN-LAST:event_expensesLabelMouseClicked
+
+    private void netLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_netLabelMouseClicked
+        // TODO add your handling code here:
+        makeNetChart();
+    }//GEN-LAST:event_netLabelMouseClicked
+
+    /*
+     *  <!-- KIM CODE STARTS HERE -->
+     */
+   
+    public void GITable() {
+       RecipeBean r = new RecipeBean(); 
+       /*DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date todayDate = new Date();
+       String today = t.format(todayDate);*/
+       
+       String today = "2014-07-01";
+       
+       aSales = sImp.getAllSales(today);
+       String cols[] = {"Name", "Gross Income"};
+       DefaultTableModel actualTable = new DefaultTableModel(cols,0);
+
+       for(RecipeBean sale : aSales) {
+           
+           r = rcImp.getRecipeBean(sale.getRecipeID());
+           Object[] data = {sale.getRecipe(), sImp.getSalesByRecipeByDay(r, today)};
+           actualTable.addRow(data);
+           grossIncomeTable.setModel(actualTable);
+           adjustTable(grossIncomeTable);
+       }
+      
+    }
+    
+    public void expTable() {
+        
+       RecipeBean r = new RecipeBean(); 
+        /*DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date todayDate = new Date();
+       String today = t.format(todayDate);*/
+       
+       String today = "2014-07-01";
+       
+       aSales = sImp.getAllSales(today);
+       String cols[] = {"Name", "Expenses"};
+       DefaultTableModel actualTable = new DefaultTableModel(cols,0);
+        
+       for(RecipeBean sale : aSales) {
+           
+           r = rcImp.getRecipeBean(sale.getRecipeID());
+           Object[] data = {sale.getRecipe(), sImp.getExpensesByRecipeByDay(r, today)};
+           actualTable.addRow(data);
+           expensesTable.setModel(actualTable);
+           adjustTable(expensesTable);
+       }
+        
+    }
+    
+    public void netTable() {
+       
+       RecipeBean r = new RecipeBean(); 
+        /*DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date todayDate = new Date();
+       String today = t.format(todayDate);*/
+       
+       String today = "2014-07-01";
+       
+       aSales = sImp.getAllSales(today);
+       String cols[] = {"Name", "Net Income"};
+       DefaultTableModel actualTable = new DefaultTableModel(cols,0);
+        
+       for(RecipeBean sale : aSales) {
+           
+           r = rcImp.getRecipeBean(sale.getRecipeID());
+           Object[] data = {sale.getRecipe(), sImp.getSalesByRecipeByDay(r, today) - sImp.getExpensesByRecipeByDay(r, today)};
+           actualTable.addRow(data);
+           netIncomeTable.setModel(actualTable);
+           adjustTable(netIncomeTable);
+       }
+        
+        
+    }
+    
+    private void adjustTable(JTable table){
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = tableColumn.getMaxWidth();
+
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+
+        //  We've exceeded the maximum width, no need to check other rows
+                if (preferredWidth >= maxWidth) {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+    }
+    
+    public void makeGIChart() {
+        
+        DefaultPieDataset objDataset = new DefaultPieDataset();
+        int rows = grossIncomeTable.getRowCount();
+        
+        for (int c = 0; c < rows; c++) {
+            
+            objDataset.setValue(grossIncomeTable.getValueAt(c, 0).toString(), Float.parseFloat(grossIncomeTable.getValueAt(c, 1).toString())); // retrieve table contents and add to data set
+            
+        }
+        
+        JFreeChart grossChart = ChartFactory.createPieChart("Gross Income", objDataset, true, true, false); // makes chart
+        jPanelChart.setLayout(new java.awt.BorderLayout());
+        ChartPanel chartPanel = new ChartPanel(grossChart);
+        jPanelChart.add(chartPanel, BorderLayout.CENTER);
+        jPanelChart.validate();
+       
+        /*JFrame frame = new JFrame();
+        frame.add(jPanelChart);
+        frame.pack();
+        frame.setVisible(true);*/
+        
+    }
+    
+    public void makeExpChart() {
+        
+        DefaultPieDataset objDataset = new DefaultPieDataset();
+        int rows = expensesTable.getRowCount();
+        
+        for (int c = 0; c < rows; c++) {
+            
+            objDataset.setValue(expensesTable.getValueAt(c, 0).toString(), Float.parseFloat(expensesTable.getValueAt(c, 1).toString())); // retrieve table contents and add to data set
+            
+        }
+        
+        JFreeChart expChart = ChartFactory.createPieChart("Expenses", objDataset, true, true, false); // makes chart
+        jPanelChart.setLayout(new java.awt.BorderLayout());
+        ChartPanel chartPanel = new ChartPanel(expChart);
+        jPanelChart.add(chartPanel, BorderLayout.CENTER);
+        jPanelChart.validate();
+      
+        
+    }
+    
+    public void makeNetChart() {
+        
+        DefaultPieDataset objDataset = new DefaultPieDataset();
+        int rows = netIncomeTable.getRowCount();
+        
+        for (int c = 0; c < rows; c++) {
+            
+            objDataset.setValue(netIncomeTable.getValueAt(c, 0).toString(), Float.parseFloat(netIncomeTable.getValueAt(c, 1).toString())); // retrieve table contents and add to data set
+            
+        }
+        
+        JFreeChart netChart = ChartFactory.createPieChart("Net Income", objDataset, true, true, false); // makes chart
+        jPanelChart.setLayout(new java.awt.BorderLayout());
+        ChartPanel chartPanel = new ChartPanel(netChart);
+        jPanelChart.add(chartPanel, BorderLayout.CENTER);
+        jPanelChart.validate();
+       
+    }
+    
+    /*
+     *  <!-- KIM CODE ENDS HERE --> 
+     */
+    
+=======
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
     /**
      * @param args the command line arguments
      */
@@ -112,6 +532,10 @@ public class GrossIncome extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+<<<<<<< HEAD
+            @Override
+=======
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
             public void run() {
                 new GrossIncome().setVisible(true);
             }
@@ -119,9 +543,24 @@ public class GrossIncome extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+<<<<<<< HEAD
+    private javax.swing.JLabel expensesLabel;
+    private javax.swing.JTable expensesTable;
+    private javax.swing.JLabel grossIncomeLabel;
+    private javax.swing.JTable grossIncomeTable;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanelChart;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable netIncomeTable;
+    private javax.swing.JLabel netLabel;
+=======
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+>>>>>>> 9dc8516e4986e2f824d904f5eb787cac44e6231e
     // End of variables declaration//GEN-END:variables
 }

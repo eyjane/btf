@@ -55,16 +55,11 @@ public class RCManagement extends javax.swing.JFrame {
     /**
      * Creates new form RCManagement
      */
-    public RCManagement(EODTab t) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public RCManagement() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
 
-        main = t;
-
-        //nameError.setVisible(false);
-        //errorLabel2.setVisible(false);
-        //inError.setVisible(false);
         prepareTable();
     }
 
@@ -91,6 +86,7 @@ public class RCManagement extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(956, 555));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setPreferredSize(new java.awt.Dimension(956, 555));
@@ -116,7 +112,6 @@ public class RCManagement extends javax.swing.JFrame {
         addRecipeB.setText("Add A Recipe");
         addRecipeB.setFocusPainted(false);
         addRecipeB.setFocusable(false);
-        addRecipeB.setOpaque(false);
         addRecipeB.setRequestFocusEnabled(false);
         addRecipeB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -193,10 +188,12 @@ public class RCManagement extends javax.swing.JFrame {
     private void deleteRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteRecipeActionPerformed
 
         int rselect = recipeTable.getSelectedRow();
-        if (rselect < 0) {
-            return;
+        if (rselect != -1) {
+            if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this recipe?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                deleteRecipe(rselect);
+            }
         } else {
-            deleteRecipe(rselect);
+            return;
         }
     }//GEN-LAST:event_deleteRecipeActionPerformed
 
@@ -216,20 +213,12 @@ public class RCManagement extends javax.swing.JFrame {
             int rselect = recipeTable.getSelectedRow();
             int rID = Integer.parseInt(recipeTable.getModel().getValueAt(rselect, 0).toString());
             RecipeBean r = rcImp.getRecipeBean(rID);
-            //recipeIDLabel.setText(String.valueOf(r.getRecipeID()));
-        //    nameField.setText(r.getRecipe());
-        //    costField.setText(String.format("%.2f", r.getCost()));
-        //    actualLabel.setText(String.format("%.2f", r.getActualPrice()));
-
+        
             for (CategoryBean c : aCategory) {
-        //        categoryBox.addItem(c);
                 if (c.getCategoryID() == r.getCategory()) {
-        //            categoryBox.setSelectedIndex(categoryBox.getItemCount() - 1);
                 }
             }
-            //CategoryBean ct = (CategoryBean)categoryBox.getSelectedItem();
-            //System.out.println("SELECTED " + ct.getCategoryID());
-
+           
             String cols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
             DefaultTableModel model = new DefaultTableModel(cols, 0);
 

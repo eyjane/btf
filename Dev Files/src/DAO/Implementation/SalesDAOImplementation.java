@@ -94,7 +94,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             while (resultSet.next()) {
                 RecipeBean r = new RecipeBean();
                 ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
-                r.setRecipeID(resultSet.getInt("recipeID"));
+                r.setRecipeID(resultSet.getInt("r.recipeID"));
                 r.setRecipe(resultSet.getString("recipe"));
                 r.setCost(resultSet.getFloat("price"));
                 r.setStock(resultSet.getFloat("stock"));
@@ -120,8 +120,9 @@ public class SalesDAOImplementation implements SalesDAOInterface {
         try {
             float s =0;
             String query = "select recipeID, quantity, price "
+
                     + "from sales s, sold sd "
-                    + "where recipeID = ? and s.salesID = sd.salesID and sales_date = ? and sales_type= 'sales';";
+                    + "where sd.recipeID = ? and s.salesID = sd.salesID and sales_date = ? and sales_type= 'sales';";
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
