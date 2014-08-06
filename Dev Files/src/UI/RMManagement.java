@@ -239,9 +239,8 @@ public class RMManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddRMActionPerformed
 
     private void btnEditRMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditRMActionPerformed
-        if(selectedRaw != null) {
             try {
-                EditRawMaterial r = new EditRawMaterial(this);
+                EditRM r = new EditRM(this);
                 r.setVisible(true);
                 this.setVisible(false);
             } catch (ClassNotFoundException ex) {
@@ -253,8 +252,6 @@ public class RMManagement extends javax.swing.JFrame {
             } catch (UnsupportedLookAndFeelException ex) {
                 Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
             }
-         } else if(selectedRaw == null)
-            JOptionPane.showMessageDialog(null, "Please select an entry to edit.", "Blank Form", JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_btnEditRMActionPerformed
 
     private void btnDeleteRMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteRMActionPerformed

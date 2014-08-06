@@ -1,15 +1,164 @@
 package UI;
 
+import Beans.RawBean;
+import DAO.Implementation.RawDAOImplementation;
+import DAO.Interface.RawDAOInterface;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Evy
  */
 public class EditRM extends javax.swing.JFrame {
-
+    private RawDAOInterface rwImp = new RawDAOImplementation();
+    private RawBean raw;
+    private RMManagement rm;
    
-    public EditRM() {
+    //<--- CLARK'S CODE STARTS HERE --->
+    
+    public EditRM(RMManagement r) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        String laf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(laf);
+        rm = r;
         initComponents();
+        errorLabel.setVisible(false);
+        errorLabel1.setVisible(false);
+        errorLabel2.setVisible(false);
+        errorLabel3.setVisible(false);
+        errorLabel4.setVisible(false);
+        errorLabel5.setVisible(false);
+        prepareTable();
+        //setFields(raw);
     }
+    
+    public void prepareTable(){
+        rmTable.setModel(rm.getRMTable());
+        rmTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+        public void valueChanged(ListSelectionEvent event) {
+            try {
+            DefaultTableModel defaultTableModel = (DefaultTableModel) rmTable.getModel();
+            if (rmTable.getSelectedRow() >= 0) { 
+                raw = rwImp.getRaw((int) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0));
+                setFields(raw);
+            } else {
+                raw = null;
+              }
+            } catch (Exception err) {
+                err.printStackTrace();
+            } 
+        }
+       });
+    }
+    /*public DefaultTableModel initializeRecipeTable(){
+        DefaultTableModel defaultTableModel = new DefaultTableModel();
+        defaultTableModel.addColumn("ID");
+        defaultTableModel.addColumn("Name");
+        defaultTableModel.addColumn("Cost");
+        defaultTableModel.addColumn("Stock");
+        defaultTableModel.addColumn("Status");
+        return defaultTableModel;
+    }*/
+    
+   public boolean authenticateRM(){
+        boolean flag = true;
+        
+        if(nameField.getText().equals("")) {
+            errorLabel.setVisible(true);
+            flag = false;
+        }
+        else {
+            errorLabel.setVisible(false);
+            errorLabel1.setVisible(false);
+            raw.setRaw(nameField.getText());
+            ArrayList<RawBean> rList = new ArrayList<RawBean>();
+            rList = rwImp.getRawByStatus("available");
+            for(int i = 0; i < rList.size(); i++){
+                if(nameField.getText().equalsIgnoreCase(rList.get(i).getRaw())
+                        && raw.getRawID() != rList.get(i).getRawID()) {
+                     errorLabel1.setVisible(true);
+                     errorLabel.setVisible(true);
+                     flag = false;
+                }
+            }
+        }
+        if(!priceField.getText().equals("") && isNumber(priceField.getText())) {
+            if(Float.parseFloat(priceField.getText()) > 0) {
+                errorLabel2.setVisible(false);
+                raw.setPrice(Float.parseFloat(priceField.getText()));
+            }
+            else {
+                errorLabel2.setVisible(true);
+                flag = false;
+            }
+        }
+        else {
+            errorLabel2.setVisible(true);
+            flag = false;
+        }
+        if(!stockField.getText().equals("") && isNumber(stockField.getText())) {
+            if(Float.parseFloat(stockField.getText()) > 0) {
+                errorLabel3.setVisible(false);
+                raw.setStock(Float.parseFloat(stockField.getText()));
+            }
+            else {
+                errorLabel3.setVisible(true);
+                flag = false;
+            }
+        }
+        else {
+            errorLabel3.setVisible(true);
+            flag = false;
+        }
+        if(!criticalField.getText().equals("") && isNumber(criticalField.getText())) {
+            if(Float.parseFloat(criticalField.getText()) > 0) {
+                errorLabel4.setVisible(false);
+                raw.setCritical(Float.parseFloat(criticalField.getText()));
+            }
+            else {
+                errorLabel4.setVisible(true);
+                flag = false;
+            }
+        }
+        else {
+            errorLabel4.setVisible(true);
+            flag = false;
+        }
+        if(uomField.getText().equals("") || isNumber(uomField.getText())) {
+            errorLabel5.setVisible(true);
+            flag = false;
+        }
+        else {
+            errorLabel5.setVisible(false);
+            raw.setUom(uomField.getText());
+        }
+        raw.setRmstatus("available");
+        return flag;
+    }
+    
+   public void setFields(RawBean r){
+        nameField.setText(r.getRaw());
+        priceField.setText(Float.toString(r.getPrice()));
+        stockField.setText(Float.toString(r.getStock()));
+        criticalField.setText(Float.toString(r.getCritical()));
+        uomField.setText(r.getUom());
+    }
+   
+    public boolean isNumber(String s) {
+        try {
+            Float.parseFloat(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    //<--- CLARK'S CODE ENDS HERE --->
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -133,6 +282,11 @@ public class EditRM extends javax.swing.JFrame {
         jPanel2.add(errorLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 56, -1, -1));
 
         btnEdit.setText("Edit Category");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 210, -1, -1));
 
         btnBack.setText("Back");
@@ -185,44 +339,26 @@ public class EditRM extends javax.swing.JFrame {
     }//GEN-LAST:event_nameFieldActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-     
-           
+        rm.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        if(raw != null){
+            if(authenticateRM()){
+                try{
+                    rwImp.editRaw(raw);
+                    JOptionPane.showMessageDialog(null, "Raw material successfully edited!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    rm.setVisible(true);
+                    rm.ViewAllRM();
+                    //rm.setFields(raw);
+                    dispose();
+                } catch(Exception err){
+                    err.printStackTrace();
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EditRM().setVisible(true);
-            }
-        });
-    }
+    }//GEN-LAST:event_btnEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
