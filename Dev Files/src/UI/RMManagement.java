@@ -24,6 +24,7 @@ public class RMManagement extends javax.swing.JFrame {
     private RawDAOInterface rmImp = new RawDAOImplementation();
     private RecipeDAOInterface rcImp = new RecipeDAOImplementation();
     private RawBean selectedRaw = null;
+    private DefaultTableModel defaultModel;
 
     //<--- CLARK'S CODE STARTS HERE --->
     public RMManagement() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
@@ -47,10 +48,12 @@ public class RMManagement extends javax.swing.JFrame {
     }
     
     public void ViewAllRM(){
-       DefaultTableModel defaultModel = initializeTable();
        RawBean r;
-       for (int i = 0; i < rmImp.getRawByStatus("available").size(); i++) {
-            r = rmImp.getRawByStatus("available").get(i);
+       ArrayList<RawBean> rList = new ArrayList<RawBean>();
+       defaultModel = initializeTable();
+       rList = rmImp.getRawByStatus("available");
+       for (int i = 0; i < rList.size(); i++) {
+            r = rList.get(i);
             defaultModel.addRow(new Object[] {r.getRawID(), r.getRaw(), r.getPrice(), r.getStock(), r.getCritical(), r.getRmstatus(), r.getUom()});
        }
        rmTable.setModel(defaultModel);
@@ -99,6 +102,11 @@ public class RMManagement extends javax.swing.JFrame {
     public RawBean getRaw(){
         return selectedRaw;
     }
+    
+    public DefaultTableModel getRMTable(){
+        return defaultModel;
+    }
+    
     //<--- CLARK'S CODE ENDS HERE --->
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -216,7 +224,7 @@ public class RMManagement extends javax.swing.JFrame {
 
     private void btnAddRMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRMActionPerformed
         try {
-            AddRawMaterial r = new AddRawMaterial(this);
+            AddRM r = new AddRM(this);
             r.setVisible(true);
             this.setVisible(false);
         } catch (ClassNotFoundException ex) {
