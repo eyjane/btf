@@ -12,6 +12,7 @@ import DAO.Implementation.TransactionDAOImplementation;
 import DAO.Interface.TransactionDAOInterface;
 import DAO.Implementation.RawDAOImplementation;
 import DAO.Interface.RawDAOInterface;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -52,7 +53,7 @@ public class UsedTransfer extends javax.swing.JFrame {
         
         for (RawBean raw : aRaw) {
             
-            Object[] data = {raw.getRaw(), null};
+            Object[] data = {raw.getRaw(), raw.getStock(), "0.00", "0.00", "0.00"};
             actualTable.addRow(data);
             rmTable.setModel(actualTable);
             adjustTable(rmTable);
@@ -314,34 +315,60 @@ public class UsedTransfer extends javax.swing.JFrame {
         
         // VALIDATE INPUT
         int rows = rmTable.getRowCount();
+        int c = 0;
         
-        for (int c = 0; c < rows; c++) {
+        while(c < rows && submit) {
             
-            
-            
+            for (int d = 2; d <= 4 && submit; d++) {
+                
+                if(rmTable.getValueAt(c,d).toString().isEmpty()) {
+                    submit = false;
+                }
+                
+            }
+            c++;
             
         }
-        
-        
+            
         if(submit) {
-            RawBean r = new RawBean();
-            String st = type.getSelectedItem().toString();
-            String name = rmName.getText().toString();
-            float q = Float.parseFloat(rmCount.getText().toString());
             
-            // REDUCE FROM RAW TABLE
+            for(int a = 0; a < rows; a++) {
+            
+                for (int b = 2; b <= 4; b++) {
+                    
+                    RawBean r = new RawBean();
+                    
+                    String name = rmTable.getValueAt(a, 0).toString(); // raw material name
+                    float q = Float.parseFloat(rmTable.getValueAt(a,b).toString());
+                    String type = new String();
+                    if(b == 2) {
+                        type = "used";
+                    }
+                    else if (b == 3) {
+                        type = "transfer";
+                    }
+                    else if(b == 4) {
+                        type = "wastage";
+                    }
+            
+                    // REDUCE FROM RAW TABLE
+            
+                    float s = rmImp.getStock(type);
+                    float deduct = s - q;
+                    rmImp.updateStock(name, deduct);
+            
+                    // ADD TRANSACTION
+                    TransactionBean t = new TransactionBean();
+                    t.setType(type);
+                    int id = rmImp.getIDbyRaw(name);
+                    r.setRawID(id);
+                    tclmp.addTransaction(t, r, q);
+                
+                    
+                }
+            }
             
             
-            float s = rmImp.getStock(st);
-            float deduct = s - q;
-            rmImp.updateStock(name, deduct);
-            
-            // ADD TRANSACTION
-            TransactionBean t = new TransactionBean();
-            t.setType(st);
-            int id = rmImp.getIDbyRaw(name);
-            r.setRawID(id);
-            tclmp.addTransaction(t, r, q);
         }
         
     }//GEN-LAST:event_submitUsedActionPerformed
@@ -463,11 +490,13 @@ class dnd extends TransferHandler {
         
     }
     
+    @Override
     public boolean canImport(TransferSupport s) {
         return true;
     }
     
 
+    @Override
     public boolean importData(TransferSupport s) {
         
         JTable tbl = (JTable)s.getComponent();
