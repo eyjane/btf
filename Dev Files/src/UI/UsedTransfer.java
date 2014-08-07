@@ -41,7 +41,7 @@ public class UsedTransfer extends javax.swing.JFrame {
          * FOR ACTUAL INPUT TABLE
          */
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"ID", "Name", "Quantity"};
+        String cols[] = {"Name", "Quantity"};
         DefaultTableModel actualTable = new DefaultTableModel(cols,0);
         
         for (RawBean raw : aRaw) {
@@ -116,6 +116,32 @@ public class UsedTransfer extends javax.swing.JFrame {
 
         jLabel1.setText("Used Materials");
 
+        rmTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Name", "Quantity in Stock", "Used", "Transferred", "Wastage"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         rmTable.setColumnSelectionAllowed(true);
         rmTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         rmTable.getTableHeader().setReorderingAllowed(false);
@@ -256,7 +282,7 @@ public class UsedTransfer extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         boolean submit = true;
-
+        /*
         if(rmName.getText().toString().isEmpty()) {
             
             errorName.setVisible(true);
@@ -277,7 +303,18 @@ public class UsedTransfer extends javax.swing.JFrame {
             
            errorCount.setVisible(true);
            submit = false; 
+        }*/
+        
+        // VALIDATE INPUT
+        int rows = rmTable.getRowCount();
+        
+        for (int c = 0; c < rows; c++) {
+            
+            
+            
+            
         }
+        
         
         if(submit) {
             RawBean r = new RawBean();
