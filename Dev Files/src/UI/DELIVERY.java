@@ -133,9 +133,16 @@ public class DELIVERY extends javax.swing.JFrame {
                 "Name", "Amount"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Float.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -312,11 +319,26 @@ public class DELIVERY extends javax.swing.JFrame {
         }
 
         if (add) {
-            RawBean r = new RawBean();
-            r.setRaw(rmName.getText().toString());
+            //RawBean r = new RawBean();
+            /*r.setRaw(rmName.getText().toString());
             r.setStock(Float.parseFloat(rmAmount.getText().toString()));
             rmImp.restockRaw(r);
+            success.setVisible(true);*/
+            
+            // GET # OF ROWS
+            int rows = rawTable.getRowCount();
+            
+            for (int c = 0; c < rows; c++) {
+                RawBean r = new RawBean();
+                r.setRaw(rawTable.getValueAt(c, 0).toString());
+                r.setStock(Float.parseFloat(rawTable.getValueAt(c,1).toString()));
+                rmImp.restockRaw(r);
+                
+            }
+            
             success.setVisible(true);
+            
+            // REFRESH TABLE WITH UPDATED VALUES
             viewRaw();
         }
         
