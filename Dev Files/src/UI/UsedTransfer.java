@@ -13,10 +13,14 @@ import DAO.Interface.TransactionDAOInterface;
 import DAO.Implementation.RawDAOImplementation;
 import DAO.Interface.RawDAOInterface;
 import java.awt.Component;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -36,6 +40,8 @@ public class UsedTransfer extends javax.swing.JFrame {
     ArrayList<RawBean> aRaw;
     EODTab main;
     
+    
+    
     public void transactTable() {
         /*
          * FOR ACTUAL INPUT TABLE
@@ -46,11 +52,12 @@ public class UsedTransfer extends javax.swing.JFrame {
         
         for (RawBean raw : aRaw) {
             
-            Object[] data = {raw.getRawID(), raw.getRaw(), null};
+            Object[] data = {raw.getRaw(), null};
             actualTable.addRow(data);
             rmTable.setModel(actualTable);
             adjustTable(rmTable);
         }
+        rmTable.setTransferHandler(new dnd());  
     }
     
     private void adjustTable(JTable table){
@@ -142,8 +149,8 @@ public class UsedTransfer extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        rmTable.setColumnSelectionAllowed(true);
-        rmTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        rmTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        rmTable.setDragEnabled(true);
         rmTable.getTableHeader().setReorderingAllowed(false);
         rmTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -432,4 +439,39 @@ public class UsedTransfer extends javax.swing.JFrame {
     private javax.swing.JComboBox type;
     private javax.swing.JLabel typeLabel;
     // End of variables declaration//GEN-END:variables
+}
+    
+class dnd extends TransferHandler {
+    
+    public dnd() {
+        
+    }
+    
+    public int getAction (JComponent c) {
+        return TransferHandler.MOVE;
+    }
+    
+    protected Transferable makeTransferable (JTable rmTable){
+        
+        return new StringSelection((String)rmTable.getModel().getValueAt(rmTable.getSelectedRow(), rmTable.getSelectedColumn()));
+        
+    }
+    
+    protected void movedRow(JTable rmTable, Transferable data, int action) {
+        
+        rmTable.getModel().setValueAt("", rmTable.getSelectedRow(), rmTable.getSelectedColumn());
+        
+    }
+    
+    public boolean canImport(TransferSupport s) {
+        return true;
+    }
+    
+
+    public boolean importData(TransferSupport s) {
+        
+        JTable tbl = (JTable)s.getComponent();
+        return super.importData(s);
+    }
+    
 }
