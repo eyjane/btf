@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,10 +22,10 @@ public class AddRM extends javax.swing.JFrame {
     public AddRM(RMManagement r) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
+        initComponents();
         rm = r;
         raw = new RawBean();
-        initComponents();
-        rmTable.setModel(rm.getRMTable());
+        prepareTable();
         errorLabel.setVisible(false);
         errorLabel1.setVisible(false);
         errorLabel2.setVisible(false);
@@ -34,17 +33,13 @@ public class AddRM extends javax.swing.JFrame {
         errorLabel4.setVisible(false);
         errorLabel5.setVisible(false);
     }
-    
-    /*public DefaultTableModel initializeRecipeTable(){
-        DefaultTableModel defaultTableModel = new DefaultTableModel();
-        defaultTableModel.addColumn("ID");
-        defaultTableModel.addColumn("Name");
-        defaultTableModel.addColumn("Cost");
-        defaultTableModel.addColumn("Stock");
-        defaultTableModel.addColumn("Status");
-        return defaultTableModel;
-    }*/
-    
+   
+   public void prepareTable(){
+       rmTable.setModel(rm.getRMTable());
+       rmTable.getColumnModel().getColumn(0).setMinWidth(0);
+       rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
+   }
+   
    public boolean authenticateRM(){
         boolean flag = true;
         raw = new RawBean();
@@ -179,12 +174,6 @@ public class AddRM extends javax.swing.JFrame {
 
         jLabel4.setText("Stock:");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 83, -1, -1));
-
-        nameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameFieldActionPerformed(evt);
-            }
-        });
         jPanel2.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 109, -1));
         jPanel2.add(priceField, new org.netbeans.lib.awtextra.AbsoluteConstraints(111, 54, 109, -1));
         jPanel2.add(stockField, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 80, 109, -1));
@@ -255,6 +244,7 @@ public class AddRM extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        rmTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(rmTable);
         rmTable.getColumnModel().getColumn(0).setResizable(false);
         rmTable.getColumnModel().getColumn(1).setResizable(false);
@@ -296,10 +286,6 @@ public class AddRM extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nameFieldActionPerformed
-
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
       if(authenticateRM()){
             try{
@@ -308,7 +294,6 @@ public class AddRM extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Raw material successfully added!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 rm.setVisible(true);
                 rm.ViewAllRM();
-                //rm.setFields(raw);
                 dispose();
             } catch(Exception err){
                 err.printStackTrace();

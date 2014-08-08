@@ -14,43 +14,27 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class AddCategory extends javax.swing.JFrame {
     private CategoryDAOInterface ctImp = new CategoryDAOImplementation();
-    private CategoryBean cat;
     private CategoryManagement cm;
+    private CategoryBean cat;
 
     //<--- CLARK'S CODE STARTS HERE --->
     
     public AddCategory(CategoryManagement c) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
-        cm = c;
         initComponents();
-        categoryTable.setModel(cm.getCMTable());
+        cm = c;
+        prepareTable();
         errorLabel1.setVisible(false);
         errorLabel2.setVisible(false);
         
     }
     
-    /*public DefaultTableModel initializeRecipeTable(){
-        DefaultTableModel defaultTableModel = new DefaultTableModel();
-        defaultTableModel.addColumn("ID");
-        defaultTableModel.addColumn("Name");
-        defaultTableModel.addColumn("Cost");
-        defaultTableModel.addColumn("Stock");
-        defaultTableModel.addColumn("Status");
-        return defaultTableModel;
-     */
-     
-    /*public void ViewAllRecipes(ArrayList<RecipeBean> rb){
-       DefaultTableModel defaultModel = initializeRecipeTable();
-       r = rb;
-       for (int i = 0; i < r.size(); i++) {
-           if(r.get(i).getRcstatus().equalsIgnoreCase("available")) {
-               defaultModel.addRow(new Object[] {r.get(i).getRecipeID(), r.get(i).getRecipe(),               
-               r.get(i).getCost(), r.get(i).getStock(), r.get(i).getRcstatus()});
-           }
-       }
-       recipeTable.setModel(defaultModel);
-    */
+    public void prepareTable(){
+        categoryTable.setModel(cm.getCMTable());
+        categoryTable.getColumnModel().getColumn(0).setMinWidth(0);
+        categoryTable.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
     
     public boolean authenticateCategory(){
         boolean flag = true;
@@ -137,11 +121,11 @@ public class AddCategory extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Name"
+                "Name"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -150,6 +134,7 @@ public class AddCategory extends javax.swing.JFrame {
         });
         categoryTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(categoryTable);
+        categoryTable.getColumnModel().getColumn(0).setResizable(false);
 
         jLabel9.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel9.setText("CATEGORY");
@@ -210,8 +195,6 @@ public class AddCategory extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Successfully added a new category!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 cm.setVisible(true);
                 cm.ViewAllCategories();
-                //cm.setCategoryField(cat);
-                //cm.ViewAllRecipes(cat);
                 dispose();
             } catch(Exception err){
                 err.printStackTrace();

@@ -34,36 +34,13 @@ public class EditRM extends javax.swing.JFrame {
         errorLabel4.setVisible(false);
         errorLabel5.setVisible(false);
         prepareTable();
-        //setFields(raw);
     }
     
     public void prepareTable(){
         rmTable.setModel(rm.getRMTable());
-        rmTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-        public void valueChanged(ListSelectionEvent event) {
-            try {
-            DefaultTableModel defaultTableModel = (DefaultTableModel) rmTable.getModel();
-            if (rmTable.getSelectedRow() >= 0) { 
-                raw = rwImp.getRaw((int) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0));
-                setFields(raw);
-            } else {
-                raw = null;
-              }
-            } catch (Exception err) {
-                err.printStackTrace();
-            } 
-        }
-       });
+        rmTable.getColumnModel().getColumn(0).setMinWidth(0);
+        rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
-    /*public DefaultTableModel initializeRecipeTable(){
-        DefaultTableModel defaultTableModel = new DefaultTableModel();
-        defaultTableModel.addColumn("ID");
-        defaultTableModel.addColumn("Name");
-        defaultTableModel.addColumn("Cost");
-        defaultTableModel.addColumn("Stock");
-        defaultTableModel.addColumn("Status");
-        return defaultTableModel;
-    }*/
     
    public boolean authenticateRM(){
         boolean flag = true;
@@ -171,11 +148,9 @@ public class EditRM extends javax.swing.JFrame {
             }
         };
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        idField = new javax.swing.JTextField();
         nameField = new javax.swing.JTextField();
         priceField = new javax.swing.JTextField();
         stockField = new javax.swing.JTextField();
@@ -203,25 +178,28 @@ public class EditRM extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Name", "Price", "Stock", "Critical", "Status", "UOM"
+                "Name", "Price", "Stock", "Critical", "Status", "UOM"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        rmTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(rmTable);
+        rmTable.getColumnModel().getColumn(0).setResizable(false);
+        rmTable.getColumnModel().getColumn(1).setResizable(false);
+        rmTable.getColumnModel().getColumn(2).setResizable(false);
+        rmTable.getColumnModel().getColumn(3).setResizable(false);
+        rmTable.getColumnModel().getColumn(4).setResizable(false);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Raw Material Info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(255, 153, 153)));
         jPanel2.setMinimumSize(new java.awt.Dimension(620, 236));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel1.setText("ID:");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
 
         jLabel2.setText("Name:");
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 56, -1, -1));
@@ -231,20 +209,6 @@ public class EditRM extends javax.swing.JFrame {
 
         jLabel4.setText("Stock:");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 108, -1, -1));
-
-        idField.setEditable(false);
-        idField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                idFieldActionPerformed(evt);
-            }
-        });
-        jPanel2.add(idField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 27, 109, -1));
-
-        nameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameFieldActionPerformed(evt);
-            }
-        });
         jPanel2.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 53, 109, -1));
         jPanel2.add(priceField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 79, 109, -1));
         jPanel2.add(stockField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 105, 109, -1));
@@ -281,7 +245,7 @@ public class EditRM extends javax.swing.JFrame {
         errorLabel1.setText("ERROR: Required field.");
         jPanel2.add(errorLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 56, -1, -1));
 
-        btnEdit.setText("Edit Category");
+        btnEdit.setText("Edit Raw Material");
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditActionPerformed(evt);
@@ -330,14 +294,6 @@ public class EditRM extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void idFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_idFieldActionPerformed
-
-    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nameFieldActionPerformed
-
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         rm.setVisible(true);
         dispose();
@@ -370,8 +326,6 @@ public class EditRM extends javax.swing.JFrame {
     private javax.swing.JLabel errorLabel3;
     private javax.swing.JLabel errorLabel4;
     private javax.swing.JLabel errorLabel5;
-    private javax.swing.JTextField idField;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;

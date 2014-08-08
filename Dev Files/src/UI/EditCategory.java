@@ -21,18 +21,18 @@ import javax.swing.table.DefaultTableModel;
 public class EditCategory extends javax.swing.JFrame {
     private CategoryDAOInterface ctImp = new CategoryDAOImplementation();
     private RecipeDAOInterface rcImp = new RecipeDAOImplementation();
-    private ArrayList<RecipeBean> r = new ArrayList();
+    private ArrayList<RecipeBean> catRecipes = new ArrayList<RecipeBean>();
+    private CategoryManagement cm;
     private CategoryBean cat;
     private RCpopup rc;
-    private CategoryManagement cm;
 
     //<--- CLARK'S CODE STARTS HERE --->
     
     public EditCategory(CategoryManagement c) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
-        cm = c;
         initComponents();
+        cm = c;
         prepareTable();
         errorLabel.setVisible(false);
         errorLabel1.setVisible(false);
@@ -51,18 +51,23 @@ public class EditCategory extends javax.swing.JFrame {
     
     public void ViewAllRecipes(ArrayList<RecipeBean> rb){
        DefaultTableModel defaultModel = initializeRecipeTable();
-       r = rb;
-       for (int i = 0; i < r.size(); i++) {
-           if(r.get(i).getRcstatus().equalsIgnoreCase("available")) {
-               defaultModel.addRow(new Object[] {r.get(i).getRecipeID(), r.get(i).getRecipe(),               
-               r.get(i).getCost(), r.get(i).getStock(), r.get(i).getRcstatus()});
+       catRecipes = rb;
+       for (int i = 0; i < catRecipes.size(); i++) {
+           if(catRecipes.get(i).getRcstatus().equalsIgnoreCase("available")) {
+               defaultModel.addRow(new Object[] {catRecipes.get(i).getRecipeID(), catRecipes.get(i).getRecipe(),               
+               catRecipes.get(i).getCost(), catRecipes.get(i).getStock(), catRecipes.get(i).getRcstatus()});
            }
        }
        recipeTable.setModel(defaultModel);
+       recipeTable.getColumnModel().getColumn(0).setMinWidth(0);
+       recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
     
     public void prepareTable(){
         categoryTable.setModel(cm.getCMTable());
+        categoryTable.getColumnModel().getColumn(0).setMinWidth(0);
+        categoryTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        
         categoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
         public void valueChanged(ListSelectionEvent event) {
             try {
@@ -167,12 +172,6 @@ public class EditCategory extends javax.swing.JFrame {
 
         jLabel6.setText("Recipes:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 73, -1, -1));
-
-        nameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameFieldActionPerformed(evt);
-            }
-        });
         jPanel1.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 35, 225, -1));
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 51));
@@ -184,20 +183,15 @@ public class EditCategory extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Name", "Cost", "Stock", "Status"
+                "Name", "Cost", "Stock", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
-            }
-        });
-        recipeTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                recipeTableMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(recipeTable);
@@ -205,7 +199,6 @@ public class EditCategory extends javax.swing.JFrame {
         recipeTable.getColumnModel().getColumn(1).setResizable(false);
         recipeTable.getColumnModel().getColumn(2).setResizable(false);
         recipeTable.getColumnModel().getColumn(3).setResizable(false);
-        recipeTable.getColumnModel().getColumn(4).setResizable(false);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 93, 476, 108));
 
@@ -248,11 +241,11 @@ public class EditCategory extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Name"
+                "Name"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -261,6 +254,7 @@ public class EditCategory extends javax.swing.JFrame {
         });
         categoryTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(categoryTable);
+        categoryTable.getColumnModel().getColumn(0).setResizable(false);
 
         getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 90, 350, 260));
 
@@ -294,12 +288,8 @@ public class EditCategory extends javax.swing.JFrame {
         if(authenticateCategory()){
             try{
                 ctImp.editCategory(cat);
-                /*for (RecipeBean recipe : cat.getaRecipes()) {
-                    recipe.setCategory(1);
-                    rcImp.editRecipe(recipe);
-                }*/
                 
-                for (RecipeBean recipe : r) {
+                for (RecipeBean recipe : catRecipes) {
                     recipe.setCategory(cat.getCategoryID());
                     rcImp.editRecipe(recipe);
                 }
@@ -307,8 +297,8 @@ public class EditCategory extends javax.swing.JFrame {
                 ArrayList<RecipeBean> a = cat.getaRecipes();
                 for(int i = 0; i < a.size(); i++){
                     boolean flag = false;
-                    for(int j = 0; j < r.size(); j++){
-                        if(a.get(i).getRecipe().equals(r.get(j).getRecipe()))
+                    for(int j = 0; j < catRecipes.size(); j++){
+                        if(a.get(i).getRecipe().equals(catRecipes.get(j).getRecipe()))
                             flag = true;
                     }
                     if(flag == false){
@@ -320,8 +310,6 @@ public class EditCategory extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Successfully edited the category!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 cm.setVisible(true);
                 cm.ViewAllCategories();
-                //cm.setCategoryField(cat);
-                //cm.ViewAllRecipes(cat);
                 dispose();
             } catch(Exception err){
                 err.printStackTrace();
@@ -329,18 +317,11 @@ public class EditCategory extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveCategoryActionPerformed
 
-    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nameFieldActionPerformed
-
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         cm.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
-    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
-
-    }//GEN-LAST:event_recipeTableMouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JTable categoryTable;

@@ -7,7 +7,6 @@ import DAO.Interface.CategoryDAOInterface;
 import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Interface.RecipeDAOInterface;
 import java.awt.Component;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,11 +14,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -28,8 +26,6 @@ import javax.swing.table.TableColumn;
 public class CategoryManagement extends javax.swing.JFrame {
         private CategoryDAOInterface ctImp;
         private RecipeDAOInterface rcImp;
-        private CategoryBean selectedCat;
-        private RecipeBean selectedRC;
         private DefaultTableModel defaultModel;
     
     //<--- CLARK'S CODE STARTS HERE --->
@@ -39,8 +35,6 @@ public class CategoryManagement extends javax.swing.JFrame {
         initComponents();
         rcImp = new RecipeDAOImplementation();
         ctImp = new CategoryDAOImplementation();
-        selectedCat = new CategoryBean();
-        selectedRC = new RecipeBean();
         ViewAllCategories();
     }
     
@@ -72,102 +66,43 @@ public class CategoryManagement extends javax.swing.JFrame {
        categoryTable.getColumnModel().getColumn(0).setMinWidth(0);
        categoryTable.getColumnModel().getColumn(0).setMaxWidth(0);
        adjustTable(categoryTable);
-       
-       categoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-        public void valueChanged(ListSelectionEvent event) {
-            try {
-            DefaultTableModel defaultTableModel = (DefaultTableModel) categoryTable.getModel();
-            if (categoryTable.getSelectedRow() >= 0) {
-                //categoryIDField.setText(defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0).toString());
-                //categoryNameField.setText((String) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 1));
-                selectedCat = ctImp.getCategory((int) (defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0)));
-                //btnUpdateCategory.setEnabled(true);
-                //btnAddRecipe.setEnabled(true);
-                //btnAddCategory.setEnabled(false);    
-                /*if(selectedCat.getCategoryID() == 1) 
-                    btnDeleteRecipe.setEnabled(false);
-                else
-                    btnDeleteRecipe.setEnabled(true);            
-                ViewAllRecipes(selectedCat); */
-            } else 
-                    selectedCat = null;
-            } catch (Exception err) {
-                err.printStackTrace();
-            } 
-        }
-       });
-            
     }
     
     public DefaultTableModel getCMTable(){
         return defaultModel;
     }
     
-    /*public void ViewAllRecipes(CategoryBean c){
-       DefaultTableModel defaultModel = initializeRecipeTable();
-       c.setaRecipes(rcImp.getRecipeByCategory(c));
-       for (int i = 0; i < c.getaRecipes().size(); i++) {
-           if(c.getaRecipes().get(i).getRcstatus().equalsIgnoreCase("available")) {
-               defaultModel.addRow(new Object[] {c.getaRecipes().get(i).getRecipeID(), c.getaRecipes().get(i).getRecipe(),               
-               c.getaRecipes().get(i).getCost(), c.getaRecipes().get(i).getStock(), c.getaRecipes().get(i).getRcstatus()});
-           }
-       }
-       recipeTable.setModel(defaultModel);
-       recipeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-        public void valueChanged(ListSelectionEvent event) {
-            try {
-            DefaultTableModel defaultTableModel = (DefaultTableModel) recipeTable.getModel();
-            if (recipeTable.getSelectedRow() >= 0) {
-                selectedRC = rcImp.getRecipeBean((int) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 0));
-            } else
-                selectedRC = null;
-            } catch (Exception err) {
-                err.printStackTrace();
-            } 
+    public void deleteCategory(int c[]){
+        TableModel model = categoryTable.getModel();
+        DefaultTableModel table = (DefaultTableModel) model;
+        
+        for(int i = 0; i < c.length; i++){
+            int rID = Integer.parseInt(categoryTable.getModel().getValueAt(c[i], 0).toString());
+            CategoryBean category = ctImp.getCategory(rID);
+            if(rID != 1) {
+                    if(JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this category?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+                        RecipeBean rc;
+                        ArrayList<RecipeBean> temp = rcImp.getRecipeByCategory(category);
+                        for (int j = 0; j < temp.size(); j++) {
+                            rc = temp.get(j);
+                            rc.setCategory(1);
+                            rcImp.editRecipe(rc);
+                        }
+                        ctImp.deleteCategory(category);
+                        JOptionPane.showMessageDialog(null, "Successfully deleted the category!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        table.removeRow(c[i]);
+                    }
+                } else if(rID == 1)
+                    JOptionPane.showMessageDialog(null, "You cannot delete the category.", "Try Again", JOptionPane.WARNING_MESSAGE);
         }
-       });
-       
-    }*/
-    
-    /*public boolean authenticateCategory(){
-        boolean flag = true;
-        selectedCat = new CategoryBean();
-        if(categoryNameField.getText().equals("")) {
-            errorLabel1.setVisible(true);
-            flag = false;
-        }
-        else {
-            selectedCat.setCategory(categoryNameField.getText());
-            errorLabel1.setVisible(false);
-            errorLabel2.setVisible(false);
-            for(int i = 0; i < ctImp.getAllCategory().size(); i++){
-                if(categoryNameField.getText().equalsIgnoreCase(ctImp.getAllCategory().get(i).getCategory())) {
-                    errorLabel1.setVisible(true);
-                    errorLabel2.setVisible(true);
-                    flag = false;
-                } 
-            }
-        }
-        return flag;
-    }*/
-    
-  /*  public void clearText(){
-        categoryNameField.setText("");
-        categoryIDField.setText("");
-        errorLabel1.setVisible(false);
-        errorLabel2.setVisible(false);
-        btnUpdateCategory.setEnabled(false);
-        btnAddCategory.setEnabled(true);
-        btnAddRecipe.setEnabled(false);
-        btnDeleteRecipe.setEnabled(false);
-        recipeTable.setModel(initializeRecipeTable());
-    } */
-    
-    public CategoryBean getCategory(){
-        return selectedCat;
+        
+        categoryTable.setModel(table);
+        categoryTable.getColumnModel().getColumn(0).setMinWidth(0);
+        categoryTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
     
     //<--- CLARK'S CODE ENDS HERE --->
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -343,29 +278,11 @@ public class CategoryManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditCategoryActionPerformed
 
     private void btnDeleteCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteCategoryActionPerformed
-        try {
-            if(selectedCat != null){
-                if(selectedCat.getCategoryID() != 1) {
-                    //ViewAllRecipes(selectedCat);
-                    if(JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this category?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-                        RecipeBean rc;
-                        ArrayList<RecipeBean> temp = rcImp.getRecipeByCategory(selectedCat);
-                        for (int i = 0; i < temp.size(); i++) {
-                            rc = temp.get(i);
-                            rc.setCategory(1);
-                            rcImp.editRecipe(rc);
-                        }
-                        ctImp.deleteCategory(selectedCat);
-                        JOptionPane.showMessageDialog(null, "Successfully deleted the category!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                        ViewAllCategories();
-                    }
-                    //clearText();
-                } else if(selectedCat.getCategoryID() == 1)
-                    JOptionPane.showMessageDialog(null, "You cannot delete the category.", "Try Again", JOptionPane.WARNING_MESSAGE);
-            } else
-                JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
-        }   catch (Exception err) {
-            err.printStackTrace();
+        int select[] = categoryTable.getSelectedRows();
+        if (select.length > 0) {
+            deleteCategory(select);
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnDeleteCategoryActionPerformed
 

@@ -12,9 +12,8 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -31,7 +30,6 @@ public class RMManagement extends javax.swing.JFrame {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
-    
         ViewAllRM();
     }
     
@@ -57,29 +55,9 @@ public class RMManagement extends javax.swing.JFrame {
             defaultModel.addRow(new Object[] {r.getRawID(), r.getRaw(), r.getPrice(), r.getStock(), r.getCritical(), r.getRmstatus(), r.getUom()});
        }
        rmTable.setModel(defaultModel);
-       rmTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-        public void valueChanged(ListSelectionEvent event) {
-            try {
-            DefaultTableModel defaultTableModel = (DefaultTableModel) rmTable.getModel();
-            if (rmTable.getSelectedRow() >= 0) {
-                selectedRaw = rmImp.getRaw((int) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0));
-            } else {
-                selectedRaw = null;
-              }
-            } catch (Exception err) {
-                err.printStackTrace();
-            } 
-        }
-       });
+       rmTable.getColumnModel().getColumn(0).setMinWidth(0);
+       rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
-    
-    /*public boolean authenticateRM(){
-        boolean flag = true;
-        editRaw = new RawBean();
-        int count = 0;
-        return false;
-        
-        } */
     
     public boolean isNumber(String s) {
         try {
@@ -90,17 +68,35 @@ public class RMManagement extends javax.swing.JFrame {
         }
     }
     
-    public boolean authenticateDelete() {
+    public boolean authenticateDelete(RawBean raw) {
         boolean flag = true;
         ArrayList<RecipeBean> recipeTemp = null;
-        recipeTemp = rcImp.getRecipeByRawMaterial(selectedRaw);
+        recipeTemp = rcImp.getRecipeByRawMaterial(raw);
         if(recipeTemp.size() > 0)
             flag = false;
         return flag;
     }
     
-    public RawBean getRaw(){
-        return selectedRaw;
+    public void deleteRM(int r[]){
+        TableModel model = rmTable.getModel();
+        DefaultTableModel table = (DefaultTableModel) model;
+        
+        for(int i = 0; i < r.length; i++){
+            int rID = Integer.parseInt(rmTable.getModel().getValueAt(r[i], 0).toString());
+            RawBean raw = rmImp.getRaw(rID);
+            if(authenticateDelete(raw)) {
+                    if(JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this raw material?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+                        rmImp.deleteRaw(raw);
+                        JOptionPane.showMessageDialog(null, "Successfully deleted the raw material!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        table.removeRow(r[i]);
+                    }
+                } else
+                    JOptionPane.showMessageDialog(null, "You cannot delete a raw material that's in use.", "Try Again", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        rmTable.setModel(table);
+        rmTable.getColumnModel().getColumn(0).setMinWidth(0);
+        rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
     
     public DefaultTableModel getRMTable(){
@@ -255,20 +251,11 @@ public class RMManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditRMActionPerformed
 
     private void btnDeleteRMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteRMActionPerformed
-        try {
-            if(selectedRaw != null){
-                if(authenticateDelete()) {
-                    if(JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this raw material?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-                            rmImp.deleteRaw(selectedRaw);
-                            JOptionPane.showMessageDialog(null, "Successfully deleted raw material!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            ViewAllRM();
-                    }
-                } else if(!authenticateDelete())
-                    JOptionPane.showMessageDialog(null, "You cannot delete a raw material that's in use.", "Error Deleting", JOptionPane.WARNING_MESSAGE);
-            } else if(selectedRaw == null)
-                JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
-        }   catch (Exception err) {
-            err.printStackTrace();
+        int select[] = rmTable.getSelectedRows();
+        if (select.length > 0) {
+            deleteRM(select);
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnDeleteRMActionPerformed
 
