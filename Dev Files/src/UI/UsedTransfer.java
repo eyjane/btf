@@ -12,11 +12,18 @@ import DAO.Implementation.TransactionDAOImplementation;
 import DAO.Interface.TransactionDAOInterface;
 import DAO.Implementation.RawDAOImplementation;
 import DAO.Interface.RawDAOInterface;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -36,21 +43,24 @@ public class UsedTransfer extends javax.swing.JFrame {
     ArrayList<RawBean> aRaw;
     EODTab main;
     
+    
+    
     public void transactTable() {
         /*
          * FOR ACTUAL INPUT TABLE
          */
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"ID", "Name", "Quantity Used"};
+        String cols[] = {"Name", "Quantity"};
         DefaultTableModel actualTable = new DefaultTableModel(cols,0);
         
         for (RawBean raw : aRaw) {
             
-            Object[] data = {raw.getRawID(), raw.getRaw(), null};
+            Object[] data = {raw.getRaw(), raw.getStock(), "0.00", "0.00", "0.00"};
             actualTable.addRow(data);
-            usedTable.setModel(actualTable);
-            adjustTable(usedTable);
+            rmTable.setModel(actualTable);
+            adjustTable(rmTable);
         }
+        rmTable.setTransferHandler(new dnd());  
     }
     
     private void adjustTable(JTable table){
@@ -99,34 +109,31 @@ public class UsedTransfer extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        usedTable = new javax.swing.JTable();
+        rmTable = new javax.swing.JTable();
         submitUsed = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        errorBox = new javax.swing.JTextArea();
         backBtn = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(956, 555));
 
         jLabel1.setText("Used Materials");
 
-        usedTable.setModel(new javax.swing.table.DefaultTableModel(
+        rmTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Name", "Quantity Used", "Quantity Wasted"
+                "Name", "Quantity in Stock", "Used", "Transferred", "Wastage"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Float.class
+                java.lang.Object.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, true
+                false, false, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -137,19 +144,23 @@ public class UsedTransfer extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(usedTable);
+        rmTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        rmTable.setDragEnabled(true);
+        rmTable.getTableHeader().setReorderingAllowed(false);
+        rmTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rmTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(rmTable);
+        rmTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        submitUsed.setText("SUBMIT");
+        submitUsed.setText("REDUCE");
         submitUsed.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submitUsedActionPerformed(evt);
             }
         });
-
-        errorBox.setEditable(false);
-        errorBox.setColumns(20);
-        errorBox.setRows(5);
-        jScrollPane2.setViewportView(errorBox);
 
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -158,16 +169,14 @@ public class UsedTransfer extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setForeground(new java.awt.Color(255, 0, 1));
-        jLabel2.setText("ERRORS:");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+<<<<<<< HEAD
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -188,6 +197,17 @@ public class UsedTransfer extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane2))
+=======
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(backBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(submitUsed))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+>>>>>>> usedTransfer
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -197,15 +217,19 @@ public class UsedTransfer extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 296, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(submitUsed)
                     .addComponent(backBtn))
+<<<<<<< HEAD
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
+=======
+                .addContainerGap())
+>>>>>>> usedTransfer
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -220,7 +244,11 @@ public class UsedTransfer extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+<<<<<<< HEAD
                 .addGap(0, 81, Short.MAX_VALUE))
+=======
+                .addGap(0, 0, Short.MAX_VALUE))
+>>>>>>> usedTransfer
         );
 
         pack();
@@ -229,38 +257,80 @@ public class UsedTransfer extends javax.swing.JFrame {
     private void submitUsedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitUsedActionPerformed
         // TODO add your handling code here:
         
-        boolean submit = true;
-
-        int rows = usedTable.getRowCount();
-        int c = 0;
-
-        for (c = 0; c < rows; c++) {
-
-            if(usedTable.getValueAt(c,2).toString().isEmpty() || usedTable.getValueAt(c,3).toString().isEmpty()) {
-
-                submit = false;
-                errorBox.append("Empty: Row #" + c+1 + "\n");
-            }
-
-        }
-
+        JFrame frame = new JFrame("Error");
+        int ans = JOptionPane.showConfirmDialog(rootPane, frame, "Are you sure that you want to submit? You may only submit once a day.", JOptionPane.YES_NO_OPTION);
         
-        if (submit) {
-            TransactionBean t = new TransactionBean();
-            RawBean r = new RawBean();
-            float usedQ = 0, wastedQ = 0; // QUANTITY
-
-            errorBox.append("No errors found.");
+        if (ans == JOptionPane.YES_OPTION) {
+        
+        boolean submit = true;
+        
+            // VALIDATE INPUT
+            int rows = rmTable.getRowCount();
+            int c = 0;
+        
+            while(c < rows && submit) {
             
-            for (c = 0; c < rows; c++) {
-
-                r.setRawID(Integer.parseInt(usedTable.getValueAt(c, 0).toString()));
-                usedQ = Float.parseFloat(usedTable.getValueAt(c, 2).toString());
-                wastedQ = Float.parseFloat(usedTable.getValueAt(c, 2).toString());
-                tclmp.usedTransfer(t, r, usedQ);
-                tclmp.wastages(t, r, wastedQ);
+                for (int d = 2; d <= 4 && submit; d++) {
+                
+                    if(rmTable.getValueAt(c,d).toString().isEmpty() || Math.signum(Float.parseFloat(rmTable.getValueAt(c,d).toString())) == -1) {
+                        submit = false;
+                    }
+                
+                }
+                c++;
+            
             }
-
+            
+            if(submit) {
+            
+                for(int a = 0; a < rows; a++) {
+            
+                    for (int b = 2; b <= 4; b++) {
+                    
+                        RawBean r = new RawBean();
+                    
+                        String name = rmTable.getValueAt(a, 0).toString(); // raw material name
+                        float q = Float.parseFloat(rmTable.getValueAt(a,b).toString());
+                        String type = new String();
+                        
+                        if(b == 2) {
+                            type = "used";
+                        }
+                        else if (b == 3) {
+                            type = "transfer";
+                        }
+                        else if(b == 4) {
+                            type = "wastage";
+                        }
+            
+                        // REDUCE FROM RAW TABLE
+            
+                        float s = rmImp.getStock(type);
+                        float deduct = s - q;
+                        rmImp.updateStock(name, deduct);
+            
+                        // ADD TRANSACTION
+                        TransactionBean t = new TransactionBean();
+                        t.setType(type);
+                        int id = rmImp.getIDbyRaw(name);
+                        r.setRawID(id);
+                        tclmp.addTransaction(t, r, q);
+                    }
+                }
+            
+            }
+            else {
+                
+                JFrame frame2 = new JFrame("Error");
+                JOptionPane.showMessageDialog(rootPane, frame2, "Submission Failed.\n\n Please check that all inputs are positive numbers and that no fields are empty.", JOptionPane.ERROR_MESSAGE);
+            
+            }
+        }
+        else if (ans == JOptionPane.NO_OPTION) {
+            
+            JFrame frame3 = new JFrame("");
+            JOptionPane.showMessageDialog(rootPane, frame3, "Submission aborted.", JOptionPane.ERROR_MESSAGE);
+            
         }
         
     }//GEN-LAST:event_submitUsedActionPerformed
@@ -270,6 +340,11 @@ public class UsedTransfer extends javax.swing.JFrame {
         this.setVisible(false);
         main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
+
+    private void rmTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rmTableMouseClicked
+        
+        
+    }//GEN-LAST:event_rmTableMouseClicked
 
     /*
      *  check if number!
@@ -332,13 +407,47 @@ public class UsedTransfer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JTextArea errorBox;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable rmTable;
     private javax.swing.JButton submitUsed;
-    private javax.swing.JTable usedTable;
     // End of variables declaration//GEN-END:variables
+}
+    
+class dnd extends TransferHandler {
+    
+    public dnd() {
+        
+    }
+    
+    public int getAction (JComponent c) {
+        return TransferHandler.MOVE;
+    }
+    
+    protected Transferable makeTransferable (JTable rmTable){
+        
+        return new StringSelection((String)rmTable.getModel().getValueAt(rmTable.getSelectedRow(), rmTable.getSelectedColumn()));
+        
+    }
+    
+    protected void movedRow(JTable rmTable, Transferable data, int action) {
+        
+        rmTable.getModel().setValueAt("", rmTable.getSelectedRow(), rmTable.getSelectedColumn());
+        
+    }
+    
+    @Override
+    public boolean canImport(TransferSupport s) {
+        return true;
+    }
+    
+
+    @Override
+    public boolean importData(TransferSupport s) {
+        
+        JTable tbl = (JTable)s.getComponent();
+        return super.importData(s);
+    }
+    
 }

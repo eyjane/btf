@@ -122,6 +122,30 @@ public class RawDAOImplementation implements RawDAOInterface {
     }
 
     @Override
+    public float getStock(String s) {
+        
+        float stock = 0;
+        
+        try {
+            String query = "select stock from raw where raw = ?";
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, s);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            stock = resultSet.getFloat("stock");
+            
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RecipeDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return stock;
+    }
+    
+    @Override
     public int getLatestAddedID(){
          int r = 0;
          
@@ -227,5 +251,50 @@ public class RawDAOImplementation implements RawDAOInterface {
         return false;
     }
     
+    @Override
+    public boolean updateStock (String s, float a) {
+        
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            String query = "UPDATE raw SET stock = ? WHERE raw = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setFloat(1, a);
+            preparedStatement.setString(2, s);
+            preparedStatement.executeUpdate();
+            connection.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(RawDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return false;
+    }
     
+    @Override
+    public int getIDbyRaw (String s) {
+        int id = 0;
+        
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            String query = "SELECT rawID FROM raw WHERE raw = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, s);
+            ResultSet resultSet = preparedStatement.executeQuery(query);
+            
+            id = resultSet.getInt("rawID");
+            
+            connection.close();
+            return id;
+        } catch (SQLException ex) {
+            Logger.getLogger(RawDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return id;
+        
+        
+    }
 }

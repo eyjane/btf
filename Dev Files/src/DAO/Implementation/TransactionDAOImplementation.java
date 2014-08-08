@@ -201,11 +201,15 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
     // Input values of Used/Transfer
     
     @Override
-    public boolean usedTransfer(TransactionBean t, RawBean r, float a) {
+    public boolean usedTransfer(TransactionBean t, RawBean r, float a, String type) {
          try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
+<<<<<<< HEAD
             String query = "INSERT into transactions(transaction_date, transaction_type) values (?, 'used');";
+=======
+            String query = "INSERT into transactions(transaction_date, transaction_type) values (?, ?);";
+>>>>>>> usedTransfer
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             
             /* create date*/
@@ -213,7 +217,7 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
             java.sql.Date today = new java.sql.Date(now.getTime());
 
             preparedStatement.setDate(1, today);
-            preparedStatement.setString(2, t.getType());
+            preparedStatement.setString(2, type);
             
             preparedStatement.executeUpdate();
             
@@ -246,8 +250,8 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
         
     }
     
-    // Input values for Wastages
     
+<<<<<<< HEAD
     @Override
     public boolean wastages(TransactionBean t, RawBean r, float a) {
          try {
@@ -293,5 +297,7 @@ public class TransactionDAOImplementation implements TransactionDAOInterface{
         return false;
         
     }
+=======
+>>>>>>> usedTransfer
     
 }

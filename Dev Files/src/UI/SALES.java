@@ -89,6 +89,7 @@ public class SALES extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -110,11 +111,21 @@ public class SALES extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         submitSales = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        submitBtn = new javax.swing.JButton();
+        backBtn2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(956, 555));
 
+<<<<<<< HEAD
         jPanel1.setPreferredSize(new java.awt.Dimension(956, 555));
+=======
+        jTabbedPane1.setOpaque(true);
+
+>>>>>>> usedTransfer
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
@@ -241,28 +252,112 @@ public class SALES extends javax.swing.JFrame {
         });
         jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, -1, -1));
 
+        jTabbedPane1.addTab("SALES", jPanel1);
+        jPanel1.getAccessibleContext().setAccessibleParent(null);
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Raw Material", "Quantity to deduct"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jTable2);
+
+        submitBtn.setText("SUBMIT");
+        submitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitBtnActionPerformed(evt);
+            }
+        });
+
+        backBtn2.setText("BACK");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(103, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(backBtn2)
+                .addGap(105, 105, 105)
+                .addComponent(submitBtn)
+                .addGap(203, 203, 203))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(83, 83, 83)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(submitBtn)
+                    .addComponent(backBtn2))
+                .addContainerGap(155, Short.MAX_VALUE))
+        );
+
+        submitBtn.getAccessibleContext().setAccessibleName("submitBtn");
+        backBtn2.getAccessibleContext().setAccessibleName("BACK");
+
+        jTabbedPane1.addTab("tab3", jPanel2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+<<<<<<< HEAD
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 932, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 24, Short.MAX_VALUE))
+=======
+                .addContainerGap()
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
+>>>>>>> usedTransfer
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+<<<<<<< HEAD
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+=======
+                .addContainerGap()
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
+>>>>>>> usedTransfer
         );
+
+        jTabbedPane1.getAccessibleContext().setAccessibleName("SALES");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        this.setVisible(false);
+        main.setVisible(true);
+    }                                       
+
     private void submitSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitSalesActionPerformed
        /* int rcount = recipeTable.getRowCount();
         int i,j;
-        
+
         for(i=0; i<rcount;i++){
             SalesBean sbean = new SalesBean();
             SalesBean cbean = new SalesBean();
@@ -273,19 +368,19 @@ public class SALES extends javax.swing.JFrame {
             int rID = Integer.parseInt(recipeTable.getModel().getValueAt(i, 0).toString());
             float sales = Float.parseFloat(recipeTable.getModel().getValueAt(i, 2).toString());
             float compliment = Float.parseFloat(recipeTable.getModel().getValueAt(i, 3).toString());
-            
+
             RecipeBean rbean = rcImp.getRecipeBean(rID);
-            
+
             //add sales
             sbean.setOrder(i+1);
             sbean.setType("sales");
             tcImp.addSales(sbean, rbean, sales);
-            
+
             //add compliment
             cbean.setOrder(i+1);
             cbean.setType("complimentary");
             tcImp.addSales(cbean, rbean, compliment);
-            
+
             //update rm stocks
             total = sales + compliment;
             ingredients = rbean.getIngredients();
@@ -305,37 +400,19 @@ public class SALES extends javax.swing.JFrame {
         if(inputLockDown()){
             inputPanel.setVisible(false);
             submitSales.setVisible(false);
-        }
         //this.setVisible(false);
         //main.setVisible(true);
-        
     }//GEN-LAST:event_submitSalesActionPerformed
-
+    }
     private void salesFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_salesFieldActionPerformed
-
-    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
-        try {
-            int rselect = recipeTable.getSelectedRow();
-
-            //recipeIDLabel.setText(String.valueOf(r.getRecipeID()));
-            nameLabel.setText(recipeTable.getModel().getValueAt(rselect, 1).toString());
-            salesField.setText(recipeTable.getModel().getValueAt(rselect, 2).toString());
-            complimentaryField.setText(recipeTable.getModel().getValueAt(rselect, 3).toString());
-
-            //CategoryBean ct = (CategoryBean)categoryBox.getSelectedItem();
-            //System.out.println("SELECTED " + ct.getCategoryID());
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_recipeTableMouseClicked
 
     private void enterSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterSalesActionPerformed
         String sales = salesField.getText().toString();
         String compliment = complimentaryField.getText().toString();
         int rselected = recipeTable.getSelectedRow();
-        
+
         if (rselected < 0) {
             return;
         }
@@ -345,7 +422,7 @@ public class SALES extends javax.swing.JFrame {
         } else {
             errorLabel.setVisible(true);
         }
-        
+
         if(isNumber(compliment)){
             recipeTable.getModel().setValueAt(compliment, rselected, 3);
             errorLabel1.setVisible(false);
@@ -353,10 +430,9 @@ public class SALES extends javax.swing.JFrame {
             errorLabel1.setVisible(true);
         }
     }//GEN-LAST:event_enterSalesActionPerformed
-
+/*
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-       this.setVisible(false);
-       main.setVisible(true);
+       
     }//GEN-LAST:event_backBtnActionPerformed
     /*** <--- CLARK'S CODE STARTS HERE ---> ***/
     
@@ -411,7 +487,26 @@ public class SALES extends javax.swing.JFrame {
     }
     
     /*** <--- CLARK'S CODE ENDS HERE ---> ***/
-    
+    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
+        try {
+            int rselect = recipeTable.getSelectedRow();
+
+            //recipeIDLabel.setText(String.valueOf(r.getRecipeID()));
+            nameLabel.setText(recipeTable.getModel().getValueAt(rselect, 1).toString());
+            salesField.setText(recipeTable.getModel().getValueAt(rselect, 2).toString());
+            complimentaryField.setText(recipeTable.getModel().getValueAt(rselect, 3).toString());
+
+            //CategoryBean ct = (CategoryBean)categoryBox.getSelectedItem();
+            //System.out.println("SELECTED " + ct.getCategoryID());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_recipeTableMouseClicked
+
+    private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_submitBtnActionPerformed
+
     /*** <--- JANERYS CODE STARTS HERE ---> ***/
     
     //check if number
@@ -642,6 +737,7 @@ class TableTransferHandler extends StringTransferHandler {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
+    private javax.swing.JButton backBtn2;
     private javax.swing.JTextField complimentaryField;
     private javax.swing.JButton enterSales;
     private javax.swing.JLabel errorLabel;
@@ -653,10 +749,15 @@ class TableTransferHandler extends StringTransferHandler {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable2;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTable recipeTable;
     private javax.swing.JTextField salesField;
+    private javax.swing.JButton submitBtn;
     private javax.swing.JButton submitSales;
     // End of variables declaration//GEN-END:variables
 }
