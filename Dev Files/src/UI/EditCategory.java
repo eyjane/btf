@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,11 +33,10 @@ public class EditCategory extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         cm = c;
         initComponents();
-        cat = cm.getCategory();
-        nameField.setText(cat.getCategory());
+        prepareTable();
         errorLabel.setVisible(false);
         errorLabel1.setVisible(false);
-        ViewAllRecipes(cat.getaRecipes());
+        cat = null;
     }
     
     public DefaultTableModel initializeRecipeTable(){
@@ -58,6 +59,27 @@ public class EditCategory extends javax.swing.JFrame {
            }
        }
        recipeTable.setModel(defaultModel);
+    }
+    
+    public void prepareTable(){
+        categoryTable.setModel(cm.getCMTable());
+        categoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+        public void valueChanged(ListSelectionEvent event) {
+            try {
+            DefaultTableModel defaultTableModel = (DefaultTableModel) categoryTable.getModel();
+            if (categoryTable.getSelectedRow() >= 0) { 
+                cat = ctImp.getCategory((int) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0));
+                cat.setaRecipes(rcImp.getRecipeByCategory(cat));
+                nameField.setText(cat.getCategory());
+                ViewAllRecipes(cat.getaRecipes());
+            } else {
+                cat = null;
+              }
+            } catch (Exception err) {
+                err.printStackTrace();
+            } 
+        }
+       });
     }
     
     public boolean authenticateCategory(){
@@ -109,8 +131,11 @@ public class EditCategory extends javax.swing.JFrame {
         };
         editRecipes = new javax.swing.JButton();
         errorLabel1 = new javax.swing.JLabel();
-        btnCancel = new javax.swing.JButton();
         saveCategory = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        categoryTable = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -135,18 +160,24 @@ public class EditCategory extends javax.swing.JFrame {
         nameLabel.setText(" ");
         getContentPane().add(nameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(342, 243, 0, -1));
 
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         jLabel2.setText("Name: ");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 38, -1, -1));
 
         jLabel6.setText("Recipes:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 73, -1, -1));
 
         nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nameFieldActionPerformed(evt);
             }
         });
+        jPanel1.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 35, 225, -1));
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel.setText("ERROR: Required field.");
+        jPanel1.add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(291, 38, -1, -1));
 
         recipeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -176,22 +207,19 @@ public class EditCategory extends javax.swing.JFrame {
         recipeTable.getColumnModel().getColumn(3).setResizable(false);
         recipeTable.getColumnModel().getColumn(4).setResizable(false);
 
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 93, 476, 108));
+
         editRecipes.setText("Edit Recipes");
         editRecipes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editRecipesActionPerformed(evt);
             }
         });
+        jPanel1.add(editRecipes, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 207, -1, -1));
 
         errorLabel1.setForeground(new java.awt.Color(255, 0, 51));
         errorLabel1.setText("Duplicate name.");
-
-        btnCancel.setText("Cancel");
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
-            }
-        });
+        jPanel1.add(errorLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(409, 38, -1, -1));
 
         saveCategory.setText("Save Category");
         saveCategory.addActionListener(new java.awt.event.ActionListener() {
@@ -199,66 +227,42 @@ public class EditCategory extends javax.swing.JFrame {
                 saveCategoryActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel6))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(errorLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(errorLabel1)))
-                        .addGap(0, 14, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(saveCategory)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCancel)))))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(editRecipes)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorLabel)
-                    .addComponent(errorLabel1))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editRecipes)
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancel)
-                    .addComponent(saveCategory))
-                .addContainerGap())
-        );
+        jPanel1.add(saveCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(381, 241, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 510, 290));
+
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, -1));
+
+        jLabel9.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        jLabel9.setText("Choose a category here");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 50, -1, -1));
+
+        categoryTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Name"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        categoryTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(categoryTable);
+
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 90, 350, 260));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -339,15 +343,18 @@ public class EditCategory extends javax.swing.JFrame {
     }//GEN-LAST:event_recipeTableMouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
+    private javax.swing.JTable categoryTable;
     private javax.swing.JButton editRecipes;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel errorLabel1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField nameField;
     private javax.swing.JLabel nameLabel;

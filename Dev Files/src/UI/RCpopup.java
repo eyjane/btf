@@ -34,7 +34,7 @@ public class RCpopup extends javax.swing.JFrame {
         //ViewCatRecipes();
     }
     
-    public RCpopup(AddCategory c, ArrayList<RecipeBean> rb) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    /*public RCpopup(AddCategory c, ArrayList<RecipeBean> rb) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
@@ -45,10 +45,11 @@ public class RCpopup extends javax.swing.JFrame {
         //jLabel3.setText("Recipes of category " + c.getCategory() + ":");
         ViewAllRecipes();
         //ViewCatRecipes();
-    }
+    }*/
     
     public DefaultTableModel initializeRecipeTable(){
         DefaultTableModel defaultTableModel = new DefaultTableModel();
+        defaultTableModel.addColumn("ID");
         defaultTableModel.addColumn("Name");
         defaultTableModel.addColumn("Cost");
         defaultTableModel.addColumn("Stock");
@@ -66,11 +67,13 @@ public class RCpopup extends javax.swing.JFrame {
                }
            }
            if(flag == true){
-                defaultModel.addRow(new Object[] {a.get(i).getRecipe(),               
+                defaultModel.addRow(new Object[] {a.get(i).getRecipeID(), a.get(i).getRecipe(),               
                 a.get(i).getCost(), a.get(i).getStock(), a.get(i).getRcstatus()});
            }
        }
        recipeTable.setModel(defaultModel);
+       recipeTable.getColumnModel().getColumn(0).setMinWidth(0);
+       recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
     
     public void addRecipe(int r){
@@ -192,13 +195,8 @@ public class RCpopup extends javax.swing.JFrame {
         } else {
             addRecipe(select);
             try{
-                if (ac != null) {
-                    ac.setVisible(true);
-                    ac.ViewAllRecipes(ar);
-                } else {
-                    ec.setVisible(true);
-                    ec.ViewAllRecipes(ar);
-                }
+                ec.setVisible(true);
+                ec.ViewAllRecipes(ar);
                 dispose();
             }catch(Exception e){
                 e.printStackTrace();
@@ -207,11 +205,7 @@ public class RCpopup extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddRecipeActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        if (ac != null) {
-            ac.setVisible(true);
-        } else {
-            ec.setVisible(true);
-        }
+        ec.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 

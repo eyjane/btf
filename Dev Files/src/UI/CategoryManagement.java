@@ -6,16 +6,20 @@ import DAO.Implementation.CategoryDAOImplementation;
 import DAO.Interface.CategoryDAOInterface;
 import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Interface.RecipeDAOInterface;
+import java.awt.Component;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -37,12 +41,7 @@ public class CategoryManagement extends javax.swing.JFrame {
         ctImp = new CategoryDAOImplementation();
         selectedCat = new CategoryBean();
         selectedRC = new RecipeBean();
-/*        errorLabel1.setVisible(false);
-        errorLabel2.setVisible(false);
-        btnUpdateCategory.setEnabled(false);
-        btnAddRecipe.setEnabled(false);
-        btnDeleteRecipe.setEnabled(false);
- */       ViewAllCategories();
+        ViewAllCategories();
     }
     
     public DefaultTableModel initializeTableModel() {
@@ -70,6 +69,10 @@ public class CategoryManagement extends javax.swing.JFrame {
             defaultModel.addRow(new Object[] {c.getCategoryID(), c.getCategory()});
        }
        categoryTable.setModel(defaultModel);
+       categoryTable.getColumnModel().getColumn(0).setMinWidth(0);
+       categoryTable.getColumnModel().getColumn(0).setMaxWidth(0);
+       adjustTable(categoryTable);
+       
        categoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
         public void valueChanged(ListSelectionEvent event) {
             try {
@@ -324,10 +327,9 @@ public class CategoryManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddCategoryActionPerformed
 
     private void btnEditCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditCategoryActionPerformed
-        if(selectedCat != null){
-            try {
-                EditCategory ec = new EditCategory(this);
-                ec.setVisible(true);
+        try {
+                EditCategory c = new EditCategory(this);
+                c.setVisible(true);
                 this.setVisible(false);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
@@ -338,8 +340,6 @@ public class CategoryManagement extends javax.swing.JFrame {
             } catch (UnsupportedLookAndFeelException ex) {
                 Logger.getLogger(CategoryManagement.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else
-                JOptionPane.showMessageDialog(null, "Please select an entry to edit.", "Blank Form", JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_btnEditCategoryActionPerformed
 
     private void btnDeleteCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteCategoryActionPerformed
@@ -369,6 +369,30 @@ public class CategoryManagement extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDeleteCategoryActionPerformed
 
+    /* ADJUST TABLE TO MAX WIDTH*/
+    private void adjustTable(JTable table) {
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = tableColumn.getMaxWidth();
+
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+
+                //  We've exceeded the maximum width, no need to check other rows
+                if (preferredWidth >= maxWidth) {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddCategory;
     private javax.swing.JButton btnBack;
