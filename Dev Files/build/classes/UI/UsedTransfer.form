@@ -47,8 +47,7 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="jScrollPane1" max="32767" attributes="0"/>
-                      <Component id="jPanel2" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="606" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           <Component id="backBtn" min="-2" max="-2" attributes="0"/>
@@ -71,9 +70,7 @@
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="88" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                  <Component id="jPanel2" max="32767" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace pref="296" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="submitUsed" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="backBtn" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -166,115 +163,6 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backBtnActionPerformed"/>
           </Events>
         </Component>
-        <Container class="javax.swing.JPanel" name="jPanel2">
-          <Properties>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="Reduce Quantity"/>
-              </Border>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value=""/>
-          </Properties>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="countLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="typeLabel" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="type" max="32767" attributes="0"/>
-                          <Component id="rmName" max="32767" attributes="0"/>
-                          <Component id="rmCount" pref="123" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="errorName" min="-2" max="-2" attributes="0"/>
-                          <Component id="errorCount" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="112" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="rmName" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="errorName" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="countLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="rmCount" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="errorCount" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="type" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="typeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="102" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="javax.swing.JLabel" name="nameLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Name:"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="rmName">
-            </Component>
-            <Component class="javax.swing.JLabel" name="countLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Amount:"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="rmCount">
-            </Component>
-            <Component class="javax.swing.JLabel" name="errorName">
-              <Properties>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="1" green="0" red="ff" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="ERROR: Required Field"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="errorCount">
-              <Properties>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="1" green="0" red="ff" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="ERROR: Required field. Please input valid number."/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JComboBox" name="type">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="3">
-                    <StringItem index="0" value="Used"/>
-                    <StringItem index="1" value="Transferred"/>
-                    <StringItem index="2" value="Wastage"/>
-                  </StringArray>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="typeLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Type:"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
       </SubComponents>
     </Container>
   </SubComponents>

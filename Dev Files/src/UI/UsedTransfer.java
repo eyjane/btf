@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
@@ -110,15 +112,6 @@ public class UsedTransfer extends javax.swing.JFrame {
         rmTable = new javax.swing.JTable();
         submitUsed = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        nameLabel = new javax.swing.JLabel();
-        rmName = new javax.swing.JTextField();
-        countLabel = new javax.swing.JLabel();
-        rmCount = new javax.swing.JTextField();
-        errorName = new javax.swing.JLabel();
-        errorCount = new javax.swing.JLabel();
-        type = new javax.swing.JComboBox();
-        typeLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -175,64 +168,6 @@ public class UsedTransfer extends javax.swing.JFrame {
             }
         });
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Reduce Quantity"));
-        jPanel2.setToolTipText("");
-
-        nameLabel.setText("Name:");
-
-        countLabel.setText("Amount:");
-
-        errorName.setForeground(new java.awt.Color(255, 0, 1));
-        errorName.setText("ERROR: Required Field");
-
-        errorCount.setForeground(new java.awt.Color(255, 0, 1));
-        errorCount.setText("ERROR: Required field. Please input valid number.");
-
-        type.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Used", "Transferred", "Wastage" }));
-
-        typeLabel.setText("Type:");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nameLabel)
-                    .addComponent(countLabel)
-                    .addComponent(typeLabel))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(type, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(rmName)
-                    .addComponent(rmCount, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(errorName)
-                    .addComponent(errorCount))
-                .addContainerGap(112, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nameLabel)
-                    .addComponent(rmName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorName))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(countLabel)
-                    .addComponent(rmCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorCount))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(typeLabel))
-                .addContainerGap(102, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -240,8 +175,7 @@ public class UsedTransfer extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(backBtn)
@@ -259,9 +193,7 @@ public class UsedTransfer extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 296, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(submitUsed)
                     .addComponent(backBtn))
@@ -289,85 +221,79 @@ public class UsedTransfer extends javax.swing.JFrame {
     private void submitUsedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitUsedActionPerformed
         // TODO add your handling code here:
         
+        JFrame frame = new JFrame("Error");
+        int ans = JOptionPane.showConfirmDialog(rootPane, frame, "Are you sure that you want to submit? You may only submit once a day.", JOptionPane.YES_NO_OPTION);
+        
+        if (ans == JOptionPane.YES_OPTION) {
+        
         boolean submit = true;
-        /*
-        if(rmName.getText().toString().isEmpty()) {
-            
-            errorName.setVisible(true);
-            submit = false;
-        }
         
-        if(!rmCount.getText().toString().isEmpty()) {
-            
-            if(!isNumber(rmCount.getText().toString())) {
-            
-                errorCount.setVisible(true);
-                submit = false;
-            
-            }
-            
-        }
-        else {
-            
-           errorCount.setVisible(true);
-           submit = false; 
-        }*/
+            // VALIDATE INPUT
+            int rows = rmTable.getRowCount();
+            int c = 0;
         
-        // VALIDATE INPUT
-        int rows = rmTable.getRowCount();
-        int c = 0;
-        
-        while(c < rows && submit) {
+            while(c < rows && submit) {
             
-            for (int d = 2; d <= 4 && submit; d++) {
+                for (int d = 2; d <= 4 && submit; d++) {
                 
-                if(rmTable.getValueAt(c,d).toString().isEmpty()) {
-                    submit = false;
+                    if(rmTable.getValueAt(c,d).toString().isEmpty() || Math.signum(Float.parseFloat(rmTable.getValueAt(c,d).toString())) == -1) {
+                        submit = false;
+                    }
+                
                 }
-                
+                c++;
+            
             }
-            c++;
             
-        }
+            if(submit) {
             
-        if(submit) {
+                for(int a = 0; a < rows; a++) {
             
-            for(int a = 0; a < rows; a++) {
-            
-                for (int b = 2; b <= 4; b++) {
+                    for (int b = 2; b <= 4; b++) {
                     
-                    RawBean r = new RawBean();
+                        RawBean r = new RawBean();
                     
-                    String name = rmTable.getValueAt(a, 0).toString(); // raw material name
-                    float q = Float.parseFloat(rmTable.getValueAt(a,b).toString());
-                    String type = new String();
-                    if(b == 2) {
-                        type = "used";
-                    }
-                    else if (b == 3) {
-                        type = "transfer";
-                    }
-                    else if(b == 4) {
-                        type = "wastage";
-                    }
+                        String name = rmTable.getValueAt(a, 0).toString(); // raw material name
+                        float q = Float.parseFloat(rmTable.getValueAt(a,b).toString());
+                        String type = new String();
+                        
+                        if(b == 2) {
+                            type = "used";
+                        }
+                        else if (b == 3) {
+                            type = "transfer";
+                        }
+                        else if(b == 4) {
+                            type = "wastage";
+                        }
             
-                    // REDUCE FROM RAW TABLE
+                        // REDUCE FROM RAW TABLE
             
-                    float s = rmImp.getStock(type);
-                    float deduct = s - q;
-                    rmImp.updateStock(name, deduct);
+                        float s = rmImp.getStock(type);
+                        float deduct = s - q;
+                        rmImp.updateStock(name, deduct);
             
-                    // ADD TRANSACTION
-                    TransactionBean t = new TransactionBean();
-                    t.setType(type);
-                    int id = rmImp.getIDbyRaw(name);
-                    r.setRawID(id);
-                    tclmp.addTransaction(t, r, q);
-                
-                    
+                        // ADD TRANSACTION
+                        TransactionBean t = new TransactionBean();
+                        t.setType(type);
+                        int id = rmImp.getIDbyRaw(name);
+                        r.setRawID(id);
+                        tclmp.addTransaction(t, r, q);
+                    }
                 }
-            }
             
+            }
+            else {
+                
+                JFrame frame2 = new JFrame("Error");
+                JOptionPane.showMessageDialog(rootPane, frame2, "Submission Failed.\n\n Please check that all inputs are positive numbers and that no fields are empty.", JOptionPane.ERROR_MESSAGE);
+            
+            }
+        }
+        else if (ans == JOptionPane.NO_OPTION) {
+            
+            JFrame frame3 = new JFrame("");
+            JOptionPane.showMessageDialog(rootPane, frame3, "Submission aborted.", JOptionPane.ERROR_MESSAGE);
             
         }
         
@@ -380,13 +306,7 @@ public class UsedTransfer extends javax.swing.JFrame {
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void rmTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rmTableMouseClicked
-        // TODO add your handling code here:
         
-        int col = rmTable.getSelectedColumn();
-        int row = rmTable.getSelectedRow();
-        
-        String name = rmTable.getValueAt(row, col).toString();
-        rmName.setText(name);
         
     }//GEN-LAST:event_rmTableMouseClicked
 
@@ -451,20 +371,11 @@ public class UsedTransfer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JLabel countLabel;
-    private javax.swing.JLabel errorCount;
-    private javax.swing.JLabel errorName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel nameLabel;
-    private javax.swing.JTextField rmCount;
-    private javax.swing.JTextField rmName;
     private javax.swing.JTable rmTable;
     private javax.swing.JButton submitUsed;
-    private javax.swing.JComboBox type;
-    private javax.swing.JLabel typeLabel;
     // End of variables declaration//GEN-END:variables
 }
     
