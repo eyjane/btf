@@ -20,11 +20,16 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
 import static javax.swing.TransferHandler.COPY_OR_MOVE;
@@ -34,6 +39,14 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -184,7 +197,7 @@ public class SALES extends javax.swing.JFrame {
                         .addComponent(salesField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(errorLabel)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         inputPanelLayout.setVerticalGroup(
             inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,7 +260,7 @@ public class SALES extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void submitSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitSalesActionPerformed
-        int rcount = recipeTable.getRowCount();
+       /* int rcount = recipeTable.getRowCount();
         int i,j;
         
         for(i=0; i<rcount;i++){
@@ -288,10 +301,11 @@ public class SALES extends javax.swing.JFrame {
                 rwImp.editRaw(rwbean);
             }
             
+        } */
+        if(inputLockDown()){
+            inputPanel.setVisible(false);
+            submitSales.setVisible(false);
         }
-        
-        inputPanel.setVisible(false);
-        submitSales.setVisible(false);
         //this.setVisible(false);
         //main.setVisible(true);
         
@@ -344,7 +358,59 @@ public class SALES extends javax.swing.JFrame {
        this.setVisible(false);
        main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
-
+    /*** <--- CLARK'S CODE STARTS HERE ---> ***/
+    
+    public boolean inputLockDown(){
+        boolean flag = false;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = new Date();
+        String curDate = dateFormat.format(d) ;
+        
+        try {
+            String filepath = "btf.xml";
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(filepath);
+            
+            String date = doc.getElementsByTagName("date").item(0).getTextContent();
+            String sales = doc.getElementsByTagName("sales").item(0).getTextContent();
+            System.out.println(date);
+            //System.out.println(sales);
+            if(date.equals(curDate)){
+                if(sales.equals("0"))
+                    doc.getElementsByTagName("sales").item(0).setTextContent("1");
+                else if(sales.equals("1")) {
+                    doc.getElementsByTagName("sales").item(0).setTextContent("2");
+                    flag = true;
+                }
+                else if(sales.equals("2")) {
+                    flag = true;
+                    return flag;
+                }
+            } else {
+                if(sales.equals("2")) {
+                    doc.getElementsByTagName("date").item(0).setTextContent(curDate);
+                    doc.getElementsByTagName("sales").item(0).setTextContent("1");
+                }
+                else if(sales.equals("1")) {
+                    doc.getElementsByTagName("sales").item(0).setTextContent("2");
+                    flag = true;
+                }
+            }
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(filepath));
+            transformer.transform(source, result);
+                        
+        } catch (Exception e) {
+             e.printStackTrace();
+        } 
+        
+        return flag;
+    }
+    
+    /*** <--- CLARK'S CODE ENDS HERE ---> ***/
     
     /*** <--- JANERYS CODE STARTS HERE ---> ***/
     

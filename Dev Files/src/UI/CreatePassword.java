@@ -1,6 +1,9 @@
 package UI;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.*;
@@ -120,6 +123,9 @@ public class CreatePassword extends javax.swing.JFrame {
     private void btnCreatePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreatePasswordActionPerformed
         String newpwd = new String(newPasswordField.getPassword());
         String retpwd = new String(retypePasswordField.getPassword());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = new Date();
+        String curDate = dateFormat.format(d) ;
         
         //authenticate password
         if(authenticateNewPasswords(newpwd, retpwd) == true){
@@ -134,7 +140,18 @@ public class CreatePassword extends javax.swing.JFrame {
                 Element login = doc.createElement("loginpwd");
                 login.appendChild(doc.createTextNode(newpwd));
                 rootElement.appendChild(login);
-
+                
+                Element inputlockdown = doc.createElement("inputlockdown");
+                rootElement.appendChild(inputlockdown);
+                
+                Element date = doc.createElement("date");
+                date.appendChild(doc.createTextNode(curDate));
+                inputlockdown.appendChild(date);
+                
+                Element sales = doc.createElement("sales");
+                sales.appendChild(doc.createTextNode("0"));
+                inputlockdown.appendChild(sales);
+                
                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
                 Transformer transformer = transformerFactory.newTransformer();
                 DOMSource source = new DOMSource(doc);
