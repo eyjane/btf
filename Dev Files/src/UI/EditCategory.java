@@ -90,20 +90,26 @@ public class EditCategory extends javax.swing.JFrame {
     public boolean authenticateCategory(){
         boolean flag = true;
         ArrayList<CategoryBean> c = ctImp.getAllCategory();
-        if(nameField.getText().equals("")) {
-            errorLabel.setVisible(true);
+        int select = categoryTable.getSelectedRow();
+        if (select <= 0) {
+            JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
             flag = false;
-        }
-        else {
-            cat.setCategory(nameField.getText());
-            errorLabel.setVisible(false);
-            errorLabel1.setVisible(false);
-            for(int i = 0; i < c.size(); i++){
-                if(nameField.getText().equalsIgnoreCase(c.get(i).getCategory()) && cat.getCategoryID() != c.get(i).getCategoryID()) {
-                    errorLabel.setVisible(true);
-                    errorLabel1.setVisible(true);
-                    flag = false;
-                } 
+        } else{
+            if(nameField.getText().equals("")) {
+                errorLabel.setVisible(true);
+                flag = false;
+            }
+            else {
+                cat.setCategory(nameField.getText());
+                errorLabel.setVisible(false);
+                errorLabel1.setVisible(false);
+                for(int i = 0; i < c.size(); i++){
+                    if(nameField.getText().equalsIgnoreCase(c.get(i).getCategory()) && cat.getCategoryID() != c.get(i).getCategoryID()) {
+                        errorLabel.setVisible(true);
+                        errorLabel1.setVisible(true);
+                        flag = false;
+                    } 
+                }
             }
         }
         return flag;
@@ -172,6 +178,12 @@ public class EditCategory extends javax.swing.JFrame {
 
         jLabel6.setText("Recipes:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 73, -1, -1));
+
+        nameField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                nameFieldKeyReleased(evt);
+            }
+        });
         jPanel1.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 35, 225, -1));
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 51));
@@ -321,6 +333,10 @@ public class EditCategory extends javax.swing.JFrame {
         cm.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void nameFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameFieldKeyReleased
+        authenticateCategory();
+    }//GEN-LAST:event_nameFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

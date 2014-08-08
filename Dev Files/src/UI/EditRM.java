@@ -40,9 +40,25 @@ public class EditRM extends javax.swing.JFrame {
         rmTable.setModel(rm.getRMTable());
         rmTable.getColumnModel().getColumn(0).setMinWidth(0);
         rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        
+        rmTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+        public void valueChanged(ListSelectionEvent event) {
+            try {
+            DefaultTableModel defaultTableModel = (DefaultTableModel) rmTable.getModel();
+            if (rmTable.getSelectedRow() >= 0) { 
+                raw = rwImp.getRaw((int) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0));
+                setFields(raw);
+            } else {
+                raw = null;
+              }
+            } catch (Exception err) {
+                err.printStackTrace();
+            } 
+        }
+       });
     }
     
-   public boolean authenticateRM(){
+   /*public boolean authenticateRM(){
         boolean flag = true;
         
         if(nameField.getText().equals("")) {
@@ -116,7 +132,7 @@ public class EditRM extends javax.swing.JFrame {
         }
         raw.setRmstatus("available");
         return flag;
-    }
+    } */
     
    public void setFields(RawBean r){
         nameField.setText(r.getRaw());
@@ -209,8 +225,26 @@ public class EditRM extends javax.swing.JFrame {
 
         jLabel4.setText("Stock:");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 108, -1, -1));
+
+        nameField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                nameFieldKeyReleased(evt);
+            }
+        });
         jPanel2.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 53, 109, -1));
+
+        priceField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                priceFieldKeyReleased(evt);
+            }
+        });
         jPanel2.add(priceField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 79, 109, -1));
+
+        stockField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                stockFieldKeyReleased(evt);
+            }
+        });
         jPanel2.add(stockField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 105, 109, -1));
 
         jLabel10.setText("Critical:");
@@ -218,7 +252,19 @@ public class EditRM extends javax.swing.JFrame {
 
         jLabel12.setText("Unit of Measurement:");
         jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
+
+        criticalField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                criticalFieldKeyReleased(evt);
+            }
+        });
         jPanel2.add(criticalField, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 131, 109, -1));
+
+        uomField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                uomFieldKeyReleased(evt);
+            }
+        });
         jPanel2.add(uomField, new org.netbeans.lib.awtextra.AbsoluteConstraints(144, 157, 79, -1));
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 51));
@@ -301,8 +347,8 @@ public class EditRM extends javax.swing.JFrame {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         if(raw != null){
-            if(authenticateRM()){
                 try{
+                    raw.setRmstatus("available");
                     rwImp.editRaw(raw);
                     JOptionPane.showMessageDialog(null, "Raw material successfully edited!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     rm.setVisible(true);
@@ -312,9 +358,108 @@ public class EditRM extends javax.swing.JFrame {
                 } catch(Exception err){
                     err.printStackTrace();
                 }
-            }
         }
     }//GEN-LAST:event_btnEditActionPerformed
+
+    private void nameFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameFieldKeyReleased
+        int select = rmTable.getSelectedRow();
+        if (select <= 0) {
+            JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+        } else{
+            if(nameField.getText().equals("")) {
+                errorLabel.setVisible(true);
+            }
+            else {
+                errorLabel.setVisible(false);
+                errorLabel1.setVisible(false);
+                raw.setRaw(nameField.getText());
+                ArrayList<RawBean> rList = new ArrayList<RawBean>();
+                rList = rwImp.getRawByStatus("available");
+                for(int i = 0; i < rList.size(); i++){
+                    if(nameField.getText().equalsIgnoreCase(rList.get(i).getRaw())
+                            && raw.getRawID() != rList.get(i).getRawID()) {
+                         errorLabel1.setVisible(true);
+                         errorLabel.setVisible(true);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_nameFieldKeyReleased
+
+    private void priceFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_priceFieldKeyReleased
+        int select = rmTable.getSelectedRow();
+        if (select <= 0) {
+            JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+        } else{
+            if(!priceField.getText().equals("") && isNumber(priceField.getText())) {
+                if(Float.parseFloat(priceField.getText()) > 0) {
+                    errorLabel2.setVisible(false);
+                    raw.setPrice(Float.parseFloat(priceField.getText()));
+                }
+                else {
+                    errorLabel2.setVisible(true);
+                }
+            }
+            else {
+                errorLabel2.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_priceFieldKeyReleased
+
+    private void stockFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_stockFieldKeyReleased
+        int select = rmTable.getSelectedRow();
+        if (select <= 0) {
+            JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+        } else{
+            if(!stockField.getText().equals("") && isNumber(stockField.getText())) {
+                if(Float.parseFloat(stockField.getText()) > 0) {
+                    errorLabel3.setVisible(false);
+                    raw.setStock(Float.parseFloat(stockField.getText()));
+                }
+                else {
+                    errorLabel3.setVisible(true);
+                }
+            }
+            else {
+                errorLabel3.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_stockFieldKeyReleased
+
+    private void criticalFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_criticalFieldKeyReleased
+        int select = rmTable.getSelectedRow();
+        if (select <= 0) {
+            JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+        } else{
+            if(!criticalField.getText().equals("") && isNumber(criticalField.getText())) {
+                if(Float.parseFloat(criticalField.getText()) > 0) {
+                    errorLabel4.setVisible(false);
+                    raw.setCritical(Float.parseFloat(criticalField.getText()));
+                }
+                else {
+                    errorLabel4.setVisible(true);
+                }
+            }
+            else {
+                errorLabel4.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_criticalFieldKeyReleased
+
+    private void uomFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_uomFieldKeyReleased
+        int select = rmTable.getSelectedRow();
+        if (select <= 0) {
+            JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+        } else{
+            if(uomField.getText().equals("") || isNumber(uomField.getText())) {
+                errorLabel5.setVisible(true);
+            }
+            else {
+                errorLabel5.setVisible(false);
+                raw.setUom(uomField.getText());
+            }
+        }
+    }//GEN-LAST:event_uomFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;

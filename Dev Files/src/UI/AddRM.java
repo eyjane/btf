@@ -40,7 +40,7 @@ public class AddRM extends javax.swing.JFrame {
        rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
    }
    
-   public boolean authenticateRM(){
+   /*public boolean authenticateRM(){
         boolean flag = true;
         raw = new RawBean();
         
@@ -115,7 +115,7 @@ public class AddRM extends javax.swing.JFrame {
         }
         raw.setRmstatus("available");
         return flag;
-    }
+    } */
     
     public boolean isNumber(String s) {
         try {
@@ -174,8 +174,26 @@ public class AddRM extends javax.swing.JFrame {
 
         jLabel4.setText("Stock:");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 83, -1, -1));
+
+        nameField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                nameFieldKeyReleased(evt);
+            }
+        });
         jPanel2.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 109, -1));
+
+        priceField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                priceFieldKeyReleased(evt);
+            }
+        });
         jPanel2.add(priceField, new org.netbeans.lib.awtextra.AbsoluteConstraints(111, 54, 109, -1));
+
+        stockField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                stockFieldKeyReleased(evt);
+            }
+        });
         jPanel2.add(stockField, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 80, 109, -1));
 
         jLabel10.setText("Critical:");
@@ -183,7 +201,19 @@ public class AddRM extends javax.swing.JFrame {
 
         jLabel12.setText("Unit of Measurement:");
         jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 133, -1, -1));
+
+        criticalField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                criticalFieldKeyReleased(evt);
+            }
+        });
         jPanel2.add(criticalField, new org.netbeans.lib.awtextra.AbsoluteConstraints(111, 104, 109, -1));
+
+        uomField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                uomFieldKeyReleased(evt);
+            }
+        });
         jPanel2.add(uomField, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 79, -1));
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 51));
@@ -287,8 +317,8 @@ public class AddRM extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-      if(authenticateRM()){
             try{
+                raw.setRmstatus("available");
                 rwImp.addRaw(raw);
                 raw.setRawID(rwImp.getLatestAddedID());
                 JOptionPane.showMessageDialog(null, "Raw material successfully added!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -298,13 +328,84 @@ public class AddRM extends javax.swing.JFrame {
             } catch(Exception err){
                 err.printStackTrace();
             }
-        }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
        rm.setVisible(true);
        dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void nameFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameFieldKeyReleased
+       if(nameField.getText().equals("")) {
+            errorLabel.setVisible(true);
+        }
+        else {
+            errorLabel.setVisible(false);
+            errorLabel1.setVisible(false);
+            raw.setRaw(nameField.getText());
+            ArrayList<RawBean> rList = new ArrayList<RawBean>();
+            rList = rwImp.getRawByStatus("available");
+            for(int i = 0; i < rList.size(); i++){
+                if(nameField.getText().equalsIgnoreCase(rList.get(i).getRaw())) {
+                        //&& Integer.parseInt(idField.getText()) != rwImp.getAllRaw().get(i).getRawID()) {
+                     errorLabel1.setVisible(true);
+                     errorLabel.setVisible(true);
+                }
+            }
+        }
+    }//GEN-LAST:event_nameFieldKeyReleased
+
+    private void priceFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_priceFieldKeyReleased
+        if(!priceField.getText().equals("") && isNumber(priceField.getText())) {
+            if(Float.parseFloat(priceField.getText()) > 0) {
+                errorLabel2.setVisible(false);
+                raw.setPrice(Float.parseFloat(priceField.getText()));
+            }
+            else {
+                errorLabel2.setVisible(true);
+            }
+        }
+        else 
+            errorLabel2.setVisible(true);
+    }//GEN-LAST:event_priceFieldKeyReleased
+
+    private void stockFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_stockFieldKeyReleased
+        if(!stockField.getText().equals("") && isNumber(stockField.getText())) {
+            if(Float.parseFloat(stockField.getText()) > 0) {
+                errorLabel3.setVisible(false);
+                raw.setStock(Float.parseFloat(stockField.getText()));
+            }
+            else {
+                errorLabel3.setVisible(true);
+            }
+        }
+        else
+            errorLabel3.setVisible(true);
+    }//GEN-LAST:event_stockFieldKeyReleased
+
+    private void criticalFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_criticalFieldKeyReleased
+        if(!criticalField.getText().equals("") && isNumber(criticalField.getText())) {
+            if(Float.parseFloat(criticalField.getText()) > 0) {
+                errorLabel4.setVisible(false);
+                raw.setCritical(Float.parseFloat(criticalField.getText()));
+            }
+            else {
+                errorLabel4.setVisible(true);
+            }
+        }
+        else 
+            errorLabel4.setVisible(true);
+    }//GEN-LAST:event_criticalFieldKeyReleased
+
+    private void uomFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_uomFieldKeyReleased
+        if(uomField.getText().equals("") || isNumber(uomField.getText())) {
+            errorLabel5.setVisible(true);
+        }
+        else {
+            errorLabel5.setVisible(false);
+            raw.setUom(uomField.getText());
+        }
+    }//GEN-LAST:event_uomFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;

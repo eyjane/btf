@@ -98,6 +98,12 @@ public class AddCategory extends javax.swing.JFrame {
 
         jLabel3.setText("Name:");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+
+        nameField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                nameFieldKeyReleased(evt);
+            }
+        });
         jPanel2.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 125, -1));
 
         errorLabel1.setForeground(new java.awt.Color(255, 0, 51));
@@ -206,6 +212,10 @@ public class AddCategory extends javax.swing.JFrame {
        cm.setVisible(true);
        dispose();
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void nameFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameFieldKeyReleased
+        authenticateCategory();
+    }//GEN-LAST:event_nameFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddCategory;
