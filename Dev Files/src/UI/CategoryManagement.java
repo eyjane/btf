@@ -26,6 +26,7 @@ public class CategoryManagement extends javax.swing.JFrame {
         private RecipeDAOInterface rcImp;
         private CategoryBean selectedCat;
         private RecipeBean selectedRC;
+        private DefaultTableModel defaultModel;
     
     //<--- CLARK'S CODE STARTS HERE --->
     public CategoryManagement() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
@@ -62,7 +63,7 @@ public class CategoryManagement extends javax.swing.JFrame {
     }
     
     public void ViewAllCategories(){
-       DefaultTableModel defaultModel = initializeTableModel();
+       defaultModel = initializeTableModel();
        CategoryBean c;
        for (int i = 0; i < ctImp.getAllCategory().size(); i++) {
             c = ctImp.getAllCategory().get(i);
@@ -79,7 +80,7 @@ public class CategoryManagement extends javax.swing.JFrame {
                 selectedCat = ctImp.getCategory((int) (defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0)));
                 //btnUpdateCategory.setEnabled(true);
                 //btnAddRecipe.setEnabled(true);
-                btnAddCategory.setEnabled(false);    
+                //btnAddCategory.setEnabled(false);    
                 /*if(selectedCat.getCategoryID() == 1) 
                     btnDeleteRecipe.setEnabled(false);
                 else
@@ -93,6 +94,10 @@ public class CategoryManagement extends javax.swing.JFrame {
         }
        });
             
+    }
+    
+    public DefaultTableModel getCMTable(){
+        return defaultModel;
     }
     
     /*public void ViewAllRecipes(CategoryBean c){
