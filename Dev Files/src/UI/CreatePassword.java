@@ -152,6 +152,10 @@ public class CreatePassword extends javax.swing.JFrame {
                 sales.appendChild(doc.createTextNode("0"));
                 inputlockdown.appendChild(sales);
                 
+                Element actual = doc.createElement("actual");
+                sales.appendChild(doc.createTextNode("0"));
+                inputlockdown.appendChild(actual);
+                
                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
                 Transformer transformer = transformerFactory.newTransformer();
                 DOMSource source = new DOMSource(doc);

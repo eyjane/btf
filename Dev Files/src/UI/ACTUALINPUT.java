@@ -268,15 +268,15 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
             
-            String sales = doc.getElementsByTagName("sales").item(0).getTextContent();
+            String actual = doc.getElementsByTagName("actual").item(0).getTextContent();
             //System.out.println(sales);
-                if(sales.equals("0"))
-                    doc.getElementsByTagName("sales").item(0).setTextContent("1");
-                else if(sales.equals("1")) {
-                    doc.getElementsByTagName("sales").item(0).setTextContent("2");
+                if(actual.equals("0"))
+                    doc.getElementsByTagName("actual").item(0).setTextContent("1");
+                else if(actual.equals("1")) {
+                    doc.getElementsByTagName("actual").item(0).setTextContent("2");
                     flag = true;
                 }
-                else if(sales.equals("2")) {
+                else if(actual.equals("2")) {
                     flag = true;
                     return flag;
                 }

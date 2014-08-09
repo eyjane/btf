@@ -479,6 +479,7 @@ public class EODTab extends javax.swing.JFrame {
             
             doc.getElementsByTagName("date").item(0).setTextContent(curDate);
             doc.getElementsByTagName("sales").item(0).setTextContent("0");
+            doc.getElementsByTagName("actual").item(0).setTextContent("0");
             
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
