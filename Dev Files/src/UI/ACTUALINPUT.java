@@ -13,7 +13,11 @@ import DAO.Interface.TransactionDAOInterface;
 import DAO.Implementation.RawDAOImplementation;
 import DAO.Interface.RawDAOInterface;
 import java.awt.Component;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
@@ -22,6 +26,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -229,7 +240,11 @@ public class ACTUALINPUT extends javax.swing.JFrame {
                 q = Float.parseFloat(inputActual.getValueAt(c, 2).toString());
                 tclmp.actualInput(t, r, q);
             }
-
+            
+            if(inputLockDown()){
+            updateActual.setVisible(false);
+            main.setNextDayBtn();
+            }
         }
 
     }//GEN-LAST:event_updateActualActionPerformed
@@ -239,7 +254,48 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         this.setVisible(false);
        main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
-
+    /*** <--- CLARK'S CODE STARTS HERE ---> ***/
+    
+    public boolean inputLockDown(){
+        boolean flag = false;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = new Date();
+        String curDate = dateFormat.format(d) ;
+        
+        try {
+            String filepath = "btf.xml";
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(filepath);
+            
+            String sales = doc.getElementsByTagName("sales").item(0).getTextContent();
+            //System.out.println(sales);
+                if(sales.equals("0"))
+                    doc.getElementsByTagName("sales").item(0).setTextContent("1");
+                else if(sales.equals("1")) {
+                    doc.getElementsByTagName("sales").item(0).setTextContent("2");
+                    flag = true;
+                }
+                else if(sales.equals("2")) {
+                    flag = true;
+                    return flag;
+                }
+                
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(filepath));
+            transformer.transform(source, result);
+                        
+        } catch (Exception e) {
+             e.printStackTrace();
+        } 
+        
+        return flag;
+    }
+    
+    /*** <--- CLARK'S CODE ENDS HERE ---> ***/
+    
     /*
      *  check if number!
      */

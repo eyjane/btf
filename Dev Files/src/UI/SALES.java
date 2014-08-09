@@ -260,7 +260,7 @@ public class SALES extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void submitSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitSalesActionPerformed
-       /* int rcount = recipeTable.getRowCount();
+        int rcount = recipeTable.getRowCount();
         int i,j;
         
         for(i=0; i<rcount;i++){
@@ -301,7 +301,7 @@ public class SALES extends javax.swing.JFrame {
                 rwImp.editRaw(rwbean);
             }
             
-        } */
+        } 
         if(inputLockDown()){
             inputPanel.setVisible(false);
             submitSales.setVisible(false);
@@ -372,11 +372,8 @@ public class SALES extends javax.swing.JFrame {
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
             
-            String date = doc.getElementsByTagName("date").item(0).getTextContent();
             String sales = doc.getElementsByTagName("sales").item(0).getTextContent();
-            System.out.println(date);
             //System.out.println(sales);
-            if(date.equals(curDate)){
                 if(sales.equals("0"))
                     doc.getElementsByTagName("sales").item(0).setTextContent("1");
                 else if(sales.equals("1")) {
@@ -387,16 +384,7 @@ public class SALES extends javax.swing.JFrame {
                     flag = true;
                     return flag;
                 }
-            } else {
-                if(sales.equals("2")) {
-                    doc.getElementsByTagName("date").item(0).setTextContent(curDate);
-                    doc.getElementsByTagName("sales").item(0).setTextContent("1");
-                }
-                else if(sales.equals("1")) {
-                    doc.getElementsByTagName("sales").item(0).setTextContent("2");
-                    flag = true;
-                }
-            }
+                
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
