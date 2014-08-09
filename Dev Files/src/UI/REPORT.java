@@ -27,7 +27,9 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.chart.ChartPanel;
-
+import org.joda.time.*;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -68,24 +70,37 @@ public class REPORT extends javax.swing.JFrame {
 
     public void GITable() {
        RecipeBean r = new RecipeBean(); 
-       /*DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
-       Date todayDate = new Date();
-       String today = t.format(todayDate);*/
        
-       String today = "2014-07-01";
+       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date sDate = startDate.getDate();
+       String start = t.format(sDate);
        
-       aSales = sImp.getAllSales(today);
+       DateFormat u = new SimpleDateFormat("yyyy-MM-dd");
+       Date eDate = endDate.getDate();
+       
+       DateTimeFormatter dispFmt = DateTimeFormat.forPattern("MMM, dd");
+       DateTimeFormatter compFmt = DateTimeFormat.forPattern("YYYY-MM-dd");
+       
        String cols[] = {"Name", "Gross Income"};
        DefaultTableModel actualTable = new DefaultTableModel(cols,0);
-
-       for(RecipeBean sale : aSales) {
+       LocalDate end = new LocalDate(eDate);
+       for (LocalDate date = new LocalDate(start); date.isBefore(end) || date.isEqual(end); date = date.plusDays(1)) {
+       
+           aSales = sImp.getAllSales(date.toString());
+           float total = 0;
+           for(RecipeBean sale : aSales) {
            
-           r = rcImp.getRecipeBean(sale.getRecipeID());
-           Object[] data = {sale.getRecipe(), sImp.sumSalesByRecipeByDay(r, today)};
+               total = total + sImp.sumSalesByRecipeByDay(r, date.toString(compFmt));
+               
+           }
+           Object[] data = {date.toString(dispFmt), total};
            actualTable.addRow(data);
            grossIncomeTable.setModel(actualTable);
            adjustTable(grossIncomeTable);
+           
        }
+       
+       
       
     }
     
@@ -249,6 +264,10 @@ public class REPORT extends javax.swing.JFrame {
         netIncomeTable = new javax.swing.JTable();
         netPanel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
+        startDate = new org.jdesktop.swingx.JXDatePicker();
+        endDate = new org.jdesktop.swingx.JXDatePicker();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -281,7 +300,7 @@ public class REPORT extends javax.swing.JFrame {
         );
         grossPanelLayout.setVerticalGroup(
             grossPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 329, Short.MAX_VALUE)
+            .addGap(0, 309, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -330,7 +349,7 @@ public class REPORT extends javax.swing.JFrame {
         );
         expensesPanelLayout.setVerticalGroup(
             expensesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 330, Short.MAX_VALUE)
+            .addGap(0, 310, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -379,7 +398,7 @@ public class REPORT extends javax.swing.JFrame {
         );
         netPanelLayout.setVerticalGroup(
             netPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 330, Short.MAX_VALUE)
+            .addGap(0, 310, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -407,7 +426,7 @@ public class REPORT extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 427, Short.MAX_VALUE)
+            .addGap(0, 407, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Variance", jPanel6);
@@ -422,22 +441,51 @@ public class REPORT extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 20, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        startDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startDateActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Start Date:");
+
+        jLabel2.setText("End Date:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66)
+                        .addComponent(jLabel2)
+                        .addGap(31, 31, 31)
+                        .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(40, Short.MAX_VALUE)
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -457,6 +505,10 @@ public class REPORT extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void startDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_startDateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -495,10 +547,13 @@ public class REPORT extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXDatePicker endDate;
     private javax.swing.JPanel expensesPanel;
     private javax.swing.JTable expensesTable;
     private javax.swing.JTable grossIncomeTable;
     private javax.swing.JPanel grossPanel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -511,5 +566,6 @@ public class REPORT extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable netIncomeTable;
     private javax.swing.JPanel netPanel;
+    private org.jdesktop.swingx.JXDatePicker startDate;
     // End of variables declaration//GEN-END:variables
 }
