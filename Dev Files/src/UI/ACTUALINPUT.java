@@ -243,7 +243,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             
             if(inputLockDown()){
             updateActual.setVisible(false);
-            main.setNextDayBtn();
+            //main.setNextDayBtn();
             }
         }
 

@@ -55,7 +55,7 @@ public class EditCategory extends javax.swing.JFrame {
        for (int i = 0; i < catRecipes.size(); i++) {
            if(catRecipes.get(i).getRcstatus().equalsIgnoreCase("available")) {
                defaultModel.addRow(new Object[] {catRecipes.get(i).getRecipeID(), catRecipes.get(i).getRecipe(),               
-               catRecipes.get(i).getCost(), catRecipes.get(i).getStock(), catRecipes.get(i).getRcstatus()});
+               catRecipes.get(i).getCost(), catRecipes.get(i).computeStock(), catRecipes.get(i).getRcstatus()});
            }
        }
        recipeTable.setModel(defaultModel);
