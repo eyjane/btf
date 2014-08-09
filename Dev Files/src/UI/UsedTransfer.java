@@ -14,8 +14,6 @@ import DAO.Implementation.RawDAOImplementation;
 import DAO.Interface.RawDAOInterface;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +21,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -60,7 +57,7 @@ public class UsedTransfer extends javax.swing.JFrame {
             rmTable.setModel(actualTable);
             adjustTable(rmTable);
         }
-        rmTable.setTransferHandler(new dnd());  
+       
     }
     
     private void adjustTable(JTable table){
