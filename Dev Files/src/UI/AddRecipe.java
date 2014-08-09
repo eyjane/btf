@@ -57,7 +57,6 @@ public class AddRecipe extends javax.swing.JFrame {
         nameError.setVisible(false);
         errorLabel2.setVisible(false);
         inError.setVisible(false);
-        errorLabel4.setVisible(false);
         prepareTable();
         prepareCombo();
 
@@ -76,12 +75,10 @@ public class AddRecipe extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         actualLabel = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         nameField = new javax.swing.JTextField();
         costField = new javax.swing.JTextField();
-        stockField = new javax.swing.JTextField();
         categoryBox = new javax.swing.JComboBox();
         jScrollPane2 = new javax.swing.JScrollPane();
         ingredientsTable = new javax.swing.JTable(){
@@ -94,7 +91,6 @@ public class AddRecipe extends javax.swing.JFrame {
         nameError = new javax.swing.JLabel();
         errorLabel2 = new javax.swing.JLabel();
         inError = new javax.swing.JLabel();
-        errorLabel4 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         editIngredients = new javax.swing.JButton();
@@ -117,8 +113,6 @@ public class AddRecipe extends javax.swing.JFrame {
         jLabel2.setText("Name: ");
 
         actualLabel.setText("0.00");
-
-        jLabel4.setText("Stock:");
 
         jLabel5.setText("Category: ");
 
@@ -174,9 +168,6 @@ public class AddRecipe extends javax.swing.JFrame {
         inError.setForeground(new java.awt.Color(255, 0, 51));
         inError.setText("ERROR: Recipe must have at least one ingredient.");
 
-        errorLabel4.setForeground(new java.awt.Color(255, 0, 51));
-        errorLabel4.setText("ERROR: Required field. Please input valid number.");
-
         jLabel7.setText("Cost: ");
 
         jLabel8.setText("Actual Price:");
@@ -215,12 +206,6 @@ public class AddRecipe extends javax.swing.JFrame {
                                 .addComponent(jLabel8)
                                 .addGap(30, 30, 30)
                                 .addComponent(actualLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(40, 40, 40)
-                                .addComponent(stockField, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6)
-                                .addComponent(errorLabel4))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
@@ -268,19 +253,11 @@ public class AddRecipe extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(actualLabel))
-                .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(stockField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(errorLabel4))))
-                .addGap(16, 16, 16)
+                .addGap(50, 50, 50)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(categoryBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -331,7 +308,7 @@ public class AddRecipe extends javax.swing.JFrame {
 
     private void addRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeActionPerformed
         boolean add = true;
-        ArrayList<RecipeBean> avRecipe = rcImp.getAllRecipe();
+        ArrayList<RecipeBean> avRecipe = rcImp.getRecipeByStatus("available");
         int j;
 
         if (!nameField.getText().toString().isEmpty()) {
@@ -372,19 +349,11 @@ public class AddRecipe extends javax.swing.JFrame {
             add = false;
         }
 
-        String stock = stockField.getText().toString();
-        if ((!stockField.getText().isEmpty()) && isNumber(stock) && Float.parseFloat(stock) > 0) {
-            errorLabel4.setVisible(false);
-        } else {
-            errorLabel4.setVisible(true);
-            add = false;
-        }
 
         if (add) {
             RecipeBean r = new RecipeBean();
             r.setRecipe(nameField.getText().toString());
             r.setCost(Float.parseFloat(costField.getText().toString()));
-            r.setStock(Float.parseFloat(stockField.getText().toString()));
             CategoryBean category = (CategoryBean) categoryBox.getSelectedItem();
             r.setCategory(category.getCategoryID());
             r.setRcstatus("available");
@@ -398,7 +367,6 @@ public class AddRecipe extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Recipe successfully added!");
                 nameField.setText("");
                  costField.setText("");
-                 stockField.setText("");
                  categoryBox.setSelectedIndex(0);
                  aIngredient.clear();
                  actualLabel.setText("0.00");
@@ -517,7 +485,7 @@ public class AddRecipe extends javax.swing.JFrame {
         aCategory = catImp.getAllCategory();
         avRecipes = rcImp.getRecipeByStatus("available");
 
-        String cols[] = {"Recipe ID", "Recipe", "Stock", "Actual Price", "Cost", "Category"};
+        String cols[] = {"Recipe ID", "Recipe", "Actual Price", "Cost", "Category"};
         DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
         //System.out.println(avRecipes.get(1).getRecipe());
 
@@ -530,7 +498,7 @@ public class AddRecipe extends javax.swing.JFrame {
                 }
             }
 
-            Object[] data = {r.getRecipeID(), r.getRecipe(), String.format("%.2f", r.getStock()), String.format("%.2f", r.getActualPrice()), String.format("%.2f", r.getCost()), rCategory};
+            Object[] data = {r.getRecipeID(), r.getRecipe(), String.format("%.2f", r.getActualPrice()), String.format("%.2f", r.getCost()), rCategory};
             recipeModel.addRow(data);
         }
 
@@ -625,12 +593,10 @@ public class AddRecipe extends javax.swing.JFrame {
     private javax.swing.JTextField costField;
     private javax.swing.JButton editIngredients;
     private javax.swing.JLabel errorLabel2;
-    private javax.swing.JLabel errorLabel4;
     private javax.swing.JLabel inError;
     private javax.swing.JTable ingredientsTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -642,6 +608,5 @@ public class AddRecipe extends javax.swing.JFrame {
     private javax.swing.JLabel nameError;
     private javax.swing.JTextField nameField;
     private javax.swing.JTable recipeTable;
-    private javax.swing.JTextField stockField;
     // End of variables declaration//GEN-END:variables
 }
