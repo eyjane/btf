@@ -38,6 +38,24 @@ public class RawBean {
         
         return false;
     }
+    
+    public boolean isMedium(){
+        if(stock <= critical*1.5){
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public boolean isHigh(){
+        if(stock <= critical*2){
+            return true;
+        }
+        
+        return false;
+    }
+    
+    
 
     public void setUom(String uom) {
         this.uom = uom;
