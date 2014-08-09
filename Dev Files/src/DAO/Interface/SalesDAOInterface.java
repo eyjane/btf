@@ -5,6 +5,7 @@
  */
 package DAO.Interface;
 
+import Beans.RawBean;
 import Beans.RecipeBean;
 import Beans.SalesBean;
 import java.util.ArrayList;
@@ -35,4 +36,10 @@ public interface SalesDAOInterface {
     
     public ArrayList<String> getAllDates();
     //gets dates w/ sales
+    
+    public ArrayList<String> getRangeDates(String f, String t);
+    //gets dates from f to t
+    
+    public float getTotalRawSales(RawBean r, String d);
+    //gets total sales of r
 }

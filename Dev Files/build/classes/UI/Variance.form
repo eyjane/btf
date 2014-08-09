@@ -59,7 +59,7 @@
                           <EmptySpace min="-2" pref="147" max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jComboBox1" min="-2" pref="237" max="-2" attributes="0"/>
+                          <Component id="dateCombo" min="-2" pref="237" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jScrollPane1" alignment="0" min="-2" pref="916" max="-2" attributes="0"/>
                   </Group>
@@ -75,7 +75,7 @@
                           <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="dateCombo" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -98,17 +98,15 @@
             <Property name="text" type="java.lang.String" value="View:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jComboBox1">
+        <Component class="javax.swing.JComboBox" name="dateCombo">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-              </StringArray>
+              <StringArray count="0"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dateComboActionPerformed"/>
+          </Events>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">
           <AuxValues>
@@ -117,7 +115,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="jTable1">
+            <Component class="javax.swing.JTable" name="varianceTable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="7" rowCount="4">

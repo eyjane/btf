@@ -29,5 +29,10 @@ public interface TransactionDAOInterface {
     
     public boolean usedTransfer(TransactionBean t, RawBean r, float a, String type);
     
+    public ArrayList<String> getRangeDates(String f, String t);
+    
+    public String getDayBefore(String d);
+    
+    public ArrayList<RawBean> getAllTRaw(String d);
 
 }

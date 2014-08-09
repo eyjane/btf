@@ -414,15 +414,13 @@ public class EditRecipe extends javax.swing.JFrame {
 
             int rID = Integer.parseInt(recipeTable.getModel().getValueAt(recipeTable.getSelectedRow(), 0).toString());
             RecipeBean rtemp = rcImp.getRecipeBean(rID);
-            System.out.println("rtemp stock: " + rtemp.getStock());
             r.setRecipeID(rID);
             r.setRecipe(nameField.getText().toString());
             r.setCost(Float.parseFloat(costField.getText().toString()));
             CategoryBean category = (CategoryBean) categoryBox.getSelectedItem();
             r.setCategory(category.getCategoryID());
             r.setRcstatus("available");
-            r.setStock(rtemp.getStock());
-
+           
             if (rcImp.editRecipe(r)) {
                 JOptionPane.showMessageDialog(null, "Recipe successfully edited!");
                 updateIngredient(r, aIngredient);
@@ -599,7 +597,7 @@ public class EditRecipe extends javax.swing.JFrame {
                 }
             }
 
-            Object[] data = {r.getRecipeID(), r.getRecipe(), String.format("%.2f", r.getStock()), String.format("%.2f", r.getActualPrice()), String.format("%.2f", r.getCost()), rCategory};
+            Object[] data = {r.getRecipeID(), r.getRecipe(), String.format("%.2f", r.computeStock()), String.format("%.2f", r.getActualPrice()), String.format("%.2f", r.getCost()), rCategory};
             recipeModel.addRow(data);
         }
 
@@ -613,6 +611,8 @@ public class EditRecipe extends javax.swing.JFrame {
         DefaultTableModel model = new DefaultTableModel(icols, 0);
 
     }
+    
+    
 
     /* ADJUST TABLE TO MAX WIDTH*/
     private void adjustTable(JTable table) {
