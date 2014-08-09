@@ -16,7 +16,6 @@ public class RecipeBean {
     private int recipeID;
     private String recipe;
     private float cost;
-    private float stock;
     private String rcstatus;
     private int category;
     private ArrayList<IngredientBean> ingredients;
@@ -24,31 +23,28 @@ public class RecipeBean {
     public RecipeBean(){
         
     }
-    public RecipeBean(String rc, float c, float s, String rs, int ct) {
+    public RecipeBean(String rc, float c, String rs, int ct) {
         //recipeID = r;
         recipe = rc;
         cost = c;
-        stock = s;
         rcstatus = rs;
         category = ct;
         //ingredients = new ArrayList<IngredientBean>(rb);
     }
     
-    public RecipeBean(String rc, float c, float s, String rs) {
+    public RecipeBean(String rc, float c, String rs) {
         //recipeID = r;
         recipe = rc;
         cost = c;
-        stock = s;
         rcstatus = rs;
         category = 1; //no category
         //ingredients = new ArrayList<IngredientBean>(rb);
     }
     
-    public RecipeBean(String rc, float c, float s, String rs, int ct, ArrayList<IngredientBean> rb) {
+    public RecipeBean(String rc, float c, String rs, int ct, ArrayList<IngredientBean> rb) {
         //recipeID = r;
         recipe = rc;
         cost = c;
-        stock = s;
         rcstatus = rs;
         category = ct;
         ingredients = new ArrayList<IngredientBean>(rb);
@@ -99,10 +95,6 @@ public class RecipeBean {
         return recipeID;
     }
 
-    public float getStock() {
-        return stock;
-    }
-
     public float getActualPrice() {
         int i;
         float price = 0;
@@ -142,10 +134,6 @@ public class RecipeBean {
 
     public void setRecipeID(int recipeID) {
         this.recipeID = recipeID;
-    }
-
-    public void setStock(float stock) {
-        this.stock = stock;
     }
 
 }
