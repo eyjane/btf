@@ -217,7 +217,7 @@ public class addIngredient extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel1))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,8 +239,8 @@ public class addIngredient extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(16, 16, 16)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(385, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(406, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -255,7 +255,7 @@ public class addIngredient extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(deleteIngredient)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -278,7 +278,7 @@ public class addIngredient extends javax.swing.JFrame {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(70, 70, 70)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(125, Short.MAX_VALUE)))
+                    .addContainerGap(121, Short.MAX_VALUE)))
         );
 
         pack();
@@ -394,7 +394,7 @@ public class addIngredient extends javax.swing.JFrame {
         int rID = Integer.parseInt(rawTable.getModel().getValueAt(r, 0).toString());
         RawBean rm = rwImp.getRaw(rID);
 
-        Object[] ingredient = {rm.getRawID(), rm.getRaw(), String.format("%.2f", q), rm.getUom()};
+        Object[] ingredient = {rm.getRawID(), rm.getRaw(), String.format("%.2f", q), rm.getUom(), String.format("%.2f", rm.getPrice()*q)};
 
         TableModel model = rawTable.getModel();
         TableModel inmodel = ingredientTable.getModel();
@@ -441,13 +441,12 @@ public class addIngredient extends javax.swing.JFrame {
 
     //prepare rawTable
     private void prepareTable() {
-        String cols[] = {"Raw ID", "Raw Material"};
+        String cols[] = {"Raw ID", "Raw Material", "UOM", "Price"};
         ArrayList<RawBean> avRaw = rwImp.getRawByStatus("available");
         DefaultTableModel rawModel = new DefaultTableModel(cols, 0);
-        DefaultTableModel notificationModel = new DefaultTableModel(cols, 0);
-
+        
         for (RawBean rm : avRaw) {
-            Object[] raw = {rm.getRawID(), rm.getRaw()};
+            Object[] raw = {rm.getRawID(), rm.getRaw(), rm.getUom(), String.format("%.2f", rm.getPrice())};
             boolean skip = false;
             for (IngredientBean ibean2 : ai) {
                 if (rm.getRawID() == ibean2.getRaw().getRawID()) {
@@ -466,11 +465,11 @@ public class addIngredient extends javax.swing.JFrame {
         adjustTable(rawTable);
 
         //ingredient Tab
-        String cols2[] = {"Raw ID", "Raw Material", "Quantity", "Unit of Measurement"};
+        String cols2[] = {"Raw ID", "Raw Material", "Quantity", "UOM", "Total Price"};
         DefaultTableModel ingredientModel = new DefaultTableModel(cols2, 0);
         
         for (IngredientBean ibean : ai) {
-            Object[] ingredient = {ibean.getRaw().getRawID(), ibean.getRaw().getRaw(), ibean.getAmount(), ibean.getRaw().getUom()};
+            Object[] ingredient = {ibean.getRaw().getRawID(), ibean.getRaw().getRaw(), String.format("%.2f", ibean.getAmount()), ibean.getRaw().getUom(), String.format("%.2f", ibean.getRaw().getPrice()*ibean.getAmount())};
             ingredientModel.addRow(ingredient);
         }
         ingredientTable.setModel(ingredientModel);
@@ -502,6 +501,7 @@ public class addIngredient extends javax.swing.JFrame {
             tableColumn.setPreferredWidth(preferredWidth);
         }
     }
+    
 
     /**
      * * <--- JANERYS CODE ENDS HERE ---> **

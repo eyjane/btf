@@ -3,9 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/UI/RCManagement.java</file>
-            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/UI/AddRecipe.java</file>
-            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/UI/EODTab.java</file>
+            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/DAO/Implementation/SalesDAOImplementation.java</file>
+            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/UI/SALES.java</file>
+            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/UI/AddRM.java</file>
+            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/DAO/Implementation/TransactionDAOImplementation.java</file>
+            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/UI/REPORT.java</file>
+            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/DAO/Implementation/PseudoDAOImplementation.java</file>
+            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/UI/Variance.java</file>
         </group>
     </open-files>
 </project-private>

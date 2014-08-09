@@ -60,7 +60,8 @@ public class UsedTransfer extends javax.swing.JFrame {
             rmTable.setModel(actualTable);
             adjustTable(rmTable);
         }
-        rmTable.setTransferHandler(new dnd());  
+        rmTable.setTransferHandler(new dnd()); 
+        
     }
     
     private void adjustTable(JTable table){

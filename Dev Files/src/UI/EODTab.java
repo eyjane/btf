@@ -64,13 +64,6 @@ public class EODTab extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        notificationTable = new javax.swing.JTable(){
-            public boolean isCellEditable(int row, int column){
-                return false;
-            }
-        };
-        jLabel3 = new javax.swing.JLabel();
         InventoryTab = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -107,37 +100,6 @@ public class EODTab extends javax.swing.JFrame {
 
         jPanel1.setLayout(null);
 
-        notificationTable.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
-        notificationTable.setForeground(new java.awt.Color(255, 51, 51));
-        notificationTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane3.setViewportView(notificationTable);
-
-        jPanel1.add(jScrollPane3);
-        jScrollPane3.setBounds(660, 150, 256, 444);
-
-        jLabel3.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
-        jLabel3.setText("LOW SUPPLY NOTIFICATION");
-        jPanel1.add(jLabel3);
-        jLabel3.setBounds(660, 110, 253, 24);
-
         jPanel5.setOpaque(false);
         jPanel5.setLayout(null);
 
@@ -156,7 +118,7 @@ public class EODTab extends javax.swing.JFrame {
         jScrollPane2.setViewportView(recipeTable);
 
         jPanel5.add(jScrollPane2);
-        jScrollPane2.setBounds(160, 50, 452, 160);
+        jScrollPane2.setBounds(160, 50, 454, 110);
 
         rawTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -170,17 +132,17 @@ public class EODTab extends javax.swing.JFrame {
         jScrollPane1.setViewportView(rawTable);
 
         jPanel5.add(jScrollPane1);
-        jScrollPane1.setBounds(160, 270, 452, 170);
+        jScrollPane1.setBounds(160, 260, 454, 110);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel1.setText("RECIPE STOCK");
         jPanel5.add(jLabel1);
-        jLabel1.setBounds(167, 16, 179, 32);
+        jLabel1.setBounds(167, 16, 178, 30);
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel2.setText("RAW MATERIAL STOCK");
         jPanel5.add(jLabel2);
-        jLabel2.setBounds(170, 230, 279, 32);
+        jLabel2.setBounds(170, 220, 286, 30);
 
         rcMgt.setText("Recipe Management");
         rcMgt.addActionListener(new java.awt.event.ActionListener() {
@@ -283,7 +245,7 @@ public class EODTab extends javax.swing.JFrame {
         InventoryTab.addTab("REPORT", jPanel3);
 
         jPanel1.add(InventoryTab);
-        InventoryTab.setBounds(0, 130, 640, 480);
+        InventoryTab.setBounds(0, 130, 840, 480);
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Background.png"))); // NOI18N
         jLabel7.setText("jLabel7");
@@ -300,9 +262,7 @@ public class EODTab extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -523,26 +483,32 @@ public class EODTab extends javax.swing.JFrame {
 
         // raw material stock
         DefaultTableModel rawModel = new DefaultTableModel(cols, 0);
-        DefaultTableModel notificationModel = new DefaultTableModel(cols, 0);
         avRaw = rwImp.getRawByStatus("available");
 
         if (avRaw != null) {
             for (i = 0; i < avRaw.size(); i++) {
                 RawBean rm = avRaw.get(i);
-                Object[] raw = {rm.getRaw(), String.format("%.2f", rm.getStock())};
+                String color = "black";
+                
+                
                 if (rm.isCritical()) {
-                    notificationModel.addRow(raw);
+                    color = "red";
+                }else if(rm.isMedium()){
+                    color = "orange";
+                }else{
+                    color = "green";
                 }
+                
+                String shtml = "<html><p style=color:" + color + ">";
+                String ehtml = "</p></html>";
+                Object[] raw = {shtml + rm.getRaw() + ehtml, shtml + String.format("%.2f", rm.getStock()) + ehtml};
                 rawModel.addRow(raw);
             }
         }
 
         rawTable.setModel(rawModel);
-        notificationTable.setModel(notificationModel);
-        
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
-        notificationTable.getColumn("Stock").setCellRenderer(rightRenderer);
         rawTable.getColumn("Stock").setCellRenderer(rightRenderer);
         recipeTable.getColumn("Stock").setCellRenderer(rightRenderer);
         recipeTable.setRowSelectionAllowed(true);
@@ -610,7 +576,6 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
@@ -618,8 +583,6 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable notificationTable;
     private javax.swing.JTable rawTable;
     private javax.swing.JButton rcMgt;
     private javax.swing.JTable recipeTable;
