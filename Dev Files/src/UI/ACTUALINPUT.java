@@ -36,9 +36,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
-=======
 import javax.swing.JOptionPane;
->>>>>>> actualInput
 
 /**
  *
@@ -59,16 +57,13 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         main = t;
-<<<<<<< HEAD
         transactTable();
         checkDate();
-=======
         errorLabel1.setVisible(false);
         errorLabel2.setVisible(false);
         abortedLabel.setVisible(false);
         successLabel.setVisible(false);
         displayTable();
->>>>>>> actualInput
     }
 
     /*
@@ -112,7 +107,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTable1);
 
-<<<<<<< HEAD
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(956, 555));
@@ -120,9 +115,8 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
         jLabel1.setText("INPUT ACTUAL COUNT");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, -1, -1));
-=======
+
         jDialog1.setType(java.awt.Window.Type.POPUP);
->>>>>>> actualInput
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -137,14 +131,11 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-<<<<<<< HEAD
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 91, 462, 157));
 
         jLabel4.setText("Current Raw Material Inventory");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 43, -1, -1));
-=======
         jLabel1.setText("INPUT ACTUAL COUNT");
->>>>>>> actualInput
 
         inputTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -182,14 +173,11 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         inputTable.getColumnModel().getColumn(0).setResizable(false);
         inputTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 
-<<<<<<< HEAD
         jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 91, -1, 157));
 
         jLabel5.setText("Actual Count Input");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(631, 43, -1, -1));
-=======
         jLabel5.setText("Raw Materials");
->>>>>>> actualInput
 
         submitBtn.setText("SUBMIT");
         submitBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -199,7 +187,6 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         });
         jPanel1.add(updateActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 276, -1, -1));
 
-<<<<<<< HEAD
         errorBox.setEditable(false);
         errorBox.setColumns(20);
         errorBox.setRows(5);
@@ -207,8 +194,6 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, 330, 198));
 
-=======
->>>>>>> actualInput
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -217,11 +202,9 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         });
         jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(413, 276, -1, -1));
 
-<<<<<<< HEAD
         jLabel2.setForeground(new java.awt.Color(255, 0, 1));
         jLabel2.setText("ERRORS:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, -1, -1));
-=======
         errorLabel1.setForeground(new java.awt.Color(255, 0, 1));
         errorLabel1.setText("Submission Failed. Please check that all inputs are positive numbers");
 
@@ -286,7 +269,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
                     .addComponent(backBtn))
                 .addGap(35, 35, 35))
         );
->>>>>>> actualInput
+
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -296,13 +279,11 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-<<<<<<< HEAD
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 =======
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
->>>>>>> actualInput
         );
 
         pack();
@@ -346,16 +327,12 @@ public class ACTUALINPUT extends javax.swing.JFrame {
                 
             }
             
-<<<<<<< HEAD
             if(inputLockDown()){
             updateActual.setVisible(false);
             //main.setNextDayBtn();
             }
-=======
-            
             successLabel.setVisible(false);
             displayTable();
->>>>>>> actualInput
         }
         else {
            errorLabel1.setVisible(true);
@@ -373,7 +350,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         this.setVisible(false);
        main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
-<<<<<<< HEAD
+
     /*** <--- CLARK'S CODE STARTS HERE ---> ***/
     
     public boolean inputLockDown(){
@@ -437,14 +414,11 @@ public class ACTUALINPUT extends javax.swing.JFrame {
     }
     /*** <--- CLARK'S CODE ENDS HERE ---> ***/
     
-=======
 
     private void inputTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputTableMouseClicked
         // TODO add your handling code here:
       
     }//GEN-LAST:event_inputTableMouseClicked
-
->>>>>>> actualInput
     /*
      *  check if number!
      */
