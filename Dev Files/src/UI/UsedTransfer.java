@@ -14,7 +14,14 @@ import DAO.Implementation.RawDAOImplementation;
 import DAO.Interface.RawDAOInterface;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
@@ -26,6 +33,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
 
 
 /**
@@ -92,6 +106,7 @@ public class UsedTransfer extends javax.swing.JFrame {
         initComponents();
         main = t;
         transactTable();
+        checkDate();
         errorLabel.setVisible(false);
         abortedLabel.setVisible(false);
     }
@@ -305,7 +320,9 @@ public class UsedTransfer extends javax.swing.JFrame {
                         tclmp.addTransaction(t, r, q);
                     }
                 }
-            
+                if(inputLockDown()){
+                    submitUsed.setVisible(false);
+                }
             }
             else {
                 
@@ -329,7 +346,69 @@ public class UsedTransfer extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_rmTableMouseClicked
+    /*** <--- CLARK'S CODE STARTS HERE ---> ***/
+    
+    public boolean inputLockDown(){
+        boolean flag = false;
+        
+        try {
+            String filepath = "btf.xml";
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(filepath);
+            
+            String delivery = doc.getElementsByTagName("used").item(0).getTextContent();
+            //System.out.println(sales);
+                if(delivery.equals("0"))
+                    doc.getElementsByTagName("used").item(0).setTextContent("1");
+                else if(delivery.equals("1")) {
+                    doc.getElementsByTagName("used").item(0).setTextContent("2");
+                    flag = true;
+                }
+                else if(delivery.equals("2")) {
+                    flag = true;
+                    return flag;
+                }
+                
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(filepath));
+            transformer.transform(source, result);
+                        
+        } catch (Exception e) {
+             e.printStackTrace();
+        } 
+        
+        return flag;
+    }
+    
+    public void checkDate() {
+        try{
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String curDate = dateFormat.format(d) ;
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, +1);
+            String nextDate = dateFormat.format(cal.getTime());
 
+            String used = main.getValueXML("used");
+
+            if(main.getDateXML().equals(curDate)) {
+                if(used.equals("0") || used.equals("1")) {
+                    submitUsed.setVisible(true);
+                } else if(used.equals("2")) {
+                    submitUsed.setVisible(false);
+                }
+            } else if(main.getDateXML().equals(nextDate)) {
+                submitUsed.setVisible(false);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /*** <--- CLARK'S CODE ENDS HERE ---> ***/
+    
     /*
      *  check if number!
      */

@@ -17,21 +17,30 @@ import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -88,6 +97,7 @@ public class EODTab extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         actualBtn = new javax.swing.JButton();
         UTWbtn = new javax.swing.JButton();
+        nextDayBtn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
@@ -118,7 +128,7 @@ public class EODTab extends javax.swing.JFrame {
         jScrollPane2.setViewportView(recipeTable);
 
         jPanel5.add(jScrollPane2);
-        jScrollPane2.setBounds(160, 50, 454, 110);
+        jScrollPane2.setBounds(160, 50, 452, 110);
 
         rawTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -132,17 +142,17 @@ public class EODTab extends javax.swing.JFrame {
         jScrollPane1.setViewportView(rawTable);
 
         jPanel5.add(jScrollPane1);
-        jScrollPane1.setBounds(160, 260, 454, 110);
+        jScrollPane1.setBounds(160, 260, 452, 110);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel1.setText("RECIPE STOCK");
         jPanel5.add(jLabel1);
-        jLabel1.setBounds(167, 16, 178, 30);
+        jLabel1.setBounds(167, 16, 179, 32);
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel2.setText("RAW MATERIAL STOCK");
         jPanel5.add(jLabel2);
-        jLabel2.setBounds(170, 220, 286, 30);
+        jLabel2.setBounds(170, 220, 279, 32);
 
         rcMgt.setText("Recipe Management");
         rcMgt.addActionListener(new java.awt.event.ActionListener() {
@@ -211,6 +221,15 @@ public class EODTab extends javax.swing.JFrame {
         });
         jPanel6.add(UTWbtn);
         UTWbtn.setBounds(0, 230, 160, 50);
+
+        nextDayBtn.setText("NEXT DAY");
+        jPanel6.add(nextDayBtn);
+        nextDayBtn.setBounds(0, 300, 160, 50);
+        nextDayBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextDayBtnActionPerformed(evt);
+            }
+        });
 
         InventoryTab.addTab("EOD", jPanel6);
 
@@ -373,9 +392,128 @@ public class EODTab extends javax.swing.JFrame {
             Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnExportReportsActionPerformed
+
+
+    private void nextDayBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UTWbtn1ActionPerformed
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String curDate = dateFormat.format(d) ;
+            Calendar cal1 = Calendar.getInstance();
+            cal1.add(Calendar.DATE, +1);
+            String nextDate = dateFormat.format(cal1.getTime());
+            Calendar cal2 = Calendar.getInstance();
+            cal2.add(Calendar.DATE, -1);
+            String prevDate = dateFormat.format(cal2.getTime());
+            System.out.println(curDate);
+            System.out.println(nextDate);
+        
+            if(getDateXML().equals(curDate)) {
+                if(JOptionPane.showConfirmDialog(null, "Are you sure you're done for the day?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+                        nextDay(nextDate);
+                        JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else if(!getDateXML().equals(nextDate)) {
+                nextDay(nextDate);
+                JOptionPane.showMessageDialog(null, "New date is " + curDate, "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+    }//GEN-LAST:event_UTWbtn1ActionPerformed
     /**
      * < -- CLARK'S FUNCTIONS START -- > *
      */
+    
+    private void nextDay(String curDate) {
+        try {
+            String filepath = "btf.xml";
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(filepath);
+            
+            String date = doc.getElementsByTagName("date").item(0).getTextContent();
+            String sales = doc.getElementsByTagName("sales").item(0).getTextContent();
+            System.out.println(date);
+            
+            doc.getElementsByTagName("date").item(0).setTextContent(curDate);
+            doc.getElementsByTagName("sales").item(0).setTextContent("0");
+            doc.getElementsByTagName("actual").item(0).setTextContent("0");
+            
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(filepath));
+            transformer.transform(source, result);
+            
+            nextDayBtn.setEnabled(false);
+        } catch (Exception e) {
+             e.printStackTrace();
+        } 
+    }
+    
+    public String getDateXML() {
+        String date = ""; 
+        try {
+            String filepath = "btf.xml";
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(filepath);
+            
+            date = doc.getElementsByTagName("date").item(0).getTextContent();
+                        
+        } catch (Exception e) {
+             e.printStackTrace();
+        } 
+        return date;
+    }
+    
+    public String getValueXML(String x) {
+        String value = ""; 
+        try {
+            String filepath = "btf.xml";
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(filepath);
+            
+            value = doc.getElementsByTagName(x).item(0).getTextContent();
+                        
+        } catch (Exception e) {
+             e.printStackTrace();
+        } 
+        return value;
+    }
+    
+    public void checkDate() {
+        try{
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String curDate = dateFormat.format(d) ;
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, +1);
+            String nextDate = dateFormat.format(cal.getTime());
+
+            String sales = getValueXML("sales");
+
+            if(getDateXML().equals(curDate)) {
+                if(sales.equals("0") || sales.equals("1")) {
+                    nextDayBtn.setVisible(false);
+                } else if(sales.equals("2")) {
+                    nextDayBtn.setVisible(true);
+                }
+            } else if(getDateXML().equals(nextDate)) {
+                nextDayBtn.setVisible(false);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+
+    /**
+     * < -- CLARK'S FUNCTIONS START -- > *
+     */
+
     private void exportToExcel(ArrayList<JTable> tables, String path) throws FileNotFoundException, IOException {
         new WorkbookFactory();
         Workbook wb = new XSSFWorkbook(); //Excel workbook
@@ -583,6 +721,7 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton nextDayBtn;
     private javax.swing.JTable rawTable;
     private javax.swing.JButton rcMgt;
     private javax.swing.JTable recipeTable;
