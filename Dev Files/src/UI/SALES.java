@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,6 +78,7 @@ public class SALES extends javax.swing.JFrame {
         errorLabel.setVisible(false);
         errorLabel1.setVisible(false);
         prepareTable();
+        checkDate();
 
     }
 
@@ -398,6 +400,33 @@ public class SALES extends javax.swing.JFrame {
         return flag;
     }
     
+    public void checkDate() {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String curDate = dateFormat.format(d) ;
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, +1);
+            String nextDate = dateFormat.format(cal.getTime());
+
+            String actual = main.getValueXML("actual");
+
+            if(main.getDateXML().equals(curDate)) {
+                if(actual.equals("0") || actual.equals("1")) {
+                    inputPanel.setVisible(true);
+                    submitSales.setVisible(true);
+                } else if(actual.equals("2")) {
+                    inputPanel.setVisible(false);
+                    submitSales.setVisible(false);
+                }
+            } else if(main.getDateXML().equals(nextDate)) {
+                inputPanel.setVisible(false);
+                submitSales.setVisible(false);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
     /*** <--- CLARK'S CODE ENDS HERE ---> ***/
     
     /*** <--- JANERYS CODE STARTS HERE ---> ***/

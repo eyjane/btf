@@ -4,7 +4,12 @@ import Beans.RawBean;
 import DAO.Implementation.RawDAOImplementation;
 import DAO.Interface.RawDAOInterface;
 import java.awt.Component;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
@@ -14,6 +19,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -45,6 +57,7 @@ public class DELIVERY extends javax.swing.JFrame {
         success.setVisible(false);
         inputMsg.setVisible(false);
         viewRaw();
+        checkDate();
     }
     /*
      * <!-- KIM CODE START -> *
@@ -340,6 +353,9 @@ public class DELIVERY extends javax.swing.JFrame {
             
             // REFRESH TABLE WITH UPDATED VALUES
             viewRaw();
+            if(inputLockDown()){
+                submitBtn.setVisible(false);
+            }
         }
         
         
@@ -369,7 +385,68 @@ public class DELIVERY extends javax.swing.JFrame {
         inputMsg.setVisible(true);
         
     }//GEN-LAST:event_rawTableMouseClicked
+    /*** <--- CLARK'S CODE STARTS HERE ---> ***/
+    
+    public boolean inputLockDown(){
+        boolean flag = false;
+        
+        try {
+            String filepath = "btf.xml";
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(filepath);
+            
+            String delivery = doc.getElementsByTagName("delivery").item(0).getTextContent();
+            //System.out.println(sales);
+                if(delivery.equals("0"))
+                    doc.getElementsByTagName("delivery").item(0).setTextContent("1");
+                else if(delivery.equals("1")) {
+                    doc.getElementsByTagName("delivery").item(0).setTextContent("2");
+                    flag = true;
+                }
+                else if(delivery.equals("2")) {
+                    flag = true;
+                    return flag;
+                }
+                
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(filepath));
+            transformer.transform(source, result);
+                        
+        } catch (Exception e) {
+             e.printStackTrace();
+        } 
+        
+        return flag;
+    }
+    
+    public void checkDate() {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String curDate = dateFormat.format(d) ;
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, +1);
+            String nextDate = dateFormat.format(cal.getTime());
 
+            String delivery = main.getValueXML("delivery");
+
+            if(main.getDateXML().equals(curDate)) {
+                if(delivery.equals("0") || delivery.equals("1")) {
+                    submitBtn.setVisible(true);
+                } else if(delivery.equals("2")) {
+                    submitBtn.setVisible(false);
+                }
+            } else if(main.getDateXML().equals(nextDate)) {
+                submitBtn.setVisible(false);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /*** <--- CLARK'S CODE ENDS HERE ---> ***/
     
     private boolean isNumber(String s) {
         try {

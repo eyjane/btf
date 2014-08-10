@@ -153,8 +153,16 @@ public class CreatePassword extends javax.swing.JFrame {
                 inputlockdown.appendChild(sales);
                 
                 Element actual = doc.createElement("actual");
-                sales.appendChild(doc.createTextNode("0"));
+                actual.appendChild(doc.createTextNode("0"));
                 inputlockdown.appendChild(actual);
+                
+                Element delivery = doc.createElement("delivery");
+                delivery.appendChild(doc.createTextNode("0"));
+                inputlockdown.appendChild(delivery);
+                
+                Element used = doc.createElement("used");
+                used.appendChild(doc.createTextNode("0"));
+                inputlockdown.appendChild(used);
                 
                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
                 Transformer transformer = transformerFactory.newTransformer();

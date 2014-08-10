@@ -441,10 +441,10 @@ public class EODTab extends javax.swing.JFrame {
             String curDate = dateFormat.format(d) ;
             Calendar cal1 = Calendar.getInstance();
             cal1.add(Calendar.DATE, +1);
-            String nextDate = dateFormat.format(cal1);
+            String nextDate = dateFormat.format(cal1.getTime());
             Calendar cal2 = Calendar.getInstance();
             cal2.add(Calendar.DATE, -1);
-            String prevDate = dateFormat.format(cal2);
+            String prevDate = dateFormat.format(cal2.getTime());
             System.out.println(curDate);
             System.out.println(nextDate);
         
@@ -507,6 +507,47 @@ public class EODTab extends javax.swing.JFrame {
              e.printStackTrace();
         } 
         return date;
+    }
+    
+    public String getValueXML(String x) {
+        String value = ""; 
+        try {
+            String filepath = "btf.xml";
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(filepath);
+            
+            value = doc.getElementsByTagName(x).item(0).getTextContent();
+                        
+        } catch (Exception e) {
+             e.printStackTrace();
+        } 
+        return value;
+    }
+    
+    public void checkDate() {
+        try{
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String curDate = dateFormat.format(d) ;
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, +1);
+            String nextDate = dateFormat.format(cal.getTime());
+
+            String sales = getValueXML("sales");
+
+            if(getDateXML().equals(curDate)) {
+                if(sales.equals("0") || sales.equals("1")) {
+                    nextDayBtn.setVisible(false);
+                } else if(sales.equals("2")) {
+                    nextDayBtn.setVisible(true);
+                }
+            } else if(getDateXML().equals(nextDate)) {
+                nextDayBtn.setVisible(false);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     
     private void exportToExcel(ArrayList<JTable> tables, String path) throws FileNotFoundException, IOException {
