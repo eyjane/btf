@@ -52,7 +52,7 @@ public class RCpopup extends javax.swing.JFrame {
            }
            if(flag == true){
                 defaultModel.addRow(new Object[] {allRecipes.get(i).getRecipeID(), allRecipes.get(i).getRecipe(),               
-                allRecipes.get(i).getCost(), allRecipes.get(i).getStock(), allRecipes.get(i).getRcstatus()});
+                allRecipes.get(i).getCost(), allRecipes.get(i).computeStock(), allRecipes.get(i).getRcstatus()});
            }
        }
        recipeTable.setModel(defaultModel);

@@ -49,7 +49,6 @@ public class PseudoDAOImplementation implements PseudoDAOInterface {
                 r.setRecipeID(resultSet.getInt("r.recipeID"));
                 r.setRecipe(resultSet.getString("recipe"));
                 r.setCost(resultSet.getFloat("price"));
-                r.setStock(resultSet.getFloat("stock"));
                 r.setRcstatus(resultSet.getString("rcstatus"));
                 r.setCategory(resultSet.getInt("categoryID"));
                 ingredients = inImp.getAllIngredients(r);

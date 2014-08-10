@@ -83,7 +83,7 @@ public class RCManagement extends javax.swing.JFrame {
         deleteRecipe = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        editRC = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(956, 555));
@@ -136,10 +136,10 @@ public class RCManagement extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Edit A Recipe");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        editRC.setText("Edit A Recipe");
+        editRC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                editRCActionPerformed(evt);
             }
         });
 
@@ -150,7 +150,7 @@ public class RCManagement extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(deleteRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(editRC, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addRecipeB, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(backBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -171,7 +171,7 @@ public class RCManagement extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(addRecipeB, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(editRC, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(deleteRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(246, 246, 246)
@@ -213,12 +213,12 @@ public class RCManagement extends javax.swing.JFrame {
             int rselect = recipeTable.getSelectedRow();
             int rID = Integer.parseInt(recipeTable.getModel().getValueAt(rselect, 0).toString());
             RecipeBean r = rcImp.getRecipeBean(rID);
-        
+
             for (CategoryBean c : aCategory) {
                 if (c.getCategoryID() == r.getCategory()) {
                 }
             }
-           
+
             String cols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
             DefaultTableModel model = new DefaultTableModel(cols, 0);
 
@@ -229,10 +229,9 @@ public class RCManagement extends javax.swing.JFrame {
             }
 
        //     ingredientsTable.setModel(model);
-         //   ingredientsTable.getColumnModel().getColumn(0).setMinWidth(0);
-         //   ingredientsTable.getColumnModel().getColumn(0).setMaxWidth(0);
-
-           // adjustTable(ingredientsTable);
+            //   ingredientsTable.getColumnModel().getColumn(0).setMinWidth(0);
+            //   ingredientsTable.getColumnModel().getColumn(0).setMaxWidth(0);
+            // adjustTable(ingredientsTable);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -249,9 +248,18 @@ public class RCManagement extends javax.swing.JFrame {
         main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void editRCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editRCActionPerformed
+        //this.setVisible(false);
+        try {
+            EditRecipe eRC = new EditRecipe();
+            eRC.setVisible(true);
+            this.dispose();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        
+    }//GEN-LAST:event_editRCActionPerformed
 
     /**
      * <--- JANERYS CODE START ---> *
@@ -283,11 +291,11 @@ public class RCManagement extends javax.swing.JFrame {
             rmodel.removeRow(r);
             recipeTable.setModel(rmodel);
         //    nameField.setText("");
-        //    costField.setText("");
-        //    categoryBox.setSelectedIndex(0);
-        //    actualLabel.setText("0.00");
-        //    DefaultTableModel iModel = (DefaultTableModel) ingredientsTable.getModel();
-       //     iModel.setRowCount(0);
+            //    costField.setText("");
+            //    categoryBox.setSelectedIndex(0);
+            //    actualLabel.setText("0.00");
+            //    DefaultTableModel iModel = (DefaultTableModel) ingredientsTable.getModel();
+            //     iModel.setRowCount(0);
             prepareTable();
         }
     }
@@ -295,7 +303,7 @@ public class RCManagement extends javax.swing.JFrame {
     public void computeActual(ArrayList<IngredientBean> aIngredient) {
         RecipeBean rtemp = new RecipeBean();
         rtemp.setIngredients(aIngredient);
-       // actualLabel.setText(String.format("%.2f", rtemp.getActualPrice()));
+        // actualLabel.setText(String.format("%.2f", rtemp.getActualPrice()));
 
     }
 
@@ -303,15 +311,15 @@ public class RCManagement extends javax.swing.JFrame {
         String cols[] = {"Raw ID", "Raw Material", "Quantity"};
         DefaultTableModel ingredientModel = new DefaultTableModel(cols, 0);
       //  ingredientsTable.setModel(ingredientModel);
-      //  ingredientsTable.getColumnModel().getColumn(0).setMinWidth(0);
-      //  ingredientsTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        //  ingredientsTable.getColumnModel().getColumn(0).setMinWidth(0);
+        //  ingredientsTable.getColumnModel().getColumn(0).setMaxWidth(0);
 
         if (aIngredient != null) {
             for (IngredientBean ibean : aIngredient) {
                 Object[] ingredient = {ibean.getRaw().getRawID(), ibean.getRaw().getRaw(), ibean.getAmount()};
                 ingredientModel.addRow(ingredient);
             }
-        //    ingredientsTable.setModel(ingredientModel);
+            //    ingredientsTable.setModel(ingredientModel);
 
         } else {
             //System.out.println("aIngredient is null");
@@ -343,7 +351,7 @@ public class RCManagement extends javax.swing.JFrame {
                 }
             }
 
-            Object[] data = {r.getRecipeID(), r.getRecipe(), String.format("%.2f", r.getStock()), String.format("%.2f", r.getActualPrice()), String.format("%.2f", r.getCost()), rCategory};
+            Object[] data = {r.getRecipeID(), r.getRecipe(), String.format("%.2f", r.computeStock()), String.format("%.2f", r.getActualPrice()), String.format("%.2f", r.getCost()), rCategory};
             recipeModel.addRow(data);
         }
 
@@ -392,7 +400,7 @@ public class RCManagement extends javax.swing.JFrame {
     }
 
     public void inErrorV(boolean b) {
-  //      inError.setVisible(b);
+        //      inError.setVisible(b);
     }
 
     /**
@@ -403,7 +411,7 @@ public class RCManagement extends javax.swing.JFrame {
     private javax.swing.JButton addRecipeB;
     private javax.swing.JButton backBtn;
     private javax.swing.JButton deleteRecipe;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton editRC;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

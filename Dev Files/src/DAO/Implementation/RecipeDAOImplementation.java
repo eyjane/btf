@@ -34,13 +34,12 @@ public class RecipeDAOImplementation implements RecipeDAOInterface{
         try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "INSERT into recipe(recipe, cost, stock, rcstatus, categoryID) values (?, ?, ?, ?, ?);";
+            String query = "INSERT into recipe(recipe, cost, rcstatus, categoryID) values (?, ?, ?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, r.getRecipe());
             preparedStatement.setFloat(2, r.getCost());
-            preparedStatement.setFloat(3, r.getStock());
-            preparedStatement.setString(4, r.getRcstatus());
-            preparedStatement.setInt(5, r.getCategory());
+            preparedStatement.setString(3, r.getRcstatus());
+            preparedStatement.setInt(4, r.getCategory());
             
             
             preparedStatement.executeUpdate();
@@ -75,13 +74,12 @@ public class RecipeDAOImplementation implements RecipeDAOInterface{
          try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "UPDATE recipe SET recipe = ?, cost = ?, stock = ?, categoryID = ? WHERE recipeID = ?;";
+            String query = "UPDATE recipe SET recipe = ?, cost = ?, categoryID = ? WHERE recipeID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, r.getRecipe());
             preparedStatement.setFloat(2, r.getCost());
-            preparedStatement.setFloat(3, r.getStock());
-            preparedStatement.setInt(4, r.getCategory());
-            preparedStatement.setFloat(5, r.getRecipeID());
+            preparedStatement.setInt(3, r.getCategory());
+            preparedStatement.setFloat(4, r.getRecipeID());
             preparedStatement.executeUpdate();
             connection.close();
             return true;
@@ -129,8 +127,7 @@ public class RecipeDAOImplementation implements RecipeDAOInterface{
                 r.setRcstatus(resultSet.getString("rcstatus"));
                 r.setRecipeID(rID);
                 r.setCost(resultSet.getFloat("cost"));
-                r.setStock(resultSet.getFloat("stock"));
-                
+               
                 ingredients = iImp.getAllIngredients(r);
                 r.setIngredients(ingredients);
                 
@@ -164,7 +161,6 @@ public class RecipeDAOImplementation implements RecipeDAOInterface{
                 r.setRecipe(resultSet.getString("recipe"));
                 r.setCost(resultSet.getFloat("cost"));
                 r.setCategory(resultSet.getInt("categoryID"));
-                r.setStock(resultSet.getFloat("stock"));
                 r.setRcstatus(resultSet.getString("rcstatus"));
                 
                 ingredients = iImp.getAllIngredients(r);
@@ -199,7 +195,6 @@ public class RecipeDAOImplementation implements RecipeDAOInterface{
                 r.setRecipe(resultSet.getString("recipe"));
                 r.setCost(resultSet.getFloat("cost"));
                 r.setCategory(c.getCategoryID());
-                r.setStock(resultSet.getFloat("stock"));
                 r.setRcstatus(resultSet.getString("rcstatus"));
                 ingredients = iImp.getAllIngredients(r);
                 r.setIngredients(ingredients);
@@ -262,7 +257,6 @@ public class RecipeDAOImplementation implements RecipeDAOInterface{
                 r.setRecipe(resultSet.getString("recipe"));
                 r.setCost(resultSet.getFloat("cost"));
                 r.setCategory(resultSet.getInt("categoryID"));
-                r.setStock(resultSet.getFloat("stock"));
                 r.setRcstatus(s);
                  ingredients = iImp.getAllIngredients(r);
                 r.setIngredients(ingredients);

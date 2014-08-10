@@ -1,22 +1,53 @@
 package UI;
 
+import Beans.RawBean;
+import Beans.RecipeBean;
+import DAO.Implementation.RawDAOImplementation;
+import DAO.Implementation.RecipeDAOImplementation;
+import DAO.Implementation.SalesDAOImplementation;
+import DAO.Implementation.TransactionDAOImplementation;
+import DAO.Interface.RawDAOInterface;
+import DAO.Interface.RecipeDAOInterface;
+import DAO.Interface.SalesDAOInterface;
+import DAO.Interface.TransactionDAOInterface;
+import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Evy
  */
 public class Variance extends javax.swing.JFrame {
 
+    SalesDAOInterface saImp = new SalesDAOImplementation();
+    TransactionDAOInterface tcImp = new TransactionDAOImplementation();
+    RawDAOInterface rwImp = new RawDAOImplementation();
+    RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    
     /**
      * Creates new form Variance
      */
-    public Variance() {
+    public Variance() throws ParseException {
         initComponents();
+        prepare();
     }
 
     /**
@@ -30,9 +61,9 @@ public class Variance extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        dateCombo = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        varianceTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
@@ -41,9 +72,13 @@ public class Variance extends javax.swing.JFrame {
 
         jLabel1.setText("View:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        dateCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateComboActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        varianceTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -54,7 +89,7 @@ public class Variance extends javax.swing.JFrame {
                 "Name", "Beginning", "Delivery", "Sales", "Wastages", "EOD", "Variance"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(varianceTable);
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
         jLabel2.setText("Variance");
@@ -81,7 +116,7 @@ public class Variance extends javax.swing.JFrame {
                         .addGap(147, 147, 147)
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(dateCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 916, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -93,7 +128,7 @@ public class Variance extends javax.swing.JFrame {
                         .addGap(34, 34, 34)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(dateCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2)))
@@ -126,6 +161,141 @@ public class Variance extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void dateComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateComboActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateComboActionPerformed
+
+    /**
+     * * <--- JANERYS CODE STARTS HERE ---> **
+     */
+    
+    private void generateReport(String d){
+        ArrayList<RawBean> aRaw = tcImp.getAllTRaw(d); //recipes w beginning already set
+        String cols[] = {"Raw ID", "Raw Material", "Beginning", "Sales", "Delivery", "Used", "Transfer", "Wastage", "Actual Count", "Variance"};
+        DefaultTableModel varianceModel = new DefaultTableModel(cols, 0);
+        
+        for(RawBean rw: aRaw){
+            float sales = computeSales(rw); //!!!
+            float delivery = tcImp.getQuantityByDayByRaw(d, "delivery", rw);
+            float used = tcImp.getQuantityByDayByRaw(d, "used", rw);
+            float transferred = tcImp.getQuantityByDayByRaw(d, "transferred", rw);
+            float wastage = tcImp.getQuantityByDayByRaw(d, "delivery", rw);
+            float actual = tcImp.getQuantityByDayByRaw(d, "actual", rw);
+            float variance = rw.getStock() + delivery - sales - used - transferred - wastage - actual;
+            
+            Object iRaw[] = {rw.getRawID(), rw.getRaw(), 
+                rw.getStock(), 
+                String.format("%.2f", sales), 
+                String.format("%.2f", delivery), 
+                String.format("%.2f", used), 
+                String.format("%.2f", transferred), 
+                String.format("%.2f", wastage), 
+                String.format("%.2f", actual), 
+                String.format("%.2f", variance) };
+            
+            varianceModel.addRow(iRaw);
+        }
+        
+        varianceTable.setModel(varianceModel);
+        varianceTable.getColumnModel().getColumn(0).setMinWidth(0);
+        varianceTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        adjustTable(varianceTable);
+    }
+    
+    private float computeSales(RawBean r){
+        float total = 0;
+        return total;
+    }
+    private void prepare() throws ParseException {
+        //prepare combo
+        ArrayList<String> aDates = tcImp.getAllDates(); // dates format: yyyy-mm-dd
+
+        for (String d : aDates) {
+            //convert to word date
+            DateFormat dformat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = dformat.parse(d);
+            DateFormat wformat = new SimpleDateFormat("MMMMM d, yyyy");
+            String dateWord = wformat.format(date);
+            DateItem dItem = new DateItem(d, dateWord);
+
+            dateCombo.addItem(dItem);
+        }
+
+        dateCombo.addItemListener(new ItemChangeListener());
+        
+        //prepare table
+        
+        
+        DateItem dSelected = (DateItem) dateCombo.getSelectedItem();
+        generateReport(dSelected.getValue());
+    }
+
+    class ItemChangeListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent event) {
+            if (event.getStateChange() == ItemEvent.SELECTED) {
+                DateItem item = (DateItem) event.getItem();
+                
+                //JOptionPane.showMessageDialog(null, item.getValue());
+               //JOptionPane.showMessageDialog(null, "Day before: " + tcImp.getDayBefore(item.getValue())); day before to get beginning
+                
+                /*enter to code to generate report */
+                generateReport(item.getValue());
+            }
+        }
+    }
+
+    public class DateItem {
+
+        private String value;
+        private String label;
+
+        public DateItem(String value, String label) {
+            this.value = value;
+            this.label = label;
+        }
+
+        public String getValue() {
+            return this.value;
+        }
+
+        public String getLabel() {
+            return this.label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+    }
+    
+    private void adjustTable(JTable table) {
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = tableColumn.getMaxWidth();
+
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+
+                //  We've exceeded the maximum width, no need to check other rows
+                if (preferredWidth >= maxWidth) {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+    }
+
+    /**
+     * * <--- JANERYS CODE ENDS HERE ---> **
+     */
     /**
      * @param args the command line arguments
      */
@@ -156,18 +326,22 @@ public class Variance extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Variance().setVisible(true);
+                try {
+                    new Variance().setVisible(true);
+                } catch (ParseException ex) {
+                    Logger.getLogger(Variance.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox dateCombo;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable varianceTable;
     // End of variables declaration//GEN-END:variables
 }
