@@ -10,6 +10,7 @@ import DAO.Interface.RecipeDAOInterface;
 import DAO.Interface.SalesDAOInterface;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javax.swing.JTable;
@@ -27,7 +28,9 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.chart.ChartPanel;
-
+import org.joda.time.*;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -53,13 +56,9 @@ public class REPORT extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         main = t;
-        GITable();
-        makeGIChart();
-        expTable();
-        makeExpChart();
-        netTable();
-        makeNetChart();
-        
+        errorLabel.setVisible(false);
+        startDate.setDate(new Date());
+        endDate.setDate(new Date());
     }
 
     private REPORT() {
@@ -68,74 +67,119 @@ public class REPORT extends javax.swing.JFrame {
 
     public void GITable() {
        RecipeBean r = new RecipeBean(); 
-       /*DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
-       Date todayDate = new Date();
-       String today = t.format(todayDate);*/
        
-       String today = "2014-07-01";
+       // GET DATES
+       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date sDate = startDate.getDate();
+       String start = t.format(sDate);
+
+       Date eDate = endDate.getDate();
+       LocalDate end = new LocalDate(eDate);
        
-       aSales = sImp.getAllSales(today);
+       DateTimeFormatter dispFmt = DateTimeFormat.forPattern("MMM, dd");
+       DateTimeFormatter compFmt = DateTimeFormat.forPattern("YYYY-MM-dd");
+       
        String cols[] = {"Name", "Gross Income"};
        DefaultTableModel actualTable = new DefaultTableModel(cols,0);
-
-       for(RecipeBean sale : aSales) {
+       
+       
+       
+       for (LocalDate date = new LocalDate(start); date.isBefore(end) || date.isEqual(end); date = date.plusDays(1)) {
+           String sumDate = date.toString(compFmt);
+           aSales = sImp.getAllSales(sumDate);
+           float total = 0;
+           for(RecipeBean sale : aSales) {
            
-           r = rcImp.getRecipeBean(sale.getRecipeID());
-           Object[] data = {sale.getRecipe(), sImp.getSalesByRecipeByDay(r, today)};
+               r = rcImp.getRecipeBean(sale.getRecipeID());
+               total = total + sImp.getSalesByRecipeByDay(r, sumDate);
+           }
+           // FILL TABLE
+           Object[] data = {date.toString(dispFmt), total};
            actualTable.addRow(data);
            grossIncomeTable.setModel(actualTable);
            adjustTable(grossIncomeTable);
+           
        }
+       
+       
       
     }
     
     public void expTable() {
         
        RecipeBean r = new RecipeBean(); 
-        /*DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
-       Date todayDate = new Date();
-       String today = t.format(todayDate);*/
+       // GET DATES
+       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date sDate = startDate.getDate();
+       String start = t.format(sDate);
+
+       Date eDate = endDate.getDate();
+       LocalDate end = new LocalDate(eDate);
        
-       String today = "2014-07-01";
+       DateTimeFormatter dispFmt = DateTimeFormat.forPattern("MMM, dd");
+       DateTimeFormatter compFmt = DateTimeFormat.forPattern("YYYY-MM-dd");
        
-       aSales = sImp.getAllSales(today);
        String cols[] = {"Name", "Expenses"};
        DefaultTableModel actualTable = new DefaultTableModel(cols,0);
-        
-       for(RecipeBean sale : aSales) {
+
+       for (LocalDate date = new LocalDate(start); date.isBefore(end) || date.isEqual(end); date = date.plusDays(1)) {
+
+           String sumDate = date.toString(compFmt);
+           aSales = sImp.getAllSales(sumDate);
+           float total = 0;
            
-           r = rcImp.getRecipeBean(sale.getRecipeID());
-           Object[] data = {sale.getRecipe(), sImp.getExpensesByRecipeByDay(r, today)};
-           actualTable.addRow(data);
-           expensesTable.setModel(actualTable);
-           adjustTable(expensesTable);
-       }
-        
+           for(RecipeBean sale : aSales) {
+           
+               r = rcImp.getRecipeBean(sale.getRecipeID());
+               total = total + sImp.getExpensesByRecipeByDay(r, sumDate);
+               
+           }
+           
+               Object[] data = {date.toString(dispFmt), total};
+               actualTable.addRow(data);
+               expensesTable.setModel(actualTable);
+               adjustTable(expensesTable);
+           
+           
+       } 
     }
     
     public void netTable() {
        
        RecipeBean r = new RecipeBean(); 
-        /*DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
-       Date todayDate = new Date();
-       String today = t.format(todayDate);*/
+       // GET DATES
+       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date sDate = startDate.getDate();
+       String start = t.format(sDate);
+
+       Date eDate = endDate.getDate();
+       LocalDate end = new LocalDate(eDate);
        
-       String today = "2014-07-01";
-       
-       aSales = sImp.getAllSales(today);
+       DateTimeFormatter dispFmt = DateTimeFormat.forPattern("MMM, dd");
+       DateTimeFormatter compFmt = DateTimeFormat.forPattern("YYYY-MM-dd");
        String cols[] = {"Name", "Net Income"};
        DefaultTableModel actualTable = new DefaultTableModel(cols,0);
-        
-       for(RecipeBean sale : aSales) {
+       
+       for (LocalDate date = new LocalDate(start); date.isBefore(end) || date.isEqual(end); date = date.plusDays(1)) {
+
+           String sumDate = date.toString(compFmt);
+           aSales = sImp.getAllSales(sumDate);
+           float total = 0;
            
-           r = rcImp.getRecipeBean(sale.getRecipeID());
-           Object[] data = {sale.getRecipe(), sImp.getSalesByRecipeByDay(r, today) - sImp.getExpensesByRecipeByDay(r, today)};
+           for(RecipeBean sale : aSales) {
+           
+               r = rcImp.getRecipeBean(sale.getRecipeID());
+               total = total + (sImp.getSalesByRecipeByDay(r, sumDate) - sImp.getExpensesByRecipeByDay(r, sumDate));
+               
+           }
+        
+           Object[] data = {date.toString(dispFmt), total};
            actualTable.addRow(data);
            netIncomeTable.setModel(actualTable);
            adjustTable(netIncomeTable);
+           
        }
-        
-        
+       
     }
     
     private void adjustTable(JTable table){
@@ -175,13 +219,10 @@ public class REPORT extends javax.swing.JFrame {
         JFreeChart grossChart = ChartFactory.createPieChart("Gross Income", objDataset, true, true, false); // makes chart
         grossPanel.setLayout(new java.awt.BorderLayout());
         ChartPanel chartPanel = new ChartPanel(grossChart);
+        chartPanel.setPreferredSize(new Dimension(442,310));
         grossPanel.add(chartPanel, BorderLayout.CENTER);
         grossPanel.validate();
        
-        /*JFrame frame = new JFrame();
-        frame.add(jPanelChart);
-        frame.pack();
-        frame.setVisible(true);*/
         
     }
     
@@ -199,6 +240,7 @@ public class REPORT extends javax.swing.JFrame {
         JFreeChart expChart = ChartFactory.createPieChart("Expenses", objDataset, true, true, false); // makes chart
         expensesPanel.setLayout(new java.awt.BorderLayout());
         ChartPanel chartPanel = new ChartPanel(expChart);
+        chartPanel.setPreferredSize(new Dimension(442,310));
         expensesPanel.add(chartPanel, BorderLayout.CENTER);
         expensesPanel.validate();
       
@@ -249,11 +291,14 @@ public class REPORT extends javax.swing.JFrame {
         netIncomeTable = new javax.swing.JTable();
         netPanel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
+        errorLabel = new javax.swing.JLabel();
+        startDate = new org.jdesktop.swingx.JXDatePicker();
+        endDate = new org.jdesktop.swingx.JXDatePicker();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        generateBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         grossIncomeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -276,30 +321,21 @@ public class REPORT extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(grossIncomeTable);
 
-        javax.swing.GroupLayout grossPanelLayout = new javax.swing.GroupLayout(grossPanel);
-        grossPanel.setLayout(grossPanelLayout);
-        grossPanelLayout.setHorizontalGroup(
-            grossPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 442, Short.MAX_VALUE)
-        );
-        grossPanelLayout.setVerticalGroup(
-            grossPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 329, Short.MAX_VALUE)
-        );
+        grossPanel.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(grossPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(grossPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(grossPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Gross", jPanel3);
@@ -325,30 +361,23 @@ public class REPORT extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(expensesTable);
 
-        javax.swing.GroupLayout expensesPanelLayout = new javax.swing.GroupLayout(expensesPanel);
-        expensesPanel.setLayout(expensesPanelLayout);
-        expensesPanelLayout.setHorizontalGroup(
-            expensesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 442, Short.MAX_VALUE)
-        );
-        expensesPanelLayout.setVerticalGroup(
-            expensesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 330, Short.MAX_VALUE)
-        );
+        expensesPanel.setMaximumSize(new java.awt.Dimension(442, 309));
+        expensesPanel.setPreferredSize(new java.awt.Dimension(442, 309));
+        expensesPanel.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(expensesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(expensesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(expensesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(expensesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Expenses", jPanel4);
@@ -374,30 +403,21 @@ public class REPORT extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(netIncomeTable);
 
-        javax.swing.GroupLayout netPanelLayout = new javax.swing.GroupLayout(netPanel);
-        netPanel.setLayout(netPanelLayout);
-        netPanelLayout.setHorizontalGroup(
-            netPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 442, Short.MAX_VALUE)
-        );
-        netPanelLayout.setVerticalGroup(
-            netPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 330, Short.MAX_VALUE)
-        );
+        netPanel.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(netPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(netPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(netPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(netPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Net", jPanel5);
@@ -406,34 +426,144 @@ public class REPORT extends javax.swing.JFrame {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 442, Short.MAX_VALUE)
+            .addGap(0, 452, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 427, Short.MAX_VALUE)
+            .addGap(0, 407, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Variance", jPanel6);
+
+        errorLabel.setForeground(new java.awt.Color(255, 0, 1));
+        errorLabel.setText("Error: Please enter a valid range.");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane1)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jTabbedPane1)
-                .addContainerGap())
+                .addGap(139, 139, 139)
+                .addComponent(errorLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(errorLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
+        startDate.setToolTipText("");
+        startDate.setAutoscrolls(true);
+        startDate.setLightWeightPopupEnabled(false);
+        startDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startDateActionPerformed(evt);
+            }
+        });
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jLabel1.setText("Start Date:");
+
+        jLabel2.setText("End Date:");
+
+        generateBtn.setText("Generate Report");
+        generateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66)
+                        .addComponent(jLabel2)
+                        .addGap(31, 31, 31)
+                        .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(178, 178, 178)
+                .addComponent(generateBtn)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addComponent(generateBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void startDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_startDateActionPerformed
+
+    private void generateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateBtnActionPerformed
+        // TODO add your handling code here:
+        
+
+        Date sDate = startDate.getDate();
+        Date eDate = endDate.getDate();
+        
+        LocalDate start = new LocalDate(sDate);
+        LocalDate end = new LocalDate(eDate);
+        if (start.isBefore(end) || start.isEqual(end)) {
+            
+            GITable();
+            makeGIChart();
+            expTable();
+            makeExpChart();
+            netTable();
+            makeNetChart();
+            
+        }
+        else {
+            
+            errorLabel.setVisible(true);
+            
+        }
+        
+            
+        
+    }//GEN-LAST:event_generateBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -472,10 +602,15 @@ public class REPORT extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXDatePicker endDate;
+    private javax.swing.JLabel errorLabel;
     private javax.swing.JPanel expensesPanel;
     private javax.swing.JTable expensesTable;
+    private javax.swing.JButton generateBtn;
     private javax.swing.JTable grossIncomeTable;
     private javax.swing.JPanel grossPanel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -488,5 +623,6 @@ public class REPORT extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable netIncomeTable;
     private javax.swing.JPanel netPanel;
+    private org.jdesktop.swingx.JXDatePicker startDate;
     // End of variables declaration//GEN-END:variables
 }
