@@ -21,12 +21,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+<<<<<<< HEAD
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -34,6 +36,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
+=======
+import javax.swing.JOptionPane;
+>>>>>>> actualInput
 
 /**
  *
@@ -54,8 +59,16 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         main = t;
+<<<<<<< HEAD
         transactTable();
         checkDate();
+=======
+        errorLabel1.setVisible(false);
+        errorLabel2.setVisible(false);
+        abortedLabel.setVisible(false);
+        successLabel.setVisible(false);
+        displayTable();
+>>>>>>> actualInput
     }
 
     /*
@@ -73,19 +86,18 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jDialog1 = new javax.swing.JDialog();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        currentInventory = new javax.swing.JTable();
-        jLabel4 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        inputActual = new javax.swing.JTable();
+        inputTable = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
-        updateActual = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        errorBox = new javax.swing.JTextArea();
+        submitBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        errorLabel1 = new javax.swing.JLabel();
+        errorLabel2 = new javax.swing.JLabel();
+        abortedLabel = new javax.swing.JLabel();
+        successLabel = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -100,6 +112,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTable1);
 
+<<<<<<< HEAD
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(956, 555));
@@ -107,50 +120,48 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
         jLabel1.setText("INPUT ACTUAL COUNT");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, -1, -1));
+=======
+        jDialog1.setType(java.awt.Window.Type.POPUP);
+>>>>>>> actualInput
 
-        currentInventory.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "ID", "Name", "Quantity in Stock"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        currentInventory.setName(""); // NOI18N
-        jScrollPane1.setViewportView(currentInventory);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+<<<<<<< HEAD
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 91, 462, 157));
 
         jLabel4.setText("Current Raw Material Inventory");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 43, -1, -1));
+=======
+        jLabel1.setText("INPUT ACTUAL COUNT");
+>>>>>>> actualInput
 
-        inputActual.setModel(new javax.swing.table.DefaultTableModel(
+        inputTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "Name", "Quantity in Stock"
+                "ID", "Name", "Quantity in Stock", "Actual Count"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -161,21 +172,34 @@ public class ACTUALINPUT extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(inputActual);
+        inputTable.getTableHeader().setReorderingAllowed(false);
+        inputTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                inputTableMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(inputTable);
+        inputTable.getColumnModel().getColumn(0).setResizable(false);
+        inputTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 
+<<<<<<< HEAD
         jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 91, -1, 157));
 
         jLabel5.setText("Actual Count Input");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(631, 43, -1, -1));
+=======
+        jLabel5.setText("Raw Materials");
+>>>>>>> actualInput
 
-        updateActual.setText("SUBMIT");
-        updateActual.addActionListener(new java.awt.event.ActionListener() {
+        submitBtn.setText("SUBMIT");
+        submitBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateActualActionPerformed(evt);
+                submitBtnActionPerformed(evt);
             }
         });
         jPanel1.add(updateActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 276, -1, -1));
 
+<<<<<<< HEAD
         errorBox.setEditable(false);
         errorBox.setColumns(20);
         errorBox.setRows(5);
@@ -183,6 +207,8 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, 330, 198));
 
+=======
+>>>>>>> actualInput
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -191,9 +217,76 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         });
         jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(413, 276, -1, -1));
 
+<<<<<<< HEAD
         jLabel2.setForeground(new java.awt.Color(255, 0, 1));
         jLabel2.setText("ERRORS:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, -1, -1));
+=======
+        errorLabel1.setForeground(new java.awt.Color(255, 0, 1));
+        errorLabel1.setText("Submission Failed. Please check that all inputs are positive numbers");
+
+        errorLabel2.setForeground(new java.awt.Color(255, 0, 1));
+        errorLabel2.setText("and that no fields are empty.");
+
+        abortedLabel.setText("Submission aborted. No changes were made.");
+
+        successLabel.setText("Success! Count has been updated.");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(278, 278, 278)
+                        .addComponent(backBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(submitBtn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(59, 59, 59)
+                        .addComponent(errorLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(146, 146, 146)
+                        .addComponent(errorLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(109, 109, 109)
+                        .addComponent(abortedLabel))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(133, 133, 133)
+                        .addComponent(successLabel)))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(errorLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(errorLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(abortedLabel)
+                .addGap(18, 18, 18)
+                .addComponent(successLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(submitBtn)
+                    .addComponent(backBtn))
+                .addGap(35, 35, 35))
+        );
+>>>>>>> actualInput
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -203,59 +296,84 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+<<<<<<< HEAD
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+=======
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+>>>>>>> actualInput
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void updateActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActualActionPerformed
+    
+    private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
         // TODO add your handling code here
 
+        //JFrame frame = new JFrame("");
+        //int ans = JOptionPane.showConfirmDialog(rootPane, frame, "Are you sure that you want to submit? You may only submit once a day.", JOptionPane.YES_NO_OPTION);
+        
+        if (JOptionPane.showConfirmDialog(null, "Are you sure that you want to submit? You may only submit once a day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        
         boolean submit = true;
-
-        int rows = inputActual.getRowCount();
-        int c = 0;
-
-        for (c = 0; c < rows; c++) {
-
-            if(inputActual.getValueAt(c,2).toString().isEmpty()) {
-
-                submit = false;
-                errorBox.append("Empty: Row #" + c+1 + "\n");
+        
+            // VALIDATE INPUT
+            int rows = inputTable.getRowCount();
+            int c = 0;
+            
+            for (c = 0; c < rows && submit; c++) {
+             
+                if(inputTable.getValueAt(c,3).toString().isEmpty() || Math.signum(Float.parseFloat(inputTable.getValueAt(c,3).toString())) == -1) {
+                        submit = false;
+                        System.out.println("error");
+                        errorLabel1.setVisible(true);
+                        errorLabel2.setVisible(true);
+                    }
+                
             }
-
-        }
+            
         
         if (submit) {
-            TransactionBean t = new TransactionBean();
-            RawBean r = new RawBean();
-            float q; // QUANTITY
-            
-            errorBox.append("No errors found.");
             
             for (c = 0; c < rows; c++) {
-
-                r.setRawID(Integer.parseInt(inputActual.getValueAt(c, 0).toString()));
-                q = Float.parseFloat(inputActual.getValueAt(c, 2).toString());
-                tclmp.actualInput(t, r, q);
+            
+                int ID = Integer.parseInt(inputTable.getValueAt(c, 0).toString());
+                RawBean r = rmImp.getRaw(ID);
+                r.setStock(Float.parseFloat(inputTable.getValueAt(c, 3).toString()));
+                rmImp.editRaw(r);
+                
             }
             
+<<<<<<< HEAD
             if(inputLockDown()){
             updateActual.setVisible(false);
             //main.setNextDayBtn();
             }
+=======
+            
+            successLabel.setVisible(false);
+            displayTable();
+>>>>>>> actualInput
         }
-
-    }//GEN-LAST:event_updateActualActionPerformed
+        else {
+           errorLabel1.setVisible(true);
+           errorLabel2.setVisible(true);
+                    
+        }
+      }
+        else {
+             abortedLabel.setVisible(true);
+        }
+    }//GEN-LAST:event_submitBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
         this.setVisible(false);
        main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
+<<<<<<< HEAD
     /*** <--- CLARK'S CODE STARTS HERE ---> ***/
     
     public boolean inputLockDown(){
@@ -319,6 +437,14 @@ public class ACTUALINPUT extends javax.swing.JFrame {
     }
     /*** <--- CLARK'S CODE ENDS HERE ---> ***/
     
+=======
+
+    private void inputTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputTableMouseClicked
+        // TODO add your handling code here:
+      
+    }//GEN-LAST:event_inputTableMouseClicked
+
+>>>>>>> actualInput
     /*
      *  check if number!
      */
@@ -336,7 +462,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
      *  TABLE SET UP
      */
     
-    public void transactTable() {
+    public void displayTable() {
         aTransact = new ArrayList<>();
         aRaw = new ArrayList<>();
         
@@ -345,17 +471,9 @@ public class ACTUALINPUT extends javax.swing.JFrame {
          */
         
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"ID", "Name", "Quantity in Stock"};
-        
-        DefaultTableModel currentTable = new DefaultTableModel(cols, 0);
-        
-        for (RawBean raw : aRaw) {
-            
-            Object[] data = {raw.getRawID(), raw.getRaw(), raw.getStock()};
-            currentTable.addRow(data);
-            currentInventory.setModel(currentTable);
-            adjustTable(currentInventory);
-        }
+        String cols[] = {"ID","Name", "Quantity in Stock", "Actual Count"};
+        inputTable.getColumnModel().getColumn(0).setMinWidth(0);
+        inputTable.getColumnModel().getColumn(0).setMaxWidth(0);
         
         /*
          * FOR ACTUAL INPUT TABLE
@@ -365,10 +483,12 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         
         for (RawBean raw : aRaw) {
             
-            Object[] data = {raw.getRawID(), raw.getRaw(), null};
+            Object[] data = {raw.getRawID(), raw.getRaw(), raw.getStock(), ""};
             actualTable.addRow(data);
-            inputActual.setModel(actualTable);
-            adjustTable(inputActual);
+            inputTable.setModel(actualTable);
+            inputTable.getColumnModel().getColumn(0).setMinWidth(0);
+            inputTable.getColumnModel().getColumn(0).setMaxWidth(0);
+            adjustTable(inputTable);
         }
         
     }
@@ -447,20 +567,19 @@ public class ACTUALINPUT extends javax.swing.JFrame {
     }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel abortedLabel;
     private javax.swing.JButton backBtn;
-    private javax.swing.JTable currentInventory;
-    private javax.swing.JTextArea errorBox;
-    private javax.swing.JTable inputActual;
+    private javax.swing.JLabel errorLabel1;
+    private javax.swing.JLabel errorLabel2;
+    private javax.swing.JTable inputTable;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
-    private javax.swing.JButton updateActual;
+    private javax.swing.JButton submitBtn;
+    private javax.swing.JLabel successLabel;
     // End of variables declaration//GEN-END:variables
 }
