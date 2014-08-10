@@ -16,6 +16,7 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -43,8 +44,10 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         main = t;
-        errorName.setVisible(false);
-        errorCount.setVisible(false);
+        errorLabel1.setVisible(false);
+        errorLabel2.setVisible(false);
+        abortedLabel.setVisible(false);
+        successLabel.setVisible(false);
         displayTable();
     }
 
@@ -69,15 +72,12 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         inputTable = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
-        updateActual = new javax.swing.JButton();
+        submitBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        rmName = new javax.swing.JTextField();
-        rmCount = new javax.swing.JTextField();
-        errorCount = new javax.swing.JLabel();
-        errorName = new javax.swing.JLabel();
+        errorLabel1 = new javax.swing.JLabel();
+        errorLabel2 = new javax.swing.JLabel();
+        abortedLabel = new javax.swing.JLabel();
+        successLabel = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -111,20 +111,20 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
         inputTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "Name", "Quantity in Stock"
+                "ID", "Name", "Quantity in Stock", "Actual Count"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -135,19 +135,22 @@ public class ACTUALINPUT extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        inputTable.getTableHeader().setReorderingAllowed(false);
         inputTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 inputTableMouseClicked(evt);
             }
         });
         jScrollPane4.setViewportView(inputTable);
+        inputTable.getColumnModel().getColumn(0).setResizable(false);
+        inputTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 
         jLabel5.setText("Raw Materials");
 
-        updateActual.setText("SUBMIT");
-        updateActual.addActionListener(new java.awt.event.ActionListener() {
+        submitBtn.setText("SUBMIT");
+        submitBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateActualActionPerformed(evt);
+                submitBtnActionPerformed(evt);
             }
         });
 
@@ -158,64 +161,15 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             }
         });
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Input Actual Values"));
+        errorLabel1.setForeground(new java.awt.Color(255, 0, 1));
+        errorLabel1.setText("Submission Failed. Please check that all inputs are positive numbers");
 
-        jLabel2.setText("Name:");
+        errorLabel2.setForeground(new java.awt.Color(255, 0, 1));
+        errorLabel2.setText("and that no fields are empty.");
 
-        jLabel3.setText("Count:");
+        abortedLabel.setText("Submission aborted. No changes were made.");
 
-        rmName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rmNameActionPerformed(evt);
-            }
-        });
-
-        rmCount.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rmCountActionPerformed(evt);
-            }
-        });
-
-        errorCount.setForeground(new java.awt.Color(255, 0, 1));
-        errorCount.setText("ERROR: Required field. Please input valid number.");
-
-        errorName.setForeground(new java.awt.Color(255, 0, 1));
-        errorName.setText("ERROR: Required Field");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2))
-                .addGap(26, 26, 26)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(rmCount, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                    .addComponent(rmName))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(errorCount)
-                    .addComponent(errorName))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(rmName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorCount))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(rmCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorName))
-                .addContainerGap(64, Short.MAX_VALUE))
-        );
+        successLabel.setText("Success! Count has been updated.");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -224,22 +178,29 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addContainerGap()
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addGap(578, 578, 578))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(555, 555, 555)
-                            .addComponent(backBtn)
-                            .addGap(26, 26, 26)
-                            .addComponent(updateActual))))
-                .addContainerGap(45, Short.MAX_VALUE))
+                            .addComponent(jLabel5)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(278, 278, 278)
+                        .addComponent(backBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(submitBtn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(59, 59, 59)
+                        .addComponent(errorLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(146, 146, 146)
+                        .addComponent(errorLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(109, 109, 109)
+                        .addComponent(abortedLabel))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(133, 133, 133)
+                        .addComponent(successLabel)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,11 +211,17 @@ public class ACTUALINPUT extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(errorLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(errorLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addComponent(abortedLabel)
+                .addGap(18, 18, 18)
+                .addComponent(successLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(updateActual)
+                    .addComponent(submitBtn)
                     .addComponent(backBtn))
                 .addGap(35, 35, 35))
         );
@@ -267,55 +234,64 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void updateActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActualActionPerformed
+    
+    private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
         // TODO add your handling code here
 
-        boolean submit = true;
-
-        if (rmName.getText().toString().isEmpty()) {
-            
-            errorName.setVisible(true);
-            submit = false;
-        }
+        //JFrame frame = new JFrame("");
+        //int ans = JOptionPane.showConfirmDialog(rootPane, frame, "Are you sure that you want to submit? You may only submit once a day.", JOptionPane.YES_NO_OPTION);
         
-        if (!rmCount.getText().toString().isEmpty()) {
+        if (JOptionPane.showConfirmDialog(null, "Are you sure that you want to submit? You may only submit once a day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        
+        boolean submit = true;
+        
+            // VALIDATE INPUT
+            int rows = inputTable.getRowCount();
+            int c = 0;
             
-            if (!isNumber(rmCount.getText().toString())) {
+            for (c = 0; c < rows && submit; c++) {
+             
+                if(inputTable.getValueAt(c,3).toString().isEmpty() || Math.signum(Float.parseFloat(inputTable.getValueAt(c,3).toString())) == -1) {
+                        submit = false;
+                        System.out.println("error");
+                        errorLabel1.setVisible(true);
+                        errorLabel2.setVisible(true);
+                    }
                 
-                errorCount.setVisible(true);
-                submit = false;
             }
             
-        }
-        else {
-            
-            errorName.setVisible(true);
-            submit = false;
-            
-            
-        }
         
         if (submit) {
             
-            RawBean r = new RawBean();
-            String raw = rmName.getText().toString();
-            Float amt = Float.parseFloat(rmCount.getText().toString());
-            r.setRaw(raw);
-            r.setStock(amt);
-            rmImp.editRaw(r);
-            JOptionPane.showMessageDialog(null, "Successfully added the physical count!", "Success!", JOptionPane.INFORMATION_MESSAGE);
+            for (c = 0; c < rows; c++) {
             
+                int ID = Integer.parseInt(inputTable.getValueAt(c, 0).toString());
+                RawBean r = rmImp.getRaw(ID);
+                r.setStock(Float.parseFloat(inputTable.getValueAt(c, 3).toString()));
+                rmImp.editRaw(r);
+                
+            }
+            
+            
+            successLabel.setVisible(false);
+            displayTable();
         }
-
-    }//GEN-LAST:event_updateActualActionPerformed
+        else {
+           errorLabel1.setVisible(true);
+           errorLabel2.setVisible(true);
+                    
+        }
+      }
+        else {
+             abortedLabel.setVisible(true);
+        }
+    }//GEN-LAST:event_submitBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
@@ -323,22 +299,9 @@ public class ACTUALINPUT extends javax.swing.JFrame {
        main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 
-    private void rmCountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rmCountActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rmCountActionPerformed
-
-    private void rmNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rmNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rmNameActionPerformed
-
     private void inputTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputTableMouseClicked
         // TODO add your handling code here:
-        
-        int col = inputTable.getSelectedColumn();
-        int row = inputTable.getSelectedRow();
-        
-        String name = inputTable.getValueAt(row,col).toString();
-        rmName.setText(name);
+      
     }//GEN-LAST:event_inputTableMouseClicked
 
     /*
@@ -367,7 +330,9 @@ public class ACTUALINPUT extends javax.swing.JFrame {
          */
         
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"ID", "Name", "Quantity in Stock"};
+        String cols[] = {"ID","Name", "Quantity in Stock", "Actual Count"};
+        inputTable.getColumnModel().getColumn(0).setMinWidth(0);
+        inputTable.getColumnModel().getColumn(0).setMaxWidth(0);
         
         /*
          * FOR ACTUAL INPUT TABLE
@@ -377,9 +342,11 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         
         for (RawBean raw : aRaw) {
             
-            Object[] data = {raw.getRawID(), raw.getRaw(), null};
+            Object[] data = {raw.getRawID(), raw.getRaw(), raw.getStock(), ""};
             actualTable.addRow(data);
             inputTable.setModel(actualTable);
+            inputTable.getColumnModel().getColumn(0).setMinWidth(0);
+            inputTable.getColumnModel().getColumn(0).setMaxWidth(0);
             adjustTable(inputTable);
         }
         
@@ -459,22 +426,19 @@ public class ACTUALINPUT extends javax.swing.JFrame {
     }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel abortedLabel;
     private javax.swing.JButton backBtn;
-    private javax.swing.JLabel errorCount;
-    private javax.swing.JLabel errorName;
+    private javax.swing.JLabel errorLabel1;
+    private javax.swing.JLabel errorLabel2;
     private javax.swing.JTable inputTable;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField rmCount;
-    private javax.swing.JTextField rmName;
-    private javax.swing.JButton updateActual;
+    private javax.swing.JButton submitBtn;
+    private javax.swing.JLabel successLabel;
     // End of variables declaration//GEN-END:variables
 }
