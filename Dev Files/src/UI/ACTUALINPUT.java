@@ -56,7 +56,6 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         main = t;
-        transactTable();
         checkDate();
         errorLabel1.setVisible(false);
         errorLabel2.setVisible(false);
@@ -180,7 +179,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
                 submitBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(updateActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 276, -1, -1));
+        jPanel1.add(submitBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 276, -1, -1));
 
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -385,12 +384,12 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
             if(main.getDateXML().equals(curDate)) {
                 if(actual.equals("0") || actual.equals("1")) {
-                    updateActual.setVisible(true);
+                    submitBtn.setVisible(true);
                 } else if(actual.equals("2")) {
-                    updateActual.setVisible(false);
+                    submitBtn.setVisible(false);
                 }
             } else if(main.getDateXML().equals(nextDate)) {
-                updateActual.setVisible(false);
+                submitBtn.setVisible(false);
             }
         } catch(Exception e) {
             e.printStackTrace();
