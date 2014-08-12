@@ -40,8 +40,8 @@ public class Btf {
        int i;
        
        //TEST: ADD RECIPE - CHECK!
-       RecipeBean newRC = new RecipeBean("Banana Split", (float) 125.00, (float) 7.5, "available");
-       newRC.setRecipeID(20003);
+      // RecipeBean newRC = new RecipeBean("Banana Split", (float) 125.00, (float) 7.5, "available");
+       //newRC.setRecipeID(20003);
        //rcImp.addRecipe(newRC);
        
        //TEST: GET ALL RECIPE - CHECK!

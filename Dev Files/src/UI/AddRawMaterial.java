@@ -358,7 +358,7 @@ public class AddRawMaterial extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Successfully added the physical count!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 rm.setVisible(true);
                 rm.ViewAllRM();
-                rm.setFields(raw);
+                //rm.setFields(raw);
                 dispose();
             } catch(Exception err){
                 err.printStackTrace();

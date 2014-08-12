@@ -18,6 +18,7 @@ import java.util.Date;
 public interface SalesDAOInterface {
 
     public boolean addSales(SalesBean s, RecipeBean r, float a);
+    public boolean addSales(SalesBean s, RecipeBean r, float a, String d);
     
     public ArrayList<RecipeBean> getAllSales(String d);
     //gets the recipeBean in order
