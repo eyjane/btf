@@ -130,10 +130,6 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 91, 462, 157));
-
-        jLabel4.setText("Current Raw Material Inventory");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 43, -1, -1));
         jLabel1.setText("INPUT ACTUAL COUNT");
 
         inputTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -186,13 +182,6 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         });
         jPanel1.add(updateActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 276, -1, -1));
 
-        errorBox.setEditable(false);
-        errorBox.setColumns(20);
-        errorBox.setRows(5);
-        jScrollPane3.setViewportView(errorBox);
-
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, 330, 198));
-
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,9 +190,6 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         });
         jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(413, 276, -1, -1));
 
-        jLabel2.setForeground(new java.awt.Color(255, 0, 1));
-        jLabel2.setText("ERRORS:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, -1, -1));
         errorLabel1.setForeground(new java.awt.Color(255, 0, 1));
         errorLabel1.setText("Submission Failed. Please check that all inputs are positive numbers");
 
@@ -326,7 +312,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             }
             
             if(inputLockDown()){
-            updateActual.setVisible(false);
+            submitBtn.setVisible(false);
             //main.setNextDayBtn();
             }
             successLabel.setVisible(false);
