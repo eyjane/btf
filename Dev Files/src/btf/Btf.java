@@ -90,7 +90,7 @@ public class Btf {
        }
        gRC.setIngredients(aIngredients);
        System.out.println("ACTUAL PRICE: " + gRC.getActualPrice());
-       System.out.println("STOCK: " + gRC.computeStock());
+       //System.out.println("STOCK: " + gRC.computeStock());
        
        //<--- CLARK'S CODE STARTS HERE --->
        //check if there's already a password
