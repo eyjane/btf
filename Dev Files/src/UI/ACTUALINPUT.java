@@ -28,7 +28,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-<<<<<<< HEAD
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -57,13 +56,13 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         main = t;
-        transactTable();
+        displayTable();
         checkDate();
         errorLabel1.setVisible(false);
         errorLabel2.setVisible(false);
         abortedLabel.setVisible(false);
         successLabel.setVisible(false);
-        displayTable();
+        
     }
 
     /*
@@ -328,7 +327,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             }
             
             if(inputLockDown()){
-            updateActual.setVisible(false);
+            submitBtn.setVisible(false);
             //main.setNextDayBtn();
             }
             successLabel.setVisible(false);
@@ -401,12 +400,12 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
             if(main.getDateXML().equals(curDate)) {
                 if(actual.equals("0") || actual.equals("1")) {
-                    updateActual.setVisible(true);
+                    submitBtn.setVisible(true);
                 } else if(actual.equals("2")) {
-                    updateActual.setVisible(false);
+                    submitBtn.setVisible(false);
                 }
             } else if(main.getDateXML().equals(nextDate)) {
-                updateActual.setVisible(false);
+                submitBtn.setVisible(false);
             }
         } catch(Exception e) {
             e.printStackTrace();
