@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package DAO.Implementation;
 
 import Beans.CategoryBean;
@@ -27,6 +26,7 @@ import java.util.logging.Logger;
  * @author earleenjanefuentes
  */
 public class IngredientDAOImplementation implements IngredientDAOInterface {
+
     private Connection connection;
     private DBConnectionFactory dBConnectionFactory;
 
@@ -35,11 +35,17 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
         try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "INSERT into ingredients(recipeID, rawID, amount) values (?, ?, ?);";
+            String query = "INSERT into ingredients(recipeID, rawID, amount, date_ingredient) values (?, ?, ?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, r.getRecipeID());
             preparedStatement.setInt(2, i.getRaw().getRawID());
             preparedStatement.setFloat(3, i.getAmount());
+
+            /* create date*/
+            java.util.Date now = new java.util.Date();
+            java.sql.Date today = new java.sql.Date(now.getTime());
+
+            preparedStatement.setDate(4, today);
             preparedStatement.executeUpdate();
             connection.close();
             return true;
@@ -74,7 +80,7 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
             connection = dBConnectionFactory.getConnection();
             String query = "UPDATE ingredients SET amount = ? WHERE recipeID = ? AND rawID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            
+
             preparedStatement.setFloat(1, i.getAmount());
             preparedStatement.setInt(2, r.getRecipeID());
             preparedStatement.setInt(3, i.getRaw().getRawID());
@@ -89,13 +95,14 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
 
     @Override
     public ArrayList<IngredientBean> getAllIngredients(RecipeBean r) {
-       ArrayList<IngredientBean> aIngredient = new ArrayList<IngredientBean>();
-       RawDAOInterface rawImp = new RawDAOImplementation();
- 
+        ArrayList<IngredientBean> aIngredient = new ArrayList<IngredientBean>();
+        RawDAOInterface rawImp = new RawDAOImplementation();
+
         try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "select * from ingredients where recipeID = ?";
+
+            String query = "select * from ingredients where recipeID = ? and date_ingredient in (select max(date_ingredient) from ingredients);";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, r.getRecipeID());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -106,16 +113,77 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
                 rm = rawImp.getRaw(resultSet.getInt("rawID"));
                 i.setAmount(resultSet.getFloat("amount"));
                 i.setRaw(rm);
-                
+
                 aIngredient.add(i);
             }
             connection.close();
 
         } catch (SQLException ex) {
-            Logger.getLogger(RawDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(IngredientDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return aIngredient;
     }
 
+    @Override
+    public ArrayList<IngredientBean> getIngredientsBydate(RecipeBean r, String d) {
+        ArrayList<IngredientBean> aIngredient = new ArrayList<IngredientBean>();
+        RawDAOInterface rawImp = new RawDAOImplementation();
+
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+
+            String query = "select * from ingredients where recipeID = ? and date_ingredient = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, r.getRecipeID());
+            preparedStatement.setString(2, d);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                IngredientBean i = new IngredientBean();
+                RawBean rm = new RawBean();
+                rm = rawImp.getRaw(resultSet.getInt("rawID"));
+                i.setAmount(resultSet.getFloat("amount"));
+                i.setRaw(rm);
+
+                aIngredient.add(i);
+            }
+            connection.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(IngredientDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aIngredient;
+    }
+
+    @Override
+    public boolean isIngredient(RawBean r) {
        
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+
+            String query = "select distinct(rawID) "
+                    + "from ingredients "
+                    + "where date_ingredient in (select distinct(max(date_ingredient)) "
+                    + "from ingredients "
+                    + "group by recipeID);";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                if(resultSet.getInt("rawID") == r.getRawID()){
+                    return true;
+                }
+            }
+            connection.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(IngredientDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
 }

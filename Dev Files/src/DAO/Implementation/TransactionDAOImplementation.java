@@ -71,6 +71,45 @@ public class TransactionDAOImplementation implements TransactionDAOInterface {
         }
         return false;
     }
+    
+    @Override
+    public boolean addTransaction(TransactionBean t, RawBean r, float a, String d) {
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            String query = "INSERT into transactions(transaction_date, transaction_type) values (?, ?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, d);
+            preparedStatement.setString(2, t.getType());
+
+            preparedStatement.executeUpdate();
+
+            /* add to transact table */
+            query = "SELECT max(transactionID) from transactions;";
+            preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int transactionID = resultSet.getInt("max(transactionID)");
+                String tquery = "INSERT into transact(transactionID, rawID, quantity, price) values (?, ?, ?, ?);";
+                PreparedStatement tpreparedStatement = connection.prepareStatement(tquery);
+                tpreparedStatement.setInt(1, transactionID);
+                tpreparedStatement.setInt(2, r.getRawID());
+                tpreparedStatement.setFloat(3, a);
+                tpreparedStatement.setFloat(4, r.getPrice());
+
+                tpreparedStatement.executeUpdate();
+                connection.close();
+                return true;
+            }
+
+            connection.close();
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(TransactionDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 
     @Override
     public ArrayList<String> getAllDates() {
