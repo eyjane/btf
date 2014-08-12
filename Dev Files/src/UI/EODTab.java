@@ -332,7 +332,7 @@ public class EODTab extends javax.swing.JFrame {
     private void salesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesBtnActionPerformed
         this.setVisible(false);
         try {
-            SALES saleswindow = new SALES(this);
+            SALES saleswindow = new SALES(this, getDateXML());
             saleswindow.setVisible(true);
         } catch (Exception e) {
             System.out.println(e);
