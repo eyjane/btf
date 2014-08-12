@@ -15,11 +15,15 @@ import DAO.Interface.RawDAOInterface;
 import DAO.Interface.RecipeDAOInterface;
 import DAO.Interface.SalesDAOInterface;
 import DAO.Interface.TransactionDAOInterface;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -29,14 +33,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import static javax.swing.TransferHandler.COPY_OR_MOVE;
 import static javax.swing.TransferHandler.MOVE;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -46,6 +57,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.jfree.text.TextBox;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -66,11 +78,12 @@ public class SALES extends javax.swing.JFrame {
     private SalesDAOInterface tcImp = new SalesDAOImplementation();
     private ArrayList<RecipeBean> avRecipes;
     EODTab main;
+    private String date;
 
     /**
      * Creates new form SALES
      */
-    public SALES(EODTab t) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public SALES(EODTab t, String d) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
@@ -79,6 +92,7 @@ public class SALES extends javax.swing.JFrame {
         errorLabel1.setVisible(false);
         prepareTable();
         checkDate();
+        date = d;
 
     }
 
@@ -96,22 +110,16 @@ public class SALES extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         recipeTable = new javax.swing.JTable(){
             public boolean isCellEditable(int row, int c){
+                if(c == 2 || c == 3)
+                return true;
                 return false;
             }
         };
-        inputPanel = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        enterSales = new javax.swing.JButton();
-        salesField = new javax.swing.JTextField();
-        complimentaryField = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        nameLabel = new javax.swing.JLabel();
-        errorLabel = new javax.swing.JLabel();
-        errorLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         submitSales = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
+        errorLabel = new javax.swing.JLabel();
+        errorLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(956, 555));
@@ -143,87 +151,6 @@ public class SALES extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 79, 880, 129));
 
-        inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Recipe Information"));
-
-        jLabel2.setText("Name:");
-
-        jLabel3.setText("Sales:");
-
-        enterSales.setText("ENTER");
-        enterSales.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                enterSalesActionPerformed(evt);
-            }
-        });
-
-        salesField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                salesFieldActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setText("Compliment: ");
-
-        nameLabel.setText(" ");
-
-        errorLabel.setForeground(new java.awt.Color(204, 0, 51));
-        errorLabel.setText("ERROR: Please enter valid number");
-
-        errorLabel1.setForeground(new java.awt.Color(204, 0, 51));
-        errorLabel1.setText("ERROR: Please enter valid number");
-
-        javax.swing.GroupLayout inputPanelLayout = new javax.swing.GroupLayout(inputPanel);
-        inputPanel.setLayout(inputPanelLayout);
-        inputPanelLayout.setHorizontalGroup(
-            inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(inputPanelLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(inputPanelLayout.createSequentialGroup()
-                        .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(inputPanelLayout.createSequentialGroup()
-                        .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(enterSales)
-                            .addGroup(inputPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(28, 28, 28)
-                                .addComponent(complimentaryField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(errorLabel1))
-                    .addGroup(inputPanelLayout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addComponent(salesField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(errorLabel)))
-                .addContainerGap(63, Short.MAX_VALUE))
-        );
-        inputPanelLayout.setVerticalGroup(
-            inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(inputPanelLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(nameLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(salesField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(complimentaryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(errorLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addComponent(enterSales))
-        );
-
-        jPanel1.add(inputPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 460, 160));
-
         jLabel5.setText("Drag and Drop to re-arrange recipes");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 51, -1, -1));
 
@@ -242,6 +169,14 @@ public class SALES extends javax.swing.JFrame {
             }
         });
         jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, -1, -1));
+
+        errorLabel.setForeground(new java.awt.Color(204, 0, 51));
+        errorLabel.setText("ERROR: Please enter valid number for SALES");
+        jPanel1.add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, -1, 20));
+
+        errorLabel1.setForeground(new java.awt.Color(204, 0, 51));
+        errorLabel1.setText("ERROR: Please enter valid number for COMPLIMENTARY");
+        jPanel1.add(errorLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 310, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -263,9 +198,9 @@ public class SALES extends javax.swing.JFrame {
 
     private void submitSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitSalesActionPerformed
         int rcount = recipeTable.getRowCount();
-        int i,j;
-        
-        for(i=0; i<rcount;i++){
+        int i, j;
+
+        for (i = 0; i < rcount; i++) {
             SalesBean sbean = new SalesBean();
             SalesBean cbean = new SalesBean();
             float total = 0;
@@ -275,25 +210,25 @@ public class SALES extends javax.swing.JFrame {
             int rID = Integer.parseInt(recipeTable.getModel().getValueAt(i, 0).toString());
             float sales = Float.parseFloat(recipeTable.getModel().getValueAt(i, 2).toString());
             float compliment = Float.parseFloat(recipeTable.getModel().getValueAt(i, 3).toString());
-            
+
             RecipeBean rbean = rcImp.getRecipeBean(rID);
-            
+
             //add sales
-            sbean.setOrder(i+1);
+            sbean.setOrder(i + 1);
             sbean.setType("sales");
             tcImp.addSales(sbean, rbean, sales);
-            
+
             //add compliment
-            cbean.setOrder(i+1);
+            cbean.setOrder(i + 1);
             cbean.setType("complimentary");
-            tcImp.addSales(cbean, rbean, compliment);
-            
+            tcImp.addSales(cbean, rbean, compliment, date);
+
             //update rm stocks
             total = sales + compliment;
             ingredients = rbean.getIngredients();
-            for(j=0; j<ingredients.size(); j++){
-                d=0;
-                a=0;
+            for (j = 0; j < ingredients.size(); j++) {
+                d = 0;
+                a = 0;
                 RawBean rwbean = new RawBean();
                 rwbean = ingredients.get(j).getRaw();
                 a = rwbean.getStock(); //original stock
@@ -302,30 +237,22 @@ public class SALES extends javax.swing.JFrame {
                 rwbean.setStock(a);
                 rwImp.editRaw(rwbean);
             }
-            
-        } 
-        if(inputLockDown()){
+
+        }
+        if (inputLockDown()) {
             inputPanel.setVisible(false);
             submitSales.setVisible(false);
         }
         //this.setVisible(false);
         //main.setVisible(true);
-        
-    }//GEN-LAST:event_submitSalesActionPerformed
 
-    private void salesFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_salesFieldActionPerformed
+    }//GEN-LAST:event_submitSalesActionPerformed
 
     private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
         try {
             int rselect = recipeTable.getSelectedRow();
 
             //recipeIDLabel.setText(String.valueOf(r.getRecipeID()));
-            nameLabel.setText(recipeTable.getModel().getValueAt(rselect, 1).toString());
-            salesField.setText(recipeTable.getModel().getValueAt(rselect, 2).toString());
-            complimentaryField.setText(recipeTable.getModel().getValueAt(rselect, 3).toString());
-
             //CategoryBean ct = (CategoryBean)categoryBox.getSelectedItem();
             //System.out.println("SELECTED " + ct.getCategoryID());
         } catch (Exception e) {
@@ -333,104 +260,82 @@ public class SALES extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_recipeTableMouseClicked
 
-    private void enterSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterSalesActionPerformed
-        String sales = salesField.getText().toString();
-        String compliment = complimentaryField.getText().toString();
-        int rselected = recipeTable.getSelectedRow();
-        
-        if (rselected < 0) {
-            return;
-        }
-        if (isNumber(sales)) {
-            recipeTable.getModel().setValueAt(sales, rselected, 2);
-            errorLabel.setVisible(false);
-        } else {
-            errorLabel.setVisible(true);
-        }
-        
-        if(isNumber(compliment)){
-            recipeTable.getModel().setValueAt(compliment, rselected, 3);
-            errorLabel1.setVisible(false);
-        }else {
-            errorLabel1.setVisible(true);
-        }
-    }//GEN-LAST:event_enterSalesActionPerformed
-
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-       this.setVisible(false);
-       main.setVisible(true);
+        this.setVisible(false);
+        main.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
-    /*** <--- CLARK'S CODE STARTS HERE ---> ***/
-    
-    public boolean inputLockDown(){
+    /**
+     * * <--- CLARK'S CODE STARTS HERE ---> **
+     */
+
+    public boolean inputLockDown() {
         boolean flag = false;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date d = new Date();
-        String curDate = dateFormat.format(d) ;
-        
+        String curDate = dateFormat.format(d);
+
         try {
             String filepath = "btf.xml";
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-            
+
             String sales = doc.getElementsByTagName("sales").item(0).getTextContent();
             //System.out.println(sales);
-                if(sales.equals("0"))
-                    doc.getElementsByTagName("sales").item(0).setTextContent("1");
-                else if(sales.equals("1")) {
-                    doc.getElementsByTagName("sales").item(0).setTextContent("2");
-                    flag = true;
-                }
-                else if(sales.equals("2")) {
-                    flag = true;
-                    return flag;
-                }
-                
+            if (sales.equals("0")) {
+                doc.getElementsByTagName("sales").item(0).setTextContent("1");
+            } else if (sales.equals("1")) {
+                doc.getElementsByTagName("sales").item(0).setTextContent("2");
+                flag = true;
+            } else if (sales.equals("2")) {
+                flag = true;
+                return flag;
+            }
+
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(filepath));
             transformer.transform(source, result);
-                        
+
         } catch (Exception e) {
-             e.printStackTrace();
-        } 
-        
+            e.printStackTrace();
+        }
+
         return flag;
     }
-    
+
     public void checkDate() {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
-            String curDate = dateFormat.format(d) ;
+            String curDate = dateFormat.format(d);
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, +1);
             String nextDate = dateFormat.format(cal.getTime());
 
             String actual = main.getValueXML("actual");
 
-            if(main.getDateXML().equals(curDate)) {
-                if(actual.equals("0") || actual.equals("1")) {
-                    inputPanel.setVisible(true);
+            if (main.getDateXML().equals(curDate)) {
+                if (actual.equals("0") || actual.equals("1")) {
                     submitSales.setVisible(true);
-                } else if(actual.equals("2")) {
-                    inputPanel.setVisible(false);
+                } else if (actual.equals("2")) {
                     submitSales.setVisible(false);
                 }
-            } else if(main.getDateXML().equals(nextDate)) {
-                inputPanel.setVisible(false);
+            } else if (main.getDateXML().equals(nextDate)) {
                 submitSales.setVisible(false);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    /*** <--- CLARK'S CODE ENDS HERE ---> ***/
-    
-    /*** <--- JANERYS CODE STARTS HERE ---> ***/
-    
+
+    /**
+     * * <--- CLARK'S CODE ENDS HERE ---> **
+     */
+    /**
+     * * <--- JANERYS CODE STARTS HERE ---> **
+     */
     //check if number
     private boolean isNumber(String s) {
         try {
@@ -440,7 +345,7 @@ public class SALES extends javax.swing.JFrame {
             return false;
         }
     }
-    
+
     /* PREPARE TABLE */
     public void prepareTable() {
         avRecipes = new ArrayList<RecipeBean>();
@@ -462,11 +367,13 @@ public class SALES extends javax.swing.JFrame {
         recipeTable.setModel(recipeModel);
         recipeTable.getColumnModel().getColumn(0).setMinWidth(0);
         recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        
+
         recipeTable.setDragEnabled(true);
         recipeTable.setTransferHandler(new SALES.TableTransferHandler());
         adjustTable(recipeTable);
 
+        DefaultCellEditor deditor = new myChecker(new JTextField());
+        recipeTable.setDefaultEditor(Object.class, deditor);
     }
 
     /* ADJUST TABLE TO MAX WIDTH*/
@@ -492,188 +399,227 @@ public class SALES extends javax.swing.JFrame {
             tableColumn.setPreferredWidth(preferredWidth);
         }
     }
-    /*** <--- JANERYS CODE ENDS HERE ---> ***/
-    
-    /*** <--- CODE CREDITS: http://www.java2s.com/Code/Java/Swing-JFC/ExtendedDnDDragandDropDemo.htm ---> ***/
-    /*
- * StringTransferHandler.java is used by the 1.4 ExtendedDnDDemo.java example.
- */
-abstract class StringTransferHandler extends TransferHandler {
 
-    protected abstract String exportString(JComponent c);
+    private static class myChecker extends DefaultCellEditor {
 
-    protected abstract void importString(JComponent c, String str);
+        private static final Border red = new LineBorder(Color.red);
+        private static final Border black = new LineBorder(Color.black);
+        private JTextField textField;
 
-    protected abstract void cleanup(JComponent c, boolean remove);
-
-    protected Transferable createTransferable(JComponent c) {
-        return new StringSelection(exportString(c));
-    }
-
-    public int getSourceActions(JComponent c) {
-        return COPY_OR_MOVE;
-    }
-
-    public boolean importData(JComponent c, Transferable t) {
-        if (canImport(c, t.getTransferDataFlavors())) {
+        public myChecker(JTextField textField) {
+            super(textField);
+            this.textField = textField;
+            this.textField.setHorizontalAlignment(JTextField.RIGHT);
+        }
+        
+        
+        @Override
+        public boolean stopCellEditing() {
             try {
-                String str = (String) t
-                        .getTransferData(DataFlavor.stringFlavor);
-                importString(c, str);
-                return true;
-            } catch (UnsupportedFlavorException ufe) {
-            } catch (IOException ioe) {
+                float v = Float.parseFloat(textField.getText());
+                if (v < 0) {
+                    throw new NumberFormatException();
+                }
+                textField.setText(String.format("%.02f", v));
+            } catch (NumberFormatException e) {
+                textField.setBorder(red);
+                return false;
             }
+            return super.stopCellEditing();
         }
 
-        return false;
-    }
-
-    protected void exportDone(JComponent c, Transferable data, int action) {
-        cleanup(c, action == MOVE);
-    }
-
-    public boolean canImport(JComponent c, DataFlavor[] flavors) {
-        for (int i = 0; i < flavors.length; i++) {
-            if (DataFlavor.stringFlavor.equals(flavors[i])) {
-                return true;
-            }
+        @Override
+        public Component getTableCellEditorComponent(JTable table,
+                Object value, boolean isSelected, int row, int column) {
+            textField.setBorder(black);
+            return super.getTableCellEditorComponent(
+                    table, value, isSelected, row, column);
         }
-        return false;
+
     }
-}
 
-/*
- * TableTransferHandler.java is used by the 1.4 ExtendedDnDDemo.java example.
- */
-class TableTransferHandler extends StringTransferHandler {
+    /**
+     * * <--- JANERYS CODE ENDS HERE ---> **
+     */
+    /**
+     * * <--- CODE CREDITS:
+     * http://www.java2s.com/Code/Java/Swing-JFC/ExtendedDnDDragandDropDemo.htm
+     * ---> **
+     */
+    /*
+     * StringTransferHandler.java is used by the 1.4 ExtendedDnDDemo.java example.
+     */
+    abstract class StringTransferHandler extends TransferHandler {
 
-    private int[] rows = null;
+        protected abstract String exportString(JComponent c);
 
-    private int addIndex = -1; //Location where items were added
+        protected abstract void importString(JComponent c, String str);
 
-    private int addCount = 0; //Number of items added.
+        protected abstract void cleanup(JComponent c, boolean remove);
 
-    protected String exportString(JComponent c) {
-        //System.out.println("export");
-        JTable table = (JTable) c;
-        rows = table.getSelectedRows();
-        int colCount = table.getColumnCount();
+        protected Transferable createTransferable(JComponent c) {
+            return new StringSelection(exportString(c));
+        }
 
-        StringBuffer buff = new StringBuffer();
+        public int getSourceActions(JComponent c) {
+            return COPY_OR_MOVE;
+        }
 
-        for (int i = 0; i < rows.length; i++) {
-            for (int j = 0; j < colCount; j++) {
-                Object val = table.getValueAt(rows[i], j);
-                buff.append(val == null ? "" : val.toString());
-                if (j != colCount - 1) {
-                    buff.append(",");
+        public boolean importData(JComponent c, Transferable t) {
+            if (canImport(c, t.getTransferDataFlavors())) {
+                try {
+                    String str = (String) t
+                            .getTransferData(DataFlavor.stringFlavor);
+                    importString(c, str);
+                    return true;
+                } catch (UnsupportedFlavorException ufe) {
+                } catch (IOException ioe) {
                 }
             }
-            if (i != rows.length - 1) {
-                buff.append("\n");
+
+            return false;
+        }
+
+        protected void exportDone(JComponent c, Transferable data, int action) {
+            cleanup(c, action == MOVE);
+        }
+
+        public boolean canImport(JComponent c, DataFlavor[] flavors) {
+            for (int i = 0; i < flavors.length; i++) {
+                if (DataFlavor.stringFlavor.equals(flavors[i])) {
+                    return true;
+                }
             }
-        }
-        System.out.println(rows[0]);
-
-        return buff.toString();
-    }
-
-    protected void importString(JComponent c, String str) {
-        //System.out.println("import");
-        JTable target = (JTable) c;
-        DefaultTableModel model = (DefaultTableModel) target.getModel();
-        int index = target.getSelectedRow();
-
-        //Prevent the user from dropping data back on itself.
-        //For example, if the user is moving rows #4,#5,#6 and #7 and
-        //attempts to insert the rows after row #5, this would
-        //be problematic when removing the original rows.
-        //So this is not allowed.
-        if (rows != null && index >= rows[0] - 1
-                && index <= rows[rows.length - 1] & rows.length != 1) {
-            int x = rows[0] - 1;
-            int y = rows[rows.length - 1];
-            /*System.out.println("index (target row) = " + index);
-             System.out.println("rows[0] (source row) = " + rows[0]);
-             System.out.println("x = " + x);
-             System.out.println("y = " + y);
-             System.out.println("NOT ALLOWED");*/
-            System.out.println();
-            rows = null;
-            return;
-        }
-
-        int max = model.getRowCount();
-        if (index < 0) {
-            index = max;
-        } else {
-            index++;
-            if (index > max) {
-                index = max;
-            }
-        }
-        addIndex = index;
-        //System.out.println(index);
-        String[] values = str.split("\n");
-        addCount = values.length;
-        int colCount = target.getColumnCount();
-        for (int i = 0; i < values.length && i < colCount; i++) {
-            model.insertRow(index++, values[i].split(","));
-
+            return false;
         }
     }
 
-    protected void cleanup(JComponent c, boolean remove) {
+    /*
+     * TableTransferHandler.java is used by the 1.4 ExtendedDnDDemo.java example.
+     */
+    class TableTransferHandler extends StringTransferHandler {
 
-        //System.out.println("clean");
-        JTable source = (JTable) c;
-        if (remove && rows != null) {
-            DefaultTableModel model = (DefaultTableModel) source.getModel();
+        private int[] rows = null;
 
-            //If we are moving items around in the same table, we
-            //need to adjust the rows accordingly, since those
-            //after the insertion point have moved.
-            if (addCount > 0) {
-                for (int i = 0; i < rows.length; i++) {
-                    if (rows[i] >= addIndex) {
-                        rows[i] += addCount;
+        private int addIndex = -1; //Location where items were added
+
+        private int addCount = 0; //Number of items added.
+
+        protected String exportString(JComponent c) {
+            //System.out.println("export");
+            JTable table = (JTable) c;
+            rows = table.getSelectedRows();
+            int colCount = table.getColumnCount();
+
+            StringBuffer buff = new StringBuffer();
+
+            for (int i = 0; i < rows.length; i++) {
+                for (int j = 0; j < colCount; j++) {
+                    Object val = table.getValueAt(rows[i], j);
+                    buff.append(val == null ? "" : val.toString());
+                    if (j != colCount - 1) {
+                        buff.append(",");
                     }
                 }
+                if (i != rows.length - 1) {
+                    buff.append("\n");
+                }
             }
+            System.out.println(rows[0]);
 
-            for (int i = rows.length - 1; i >= 0; i--) {
-                model.removeRow(rows[i]);
-
-            }
-
+            return buff.toString();
         }
-        rows = null;
-        addCount = 0;
-        addIndex = -1;
+
+        protected void importString(JComponent c, String str) {
+            //System.out.println("import");
+            JTable target = (JTable) c;
+            DefaultTableModel model = (DefaultTableModel) target.getModel();
+            int index = target.getSelectedRow();
+
+            //Prevent the user from dropping data back on itself.
+            //For example, if the user is moving rows #4,#5,#6 and #7 and
+            //attempts to insert the rows after row #5, this would
+            //be problematic when removing the original rows.
+            //So this is not allowed.
+            if (rows != null && index >= rows[0] - 1
+                    && index <= rows[rows.length - 1] & rows.length != 1) {
+                int x = rows[0] - 1;
+                int y = rows[rows.length - 1];
+                /*System.out.println("index (target row) = " + index);
+                 System.out.println("rows[0] (source row) = " + rows[0]);
+                 System.out.println("x = " + x);
+                 System.out.println("y = " + y);
+                 System.out.println("NOT ALLOWED");*/
+                System.out.println();
+                rows = null;
+                return;
+            }
+
+            int max = model.getRowCount();
+            if (index < 0) {
+                index = max;
+            } else {
+                index++;
+                if (index > max) {
+                    index = max;
+                }
+            }
+            addIndex = index;
+            //System.out.println(index);
+            String[] values = str.split("\n");
+            addCount = values.length;
+            int colCount = target.getColumnCount();
+            for (int i = 0; i < values.length && i < colCount; i++) {
+                model.insertRow(index++, values[i].split(","));
+
+            }
+        }
+
+        protected void cleanup(JComponent c, boolean remove) {
+
+            //System.out.println("clean");
+            JTable source = (JTable) c;
+            if (remove && rows != null) {
+                DefaultTableModel model = (DefaultTableModel) source.getModel();
+
+                //If we are moving items around in the same table, we
+                //need to adjust the rows accordingly, since those
+                //after the insertion point have moved.
+                if (addCount > 0) {
+                    for (int i = 0; i < rows.length; i++) {
+                        if (rows[i] >= addIndex) {
+                            rows[i] += addCount;
+                        }
+                    }
+                }
+
+                for (int i = rows.length - 1; i >= 0; i--) {
+                    model.removeRow(rows[i]);
+
+                }
+
+            }
+            rows = null;
+            addCount = 0;
+            addIndex = -1;
+        }
     }
-}
-    /*** <--- CODE CREDITS: http://www.java2s.com/Code/Java/Swing-JFC/ExtendedDnDDragandDropDemo.htm ---> ***/
-    
+    /**
+     * * <--- CODE CREDITS:
+     * http://www.java2s.com/Code/Java/Swing-JFC/ExtendedDnDDragandDropDemo.htm
+     * ---> **
+     */
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JTextField complimentaryField;
-    private javax.swing.JButton enterSales;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel errorLabel1;
-    private javax.swing.JPanel inputPanel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel nameLabel;
     private javax.swing.JTable recipeTable;
-    private javax.swing.JTextField salesField;
     private javax.swing.JButton submitSales;
     // End of variables declaration//GEN-END:variables
 }
