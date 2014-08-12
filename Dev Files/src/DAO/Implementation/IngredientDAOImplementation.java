@@ -102,9 +102,10 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
 
-            String query = "select * from ingredients where recipeID = ? and date_ingredient in (select max(date_ingredient) from ingredients);";
+            String query = "select * from ingredients where recipeID = ? and date_ingredient in (select max(date_ingredient) from ingredients where recipeID = ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, r.getRecipeID());
+            preparedStatement.setInt(2, r.getRecipeID());
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
