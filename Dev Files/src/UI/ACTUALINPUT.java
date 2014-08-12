@@ -56,13 +56,13 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         main = t;
-        displayTable();
+        transactTable();
         checkDate();
         errorLabel1.setVisible(false);
         errorLabel2.setVisible(false);
         abortedLabel.setVisible(false);
         successLabel.setVisible(false);
-        
+        displayTable();
     }
 
     /*
@@ -281,7 +281,6 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-=======
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
@@ -327,7 +326,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             }
             
             if(inputLockDown()){
-            submitBtn.setVisible(false);
+            updateActual.setVisible(false);
             //main.setNextDayBtn();
             }
             successLabel.setVisible(false);
@@ -400,12 +399,12 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
             if(main.getDateXML().equals(curDate)) {
                 if(actual.equals("0") || actual.equals("1")) {
-                    submitBtn.setVisible(true);
+                    updateActual.setVisible(true);
                 } else if(actual.equals("2")) {
-                    submitBtn.setVisible(false);
+                    updateActual.setVisible(false);
                 }
             } else if(main.getDateXML().equals(nextDate)) {
-                submitBtn.setVisible(false);
+                updateActual.setVisible(false);
             }
         } catch(Exception e) {
             e.printStackTrace();
