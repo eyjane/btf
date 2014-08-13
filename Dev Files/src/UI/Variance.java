@@ -14,9 +14,11 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,17 +32,18 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -194,71 +197,136 @@ public class Variance extends javax.swing.JFrame {
     }//GEN-LAST:event_dateComboActionPerformed
 
     private void btnExportVarianceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportVarianceActionPerformed
-      try {
+      
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
-            String path = dateFormat.format(d) + " btf reports.xlsx" ;
+            String path = dateFormat.format(d) + " btf reports.xls" ;
             
             DateItem date = (DateItem) dateCombo.getSelectedItem();
-            exportToExcel(varianceTable, path, date.getValue());
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            checkExcelExist(varianceTable, path, date.getValue());
     }//GEN-LAST:event_btnExportVarianceActionPerformed
 
     /**
      * * <--- CLARK'S CODE STARTS HERE ---> **
      */
     
-    private void exportToExcel(JTable tables, String path, String date) throws FileNotFoundException, IOException {
-        new WorkbookFactory();
-        Workbook wb = new XSSFWorkbook(); //Excel workbook
+    private void exportToExcel(JTable tables, String path, String date) throws FileNotFoundException, IOException, InvalidFormatException {
+        HSSFWorkbook wb;
+        HSSFSheet sheet;
         JTable table = tables;
-        Sheet sheet = wb.createSheet("Variance"); //WorkSheet
+        int c1 = 1;
+        int c2 = 8;
+        int col = 1;
+        
+        wb = new HSSFWorkbook();
+        sheet = wb.createSheet("Variance"); 
         sheet.setColumnWidth(0, 10000);
         sheet.createFreezePane( 1, 0, 1, 0 );
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 2, 9));
+        
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
+        
+        CellStyle style = wb.createCellStyle();
+        style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        
         Row header = sheet.createRow(0);
-        Cell headerCell = header.createCell(2);
+        Cell headerCell = header.createCell(c1);
         headerCell.setCellValue(date);
+        headerCell.setCellStyle(style);
         CellUtil.setAlignment(headerCell, wb, CellStyle.ALIGN_CENTER);
         
-        Row row = sheet.createRow(3); //Row created at line 3
-        TableModel model = table.getModel(); //Table model
+        Row row = sheet.createRow(3);
+        TableModel model = table.getModel();
 
-        Row headerRow = sheet.createRow(1); //Create row at line 0
-        for(int headings = 1; headings < model.getColumnCount(); headings++){ //For each column
-            headerRow.createCell(headings - 1).setCellValue(model.getColumnName(headings));//Write column name
+        Row headerRow = sheet.createRow(1);
+        for(int headings = col; headings < model.getColumnCount(); headings++){
+            headerRow.createCell(headings + c1 - 2).setCellValue(model.getColumnName(headings));
         }
-
-        for(int rows = 0; rows < model.getRowCount(); rows++){ //For each table row
-            for(int cols = 1; cols < table.getColumnCount(); cols++){ //For each table column
-                sheet.setColumnWidth(cols, 3000);
+         
+        for(int rows = 0; rows < model.getRowCount(); rows++){ 
+            for(int cols = col; cols < table.getColumnCount(); cols++){ 
+                sheet.setColumnWidth(cols + c1 - 1, 3000);
                 String text = model.getValueAt(rows, cols).toString();
-                Cell cell = row.createCell(cols - 1); //create cell
-                cell.setCellValue(text); //Write value
+                Cell cell = row.createCell(cols + c1 - 2); 
+                cell.setCellValue(text); 
             }
-            //Set the row to the next one in the sequence 
             row = sheet.createRow((rows + 4)); 
         }
-        //wb.setSheetName(wb.getSheetIndex(sheet), "Raw Materials");
         try{
-            File file = new File(path);
-            if(!file.exists()) {
-                file.createNewFile();
-            } 
-            FileOutputStream fileOut =  new FileOutputStream(file, false);
-            wb.write(fileOut);//Save the file     
+            FileOutputStream fileOut =  new FileOutputStream(path);
+            wb.write(fileOut); 
             fileOut.close();
-            System.out.println("SUCCESS");
+            JOptionPane.showMessageDialog(null, "Successfully exported the report!", "Success", JOptionPane.INFORMATION_MESSAGE);
         }catch(Exception e){
             e.printStackTrace();
         }
         
     }
+    public void modifyExcel(JTable tables, String path, String date) {
+        InputStream inp;
+        JTable table = tables;
+        try {
+            inp = new FileInputStream(path);
+            Workbook wb = WorkbookFactory.create(inp);
+            Sheet sheet = wb.getSheetAt(0);
+            int c1 = sheet.getRow(3).getLastCellNum();
+            int c2 = c1 + 7;
+            Row row = sheet.getRow(3);
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
+            
+            CellStyle style = wb.createCellStyle();
+            style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            
+            Row header = sheet.getRow(0);
+            Cell headerCell = header.createCell(c1);
+            headerCell.setCellValue(date);
+            headerCell.setCellStyle(style);
+            CellUtil.setAlignment(headerCell, wb, CellStyle.ALIGN_CENTER);
+
+            TableModel model = table.getModel(); 
+
+            Row headerRow = sheet.getRow(1);
+            for(int headings = 2; headings < model.getColumnCount(); headings++){ 
+                headerRow.createCell(headings + c1 - 2).setCellValue(model.getColumnName(headings));
+            }
+            
+            for(int rows = 0; rows < model.getRowCount(); rows++){ 
+                for(int cols = 2; cols < table.getColumnCount(); cols++){ 
+                    sheet.setColumnWidth(cols + c1 - 1, 3000);
+                    String text = model.getValueAt(rows, cols).toString();
+                    Cell cell = row.createCell(cols + c1 - 2); 
+                    cell.setCellValue(text); 
+                }
+                
+                row = sheet.getRow((rows + 4)); 
+            }
+
+            FileOutputStream fileOut = new FileOutputStream(path);
+            wb.write(fileOut);
+            fileOut.close();
+            JOptionPane.showMessageDialog(null, "Successfully exported the report!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     
+    public void checkExcelExist(JTable tables, String path, String date){
+        try{
+            File file = new File(path);
+            if(!file.exists()) {
+                exportToExcel(varianceTable, path, date);
+            } else {
+                modifyExcel(varianceTable, path, date);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     /**
      * * <--- CLARK'S CODE ENDS HERE ---> **
      */
