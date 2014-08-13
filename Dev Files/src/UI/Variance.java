@@ -370,6 +370,8 @@ public class Variance extends javax.swing.JFrame {
     
     private float computeSales(RawBean r){
         float total = 0;
+        
+        //get a
         return total;
     }
     private void prepare() throws ParseException {
