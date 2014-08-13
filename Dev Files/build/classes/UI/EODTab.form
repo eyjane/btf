@@ -111,7 +111,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JTable" name="rawTable">
                       <Properties>
-<<<<<<< HEAD
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="4" rowCount="0">
                             <Column editable="true" title="Title 1" type="java.lang.Object"/>
@@ -124,12 +123,7 @@
                         <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                           <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                         </Property>
-=======
-                        <Property name="text" type="java.lang.String" value="DELIVERY"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton3">
                       <Properties>
@@ -150,7 +144,6 @@
                     <Component class="javax.swing.JButton" name="UTWbtn">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="USED/TRANSFERED AND WASTAGES"/>
->>>>>>> actualInput
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int row, int column){&#xa;        return false;&#xa;    }&#xa;}"/>
@@ -267,7 +260,7 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JButton" name="actualBtn">
+                <Component class="javax.swing.JButton" name="actualBtn1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="INPUT RAW MATERIAL COUNT"/>
                   </Properties>
@@ -280,7 +273,7 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JButton" name="UTWbtn">
+                <Component class="javax.swing.JButton" name="UTWbtn1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="USED/TRANSFERED AND WASTAGES"/>
                   </Properties>
@@ -354,12 +347,12 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JButton" name="btnExportReports">
+                <Component class="javax.swing.JButton" name="btnExportStock">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Export"/>
+                    <Property name="text" type="java.lang.String" value="Export Stock"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExportReportsActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExportStockActionPerformed"/>
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">

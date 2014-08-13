@@ -183,18 +183,27 @@ public class Login extends javax.swing.JFrame {
 
     private void passwordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordFieldKeyReleased
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            try {
-                EODTab e = new EODTab();
-                e.setVisible(true);
-                dispose();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedLookAndFeelException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            String pwd = new String(passwordField.getPassword());
+            //authenticate password
+            if(authenticate(pwd) == true){
+                try {
+                    EODTab e = new EODTab();
+                    e.setVisible(true);
+                    dispose();
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                //close the user authentication UI
+            } else{
+                JOptionPane.showMessageDialog(null, "The password that you have entered is incorrect. "
+                + "Please contact the developer in case you forgot your password.", "Incorrect Password", JOptionPane.WARNING_MESSAGE);
+                passwordField.setText("");
             }
         }
     }//GEN-LAST:event_passwordFieldKeyReleased

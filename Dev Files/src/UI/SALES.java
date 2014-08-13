@@ -240,7 +240,6 @@ public class SALES extends javax.swing.JFrame {
 
         }
         if (inputLockDown()) {
-            inputPanel.setVisible(false);
             submitSales.setVisible(false);
         }
         //this.setVisible(false);

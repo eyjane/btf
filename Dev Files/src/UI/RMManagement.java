@@ -2,8 +2,10 @@ package UI;
 
 import Beans.RawBean;
 import Beans.RecipeBean;
+import DAO.Implementation.IngredientDAOImplementation;
 import DAO.Implementation.RawDAOImplementation;
 import DAO.Implementation.RecipeDAOImplementation;
+import DAO.Interface.IngredientDAOInterface;
 import DAO.Interface.RawDAOInterface;
 import DAO.Interface.RecipeDAOInterface;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import javax.swing.table.TableModel;
  */
 public class RMManagement extends javax.swing.JFrame {
     private RawDAOInterface rmImp = new RawDAOImplementation();
-    private RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    private IngredientDAOInterface inImp = new IngredientDAOImplementation();
     private RawBean selectedRaw = null;
     private DefaultTableModel defaultModel;
 
@@ -68,14 +70,14 @@ public class RMManagement extends javax.swing.JFrame {
         }
     }
     
-    public boolean authenticateDelete(RawBean raw) {
+    /*public boolean authenticateDelete(RawBean raw) {
         boolean flag = true;
         ArrayList<RecipeBean> recipeTemp = null;
         recipeTemp = rcImp.getRecipeByRawMaterial(raw);
         if(recipeTemp.size() > 0)
             flag = false;
         return flag;
-    }
+    } */
     
     public void deleteRM(int r[]){
         TableModel model = rmTable.getModel();
@@ -84,7 +86,7 @@ public class RMManagement extends javax.swing.JFrame {
         for(int i = 0; i < r.length; i++){
             int rID = Integer.parseInt(rmTable.getModel().getValueAt(r[i], 0).toString());
             RawBean raw = rmImp.getRaw(rID);
-            if(authenticateDelete(raw)) {
+            if(!inImp.isIngredient(raw)) {
                     if(JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this raw material?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
                         rmImp.deleteRaw(raw);
                         JOptionPane.showMessageDialog(null, "Successfully deleted the raw material!", "Success", JOptionPane.INFORMATION_MESSAGE);

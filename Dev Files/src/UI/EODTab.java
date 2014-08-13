@@ -61,6 +61,7 @@ public class EODTab extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         prepareTable();
+        checkDate();
     }
 
     /**
@@ -82,7 +83,10 @@ public class EODTab extends javax.swing.JFrame {
             }
         };
         jScrollPane1 = new javax.swing.JScrollPane();
-        rawTable = new javax.swing.JTable(){
+        rawTable = new javax.swing.JTable();
+        jButton3 = new javax.swing.JButton();
+        actualBtn = new javax.swing.JButton();
+        UTWbtn = new javax.swing.JTable(){
             public boolean isCellEditable(int row, int column){
                 return false;
             }
@@ -95,14 +99,14 @@ public class EODTab extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         salesBtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        actualBtn = new javax.swing.JButton();
-        UTWbtn = new javax.swing.JButton();
+        actualBtn1 = new javax.swing.JButton();
+        UTWbtn1 = new javax.swing.JButton();
         nextDayBtn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
-        btnExportReports = new javax.swing.JButton();
+        btnExportStock = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
 
@@ -140,6 +144,25 @@ public class EODTab extends javax.swing.JFrame {
         ));
         rawTable.setName("Raw Material Stock"); // NOI18N
         jScrollPane1.setViewportView(rawTable);
+
+        jButton3.setText("EOD");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jButton3);
+
+        actualBtn.setText("EOD");
+        actualBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualBtnActionPerformed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(actualBtn);
+
+        UTWbtn.setText("USED/TRANSFERED AND WASTAGES");
+        jScrollPane1.setViewportView(UTWbtn);
 
         jPanel5.add(jScrollPane1);
         jScrollPane1.setBounds(160, 260, 452, 110);
@@ -204,23 +227,23 @@ public class EODTab extends javax.swing.JFrame {
         jPanel6.add(jButton2);
         jButton2.setBounds(0, 20, 160, 50);
 
-        actualBtn.setText("EOD");
-        actualBtn.addActionListener(new java.awt.event.ActionListener() {
+        actualBtn1.setText("INPUT RAW MATERIAL COUNT");
+        actualBtn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 actualBtnActionPerformed(evt);
             }
         });
-        jPanel6.add(actualBtn);
-        actualBtn.setBounds(0, 90, 160, 50);
+        jPanel6.add(actualBtn1);
+        actualBtn1.setBounds(0, 90, 160, 50);
 
-        UTWbtn.setText("USED/TRANSFERED AND WASTAGES");
-        UTWbtn.addActionListener(new java.awt.event.ActionListener() {
+        UTWbtn1.setText("USED/TRANSFERED AND WASTAGES");
+        UTWbtn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 UTWbtnActionPerformed(evt);
             }
         });
-        jPanel6.add(UTWbtn);
-        UTWbtn.setBounds(0, 230, 160, 50);
+        jPanel6.add(UTWbtn1);
+        UTWbtn1.setBounds(0, 230, 160, 50);
 
         nextDayBtn.setText("NEXT DAY");
         jPanel6.add(nextDayBtn);
@@ -248,14 +271,14 @@ public class EODTab extends javax.swing.JFrame {
         jPanel3.add(jButton9);
         jButton9.setBounds(0, 170, 160, 50);
 
-        btnExportReports.setText("Export");
-        btnExportReports.addActionListener(new java.awt.event.ActionListener() {
+        btnExportStock.setText("Export Stock");
+        btnExportStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportReportsActionPerformed(evt);
+                btnExportStockActionPerformed(evt);
             }
         });
-        jPanel3.add(btnExportReports);
-        btnExportReports.setBounds(0, 310, 160, 50);
+        jPanel3.add(btnExportStock);
+        btnExportStock.setBounds(0, 310, 160, 50);
 
         jButton1.setText("Variance");
         jPanel3.add(jButton1);
@@ -376,7 +399,7 @@ public class EODTab extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_UTWbtnActionPerformed
 
-    private void btnExportReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportReportsActionPerformed
+    private void btnExportStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportStockActionPerformed
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
@@ -391,7 +414,7 @@ public class EODTab extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnExportReportsActionPerformed
+    }//GEN-LAST:event_btnExportStockActionPerformed
 
 
     private void nextDayBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UTWbtn1ActionPerformed
@@ -402,19 +425,14 @@ public class EODTab extends javax.swing.JFrame {
             Calendar cal1 = Calendar.getInstance();
             cal1.add(Calendar.DATE, +1);
             String nextDate = dateFormat.format(cal1.getTime());
-            Calendar cal2 = Calendar.getInstance();
-            cal2.add(Calendar.DATE, -1);
-            String prevDate = dateFormat.format(cal2.getTime());
-            System.out.println(curDate);
-            System.out.println(nextDate);
         
             if(getDateXML().equals(curDate)) {
                 if(JOptionPane.showConfirmDialog(null, "Are you sure you're done for the day?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
                         nextDay(nextDate);
                         JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
-            } else if(!getDateXML().equals(nextDate)) {
-                nextDay(nextDate);
+            } else if(!getDateXML().equals(nextDate) && !getDateXML().equals(curDate)) {
+                nextDay(curDate);
                 JOptionPane.showMessageDialog(null, "New date is " + curDate, "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
@@ -431,12 +449,9 @@ public class EODTab extends javax.swing.JFrame {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-            
-            String date = doc.getElementsByTagName("date").item(0).getTextContent();
-            String sales = doc.getElementsByTagName("sales").item(0).getTextContent();
-            System.out.println(date);
-            
-            doc.getElementsByTagName("date").item(0).setTextContent(curDate);
+                       
+            doc.getElementsByTagName("delivery").item(0).setTextContent("0");
+            doc.getElementsByTagName("used").item(0).setTextContent("0");
             doc.getElementsByTagName("sales").item(0).setTextContent("0");
             doc.getElementsByTagName("actual").item(0).setTextContent("0");
             
@@ -508,12 +523,11 @@ public class EODTab extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+
+    public void setNextDayBtn() {
+        nextDayBtn.setVisible(true);
+    }
     
-
-    /**
-     * < -- CLARK'S FUNCTIONS START -- > *
-     */
-
     private void exportToExcel(ArrayList<JTable> tables, String path) throws FileNotFoundException, IOException {
         new WorkbookFactory();
         Workbook wb = new XSSFWorkbook(); //Excel workbook
@@ -577,8 +591,6 @@ public class EODTab extends javax.swing.JFrame {
         System.out.println(temp);
         temp = temp.replace("</b></p></html>", "");
         System.out.println(temp);
-        //int index = str.indexOf("(");
-        //System.out.println(temp.substring(0, index));
         return temp;
     }
     /**
@@ -704,11 +716,14 @@ public class EODTab extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane InventoryTab;
     private javax.swing.JButton UTWbtn;
+    private javax.swing.JButton UTWbtn1;
     private javax.swing.JButton actualBtn;
-    private javax.swing.JButton btnExportReports;
+    private javax.swing.JButton actualBtn1;
+    private javax.swing.JButton btnExportStock;
     private javax.swing.JButton cMgt2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
@@ -728,4 +743,5 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JButton rmMgt1;
     private javax.swing.JButton salesBtn;
     // End of variables declaration//GEN-END:variables
-}
+
+    

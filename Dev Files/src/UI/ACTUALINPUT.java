@@ -312,7 +312,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             
             if(inputLockDown()){
             submitBtn.setVisible(false);
-            //main.setNextDayBtn();
+            main.setNextDayBtn();
             }
             successLabel.setVisible(false);
             displayTable();
