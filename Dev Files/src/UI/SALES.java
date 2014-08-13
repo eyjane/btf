@@ -37,6 +37,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -119,7 +120,6 @@ public class SALES extends javax.swing.JFrame {
         submitSales = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
         errorLabel = new javax.swing.JLabel();
-        errorLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(956, 555));
@@ -171,12 +171,8 @@ public class SALES extends javax.swing.JFrame {
         jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, -1, -1));
 
         errorLabel.setForeground(new java.awt.Color(204, 0, 51));
-        errorLabel.setText("ERROR: Please enter valid number for SALES");
+        errorLabel.setText("ERROR: Please enter valid number.");
         jPanel1.add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, -1, 20));
-
-        errorLabel1.setForeground(new java.awt.Color(204, 0, 51));
-        errorLabel1.setText("ERROR: Please enter valid number for COMPLIMENTARY");
-        jPanel1.add(errorLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 310, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -371,7 +367,7 @@ public class SALES extends javax.swing.JFrame {
         recipeTable.setTransferHandler(new SALES.TableTransferHandler());
         adjustTable(recipeTable);
 
-        DefaultCellEditor deditor = new myChecker(new JTextField());
+        DefaultCellEditor deditor = new myChecker(new JTextField(),errorLabel);
         recipeTable.setDefaultEditor(Object.class, deditor);
     }
 
@@ -404,11 +400,13 @@ public class SALES extends javax.swing.JFrame {
         private static final Border red = new LineBorder(Color.red);
         private static final Border black = new LineBorder(Color.black);
         private JTextField textField;
+        private JLabel eLabel;
 
-        public myChecker(JTextField textField) {
+        public myChecker(JTextField textField, JLabel e) {
             super(textField);
             this.textField = textField;
             this.textField.setHorizontalAlignment(JTextField.RIGHT);
+            eLabel = e;
         }
         
         
@@ -420,8 +418,10 @@ public class SALES extends javax.swing.JFrame {
                     throw new NumberFormatException();
                 }
                 textField.setText(String.format("%.02f", v));
+                eLabel.setVisible(false);
             } catch (NumberFormatException e) {
                 textField.setBorder(red);
+                eLabel.setVisible(true);
                 return false;
             }
             return super.stopCellEditing();
@@ -613,7 +613,6 @@ public class SALES extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
     private javax.swing.JLabel errorLabel;
-    private javax.swing.JLabel errorLabel1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
