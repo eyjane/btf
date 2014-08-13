@@ -140,7 +140,9 @@ public class AddCategory extends javax.swing.JFrame {
         });
         categoryTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(categoryTable);
-        categoryTable.getColumnModel().getColumn(0).setResizable(false);
+        if (categoryTable.getColumnModel().getColumnCount() > 0) {
+            categoryTable.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         jLabel9.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel9.setText("CATEGORY");
