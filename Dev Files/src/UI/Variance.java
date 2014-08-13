@@ -13,6 +13,10 @@ import DAO.Interface.TransactionDAOInterface;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,6 +29,18 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -66,6 +82,7 @@ public class Variance extends javax.swing.JFrame {
         varianceTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        btnExportVariance = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(956, 555));
@@ -101,12 +118,21 @@ public class Variance extends javax.swing.JFrame {
             }
         });
 
+        btnExportVariance.setText("Export Variance Report");
+        btnExportVariance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportVarianceActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnExportVariance)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -135,7 +161,9 @@ public class Variance extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(btnExportVariance))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
 
@@ -165,6 +193,75 @@ public class Variance extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_dateComboActionPerformed
 
+    private void btnExportVarianceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportVarianceActionPerformed
+      try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String path = dateFormat.format(d) + " btf reports.xlsx" ;
+            
+            DateItem date = (DateItem) dateCombo.getSelectedItem();
+            exportToExcel(varianceTable, path, date.getValue());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnExportVarianceActionPerformed
+
+    /**
+     * * <--- CLARK'S CODE STARTS HERE ---> **
+     */
+    
+    private void exportToExcel(JTable tables, String path, String date) throws FileNotFoundException, IOException {
+        new WorkbookFactory();
+        Workbook wb = new XSSFWorkbook(); //Excel workbook
+        JTable table = tables;
+        Sheet sheet = wb.createSheet("Variance"); //WorkSheet
+        sheet.setColumnWidth(0, 10000);
+        sheet.createFreezePane( 1, 0, 1, 0 );
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 2, 9));
+        Row header = sheet.createRow(0);
+        Cell headerCell = header.createCell(2);
+        headerCell.setCellValue(date);
+        CellUtil.setAlignment(headerCell, wb, CellStyle.ALIGN_CENTER);
+        
+        Row row = sheet.createRow(3); //Row created at line 3
+        TableModel model = table.getModel(); //Table model
+
+        Row headerRow = sheet.createRow(1); //Create row at line 0
+        for(int headings = 1; headings < model.getColumnCount(); headings++){ //For each column
+            headerRow.createCell(headings - 1).setCellValue(model.getColumnName(headings));//Write column name
+        }
+
+        for(int rows = 0; rows < model.getRowCount(); rows++){ //For each table row
+            for(int cols = 1; cols < table.getColumnCount(); cols++){ //For each table column
+                sheet.setColumnWidth(cols, 3000);
+                String text = model.getValueAt(rows, cols).toString();
+                Cell cell = row.createCell(cols - 1); //create cell
+                cell.setCellValue(text); //Write value
+            }
+            //Set the row to the next one in the sequence 
+            row = sheet.createRow((rows + 4)); 
+        }
+        //wb.setSheetName(wb.getSheetIndex(sheet), "Raw Materials");
+        try{
+            File file = new File(path);
+            if(!file.exists()) {
+                file.createNewFile();
+            } 
+            FileOutputStream fileOut =  new FileOutputStream(file, false);
+            wb.write(fileOut);//Save the file     
+            fileOut.close();
+            System.out.println("SUCCESS");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+    }
+    
+    /**
+     * * <--- CLARK'S CODE ENDS HERE ---> **
+     */
     /**
      * * <--- JANERYS CODE STARTS HERE ---> **
      */
@@ -200,6 +297,7 @@ public class Variance extends javax.swing.JFrame {
         varianceTable.getColumnModel().getColumn(0).setMinWidth(0);
         varianceTable.getColumnModel().getColumn(0).setMaxWidth(0);
         adjustTable(varianceTable);
+        btnExportVariance.setVisible(true);
     }
     
     private float computeSales(RawBean r){
@@ -222,7 +320,7 @@ public class Variance extends javax.swing.JFrame {
         }
 
         dateCombo.addItemListener(new ItemChangeListener());
-        
+        btnExportVariance.setVisible(false);
         //prepare table
         
         
@@ -336,6 +434,7 @@ public class Variance extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnExportVariance;
     private javax.swing.JComboBox dateCombo;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

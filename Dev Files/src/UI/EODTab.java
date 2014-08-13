@@ -403,7 +403,7 @@ public class EODTab extends javax.swing.JFrame {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
-            String path = dateFormat.format(d) + " btf.xlsx" ;
+            String path = dateFormat.format(d) + " btf stocks.xlsx" ;
 
             ArrayList<JTable> tables = new ArrayList<JTable>();
             tables.add(rawTable);
