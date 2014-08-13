@@ -147,12 +147,14 @@ public class RMManagement extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(rmTable);
-        rmTable.getColumnModel().getColumn(0).setResizable(false);
-        rmTable.getColumnModel().getColumn(1).setResizable(false);
-        rmTable.getColumnModel().getColumn(2).setResizable(false);
-        rmTable.getColumnModel().getColumn(3).setResizable(false);
-        rmTable.getColumnModel().getColumn(4).setResizable(false);
-        rmTable.getColumnModel().getColumn(5).setResizable(false);
+        if (rmTable.getColumnModel().getColumnCount() > 0) {
+            rmTable.getColumnModel().getColumn(0).setResizable(false);
+            rmTable.getColumnModel().getColumn(1).setResizable(false);
+            rmTable.getColumnModel().getColumn(2).setResizable(false);
+            rmTable.getColumnModel().getColumn(3).setResizable(false);
+            rmTable.getColumnModel().getColumn(4).setResizable(false);
+            rmTable.getColumnModel().getColumn(5).setResizable(false);
+        }
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 710, 430));
 
