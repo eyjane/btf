@@ -93,9 +93,8 @@ public class SALES extends javax.swing.JFrame {
         prepareTable();
         checkDate();
         date = d;
-        
-        /*insert code: DISABLE SUBMIT BTN*/
 
+        /*insert code: DISABLE SUBMIT BTN*/
     }
 
     /**
@@ -197,51 +196,56 @@ public class SALES extends javax.swing.JFrame {
         int rcount = recipeTable.getRowCount();
         int i, j;
 
-        for (i = 0; i < rcount; i++) {
-            SalesBean sbean = new SalesBean();
-            SalesBean cbean = new SalesBean();
-            float total = 0;
-            float d;
-            float a;
-            ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
-            int rID = Integer.parseInt(recipeTable.getModel().getValueAt(i, 0).toString());
-            float sales = Float.parseFloat(recipeTable.getModel().getValueAt(i, 2).toString());
-            float compliment = Float.parseFloat(recipeTable.getModel().getValueAt(i, 3).toString());
+        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this recipe?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
-            RecipeBean rbean = rcImp.getRecipeBean(rID);
+            for (i = 0; i < rcount; i++) {
+                SalesBean sbean = new SalesBean();
+                SalesBean cbean = new SalesBean();
+                float total = 0;
+                float d;
+                float a;
+                ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
+                int rID = Integer.parseInt(recipeTable.getModel().getValueAt(i, 0).toString());
+                float sales = Float.parseFloat(recipeTable.getModel().getValueAt(i, 2).toString());
+                float compliment = Float.parseFloat(recipeTable.getModel().getValueAt(i, 3).toString());
 
-            //add sales
-            sbean.setOrder(i + 1);
-            sbean.setType("sales");
-            tcImp.addSales(sbean, rbean, sales);
+                RecipeBean rbean = rcImp.getRecipeBean(rID);
 
-            //add compliment
-            cbean.setOrder(i + 1);
-            cbean.setType("complimentary");
-            tcImp.addSales(cbean, rbean, compliment, date);
+                //add sales
+                sbean.setOrder(i + 1);
+                sbean.setType("sales");
+                tcImp.addSales(sbean, rbean, sales);
 
-            //update rm stocks
-            total = sales + compliment;
-            ingredients = rbean.getIngredients();
-            for (j = 0; j < ingredients.size(); j++) {
-                d = 0;
-                a = 0;
-                RawBean rwbean = new RawBean();
-                rwbean = ingredients.get(j).getRaw();
-                a = rwbean.getStock(); //original stock
-                d = ingredients.get(j).getAmount() * total; //to be deducted
-                a -= d;
-                rwbean.setStock(a);
-                rwImp.editRaw(rwbean);
+                //add compliment
+                cbean.setOrder(i + 1);
+                cbean.setType("complimentary");
+                tcImp.addSales(cbean, rbean, compliment, date);
+
+                //update rm stocks
+                total = sales + compliment;
+                ingredients = rbean.getIngredients();
+                for (j = 0; j < ingredients.size(); j++) {
+                    d = 0;
+                    a = 0;
+                    RawBean rwbean = new RawBean();
+                    rwbean = ingredients.get(j).getRaw();
+                    a = rwbean.getStock(); //original stock
+                    d = ingredients.get(j).getAmount() * total; //to be deducted
+                    a -= d;
+                    rwbean.setStock(a);
+                    rwImp.editRaw(rwbean);
+                }
+
             }
-
-        }
-        if (inputLockDown()) {
-            submitSales.setVisible(false);
-        }
+            if (inputLockDown()) {
+                submitSales.setVisible(false);
+            }
         //this.setVisible(false);
-        //main.setVisible(true);
+            //main.setVisible(true);
 
+        } else {
+            return;
+        }
     }//GEN-LAST:event_submitSalesActionPerformed
 
     private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
@@ -368,11 +372,16 @@ public class SALES extends javax.swing.JFrame {
         recipeTable.setTransferHandler(new SALES.TableTransferHandler());
         adjustTable(recipeTable);
 
-        /*** <--- KIM PLS NOTE: THIS HOW TO APPLY THE MYCHECKER TO YOUR TABLE.. errorLabel = JLabel for displaying error ---> ***/
+        /**
+         * * <--- KIM PLS NOTE: THIS HOW TO APPLY THE MYCHECKER TO YOUR TABLE..
+         * errorLabel = JLabel for displaying error ---> **
+         */
         /* KAHIT ONE ERROR LABEL NA LANG THAT SAYS: ERROR: Please enter valid number. */
         DefaultCellEditor deditor = new myChecker(new JTextField(), errorLabel);
         recipeTable.setDefaultEditor(Object.class, deditor);
-        /*** <--- KIM PLS NOTE ENDS HERE ---> ***/
+        /**
+         * * <--- KIM PLS NOTE ENDS HERE ---> **
+         */
     }
 
     /* ADJUST TABLE TO MAX WIDTH*/
@@ -399,22 +408,23 @@ public class SALES extends javax.swing.JFrame {
         }
     }
 
-    /** <--- KIM PLS NOTE: COPY THIS WHOLE THING FOR THE ERROR CHECKING ---> ***/
+    /**
+     * <--- KIM PLS NOTE: COPY THIS WHOLE THING FOR THE ERROR CHECKING ---> **
+     */
     private static class myChecker extends DefaultCellEditor {
 
         private static final Border red = new LineBorder(Color.red);
         private static final Border black = new LineBorder(Color.black);
         private JTextField textField;
         private JLabel eLabel;
-        
+
         public myChecker(JTextField textField, JLabel e) {
             super(textField);
             this.textField = textField;
             this.textField.setHorizontalAlignment(JTextField.RIGHT);
             eLabel = e;
         }
-        
-        
+
         @Override
         public boolean stopCellEditing() {
             try {
@@ -441,9 +451,10 @@ public class SALES extends javax.swing.JFrame {
         }
 
     }
-    
-    /** <--- KIM PLS NOTE: COPY THIS WHOLE THING FOR THE ERROR CHECKING ---> ***/
 
+    /**
+     * <--- KIM PLS NOTE: COPY THIS WHOLE THING FOR THE ERROR CHECKING ---> **
+     */
     /**
      * * <--- JANERYS CODE ENDS HERE ---> **
      */
