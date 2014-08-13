@@ -82,11 +82,8 @@ public class EODTab extends javax.swing.JFrame {
                 return false;
             }
         };
-        jScrollPane1 = new javax.swing.JScrollPane();
-        rawTable = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        actualBtn = new javax.swing.JButton();
-        UTWbtn = new javax.swing.JTable(){
+        jScrollPane3 = new javax.swing.JScrollPane();
+        rawTable = new javax.swing.JTable(){
             public boolean isCellEditable(int row, int column){
                 return false;
             }
@@ -132,50 +129,34 @@ public class EODTab extends javax.swing.JFrame {
         jScrollPane2.setViewportView(recipeTable);
 
         jPanel5.add(jScrollPane2);
-        jScrollPane2.setBounds(160, 50, 452, 110);
+        jScrollPane2.setBounds(170, 50, 454, 110);
 
         rawTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        rawTable.setName("Raw Material Stock"); // NOI18N
-        jScrollPane1.setViewportView(rawTable);
+        rawTable.setName("Recipe Stock"); // NOI18N
+        jScrollPane3.setViewportView(rawTable);
 
-        jButton3.setText("EOD");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jButton3);
-
-        actualBtn.setText("EOD");
-        actualBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                actualBtnActionPerformed(evt);
-            }
-        });
-        jScrollPane1.setViewportView(actualBtn);
-
-        UTWbtn.setText("USED/TRANSFERED AND WASTAGES");
-        jScrollPane1.setViewportView(UTWbtn);
-
-        jPanel5.add(jScrollPane1);
-        jScrollPane1.setBounds(160, 260, 452, 110);
+        jPanel5.add(jScrollPane3);
+        jScrollPane3.setBounds(170, 260, 454, 110);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel1.setText("RECIPE STOCK");
         jPanel5.add(jLabel1);
-        jLabel1.setBounds(167, 16, 179, 32);
+        jLabel1.setBounds(167, 16, 178, 30);
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel2.setText("RAW MATERIAL STOCK");
         jPanel5.add(jLabel2);
-        jLabel2.setBounds(170, 220, 279, 32);
+        jLabel2.setBounds(170, 220, 286, 30);
 
         rcMgt.setText("Recipe Management");
         rcMgt.addActionListener(new java.awt.event.ActionListener() {
@@ -715,15 +696,12 @@ public class EODTab extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane InventoryTab;
-    private javax.swing.JButton UTWbtn;
     private javax.swing.JButton UTWbtn1;
-    private javax.swing.JButton actualBtn;
     private javax.swing.JButton actualBtn1;
     private javax.swing.JButton btnExportStock;
     private javax.swing.JButton cMgt2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
@@ -734,8 +712,8 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JButton nextDayBtn;
     private javax.swing.JTable rawTable;
     private javax.swing.JButton rcMgt;
@@ -745,3 +723,4 @@ public class EODTab extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     
+}
