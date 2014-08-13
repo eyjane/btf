@@ -19,6 +19,8 @@ public interface TransactionDAOInterface {
 
     public boolean addTransaction(TransactionBean t, RawBean r, float a);
     
+    public boolean addTransaction(TransactionBean t, RawBean r, float a, String d);
+    
     public ArrayList<String> getAllDates();
 
     public float sumQuantityByDay(String d, String s); //gets sum of quantities by type

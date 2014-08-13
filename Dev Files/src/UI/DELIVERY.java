@@ -4,14 +4,10 @@ import Beans.RawBean;
 import DAO.Implementation.RawDAOImplementation;
 import DAO.Interface.RawDAOInterface;
 import java.awt.Component;
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
@@ -19,13 +15,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Document;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -52,12 +41,11 @@ public class DELIVERY extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         main = t;
-        errorLabel.setVisible(false);
-        errorLabel2.setVisible(false);
-        success.setVisible(false);
-        inputMsg.setVisible(false);
+        failLabel1.setVisible(false);
+        failLabel2.setVisible(false);
+        successLabel.setVisible(false);
+        abortLabel.setVisible(false);
         viewRaw();
-        checkDate();
     }
     /*
      * <!-- KIM CODE START -> *
@@ -66,14 +54,19 @@ public class DELIVERY extends javax.swing.JFrame {
         aRaw = new ArrayList<RawBean>();
         
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"Name", "Amount"};
+        String cols[] = {"ID","Name", "Quantity in Stock", "Delivered Amount"};
+        rawTable.getColumnModel().getColumn(0).setMinWidth(0);
+        rawTable.getColumnModel().getColumn(0).setMaxWidth(0);
         DefaultTableModel allRaw = new DefaultTableModel(cols, 0);
+        
         
         for (RawBean raw : aRaw) {
             
-            Object[] data = {raw.getRaw(), raw.getStock()};
+            Object[] data = {raw.getRawID(), raw.getRaw(), raw.getStock(), ""};
             allRaw.addRow(data);
             rawTable.setModel(allRaw);
+            rawTable.getColumnModel().getColumn(0).setMinWidth(0);
+            rawTable.getColumnModel().getColumn(0).setMaxWidth(0);
             adjustTable(rawTable);
         }
         
@@ -114,22 +107,20 @@ public class DELIVERY extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         rawTable = new javax.swing.JTable();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        rmName = new javax.swing.JTextField();
-        rmAmount = new javax.swing.JTextField();
-        errorLabel = new javax.swing.JLabel();
-        errorLabel2 = new javax.swing.JLabel();
-        inputMsg = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        success = new javax.swing.JLabel();
+        successLabel = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
         submitBtn = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        failLabel1 = new javax.swing.JLabel();
+        failLabel2 = new javax.swing.JLabel();
+        abortLabel = new javax.swing.JLabel();
+
+        jLabel5.setText("jLabel5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -137,20 +128,20 @@ public class DELIVERY extends javax.swing.JFrame {
 
         rawTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Name", "Amount"
+                "ID", "Name", "Quantity in Stock", "Amount"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Float.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -167,70 +158,9 @@ public class DELIVERY extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(rawTable);
+        rawTable.getColumnModel().getColumn(0).setResizable(false);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Raw Materials Information"));
-
-        jLabel2.setText("Name:");
-
-        jLabel3.setText("Delivery:");
-
-        rmName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rmNameActionPerformed(evt);
-            }
-        });
-
-        errorLabel.setForeground(new java.awt.Color(255, 0, 1));
-        errorLabel.setText("ERROR: Required Field");
-
-        errorLabel2.setForeground(new java.awt.Color(255, 0, 1));
-        errorLabel2.setText("ERROR: Required field. Please input valid number.");
-
-        inputMsg.setText("* Input new amount above.");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addGap(50, 50, 50)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(inputMsg)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(rmName, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                            .addComponent(rmAmount))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(errorLabel)
-                            .addComponent(errorLabel2))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(rmName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorLabel))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(rmAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(inputMsg)
-                .addGap(14, 14, 14))
-        );
-
-        jLabel4.setText("jLabel4");
-
-        success.setText("Delivery information was successfully added.");
+        successLabel.setText("Delivery information was successfully added.");
 
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -246,6 +176,14 @@ public class DELIVERY extends javax.swing.JFrame {
             }
         });
 
+        failLabel1.setForeground(new java.awt.Color(255, 0, 1));
+        failLabel1.setText("Submission Failed. Please check that all inputs are positive numbers");
+
+        failLabel2.setForeground(new java.awt.Color(255, 0, 1));
+        failLabel2.setText("and that no fields are empty.");
+
+        abortLabel.setText("Submission aborted. No changes were made.");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -253,42 +191,55 @@ public class DELIVERY extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel4)
-                        .addGap(357, 357, 357)))
-                .addContainerGap())
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(195, 195, 195))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(failLabel2)
+                                .addGap(144, 144, 144))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(successLabel)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(abortLabel)
+                                            .addComponent(backBtn))
+                                        .addGap(31, 31, 31)
+                                        .addComponent(submitBtn)))))
+                        .addContainerGap())))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(backBtn)
-                .addGap(43, 43, 43)
-                .addComponent(submitBtn)
-                .addGap(24, 24, 24))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(267, 267, 267)
-                .addComponent(success)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 67, Short.MAX_VALUE)
+                .addComponent(failLabel1)
+                .addGap(53, 53, 53))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
+                .addGap(11, 11, 11)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 200, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(failLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                .addComponent(success)
-                .addGap(28, 28, 28)
+                .addComponent(failLabel2)
+                .addGap(13, 13, 13)
+                .addComponent(abortLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(successLabel)
+                .addGap(48, 48, 48)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(backBtn)
                     .addComponent(submitBtn))
@@ -299,15 +250,13 @@ public class DELIVERY extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 36, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -315,56 +264,45 @@ public class DELIVERY extends javax.swing.JFrame {
 
     private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
         
-        boolean add = true;
         
-        if (!rmName.getText().toString().isEmpty()) {
-            errorLabel.setVisible(false);
-        } else {
-            errorLabel.setVisible(true);
-            add = false;
-        }
-
-        if (isNumber(rmAmount.getText().toString())) {
-            errorLabel2.setVisible(false);
-        } else {
-            errorLabel2.setVisible(true);
-            add = false;
-        }
-
-        if (add) {
-            //RawBean r = new RawBean();
-            /*r.setRaw(rmName.getText().toString());
-            r.setStock(Float.parseFloat(rmAmount.getText().toString()));
-            rmImp.restockRaw(r);
-            success.setVisible(true);*/
-            
-            // GET # OF ROWS
+        if (JOptionPane.showConfirmDialog(null, "Are you sure that you want to submit? You may only submit once a day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        
+            boolean add = true;
             int rows = rawTable.getRowCount();
+            int c = 0;
             
-            for (int c = 0; c < rows; c++) {
-                RawBean r = new RawBean();
-                r.setRaw(rawTable.getValueAt(c, 0).toString());
-                r.setStock(Float.parseFloat(rawTable.getValueAt(c,1).toString()));
-                rmImp.restockRaw(r);
+            for (c = 0; c < rows && add; c++) {
+             
+                if(rawTable.getValueAt(c,3).toString().isEmpty() || Math.signum(Float.parseFloat(rawTable.getValueAt(c,3).toString())) == -1) {
+                        add = false;
+                        failLabel1.setVisible(true);
+                        failLabel2.setVisible(true);
+                    }
                 
             }
             
-            success.setVisible(true);
+        if (add) {
+            
+           
+            for (c = 0; c < rows; c++) {
+                
+                int ID = Integer.parseInt(rawTable.getValueAt(c, 0).toString());
+                RawBean r = rmImp.getRaw(ID);
+                r.setStock(Float.parseFloat(rawTable.getValueAt(c, 3).toString()));
+                rmImp.editRaw(r);
+            }
+            
+            successLabel.setVisible(true);
             
             // REFRESH TABLE WITH UPDATED VALUES
             viewRaw();
-            if(inputLockDown()){
-                submitBtn.setVisible(false);
-            }
         }
         
+        }
+        else
+            abortLabel.setVisible(true);
         
     }//GEN-LAST:event_submitBtnActionPerformed
-
-    private void rmNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rmNameActionPerformed
-        
-        
-    }//GEN-LAST:event_rmNameActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
@@ -376,77 +314,9 @@ public class DELIVERY extends javax.swing.JFrame {
     private void rawTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rawTableMouseClicked
         // TODO add your handling code here:
         
-        int col = rawTable.getSelectedColumn();
-        int row = rawTable.getSelectedRow();
-        
-        String select = rawTable.getValueAt(row,col).toString();
-        
-        rmName.setText(select);
-        inputMsg.setVisible(true);
         
     }//GEN-LAST:event_rawTableMouseClicked
-    /*** <--- CLARK'S CODE STARTS HERE ---> ***/
-    
-    public boolean inputLockDown(){
-        boolean flag = false;
-        
-        try {
-            String filepath = "btf.xml";
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse(filepath);
-            
-            String delivery = doc.getElementsByTagName("delivery").item(0).getTextContent();
-            //System.out.println(sales);
-                if(delivery.equals("0"))
-                    doc.getElementsByTagName("delivery").item(0).setTextContent("1");
-                else if(delivery.equals("1")) {
-                    doc.getElementsByTagName("delivery").item(0).setTextContent("2");
-                    flag = true;
-                }
-                else if(delivery.equals("2")) {
-                    flag = true;
-                    return flag;
-                }
-                
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(filepath));
-            transformer.transform(source, result);
-                        
-        } catch (Exception e) {
-             e.printStackTrace();
-        } 
-        
-        return flag;
-    }
-    
-    public void checkDate() {
-        try {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date d = new Date();
-            String curDate = dateFormat.format(d) ;
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, +1);
-            String nextDate = dateFormat.format(cal.getTime());
 
-            String delivery = main.getValueXML("delivery");
-
-            if(main.getDateXML().equals(curDate)) {
-                if(delivery.equals("0") || delivery.equals("1")) {
-                    submitBtn.setVisible(true);
-                } else if(delivery.equals("2")) {
-                    submitBtn.setVisible(false);
-                }
-            } else if(main.getDateXML().equals(nextDate)) {
-                submitBtn.setVisible(false);
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-    /*** <--- CLARK'S CODE ENDS HERE ---> ***/
     
     private boolean isNumber(String s) {
         try {
@@ -504,21 +374,17 @@ public class DELIVERY extends javax.swing.JFrame {
     }
 */
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel abortLabel;
     private javax.swing.JButton backBtn;
-    private javax.swing.JLabel errorLabel;
-    private javax.swing.JLabel errorLabel2;
-    private javax.swing.JLabel inputMsg;
+    private javax.swing.JLabel failLabel1;
+    private javax.swing.JLabel failLabel2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable rawTable;
-    private javax.swing.JTextField rmAmount;
-    private javax.swing.JTextField rmName;
     private javax.swing.JButton submitBtn;
-    private javax.swing.JLabel success;
+    private javax.swing.JLabel successLabel;
     // End of variables declaration//GEN-END:variables
 }

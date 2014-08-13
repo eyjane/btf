@@ -513,11 +513,7 @@ public class EditRecipe extends javax.swing.JFrame {
     private void updateIngredient(RecipeBean r, ArrayList<IngredientBean> in) {
         ArrayList<IngredientBean> orig = inImp.getAllIngredients(r);
         int i;
-        //delete all ingredients
-
-        for (i = 0; i < orig.size(); i++) {
-            inImp.deleteIngredient(r, orig.get(i));
-        }
+       
         //add ingredients
         for (i = 0; i < in.size(); i++) {
             inImp.addIngredient(r, in.get(i));

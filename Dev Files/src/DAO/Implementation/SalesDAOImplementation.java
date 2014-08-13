@@ -74,6 +74,47 @@ public class SalesDAOImplementation implements SalesDAOInterface {
         }
         return false;
     }
+    
+    @Override
+    public boolean addSales(SalesBean s, RecipeBean r, float a, String d) {
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            String query = "INSERT into sales(sales_date, sales_type, ordernum) values (?, ?, ?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, d);
+            preparedStatement.setString(2, s.getType());
+            preparedStatement.setInt(3, s.getOrder());
+
+            preparedStatement.executeUpdate();
+
+            /* add to sold table */
+            query = "SELECT max(salesID) from sales;";
+            preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int salesID = resultSet.getInt("max(salesID)");
+                String squery = "INSERT into sold(salesID, recipeID, quantity, price, actual) values (?, ?, ?, ?, ?);";
+                PreparedStatement spreparedStatement = connection.prepareStatement(squery);
+                spreparedStatement.setInt(1, salesID);
+                spreparedStatement.setInt(2, r.getRecipeID());
+                spreparedStatement.setFloat(3, a);
+                spreparedStatement.setFloat(4, r.getCost());
+                spreparedStatement.setFloat(5, r.getActualPrice());
+
+                spreparedStatement.executeUpdate();
+                connection.close();
+                return true;
+            }
+
+            connection.close();
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(SalesDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 
     /*checked*/
     @Override
