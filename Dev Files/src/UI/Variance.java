@@ -214,23 +214,20 @@ public class Variance extends javax.swing.JFrame {
         HSSFWorkbook wb;
         HSSFSheet sheet;
         JTable table = tables;
-        int c1 = 1;
-        int c2 = 8;
-        int col = 1;
         
         wb = new HSSFWorkbook();
         sheet = wb.createSheet("Variance"); 
         sheet.setColumnWidth(0, 10000);
         sheet.createFreezePane( 1, 0, 1, 0 );
         
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 1, 8));
         
         CellStyle style = wb.createCellStyle();
         style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
         style.setFillPattern(CellStyle.SOLID_FOREGROUND);
         
         Row header = sheet.createRow(0);
-        Cell headerCell = header.createCell(c1);
+        Cell headerCell = header.createCell(1);
         headerCell.setCellValue(date);
         headerCell.setCellStyle(style);
         CellUtil.setAlignment(headerCell, wb, CellStyle.ALIGN_CENTER);
@@ -239,25 +236,28 @@ public class Variance extends javax.swing.JFrame {
         TableModel model = table.getModel();
 
         Row headerRow = sheet.createRow(1);
-        for(int headings = col; headings < model.getColumnCount(); headings++){
-            headerRow.createCell(headings + c1 - 2).setCellValue(model.getColumnName(headings));
+        for(int headings = 1; headings < model.getColumnCount(); headings++){
+            headerRow.createCell(headings - 1).setCellValue(model.getColumnName(headings));
         }
          
         for(int rows = 0; rows < model.getRowCount(); rows++){ 
-            for(int cols = col; cols < table.getColumnCount(); cols++){ 
-                sheet.setColumnWidth(cols + c1 - 1, 3000);
+            for(int cols = 1; cols < table.getColumnCount(); cols++){ 
+                sheet.setColumnWidth(cols, 3000);
                 String text = model.getValueAt(rows, cols).toString();
-                Cell cell = row.createCell(cols + c1 - 2); 
+                Cell cell = row.createCell(cols - 1); 
                 cell.setCellValue(text); 
             }
             row = sheet.createRow((rows + 4)); 
         }
-        try{
+        
+        try {
             FileOutputStream fileOut =  new FileOutputStream(path);
             wb.write(fileOut); 
             fileOut.close();
             JOptionPane.showMessageDialog(null, "Successfully exported the report!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        }catch(Exception e){
+        } catch(FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         
