@@ -1,66 +1,20 @@
-package UI;
-
-import Beans.CategoryBean;
-import Beans.IngredientBean;
-import Beans.RawBean;
-import Beans.RecipeBean;
-import DAO.Implementation.CategoryDAOImplementation;
-import DAO.Implementation.IngredientDAOImplementation;
-import DAO.Implementation.RawDAOImplementation;
-import DAO.Implementation.RecipeDAOImplementation;
-import DAO.Interface.CategoryDAOInterface;
-import DAO.Interface.IngredientDAOInterface;
-import DAO.Interface.RawDAOInterface;
-import DAO.Interface.RecipeDAOInterface;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
-
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+package UI;
+
 /**
  *
- * @author Evy
+ * @author Catherine
  */
 public class RCManagement extends javax.swing.JFrame {
 
-    private RecipeDAOInterface rcImp = new RecipeDAOImplementation();
-    private CategoryDAOInterface catImp = new CategoryDAOImplementation();
-    private RawDAOInterface rmImp = new RawDAOImplementation();
-    private IngredientDAOInterface inImp = new IngredientDAOImplementation();
-
-    private ArrayList<RecipeBean> avRecipes;
-    private ArrayList<IngredientBean> avIngredients;
-    private ArrayList<CategoryBean> aCategory;
-
-    private addIngredient AddIngredient;
-    private AddRecipe addRecipe;
-
-    private EODTab main;
-
     /**
-     * Creates new form RCManagement
+     * Creates new form RMManagement
      */
-    public RCManagement() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        String laf = UIManager.getSystemLookAndFeelClassName();
-        UIManager.setLookAndFeel(laf);
+    public RCManagement() {
         initComponents();
-
-        prepareTable();
     }
 
     /**
@@ -73,348 +27,194 @@ public class RCManagement extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        InventoryBtn = new javax.swing.JButton();
+        RMBtn = new javax.swing.JButton();
+        RecipesBtn = new javax.swing.JButton();
+        CategoriesBtn = new javax.swing.JButton();
+        EODBtn = new javax.swing.JButton();
+        ReportsBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        recipeTable = new javax.swing.JTable(){
+        rmTable = new javax.swing.JTable(){
             public boolean isCellEditable(int row, int column){
                 return false;
             }
         };
-        addRecipeB = new javax.swing.JButton();
-        deleteRecipe = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        backBtn = new javax.swing.JButton();
-        editRC = new javax.swing.JButton();
+        AddRMBtn = new javax.swing.JButton();
+        EditRMBtn = new javax.swing.JButton();
+        DeleteRMBtn = new javax.swing.JButton();
+        Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(956, 555));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(956, 555));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        recipeTable.setModel(new javax.swing.table.DefaultTableModel(
+        InventoryBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Inventory Btn.png"))); // NOI18N
+        InventoryBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InventoryBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(InventoryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 239, 60));
+
+        RMBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/RM Btn.png"))); // NOI18N
+        RMBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RMBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(RMBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 239, 60));
+
+        RecipesBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Recipes Btn.png"))); // NOI18N
+        RecipesBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RecipesBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(RecipesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 239, 60));
+
+        CategoriesBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Categories Btn.png"))); // NOI18N
+        CategoriesBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CategoriesBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(CategoriesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 239, 60));
+
+        EODBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/EOD Btn.png"))); // NOI18N
+        jPanel1.add(EODBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 239, 60));
+
+        ReportsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Reports Btn.png"))); // NOI18N
+        jPanel1.add(ReportsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 239, 60));
+
+        jLabel1.setFont(new java.awt.Font("Quicksand Light", 0, 36)); // NOI18N
+        jLabel1.setText("Recipes Management");
+        jLabel1.setToolTipText("");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, -1, -1));
+
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(620, 402));
+
+        rmTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null}
+
             },
             new String [] {
-                "Title 1"
+                "Name"
             }
-        ));
-        recipeTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                recipeTableMouseClicked(evt);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(recipeTable);
+        jScrollPane1.setViewportView(rmTable);
 
-        addRecipeB.setText("Add A Recipe");
-        addRecipeB.setFocusPainted(false);
-        addRecipeB.setFocusable(false);
-        addRecipeB.setRequestFocusEnabled(false);
-        addRecipeB.addActionListener(new java.awt.event.ActionListener() {
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 470, 370));
+
+        AddRMBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/AddRCBtn.png"))); // NOI18N
+        jPanel1.add(AddRMBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 100, 120, 30));
+
+        EditRMBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/EditRCBtn.png"))); // NOI18N
+        EditRMBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addRecipeBActionPerformed(evt);
+                EditRMBtnActionPerformed(evt);
             }
         });
+        jPanel1.add(EditRMBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 140, 120, 30));
 
-        deleteRecipe.setText("Delete This Recipe");
-        deleteRecipe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteRecipeActionPerformed(evt);
-            }
-        });
+        DeleteRMBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/DeleteBtn.png"))); // NOI18N
+        jPanel1.add(DeleteRMBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 480, 120, 30));
 
-        jLabel9.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
-        jLabel9.setText("RECIPES");
+        Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Background3.png"))); // NOI18N
+        jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 920, 560));
 
-        backBtn.setText("BACK");
-        backBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backBtnActionPerformed(evt);
-            }
-        });
-
-        editRC.setText("Edit A Recipe");
-        editRC.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editRCActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(deleteRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editRC, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addRecipeB, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(backBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE))
-                .addContainerGap())
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(addRecipeB, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(editRC, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(deleteRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(246, 246, 246)
-                        .addComponent(backBtn))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 910, 540));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void deleteRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteRecipeActionPerformed
+    private void InventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InventoryBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_InventoryBtnActionPerformed
 
-        int rselect = recipeTable.getSelectedRow();
-        if (rselect != -1) {
-            if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this recipe?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                deleteRecipe(rselect);
-            }
-        } else {
-            return;
-        }
-    }//GEN-LAST:event_deleteRecipeActionPerformed
+    private void RMBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RMBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RMBtnActionPerformed
 
-    private void addRecipeBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeBActionPerformed
-        try {
-            addRecipe = new AddRecipe(this);
-            this.setVisible(false);
-            addRecipe.setVisible(true);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_addRecipeBActionPerformed
+    private void RecipesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipesBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RecipesBtnActionPerformed
 
-    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
-        ArrayList<CategoryBean> aCategory = catImp.getAllCategory();
-        try {
-            int rselect = recipeTable.getSelectedRow();
-            int rID = Integer.parseInt(recipeTable.getModel().getValueAt(rselect, 0).toString());
-            RecipeBean r = rcImp.getRecipeBean(rID);
+    private void CategoriesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CategoriesBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CategoriesBtnActionPerformed
 
-            for (CategoryBean c : aCategory) {
-                if (c.getCategoryID() == r.getCategory()) {
-                }
-            }
-
-            String cols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
-            DefaultTableModel model = new DefaultTableModel(cols, 0);
-
-            for (IngredientBean rw : r.getIngredients()) {
-                RawBean rwm = rw.getRaw();
-                Object[] i = {rwm.getRawID(), rwm.getRaw(), String.format("%.2f", rw.getAmount()), rwm.getUom()};
-                model.addRow(i);
-            }
-
-       //     ingredientsTable.setModel(model);
-            //   ingredientsTable.getColumnModel().getColumn(0).setMinWidth(0);
-            //   ingredientsTable.getColumnModel().getColumn(0).setMaxWidth(0);
-            // adjustTable(ingredientsTable);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_recipeTableMouseClicked
-
-    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        this.setVisible(false);
-        try {
-            main = new EODTab();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        main.setVisible(true);
-    }//GEN-LAST:event_backBtnActionPerformed
-
-    private void editRCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editRCActionPerformed
-        //this.setVisible(false);
-        try {
-            EditRecipe eRC = new EditRecipe();
-            eRC.setVisible(true);
-            this.dispose();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        
-    }//GEN-LAST:event_editRCActionPerformed
+    private void EditRMBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditRMBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EditRMBtnActionPerformed
 
     /**
-     * <--- JANERYS CODE START ---> *
+     * @param args the command line arguments
      */
-    private void updateIngredient(RecipeBean r, ArrayList<IngredientBean> in) {
-        ArrayList<IngredientBean> orig = inImp.getAllIngredients(r);
-        int i;
-        //delete all ingredients
-
-        for (i = 0; i < orig.size(); i++) {
-            inImp.deleteIngredient(r, orig.get(i));
-        }
-        //add ingredients
-        for (i = 0; i < in.size(); i++) {
-            inImp.addIngredient(r, in.get(i));
-        }
-
-    }
-
-    private void deleteRecipe(int r) {
-        int rID = Integer.parseInt(recipeTable.getModel().getValueAt(r, 0).toString());
-        RecipeBean drecipe = rcImp.getRecipeBean(rID);
-
-        if (rcImp.deleteRecipe(drecipe)) {
-            JOptionPane.showMessageDialog(null, "Recipe successfully deleted!");
-            TableModel model = recipeTable.getModel();
-            DefaultTableModel rmodel = (DefaultTableModel) model;
-
-            rmodel.removeRow(r);
-            recipeTable.setModel(rmodel);
-        //    nameField.setText("");
-            //    costField.setText("");
-            //    categoryBox.setSelectedIndex(0);
-            //    actualLabel.setText("0.00");
-            //    DefaultTableModel iModel = (DefaultTableModel) ingredientsTable.getModel();
-            //     iModel.setRowCount(0);
-            prepareTable();
-        }
-    }
-
-    public void computeActual(ArrayList<IngredientBean> aIngredient) {
-        RecipeBean rtemp = new RecipeBean();
-        rtemp.setIngredients(aIngredient);
-        // actualLabel.setText(String.format("%.2f", rtemp.getActualPrice()));
-
-    }
-
-    public void reloadIngredients(ArrayList<IngredientBean> aIngredient) {
-        String cols[] = {"Raw ID", "Raw Material", "Quantity"};
-        DefaultTableModel ingredientModel = new DefaultTableModel(cols, 0);
-      //  ingredientsTable.setModel(ingredientModel);
-        //  ingredientsTable.getColumnModel().getColumn(0).setMinWidth(0);
-        //  ingredientsTable.getColumnModel().getColumn(0).setMaxWidth(0);
-
-        if (aIngredient != null) {
-            for (IngredientBean ibean : aIngredient) {
-                Object[] ingredient = {ibean.getRaw().getRawID(), ibean.getRaw().getRaw(), ibean.getAmount()};
-                ingredientModel.addRow(ingredient);
-            }
-            //    ingredientsTable.setModel(ingredientModel);
-
-        } else {
-            //System.out.println("aIngredient is null");
-        }
-    }
-
-    /* PREPARE TABLE */
-    public void prepareTable() {
-        avRecipes = new ArrayList<RecipeBean>();
-        aCategory = new ArrayList<CategoryBean>();
-        avIngredients = new ArrayList<IngredientBean>();
-
-        String rCategory = null;
-        int i, j;
-
-        aCategory = catImp.getAllCategory();
-        avRecipes = rcImp.getRecipeByStatus("available");
-
-        String cols[] = {"Recipe ID", "Recipe", "Stock", "Actual Price", "Cost", "Category"};
-        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
-        //System.out.println(avRecipes.get(1).getRecipe());
-
-        for (RecipeBean r : avRecipes) {
-
-            for (CategoryBean c : aCategory) {
-                if (r.getCategory() == c.getCategoryID()) {
-                    rCategory = c.getCategory();
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-
-            Object[] data = {r.getRecipeID(), r.getRecipe(), String.format("%.2f", r.computeStock()), String.format("%.2f", r.getActualPrice()), String.format("%.2f", r.getCost()), rCategory};
-            recipeModel.addRow(data);
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(RCManagement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(RCManagement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(RCManagement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(RCManagement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
 
-        recipeTable.setModel(recipeModel);
-        recipeTable.getColumnModel().getColumn(0).setMinWidth(0);
-        recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
-
-        adjustTable(recipeTable);
-
-        String icols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
-        DefaultTableModel model = new DefaultTableModel(icols, 0);
-
-    }
-
-    /* ADJUST TABLE TO MAX WIDTH*/
-    private void adjustTable(JTable table) {
-        for (int column = 0; column < table.getColumnCount(); column++) {
-            TableColumn tableColumn = table.getColumnModel().getColumn(column);
-            int preferredWidth = tableColumn.getMinWidth();
-            int maxWidth = tableColumn.getMaxWidth();
-
-            for (int row = 0; row < table.getRowCount(); row++) {
-                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
-                Component c = table.prepareRenderer(cellRenderer, row, column);
-                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
-                preferredWidth = Math.max(preferredWidth, width);
-
-                //  We've exceeded the maximum width, no need to check other rows
-                if (preferredWidth >= maxWidth) {
-                    preferredWidth = maxWidth;
-                    break;
-                }
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new RCManagement().setVisible(true);
             }
-
-            tableColumn.setPreferredWidth(preferredWidth);
-        }
+        });
     }
-
-    private boolean isNumber(String s) {
-        try {
-            Float.parseFloat(s);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public void inErrorV(boolean b) {
-        //      inError.setVisible(b);
-    }
-
-    /**
-     * * <--- JANERYS CODE ENDS ---> **
-     */
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addRecipeB;
-    private javax.swing.JButton backBtn;
-    private javax.swing.JButton deleteRecipe;
-    private javax.swing.JButton editRC;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JButton AddRMBtn;
+    private javax.swing.JLabel Background;
+    private javax.swing.JButton CategoriesBtn;
+    private javax.swing.JButton DeleteRMBtn;
+    private javax.swing.JButton EODBtn;
+    private javax.swing.JButton EditRMBtn;
+    private javax.swing.JButton InventoryBtn;
+    private javax.swing.JButton RMBtn;
+    private javax.swing.JButton RecipesBtn;
+    private javax.swing.JButton ReportsBtn;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable recipeTable;
+    private javax.swing.JTable rmTable;
     // End of variables declaration//GEN-END:variables
 }

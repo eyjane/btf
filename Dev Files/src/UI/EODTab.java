@@ -1,67 +1,20 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package UI;
-
-import Beans.IngredientBean;
-import Beans.RawBean;
-import Beans.RecipeBean;
-import DAO.Implementation.IngredientDAOImplementation;
-import DAO.Implementation.RawDAOImplementation;
-import DAO.Implementation.RecipeDAOImplementation;
-import DAO.Interface.IngredientDAOInterface;
-import DAO.Interface.RawDAOInterface;
-import DAO.Interface.RecipeDAOInterface;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.w3c.dom.Document;
 
 /**
  *
- * @author Evy
+ * @author Catherine
  */
 public class EODTab extends javax.swing.JFrame {
 
-    RecipeDAOInterface rcImp = new RecipeDAOImplementation();
-    IngredientDAOInterface inImp = new IngredientDAOImplementation();
-    RawDAOInterface rwImp = new RawDAOImplementation();
-
     /**
-     * Creates new form EODTab
+     * Creates new form RMManagement
      */
-    public EODTab() throws ClassNotFoundException, InstantiationException, UnsupportedLookAndFeelException, IllegalAccessException {
-
-        String laf = UIManager.getSystemLookAndFeelClassName();
-        UIManager.setLookAndFeel(laf);
+    public EODTab() {
         initComponents();
-        prepareTable();
-        checkDate();
     }
 
     /**
@@ -74,47 +27,94 @@ public class EODTab extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        InventoryTab = new javax.swing.JTabbedPane();
+        InventoryBtn = new javax.swing.JButton();
+        RMBtn = new javax.swing.JButton();
+        RecipesBtn = new javax.swing.JButton();
+        CategoriesBtn = new javax.swing.JButton();
+        EODBtn = new javax.swing.JButton();
+        ReportsBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        inputActual = new javax.swing.JTable();
+        enterSales4 = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        enterSales1 = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        recipeTable = new javax.swing.JTable(){
-            public boolean isCellEditable(int row, int column){
-                return false;
-            }
-        };
+        rmTable = new javax.swing.JTable();
+        enterSales2 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        rawTable = new javax.swing.JTable(){
-            public boolean isCellEditable(int row, int column){
-                return false;
-            }
-        };
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        rcMgt = new javax.swing.JButton();
-        rmMgt1 = new javax.swing.JButton();
-        cMgt2 = new javax.swing.JButton();
-        jPanel6 = new javax.swing.JPanel();
-        salesBtn = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        actualBtn1 = new javax.swing.JButton();
-        UTWbtn1 = new javax.swing.JButton();
-        nextDayBtn = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        btnExportStock = new javax.swing.JButton();
+        jTable2 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
+        Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setLayout(null);
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel5.setOpaque(false);
-        jPanel5.setLayout(null);
+        InventoryBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Inventory Btn.png"))); // NOI18N
+        InventoryBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InventoryBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(InventoryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 239, 60));
 
-        recipeTable.setModel(new javax.swing.table.DefaultTableModel(
+        RMBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/RM Btn.png"))); // NOI18N
+        RMBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RMBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(RMBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 239, 60));
+
+        RecipesBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Recipes Btn.png"))); // NOI18N
+        RecipesBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RecipesBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(RecipesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 239, 60));
+
+        CategoriesBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Categories Btn.png"))); // NOI18N
+        CategoriesBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CategoriesBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(CategoriesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 239, 60));
+
+        EODBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/EOD Btn.png"))); // NOI18N
+        jPanel1.add(EODBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 239, 60));
+
+        ReportsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Reports Btn.png"))); // NOI18N
+        jPanel1.add(ReportsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 239, 60));
+
+        jLabel1.setFont(new java.awt.Font("Quicksand Light", 0, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setText("End-of-Day");
+        jLabel1.setToolTipText("");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, -1, -1));
+
+        jTabbedPane1.setForeground(new java.awt.Color(255, 0, 204));
+        jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        jTabbedPane1.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+
+        inputActual.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        inputActual.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -122,533 +122,329 @@ public class EODTab extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Name", "Quantity in Stock", "Actual Count"
             }
-        ));
-        recipeTable.setName("Recipe Stock"); // NOI18N
-        jScrollPane2.setViewportView(recipeTable);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Float.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true
+            };
 
-        jPanel5.add(jScrollPane2);
-        jScrollPane2.setBounds(170, 50, 454, 110);
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
-        rawTable.setModel(new javax.swing.table.DefaultTableModel(
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(inputActual);
+
+        enterSales4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
+
+        jLabel15.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(255, 0, 1));
+        jLabel15.setText("ERROR:");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(enterSales4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel15)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel15)
+                .addGap(46, 46, 46)
+                .addComponent(enterSales4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
+        );
+
+        jTabbedPane1.addTab("ACTUAL COUNT", jPanel3);
+
+        enterSales1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
+        enterSales1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enterSales1ActionPerformed(evt);
+            }
+        });
+
+        jLabel14.setFont(new java.awt.Font("Quicksand Light", 2, 14)); // NOI18N
+        jLabel14.setText("Drag and drop to re-arrange recipes");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Recipe", "Sales", "Compliment"
             }
         ));
-        rawTable.setName("Recipe Stock"); // NOI18N
-        jScrollPane3.setViewportView(rawTable);
+        jScrollPane1.setViewportView(jTable1);
 
-        jPanel5.add(jScrollPane3);
-        jScrollPane3.setBounds(170, 260, 454, 110);
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(enterSales1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(enterSales1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
-        jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
-        jLabel1.setText("RECIPE STOCK");
-        jPanel5.add(jLabel1);
-        jLabel1.setBounds(167, 16, 178, 30);
+        jTabbedPane1.addTab("SALES", jPanel4);
 
-        jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
-        jLabel2.setText("RAW MATERIAL STOCK");
-        jPanel5.add(jLabel2);
-        jLabel2.setBounds(170, 220, 286, 30);
+        rmTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Name", "Quantity in Stock", "Used", "Transferred", "Wastage"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true, true, true
+            };
 
-        rcMgt.setText("Recipe Management");
-        rcMgt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rcMgtActionPerformed(evt);
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        jPanel5.add(rcMgt);
-        rcMgt.setBounds(0, 20, 160, 50);
-
-        rmMgt1.setText("Manage Raw Materials");
-        rmMgt1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rmMgt1ActionPerformed(evt);
+        rmTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        rmTable.setDragEnabled(true);
+        rmTable.getTableHeader().setReorderingAllowed(false);
+        rmTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rmTableMouseClicked(evt);
             }
         });
-        jPanel5.add(rmMgt1);
-        rmMgt1.setBounds(0, 90, 160, 50);
+        jScrollPane2.setViewportView(rmTable);
 
-        cMgt2.setText("Category Management");
-        cMgt2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cMgt2ActionPerformed(evt);
+        enterSales2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        jLabel6.setText("USED/TRANSFERRED/WASTED MATERIALS");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(enterSales2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(enterSales2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("MATERIALS", jPanel5);
+
+        jLabel3.setFont(new java.awt.Font("Quicksand Light", 0, 18)); // NOI18N
+        jLabel3.setText("Raw Materials");
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Name", "Amount"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        jPanel5.add(cMgt2);
-        cMgt2.setBounds(0, 160, 160, 50);
+        jScrollPane3.setViewportView(jTable2);
 
-        InventoryTab.addTab("INVENTORY", jPanel5);
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/RestockBtn.png"))); // NOI18N
 
-        jPanel6.setOpaque(false);
-        jPanel6.setLayout(null);
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
+        );
 
-        salesBtn.setText("SALES");
-        salesBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                salesBtnActionPerformed(evt);
+        jTabbedPane1.addTab("DELIVERY", jPanel2);
+
+        jTable3.setFont(new java.awt.Font("Quicksand Light", 0, 18)); // NOI18N
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Name", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        jPanel6.add(salesBtn);
-        salesBtn.setBounds(0, 160, 160, 50);
+        jScrollPane5.setViewportView(jTable3);
 
-        jButton2.setText("DELIVERY");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        jPanel6.add(jButton2);
-        jButton2.setBounds(0, 20, 160, 50);
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/NewDayBtn.png"))); // NOI18N
 
-        actualBtn1.setText("INPUT RAW MATERIAL COUNT");
-        actualBtn1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                actualBtnActionPerformed(evt);
-            }
-        });
-        jPanel6.add(actualBtn1);
-        actualBtn1.setBounds(0, 90, 160, 50);
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(25, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 547, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(138, Short.MAX_VALUE))
+        );
 
-        UTWbtn1.setText("USED/TRANSFERED AND WASTAGES");
-        UTWbtn1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UTWbtnActionPerformed(evt);
-            }
-        });
-        jPanel6.add(UTWbtn1);
-        UTWbtn1.setBounds(0, 230, 160, 50);
+        jTabbedPane1.addTab("NEW DAY", jPanel6);
 
-        nextDayBtn.setText("NEXT DAY");
-        jPanel6.add(nextDayBtn);
-        nextDayBtn.setBounds(0, 300, 160, 50);
-        nextDayBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nextDayBtnActionPerformed(evt);
-            }
-        });
+        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, 600, 410));
 
-        InventoryTab.addTab("EOD", jPanel6);
-
-        jPanel3.setOpaque(false);
-        jPanel3.setLayout(null);
-
-        jButton7.setText("Expenses");
-        jPanel3.add(jButton7);
-        jButton7.setBounds(0, 30, 160, 50);
-
-        jButton8.setText("Gross Income");
-        jPanel3.add(jButton8);
-        jButton8.setBounds(0, 100, 160, 50);
-
-        jButton9.setText("Net Income");
-        jPanel3.add(jButton9);
-        jButton9.setBounds(0, 170, 160, 50);
-
-        btnExportStock.setText("Export Stock");
-        btnExportStock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportStockActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnExportStock);
-        btnExportStock.setBounds(0, 310, 160, 50);
-
-        jButton1.setText("Variance");
-        jPanel3.add(jButton1);
-        jButton1.setBounds(0, 240, 160, 50);
-
-        InventoryTab.addTab("REPORT", jPanel3);
-
-        jPanel1.add(InventoryTab);
-        InventoryTab.setBounds(0, 130, 840, 480);
-
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Background.png"))); // NOI18N
-        jLabel7.setText("jLabel7");
-        jPanel1.add(jLabel7);
-        jLabel7.setBounds(0, 0, 960, 710);
+        Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Background5.png"))); // NOI18N
+        jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 920, 560));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 955, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void rcMgtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rcMgtActionPerformed
-        this.setVisible(false);
-        try {
-            RCManagement rcmgt = new RCManagement();
-            rcmgt.setVisible(true);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_rcMgtActionPerformed
-
-    private void rmMgt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rmMgt1ActionPerformed
-        try {
-            RMManagement rm = new RMManagement();
-            rm.setVisible(true);
-            dispose();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_rmMgt1ActionPerformed
-
-    private void cMgt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cMgt2ActionPerformed
-        try {
-            CategoryManagement ct = new CategoryManagement();
-            ct.setVisible(true);
-            dispose();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_cMgt2ActionPerformed
-
-    private void salesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesBtnActionPerformed
-        this.setVisible(false);
-        try {
-            SALES saleswindow = new SALES(this, getDateXML());
-            saleswindow.setVisible(true);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_salesBtnActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void InventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InventoryBtnActionPerformed
         // TODO add your handling code here:
+    }//GEN-LAST:event_InventoryBtnActionPerformed
 
-        // DELIVERY
-        this.setVisible(false);
-        try {
-            DELIVERY deliveryWindow = new DELIVERY(this);
-            deliveryWindow.setVisible(true);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void actualBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualBtnActionPerformed
+    private void RMBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RMBtnActionPerformed
         // TODO add your handling code here:
+    }//GEN-LAST:event_RMBtnActionPerformed
 
-        this.setVisible(false);
-        try {
-            ACTUALINPUT actualWindow = new ACTUALINPUT(this);
-            actualWindow.setVisible(true);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_actualBtnActionPerformed
-
-    private void UTWbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UTWbtnActionPerformed
+    private void RecipesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipesBtnActionPerformed
         // TODO add your handling code here:
+    }//GEN-LAST:event_RecipesBtnActionPerformed
 
-        this.setVisible(false);
-        try {
-            UsedTransfer usedWindow = new UsedTransfer(this);
-            usedWindow.setVisible(true);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_UTWbtnActionPerformed
+    private void CategoriesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CategoriesBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CategoriesBtnActionPerformed
 
-    private void btnExportStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportStockActionPerformed
-        try {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date d = new Date();
-            String path = dateFormat.format(d) + " btf stocks.xlsx" ;
+    private void enterSales1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterSales1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_enterSales1ActionPerformed
 
-            ArrayList<JTable> tables = new ArrayList<JTable>();
-            tables.add(rawTable);
-            tables.add(recipeTable);
-            exportToExcel(tables, path);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnExportStockActionPerformed
+    private void rmTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rmTableMouseClicked
 
+    }//GEN-LAST:event_rmTableMouseClicked
 
-    private void nextDayBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UTWbtn1ActionPerformed
-        try {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date d = new Date();
-            String curDate = dateFormat.format(d) ;
-            Calendar cal1 = Calendar.getInstance();
-            cal1.add(Calendar.DATE, +1);
-            String nextDate = dateFormat.format(cal1.getTime());
-        
-            if(getDateXML().equals(curDate)) {
-                if(JOptionPane.showConfirmDialog(null, "Are you sure you're done for the day?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-                        nextDay(nextDate);
-                        JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
-                }
-            } else if(!getDateXML().equals(nextDate) && !getDateXML().equals(curDate)) {
-                nextDay(curDate);
-                JOptionPane.showMessageDialog(null, "New date is " + curDate, "Success", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } 
-    }//GEN-LAST:event_UTWbtn1ActionPerformed
-    /**
-     * < -- CLARK'S FUNCTIONS START -- > *
-     */
-    
-    private void nextDay(String curDate) {
-        try {
-            String filepath = "btf.xml";
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse(filepath);
-                       
-            doc.getElementsByTagName("delivery").item(0).setTextContent("0");
-            doc.getElementsByTagName("used").item(0).setTextContent("0");
-            doc.getElementsByTagName("sales").item(0).setTextContent("0");
-            doc.getElementsByTagName("actual").item(0).setTextContent("0");
-            
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(filepath));
-            transformer.transform(source, result);
-            
-            nextDayBtn.setEnabled(false);
-        } catch (Exception e) {
-             e.printStackTrace();
-        } 
-    }
-    
-    public String getDateXML() {
-        String date = ""; 
-        try {
-            String filepath = "btf.xml";
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse(filepath);
-            
-            date = doc.getElementsByTagName("date").item(0).getTextContent();
-                        
-        } catch (Exception e) {
-             e.printStackTrace();
-        } 
-        return date;
-    }
-    
-    public String getValueXML(String x) {
-        String value = ""; 
-        try {
-            String filepath = "btf.xml";
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse(filepath);
-            
-            value = doc.getElementsByTagName(x).item(0).getTextContent();
-                        
-        } catch (Exception e) {
-             e.printStackTrace();
-        } 
-        return value;
-    }
-    
-    public void checkDate() {
-        try{
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date d = new Date();
-            String curDate = dateFormat.format(d) ;
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, +1);
-            String nextDate = dateFormat.format(cal.getTime());
-
-            String sales = getValueXML("sales");
-
-            if(getDateXML().equals(curDate)) {
-                if(sales.equals("0") || sales.equals("1")) {
-                    nextDayBtn.setVisible(false);
-                } else if(sales.equals("2")) {
-                    nextDayBtn.setVisible(true);
-                }
-            } else if(getDateXML().equals(nextDate)) {
-                nextDayBtn.setVisible(false);
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setNextDayBtn() {
-        nextDayBtn.setVisible(true);
-    }
-    
-    private void exportToExcel(ArrayList<JTable> tables, String path) throws FileNotFoundException, IOException {
-        new WorkbookFactory();
-        Workbook wb = new XSSFWorkbook(); //Excel workbook
-        CellStyle style = wb.createCellStyle();
-        Font font = wb.createFont();
-        font.setColor(HSSFColor.RED.index);
-        style.setFont(font);
-        for(int i = 0; i < tables.size(); i++){
-            JTable table = tables.get(i);
-            Sheet sheet = wb.createSheet(table.getName()); //WorkSheet
-            sheet.setColumnWidth(0, 15000);
-            Row row = sheet.createRow(2); //Row created at line 3
-            TableModel model = table.getModel(); //Table model
-
-            Row headerRow = sheet.createRow(0); //Create row at line 0
-            for(int headings = 0; headings < model.getColumnCount(); headings++){ //For each column
-                headerRow.createCell(headings).setCellValue(model.getColumnName(headings));//Write column name
-            }
-
-            for(int rows = 0; rows < model.getRowCount(); rows++){ //For each table row
-                for(int cols = 0; cols < table.getColumnCount(); cols++){ //For each table column
-                    String text = model.getValueAt(rows, cols).toString();
-                    Cell cell = row.createCell(cols); //create cell
-                    if(checkHTML(text)){
-                        cell.setCellStyle(style);
-                        text = parseHTML(text);
-                    }
-                    cell.setCellValue(text); //Write value
-                }
-                //Set the row to the next one in the sequence 
-                row = sheet.createRow((rows + 3)); 
-            }
-        }
-        //wb.setSheetName(wb.getSheetIndex(sheet), "Raw Materials");
-        try{
-            File file = new File(path);
-            if(!file.exists()) {
-                file.createNewFile();
-            } 
-            FileOutputStream fileOut =  new FileOutputStream(file, false);
-            wb.write(fileOut);//Save the file     
-            fileOut.close();
-            System.out.println("SUCCESS");
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        
-    }
-    
-    public boolean checkHTML(String str){
-        boolean hasHTML = false;
-        if(str.contains("<html>")){
-            hasHTML = true;
-        }
-        return hasHTML;
-    }
-    
-    public String parseHTML(String str){
-        String temp = "";
-        temp = str.replace("<html><p style = 'color:red'><b>", "");
-        System.out.println(temp);
-        temp = temp.replace("</b></p></html>", "");
-        System.out.println(temp);
-        return temp;
-    }
-    /**
-     * < -- CLARK'S FUNCTIONS END -- > *
-     */
-    
-    /**
-     * < -- JANERYS FUNCTIONS START -- > *
-     */
-    /* Prepare Table */
-    private void prepareTable() {
-
-        ArrayList<RecipeBean> avRecipes = new ArrayList<RecipeBean>();
-        ArrayList<RawBean> avRaw = new ArrayList<RawBean>();
-        int i, j;
-
-        // recipe Stocks
-        String cols[] = {"Name", "Stock"};
-        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
-        avRecipes = rcImp.getRecipeByStatus("available");
-
-        if (avRecipes != null) {
-            for (i = 0; i < avRecipes.size(); i++) {
-                RecipeBean rc = avRecipes.get(i);
-                ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
-                ingredients = rc.getIngredients();
-
-                Object[] rec = {"<html><p style = 'color:red'><b>" + rc.getRecipe() + "</b></p></html>", "<html><p style = 'color:red'><b>" + String.format("%.2f", rc.computeStock()) + "</b></p></html>"};
-                recipeModel.addRow(rec);
-
-                for (j = 0; j < ingredients.size(); j++) {
-                    RawBean raw = ingredients.get(j).getRaw();
-                    Object[] rawm = {"     " + ingredients.get(j).getAmount() + " " + raw.getUom() + " of " + raw.getRaw(), String.format("%.2f", raw.getStock())};
-                    recipeModel.addRow(rawm);
-                }
-            }
-        }
-
-        recipeTable.setModel(recipeModel);
-
-        // raw material stock
-        DefaultTableModel rawModel = new DefaultTableModel(cols, 0);
-        avRaw = rwImp.getRawByStatus("available");
-
-        if (avRaw != null) {
-            for (i = 0; i < avRaw.size(); i++) {
-                RawBean rm = avRaw.get(i);
-                String color = "black";
-                
-                
-                if (rm.isCritical()) {
-                    color = "red";
-                }else if(rm.isMedium()){
-                    color = "orange";
-                }else{
-                    color = "green";
-                }
-                
-                String shtml = "<html><p style=color:" + color + ">";
-                String ehtml = "</p></html>";
-                Object[] raw = {shtml + rm.getRaw() + ehtml, shtml + String.format("%.2f", rm.getStock()) + ehtml};
-                rawModel.addRow(raw);
-            }
-        }
-
-        rawTable.setModel(rawModel);
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
-        rawTable.getColumn("Stock").setCellRenderer(rightRenderer);
-        recipeTable.getColumn("Stock").setCellRenderer(rightRenderer);
-        recipeTable.setRowSelectionAllowed(true);
-        //System.out.println(recipeTable.getRowSelectionAllowed());
-    }
-
-    /**
-     * < -- JANERYS FUNCTIONS END -- > *
-     */
     /**
      * @param args the command line arguments
      */
@@ -679,47 +475,53 @@ public class EODTab extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    new EODTab().setVisible(true);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (UnsupportedLookAndFeelException ex) {
-                    Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(EODTab.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                new EODTab().setVisible(true);
             }
         });
     }
-
+    
+    private boolean isNumber(String s) {
+        try {
+            Float.parseFloat(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTabbedPane InventoryTab;
-    private javax.swing.JButton UTWbtn1;
-    private javax.swing.JButton actualBtn1;
-    private javax.swing.JButton btnExportStock;
-    private javax.swing.JButton cMgt2;
+    private javax.swing.JLabel Background;
+    private javax.swing.JButton CategoriesBtn;
+    private javax.swing.JButton EODBtn;
+    private javax.swing.JButton InventoryBtn;
+    private javax.swing.JButton RMBtn;
+    private javax.swing.JButton RecipesBtn;
+    private javax.swing.JButton ReportsBtn;
+    private javax.swing.JButton enterSales1;
+    private javax.swing.JButton enterSales2;
+    private javax.swing.JButton enterSales4;
+    private javax.swing.JTable inputActual;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JButton nextDayBtn;
-    private javax.swing.JTable rawTable;
-    private javax.swing.JButton rcMgt;
-    private javax.swing.JTable recipeTable;
-    private javax.swing.JButton rmMgt1;
-    private javax.swing.JButton salesBtn;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JTable rmTable;
     // End of variables declaration//GEN-END:variables
-
 }
