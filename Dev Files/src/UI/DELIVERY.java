@@ -55,9 +55,17 @@ public class DELIVERY extends javax.swing.JFrame {
         
         aRaw = rmImp.getAllRaw();
         String cols[] = {"ID","Name", "Quantity in Stock", "Delivered Amount"};
-        rawTable.getColumnModel().getColumn(0).setMinWidth(0);
-        rawTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        DefaultTableModel allRaw = new DefaultTableModel(cols, 0);
+        DefaultTableModel allRaw = new DefaultTableModel(cols, 0) {
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if(column == 0 || column == 1 || column == 2)
+                    return false;
+                else
+                    return true;
+            }
+            
+        };
         
         
         for (RawBean raw : aRaw) {
