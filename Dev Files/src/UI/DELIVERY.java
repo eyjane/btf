@@ -73,9 +73,9 @@ public class DELIVERY extends javax.swing.JFrame {
             Object[] data = {raw.getRawID(), raw.getRaw(), raw.getStock(), ""};
             allRaw.addRow(data);
             rawTable.setModel(allRaw);
+            adjustTable(rawTable);
             rawTable.getColumnModel().getColumn(0).setMinWidth(0);
             rawTable.getColumnModel().getColumn(0).setMaxWidth(0);
-            adjustTable(rawTable);
         }
         
         rawTable.setColumnSelectionAllowed(true);
@@ -167,6 +167,7 @@ public class DELIVERY extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(rawTable);
         rawTable.getColumnModel().getColumn(0).setResizable(false);
+        rawTable.getColumnModel().getColumn(1).setResizable(false);
 
         successLabel.setText("Delivery information was successfully added.");
 
@@ -258,7 +259,7 @@ public class DELIVERY extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
