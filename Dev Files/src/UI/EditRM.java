@@ -4,6 +4,8 @@ import Beans.RawBean;
 import DAO.Implementation.RawDAOImplementation;
 import DAO.Interface.RawDAOInterface;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -409,19 +411,67 @@ private RawDAOInterface rwImp = new RawDAOImplementation();
     }// </editor-fold>//GEN-END:initComponents
 
     private void InventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InventoryBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            InventoryTab in = new InventoryTab();
+            in.setVisible(true);
+            dispose();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_InventoryBtnActionPerformed
 
     private void RMBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RMBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            RMManagement rm = new RMManagement();
+            rm.setVisible(true);
+            dispose();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_RMBtnActionPerformed
 
     private void RecipesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipesBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            RCManagement rc = new RCManagement();
+            rc.setVisible(true);
+            dispose();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_RecipesBtnActionPerformed
 
     private void CategoriesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CategoriesBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            CGManagement cg = new CGManagement();
+            cg.setVisible(true);
+            dispose();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_CategoriesBtnActionPerformed
 
     private void SaveRMBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveRMBtnActionPerformed
