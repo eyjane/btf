@@ -722,5 +722,4 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JButton salesBtn;
     // End of variables declaration//GEN-END:variables
 
-    
 }
