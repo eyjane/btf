@@ -160,40 +160,39 @@ private String currentPassword;
         String curpwd = new String(curPasswordField.getPassword());
         String newpwd = new String(newPasswordField.getPassword());
         String retpwd = new String(retypePasswordField.getPassword());
+       
         //authenticate password
         if(authenticateCurrentPassword(curpwd) == true){
             if(authenticateNewPasswords(newpwd, retpwd) == true){
-                    try {
-                        String filepath = "btf.xml";
-                        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-                        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-                        Document doc = docBuilder.parse(filepath);
-                        doc.getElementsByTagName("loginpwd").item(0).setTextContent(newpwd);
-                        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                        Transformer transformer = transformerFactory.newTransformer();
-                        DOMSource source = new DOMSource(doc);
-                        StreamResult result = new StreamResult(new File(filepath));
-                        transformer.transform(source, result);
-                        
-                        JOptionPane.showMessageDialog(null, "Succesfully changed password!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } 
-                
-                    
                 try {
-                EODTab e = new EODTab();
-                e.setVisible(true);
+                    String filepath = "btf.xml";
+                    DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+                    Document doc = docBuilder.parse(filepath);
+                    doc.getElementsByTagName("loginpwd").item(0).setTextContent(newpwd);
+                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                    Transformer transformer = transformerFactory.newTransformer();
+                    DOMSource source = new DOMSource(doc);
+                    StreamResult result = new StreamResult(new File(filepath));
+                    transformer.transform(source, result);
+                    JOptionPane.showMessageDialog(null, "Succesfully changed password!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception e) {
+                        e.printStackTrace();
+                } 
+                
+                try {
+                InventoryTab i = new InventoryTab();
+                i.setVisible(true);
                 dispose();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedLookAndFeelException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } 
         } else{
             JOptionPane.showMessageDialog(null, "The password that you have entered is incorrect. "

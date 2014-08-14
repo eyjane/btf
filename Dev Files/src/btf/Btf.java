@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package btf;
 
 import Beans.IngredientBean;
@@ -93,7 +87,7 @@ public class Btf {
        //System.out.println("STOCK: " + gRC.computeStock());
        
        //<--- CLARK'S CODE STARTS HERE --->
-       //check if there's already a password
+       
        File f = new File("btf.xml");
        if(f.exists()){
             System.out.println("File existed");
