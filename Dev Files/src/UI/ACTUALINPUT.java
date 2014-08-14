@@ -331,14 +331,22 @@ public class ACTUALINPUT extends javax.swing.JFrame {
         
         aRaw = rmImp.getAllRaw();
         String cols[] = {"ID","Name", "Quantity in Stock", "Actual Count"};
-        inputTable.getColumnModel().getColumn(0).setMinWidth(0);
-        inputTable.getColumnModel().getColumn(0).setMaxWidth(0);
         
         /*
          * FOR ACTUAL INPUT TABLE
          */
         
-        DefaultTableModel actualTable = new DefaultTableModel(cols,0);
+        DefaultTableModel actualTable = new DefaultTableModel(cols,0) {
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if(column == 0 || column == 1 || column == 2)
+                    return false;
+                else
+                    return true;
+            }
+            
+        };
         
         for (RawBean raw : aRaw) {
             
