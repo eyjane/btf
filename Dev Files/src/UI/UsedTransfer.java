@@ -47,8 +47,22 @@ public class UsedTransfer extends javax.swing.JFrame {
          * FOR ACTUAL INPUT TABLE
          */
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"ID", "Name", "Quantity", "Used", "Transferred", "Wastage"};
-        DefaultTableModel actualTable = new DefaultTableModel(cols,0);
+        String cols[] = {"ID", "Name", "Quantity in Stock", "Used", "Transferred", "Wastage"};
+        // MAKE CERTAIN COLUMNS NOT EDITABLE!!!!!
+        DefaultTableModel actualTable = new DefaultTableModel(cols,0) {
+        
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if(column == 0 || column == 1 || column == 2)
+                    return false;
+                else
+                    return true;
+            }
+
+            
+        };
+        
+            
         
         for (RawBean raw : aRaw) {
             
@@ -56,8 +70,22 @@ public class UsedTransfer extends javax.swing.JFrame {
             actualTable.addRow(data);
             rmTable.setModel(actualTable);
             adjustTable(rmTable);
+            // HIDE COLUMNS
+            rmTable.getColumnModel().getColumn(0).setMinWidth(0);
+            rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        
+        
         }
+        
+        
+        
        
+    }
+    
+    public boolean isCellEditable(int row,int column) {
+        
+            return false;
+     
     }
     
     private void adjustTable(JTable table){
@@ -72,6 +100,7 @@ public class UsedTransfer extends javax.swing.JFrame {
                 int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
                 preferredWidth = Math.max(preferredWidth, width);
 
+                
         //  We've exceeded the maximum width, no need to check other rows
                 if (preferredWidth >= maxWidth) {
                     preferredWidth = maxWidth;
@@ -130,7 +159,7 @@ public class UsedTransfer extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, true, true, true
@@ -242,6 +271,8 @@ public class UsedTransfer extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
     private void submitUsedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitUsedActionPerformed
         // TODO add your handling code here:
         
