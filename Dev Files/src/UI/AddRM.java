@@ -182,12 +182,32 @@ public class AddRM extends javax.swing.JFrame {
         jLabel6.setText("Unit of Measurement:");
 
         nameField.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        nameField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                nameFieldKeyReleased(evt);
+            }
+        });
 
         priceField.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        priceField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                priceFieldKeyReleased(evt);
+            }
+        });
 
         stockField.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        stockField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                stockFieldKeyReleased(evt);
+            }
+        });
 
         criticalField.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        criticalField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                criticalFieldKeyReleased(evt);
+            }
+        });
 
         SaveRMBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/addBtn.png"))); // NOI18N
         SaveRMBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -197,6 +217,11 @@ public class AddRM extends javax.swing.JFrame {
         });
 
         CancelBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/CancelBtn.png"))); // NOI18N
+        CancelBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelBtnActionPerformed(evt);
+            }
+        });
 
         errorLabel2.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         errorLabel2.setForeground(new java.awt.Color(204, 0, 0));
@@ -239,6 +264,11 @@ public class AddRM extends javax.swing.JFrame {
         errorLabel9.setText("*");
 
         uomField.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        uomField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                uomFieldKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -381,6 +411,106 @@ public class AddRM extends javax.swing.JFrame {
                 err.printStackTrace();
         }
     }//GEN-LAST:event_SaveRMBtnActionPerformed
+
+    private void CancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelBtnActionPerformed
+       rm.setVisible(true);
+       dispose();
+    }//GEN-LAST:event_CancelBtnActionPerformed
+
+    private void nameFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameFieldKeyReleased
+        if(nameField.getText().equals("")) {
+            errorLabel1.setVisible(true);
+            errorLabel2.setVisible(false);
+            errorLabel10.setVisible(true);
+        }
+        else {
+            //errorLabel1.setVisible(false);
+            //errorLabel2.setVisible(false);
+            //errorLabel10.setVisible(false);
+            raw.setRaw(nameField.getText());
+            ArrayList<RawBean> rList = new ArrayList<RawBean>();
+            rList = rwImp.getRawByStatus("available");
+            for(int i = 0; i < rList.size(); i++){
+                if(nameField.getText().equalsIgnoreCase(rList.get(i).getRaw())) {
+                        //&& Integer.parseInt(idField.getText()) != rwImp.getAllRaw().get(i).getRawID()) {
+                     errorLabel1.setVisible(false);
+                     errorLabel2.setVisible(true);
+                     errorLabel10.setVisible(false);
+                }
+            }
+        }
+    }//GEN-LAST:event_nameFieldKeyReleased
+
+    private void priceFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_priceFieldKeyReleased
+        if(!priceField.getText().equals("") && isNumber(priceField.getText())) {
+            if(Float.parseFloat(priceField.getText()) > 0) {
+                errorLabel3.setVisible(false);
+                errorLabel4.setVisible(false);
+                errorLabel10.setVisible(false);
+                raw.setPrice(Float.parseFloat(priceField.getText()));
+            }
+            else {
+                errorLabel3.setVisible(false);
+                errorLabel4.setVisible(true);
+                errorLabel10.setVisible(false);
+            }
+        }
+        else 
+            errorLabel3.setVisible(true);
+            errorLabel4.setVisible(false);
+            errorLabel10.setVisible(true);
+    }//GEN-LAST:event_priceFieldKeyReleased
+
+    private void stockFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_stockFieldKeyReleased
+        if(!stockField.getText().equals("") && isNumber(stockField.getText())) {
+            if(Float.parseFloat(stockField.getText()) > 0) {
+                errorLabel5.setVisible(false);
+                errorLabel6.setVisible(false);
+                errorLabel10.setVisible(false);
+                raw.setStock(Float.parseFloat(stockField.getText()));
+            }
+            else {
+                errorLabel5.setVisible(false);
+                errorLabel6.setVisible(true);
+                errorLabel10.setVisible(false);
+            }
+        }
+        else
+            errorLabel5.setVisible(true);
+            errorLabel6.setVisible(false);
+            errorLabel10.setVisible(true);
+    }//GEN-LAST:event_stockFieldKeyReleased
+
+    private void criticalFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_criticalFieldKeyReleased
+        if(!criticalField.getText().equals("") && isNumber(criticalField.getText())) {
+            if(Float.parseFloat(criticalField.getText()) > 0) {
+                errorLabel7.setVisible(false);
+                errorLabel8.setVisible(false);
+                errorLabel10.setVisible(false);
+                raw.setCritical(Float.parseFloat(criticalField.getText()));
+            }
+            else {
+                errorLabel7.setVisible(false);
+                errorLabel8.setVisible(true);
+                errorLabel10.setVisible(false);
+            }
+        }
+        else 
+            errorLabel7.setVisible(true);
+            errorLabel8.setVisible(false);
+            errorLabel10.setVisible(true);
+    }//GEN-LAST:event_criticalFieldKeyReleased
+
+    private void uomFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_uomFieldKeyReleased
+        if(!uomField.getText().equals("")) {
+            errorLabel9.setVisible(false);
+            errorLabel10.setVisible(false);
+            raw.setUom(uomField.getText());
+        }
+        else 
+            errorLabel9.setVisible(true);
+            errorLabel10.setVisible(true);
+    }//GEN-LAST:event_uomFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Background;

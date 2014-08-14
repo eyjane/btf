@@ -339,6 +339,9 @@
                   <Font name="Quicksand Light" size="14" style="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="nameFieldKeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="priceField">
               <Properties>
@@ -346,6 +349,9 @@
                   <Font name="Quicksand Light" size="14" style="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="priceFieldKeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="stockField">
               <Properties>
@@ -353,6 +359,9 @@
                   <Font name="Quicksand Light" size="14" style="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="stockFieldKeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="criticalField">
               <Properties>
@@ -360,6 +369,9 @@
                   <Font name="Quicksand Light" size="14" style="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="criticalFieldKeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="SaveRMBtn">
               <Properties>
@@ -377,6 +389,9 @@
                   <Image iconType="3" name="/Pictures/CancelBtn.png"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CancelBtnActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="errorLabel2">
               <Properties>
@@ -494,6 +509,9 @@
                   <Font name="Quicksand Light" size="14" style="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="uomFieldKeyReleased"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
