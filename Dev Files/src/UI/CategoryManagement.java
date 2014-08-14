@@ -35,18 +35,7 @@ public class CategoryManagement extends javax.swing.JFrame {
         initComponents();
         rcImp = new RecipeDAOImplementation();
         ctImp = new CategoryDAOImplementation();
-<<<<<<< HEAD
         ViewAllCategories();
-=======
-        selectedCat = new CategoryBean();
-        selectedRC = new RecipeBean();
-/*        errorLabel1.setVisible(false);
-        errorLabel2.setVisible(false);
-        btnUpdateCategory.setEnabled(false);
-        btnAddRecipe.setEnabled(false);
-        btnDeleteRecipe.setEnabled(false);
- */       ViewAllCategories();
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     }
     
     public DefaultTableModel initializeTableModel() {
@@ -73,106 +62,16 @@ public class CategoryManagement extends javax.swing.JFrame {
             c = ctImp.getAllCategory().get(i);
             defaultModel.addRow(new Object[] {c.getCategoryID(), c.getCategory()});
        }
-<<<<<<< HEAD
        categoryTable.setModel(defaultModel);
        categoryTable.getColumnModel().getColumn(0).setMinWidth(0);
        categoryTable.getColumnModel().getColumn(0).setMaxWidth(0);
        adjustTable(categoryTable);
     }
-=======
- /*      categoryTable.setModel(defaultModel);
-       categoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-        public void valueChanged(ListSelectionEvent event) {
-            try {
-            DefaultTableModel defaultTableModel = (DefaultTableModel) categoryTable.getModel();
-            if (categoryTable.getSelectedRow() >= 0) {
-                categoryIDField.setText(defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0).toString());
-                categoryNameField.setText((String) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 1));
-                selectedCat = ctImp.getCategory((int) (defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0)));
-                btnUpdateCategory.setEnabled(true);
-                btnAddRecipe.setEnabled(true);
-                btnAddCategory.setEnabled(false);    
-                if(selectedCat.getCategoryID() == 1) 
-                    btnDeleteRecipe.setEnabled(false);
-                else
-                    btnDeleteRecipe.setEnabled(true);            
-                ViewAllRecipes(selectedCat);
-            } else 
-                    selectedCat = null;
-            } catch (Exception err) {
-                err.printStackTrace();
-            } 
-        }
-       });
-            */
-    }
-    
-    public void ViewAllRecipes(CategoryBean c){
-       DefaultTableModel defaultModel = initializeRecipeTable();
-       c.setaRecipes(rcImp.getRecipeByCategory(c));
-       for (int i = 0; i < c.getaRecipes().size(); i++) {
-           if(c.getaRecipes().get(i).getRcstatus().equalsIgnoreCase("available")) {
-               defaultModel.addRow(new Object[] {c.getaRecipes().get(i).getRecipeID(), c.getaRecipes().get(i).getRecipe(),               
-               c.getaRecipes().get(i).getCost(), c.getaRecipes().get(i).getStock(), c.getaRecipes().get(i).getRcstatus()});
-           }
-       }
-   /*    recipeTable.setModel(defaultModel);
-       recipeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-        public void valueChanged(ListSelectionEvent event) {
-            try {
-            DefaultTableModel defaultTableModel = (DefaultTableModel) recipeTable.getModel();
-            if (recipeTable.getSelectedRow() >= 0) {
-                selectedRC = rcImp.getRecipeBean((int) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 0));
-            } else
-                selectedRC = null;
-            } catch (Exception err) {
-                err.printStackTrace();
-            } 
-        }
-       });
-       */
-    }
-    
-    public boolean authenticateCategory(){
-        boolean flag = true;
-        selectedCat = new CategoryBean();
-  /*      if(categoryNameField.getText().equals("")) {
-            errorLabel1.setVisible(true);
-            flag = false;
-        }
-        else {
-            selectedCat.setCategory(categoryNameField.getText());
-            errorLabel1.setVisible(false);
-            errorLabel2.setVisible(false);
-            for(int i = 0; i < ctImp.getAllCategory().size(); i++){
-                if(categoryNameField.getText().equalsIgnoreCase(ctImp.getAllCategory().get(i).getCategory())) {
-                    errorLabel1.setVisible(true);
-                    errorLabel2.setVisible(true);
-                    flag = false;
-                } 
-            }
-        }*/
-        return flag;
-    }
-    
-    public void clearText(){
- /*       categoryNameField.setText("");
-        categoryIDField.setText("");
-        errorLabel1.setVisible(false);
-        errorLabel2.setVisible(false);
-        btnUpdateCategory.setEnabled(false);
-        btnAddCategory.setEnabled(true);
-        btnAddRecipe.setEnabled(false);
-        btnDeleteRecipe.setEnabled(false);
-        recipeTable.setModel(initializeRecipeTable());
-  */  }
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     
     public DefaultTableModel getCMTable(){
         return defaultModel;
     }
     
-<<<<<<< HEAD
     public void deleteCategory(int c[]){
         TableModel model = categoryTable.getModel();
         DefaultTableModel table = (DefaultTableModel) model;
@@ -202,8 +101,6 @@ public class CategoryManagement extends javax.swing.JFrame {
         categoryTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
     
-=======
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     //<--- CLARK'S CODE ENDS HERE --->
     
     @SuppressWarnings("unchecked")
@@ -213,15 +110,9 @@ public class CategoryManagement extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         categoryTable = new javax.swing.JTable();
-<<<<<<< HEAD
         btnAddCategory = new javax.swing.JButton();
         btnEditCategory = new javax.swing.JButton();
         btnDeleteCategory = new javax.swing.JButton();
-=======
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         jLabel9 = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
 
@@ -248,7 +139,6 @@ public class CategoryManagement extends javax.swing.JFrame {
         });
         categoryTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(categoryTable);
-<<<<<<< HEAD
         categoryTable.getColumnModel().getColumn(0).setResizable(false);
 
         btnAddCategory.setText("Add A Category");
@@ -271,21 +161,6 @@ public class CategoryManagement extends javax.swing.JFrame {
                 btnDeleteCategoryActionPerformed(evt);
             }
         });
-=======
-        if (categoryTable.getColumnModel().getColumnCount() > 0) {
-            categoryTable.getColumnModel().getColumn(0).setResizable(false);
-            categoryTable.getColumnModel().getColumn(1).setResizable(false);
-        }
-
-        jButton1.setText("Add A Category");
-
-        jButton2.setText("Edit A Category");
-
-        jButton3.setText("Delete This Category");
-
-        jLabel9.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
-        jLabel9.setText("CATEGORY");
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         jLabel9.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel9.setText("CATEGORY");
@@ -296,7 +171,6 @@ public class CategoryManagement extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-<<<<<<< HEAD
                     .addComponent(btnAddCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDeleteCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -305,16 +179,6 @@ public class CategoryManagement extends javax.swing.JFrame {
                     .addComponent(jLabel9)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 30, Short.MAX_VALUE))
-=======
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 326, Short.MAX_VALUE))
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -324,19 +188,11 @@ public class CategoryManagement extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-<<<<<<< HEAD
                         .addComponent(btnAddCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnEditCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnDeleteCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-=======
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                         .addGap(0, 132, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
@@ -389,7 +245,6 @@ public class CategoryManagement extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_btnBackActionPerformed
 
-<<<<<<< HEAD
     private void btnAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCategoryActionPerformed
         try {
             AddCategory ac = new AddCategory(this);
@@ -455,22 +310,12 @@ public class CategoryManagement extends javax.swing.JFrame {
         }
     }
     
-=======
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addRecipeB;
-    private javax.swing.JButton addRecipeB1;
+    private javax.swing.JButton btnAddCategory;
     private javax.swing.JButton btnBack;
-<<<<<<< HEAD
     private javax.swing.JButton btnDeleteCategory;
     private javax.swing.JButton btnEditCategory;
     private javax.swing.JTable categoryTable;
-=======
-    private javax.swing.JTable categoryTable;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

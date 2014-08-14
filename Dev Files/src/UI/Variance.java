@@ -82,16 +82,10 @@ public class Variance extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         dateCombo = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-<<<<<<< HEAD
         varianceTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         btnExportVariance = new javax.swing.JButton();
-=======
-        jTable1 = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(956, 555));
@@ -134,27 +128,14 @@ public class Variance extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
-        jLabel2.setText("Variance");
-
-        jButton1.setText("BACK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jButton1)
-<<<<<<< HEAD
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExportVariance)
-=======
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -164,11 +145,7 @@ public class Variance extends javax.swing.JFrame {
                         .addGap(147, 147, 147)
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-<<<<<<< HEAD
                         .addComponent(dateCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
-=======
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 916, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -180,24 +157,16 @@ public class Variance extends javax.swing.JFrame {
                         .addGap(34, 34, 34)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-<<<<<<< HEAD
                             .addComponent(dateCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-=======
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-<<<<<<< HEAD
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(btnExportVariance))
-=======
-                .addComponent(jButton1)
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                 .addContainerGap(51, Short.MAX_VALUE))
         );
 
@@ -223,7 +192,6 @@ public class Variance extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
-<<<<<<< HEAD
     private void dateComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateComboActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_dateComboActionPerformed
@@ -496,8 +464,6 @@ public class Variance extends javax.swing.JFrame {
     /**
      * * <--- JANERYS CODE ENDS HERE ---> **
      */
-=======
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     /**
      * @param args the command line arguments
      */
@@ -538,14 +504,9 @@ public class Variance extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-<<<<<<< HEAD
     private javax.swing.JButton btnExportVariance;
     private javax.swing.JComboBox dateCombo;
     private javax.swing.JButton jButton1;
-=======
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
->>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
