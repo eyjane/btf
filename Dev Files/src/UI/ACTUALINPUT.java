@@ -127,9 +127,16 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
+<<<<<<< HEAD
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("INPUT ACTUAL COUNT");
+=======
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 91, 462, 157));
+
+        jLabel4.setText("Current Raw Material Inventory");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 43, -1, -1));
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         inputTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -169,9 +176,14 @@ public class ACTUALINPUT extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 91, -1, 157));
 
+        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 91, -1, 157));
+
         jLabel5.setText("Actual Count Input");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(631, 43, -1, -1));
+<<<<<<< HEAD
         jLabel5.setText("Raw Materials");
+=======
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         submitBtn.setText("SUBMIT");
         submitBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -179,7 +191,18 @@ public class ACTUALINPUT extends javax.swing.JFrame {
                 submitBtnActionPerformed(evt);
             }
         });
+<<<<<<< HEAD
         jPanel1.add(submitBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 276, -1, -1));
+=======
+        jPanel1.add(updateActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 276, -1, -1));
+
+        errorBox.setEditable(false);
+        errorBox.setColumns(20);
+        errorBox.setRows(5);
+        jScrollPane3.setViewportView(errorBox);
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
+
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, 330, 198));
 
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -188,6 +211,7 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             }
         });
         jPanel1.add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(413, 276, -1, -1));
+<<<<<<< HEAD
 
         errorLabel1.setForeground(new java.awt.Color(255, 0, 1));
         errorLabel1.setText("Submission Failed. Please check that all inputs are positive numbers");
@@ -253,6 +277,12 @@ public class ACTUALINPUT extends javax.swing.JFrame {
                     .addComponent(backBtn))
                 .addGap(35, 35, 35))
         );
+=======
+
+        jLabel2.setForeground(new java.awt.Color(255, 0, 1));
+        jLabel2.setText("ERRORS:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, -1, -1));
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -266,7 +296,10 @@ public class ACTUALINPUT extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+<<<<<<< HEAD
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+=======
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         );
 
         pack();

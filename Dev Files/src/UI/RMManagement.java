@@ -7,7 +7,10 @@ import DAO.Implementation.RawDAOImplementation;
 import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Interface.IngredientDAOInterface;
 import DAO.Interface.RawDAOInterface;
+<<<<<<< HEAD
 import DAO.Interface.RecipeDAOInterface;
+=======
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,15 +26,21 @@ import javax.swing.table.TableModel;
  */
 public class RMManagement extends javax.swing.JFrame {
     private RawDAOInterface rmImp = new RawDAOImplementation();
+<<<<<<< HEAD
     private IngredientDAOInterface inImp = new IngredientDAOImplementation();
     private RawBean selectedRaw = null;
     private DefaultTableModel defaultModel;
+=======
+    private RawBean selectedRaw = new RawBean();
+    private RawBean editRaw = new RawBean();
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
     //<--- CLARK'S CODE STARTS HERE --->
     public RMManagement() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
+    
         ViewAllRM();
     }
     
@@ -57,6 +66,7 @@ public class RMManagement extends javax.swing.JFrame {
             defaultModel.addRow(new Object[] {r.getRawID(), r.getRaw(), r.getPrice(), r.getStock(), r.getCritical(), r.getRmstatus(), r.getUom()});
        }
        rmTable.setModel(defaultModel);
+<<<<<<< HEAD
        rmTable.getColumnModel().getColumn(0).setMinWidth(0);
        rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
@@ -105,6 +115,39 @@ public class RMManagement extends javax.swing.JFrame {
         return defaultModel;
     }
     
+=======
+       rmTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+        public void valueChanged(ListSelectionEvent event) {
+            try {
+            clearText();
+            DefaultTableModel defaultTableModel = (DefaultTableModel) rmTable.getModel();
+            } catch (Exception err) {
+                err.printStackTrace();
+            } 
+        }
+       });
+    }
+    
+    public void clearText(){
+        }
+    
+    public boolean authenticateRM(){
+        boolean flag = true;
+        editRaw = new RawBean();
+        int count = 0;
+        return false;
+        
+        }
+    
+    public boolean isNumber(String s) {
+        try {
+            Float.parseFloat(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     //<--- CLARK'S CODE ENDS HERE --->
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -118,9 +161,15 @@ public class RMManagement extends javax.swing.JFrame {
             }
         };
         jLabel9 = new javax.swing.JLabel();
+<<<<<<< HEAD
         btnDeleteRM = new javax.swing.JButton();
         btnAddRM = new javax.swing.JButton();
         btnEditRM = new javax.swing.JButton();
+=======
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -154,6 +203,7 @@ public class RMManagement extends javax.swing.JFrame {
             rmTable.getColumnModel().getColumn(3).setResizable(false);
             rmTable.getColumnModel().getColumn(4).setResizable(false);
             rmTable.getColumnModel().getColumn(5).setResizable(false);
+<<<<<<< HEAD
         }
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 710, 430));
@@ -186,6 +236,26 @@ public class RMManagement extends javax.swing.JFrame {
         });
         jPanel1.add(btnEditRM, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 182, 50));
 
+=======
+            rmTable.getColumnModel().getColumn(6).setResizable(false);
+        }
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 710, 430));
+
+        jLabel9.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        jLabel9.setText("RAW MATERIALS");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, -1, -1));
+
+        jButton1.setText("Delete This Raw Material");
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 182, 50));
+
+        jButton2.setText("Add A Raw Material");
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 182, 50));
+
+        jButton3.setText("Edit A Raw Material");
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 182, 50));
+
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         backBtn.setText("BACK");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -215,6 +285,7 @@ public class RMManagement extends javax.swing.JFrame {
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         this.setVisible(false);
         try {
+<<<<<<< HEAD
             EODTab main = new EODTab();
             main.setVisible(true);
         } catch (Exception e) {
@@ -262,13 +333,28 @@ public class RMManagement extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnDeleteRMActionPerformed
+=======
+      //      main = new EODTab();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+      //  main.setVisible(true);
+    }//GEN-LAST:event_backBtnActionPerformed
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
+<<<<<<< HEAD
     private javax.swing.JButton btnAddRM;
     private javax.swing.JButton btnDeleteRM;
     private javax.swing.JButton btnEditRM;
+=======
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

@@ -3,31 +3,40 @@ package UI;
 import Beans.RecipeBean;
 import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Interface.RecipeDAOInterface;
-import java.util.ArrayList;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
  * @author clarkabalos
  */
 public class RCpopup extends javax.swing.JFrame {
+<<<<<<< HEAD
     private EditCategory ec;
     private RecipeDAOInterface rcImp;
     private ArrayList<RecipeBean> catRecipes;
     private ArrayList<RecipeBean> allRecipes;
+=======
+    private RecipeDAOInterface rcImp;
+    private CategoryManagement cm;
+    private RecipeBean rc;
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
    
     //<--- CLARK'S CODE STARTS HERE --->
-    public RCpopup(EditCategory c, ArrayList<RecipeBean> rb) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public RCpopup(CategoryManagement c) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
+<<<<<<< HEAD
         ec = c;
         catRecipes = rb;
         rcImp = new RecipeDAOImplementation();
         allRecipes = rcImp.getRecipeByStatus("available");
+=======
+        cm = c;
+        rcImp = new RecipeDAOImplementation();
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         ViewAllRecipes();
     }
     
@@ -43,6 +52,7 @@ public class RCpopup extends javax.swing.JFrame {
     
     public void ViewAllRecipes(){
        DefaultTableModel defaultModel = initializeRecipeTable();
+<<<<<<< HEAD
        for (int i = 0; i < allRecipes.size(); i++) {
            boolean flag = true;
            for (int j = 0; j < catRecipes.size(); j++) {
@@ -54,12 +64,18 @@ public class RCpopup extends javax.swing.JFrame {
                 defaultModel.addRow(new Object[] {allRecipes.get(i).getRecipeID(), allRecipes.get(i).getRecipe(),               
                 allRecipes.get(i).getCost(), allRecipes.get(i).computeStock(), allRecipes.get(i).getRcstatus()});
            }
+=======
+       for (int i = 0; i < rcImp.getRecipeByStatus("available").size(); i++) {
+            defaultModel.addRow(new Object[] {rcImp.getRecipeByStatus("available").get(i).getRecipeID(), rcImp.getRecipeByStatus("available").get(i).getRecipe(),               
+            rcImp.getRecipeByStatus("available").get(i).getCost(), rcImp.getRecipeByStatus("available").get(i).getStock(), rcImp.getRecipeByStatus("available").get(i).getRcstatus()});
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
        }
        recipeTable.setModel(defaultModel);
        recipeTable.getColumnModel().getColumn(0).setMinWidth(0);
        recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
     
+<<<<<<< HEAD
     public void addRecipe(int r[]){
         TableModel model = recipeTable.getModel();
         DefaultTableModel table = (DefaultTableModel) model;
@@ -74,6 +90,24 @@ public class RCpopup extends javax.swing.JFrame {
         recipeTable.setModel(table);
         recipeTable.getColumnModel().getColumn(0).setMinWidth(0);
         recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
+=======
+    public RecipeBean getSelectedRecipe(){
+        rc = new RecipeBean();
+        try {
+            DefaultTableModel defaultTableModel = (DefaultTableModel) recipeTable.getModel();
+            if (recipeTable.getSelectedRow() >= 0) {
+                rc.setRecipeID((int) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 0));
+                rc.setRecipe((String) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 1));
+                rc.setCost((float) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 2));
+                rc.setStock((float) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 3));
+                rc.setRcstatus((String) defaultTableModel.getValueAt(recipeTable.getSelectedRow(), 4));
+            } else
+                rc = null;
+        } catch (Exception err) {
+            err.printStackTrace();
+        } 
+        return rc;
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     }
     
     //<--- CLARK'S CODE ENDS HERE --->
@@ -89,8 +123,10 @@ public class RCpopup extends javax.swing.JFrame {
         btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(956, 224));
 
         jPanel1.setPreferredSize(new java.awt.Dimension(956, 215));
+<<<<<<< HEAD
 
         jLabel1.setText("Recipe List");
 
@@ -106,16 +142,43 @@ public class RCpopup extends javax.swing.JFrame {
                 false, false, false, false
             };
 
+=======
+
+        jLabel1.setText("Recipe List");
+
+        recipeTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Name", "Cost", "Stock", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         recipeTable.setPreferredSize(new java.awt.Dimension(375, 170));
         jScrollPane1.setViewportView(recipeTable);
+<<<<<<< HEAD
         recipeTable.getColumnModel().getColumn(0).setResizable(false);
         recipeTable.getColumnModel().getColumn(1).setResizable(false);
         recipeTable.getColumnModel().getColumn(2).setResizable(false);
         recipeTable.getColumnModel().getColumn(3).setResizable(false);
+=======
+        if (recipeTable.getColumnModel().getColumnCount() > 0) {
+            recipeTable.getColumnModel().getColumn(0).setResizable(false);
+            recipeTable.getColumnModel().getColumn(1).setResizable(false);
+            recipeTable.getColumnModel().getColumn(2).setResizable(false);
+            recipeTable.getColumnModel().getColumn(3).setResizable(false);
+            recipeTable.getColumnModel().getColumn(4).setResizable(false);
+        }
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         btnAddRecipe.setText("Add");
         btnAddRecipe.addActionListener(new java.awt.event.ActionListener() {
@@ -177,6 +240,7 @@ public class RCpopup extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRecipeActionPerformed
+<<<<<<< HEAD
         int select[] = recipeTable.getSelectedRows();
         if (select.length > 0) {
             addRecipe(select);
@@ -194,6 +258,15 @@ public class RCpopup extends javax.swing.JFrame {
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         ec.setVisible(true);
+=======
+        getSelectedRecipe().setCategory(cm.getCategory().getCategoryID());
+        rcImp.editRecipe(rc);
+        cm.ViewAllRecipes(cm.getCategory());
+        dispose();
+    }//GEN-LAST:event_btnAddRecipeActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 

@@ -93,7 +93,14 @@ public class AddRecipe extends javax.swing.JFrame {
         inError = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+<<<<<<< HEAD
         editIngredients = new javax.swing.JButton();
+=======
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         jScrollPane1 = new javax.swing.JScrollPane();
         recipeTable = new javax.swing.JTable(){
             public boolean isCellEditable(int row, int column){
@@ -113,6 +120,11 @@ public class AddRecipe extends javax.swing.JFrame {
         jLabel2.setText("Name: ");
 
         actualLabel.setText("0.00");
+<<<<<<< HEAD
+=======
+
+        jLabel4.setText("Stock:");
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         jLabel5.setText("Category: ");
 
@@ -167,11 +179,18 @@ public class AddRecipe extends javax.swing.JFrame {
 
         inError.setForeground(new java.awt.Color(255, 0, 51));
         inError.setText("ERROR: Recipe must have at least one ingredient.");
+<<<<<<< HEAD
+=======
+
+        errorLabel4.setForeground(new java.awt.Color(255, 0, 51));
+        errorLabel4.setText("ERROR: Required field. Please input valid number.");
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         jLabel7.setText("Cost: ");
 
         jLabel8.setText("Actual Price:");
 
+<<<<<<< HEAD
         editIngredients.setText("Edit Ingredient");
         editIngredients.setPreferredSize(new java.awt.Dimension(96, 22));
         editIngredients.addActionListener(new java.awt.event.ActionListener() {
@@ -179,6 +198,16 @@ public class AddRecipe extends javax.swing.JFrame {
                 editIngredientsActionPerformed(evt);
             }
         });
+=======
+        jButton1.setText("BACK");
+
+        jButton2.setText("Add Ingredients");
+        jButton2.setPreferredSize(new java.awt.Dimension(96, 22));
+
+        jButton3.setText("Edit Ingredients");
+
+        jButton4.setText("Delete This Ingredient");
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -186,6 +215,10 @@ public class AddRecipe extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+<<<<<<< HEAD
+=======
+                    .addComponent(jButton1)
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,15 +240,38 @@ public class AddRecipe extends javax.swing.JFrame {
                                 .addGap(30, 30, 30)
                                 .addComponent(actualLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
+<<<<<<< HEAD
+=======
+                                .addComponent(jLabel4)
+                                .addGap(40, 40, 40)
+                                .addComponent(stockField, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)
+                                .addComponent(errorLabel4))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                                 .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
                                 .addComponent(categoryBox, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+<<<<<<< HEAD
+=======
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inError)
+                            .addComponent(jLabel6)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                         .addGap(107, 107, 107)
                         .addComponent(addRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(cancel)))
                 .addGap(122, 122, 122))
+<<<<<<< HEAD
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -227,6 +283,8 @@ public class AddRecipe extends javax.swing.JFrame {
                             .addComponent(jLabel6)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(150, 150, 150))
+=======
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,6 +311,7 @@ public class AddRecipe extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(actualLabel))
+<<<<<<< HEAD
                 .addGap(50, 50, 50)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
@@ -274,6 +333,42 @@ public class AddRecipe extends javax.swing.JFrame {
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 620));
+=======
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stockField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(errorLabel4))))
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(categoryBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(61, 61, 61)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addRecipe)
+                    .addComponent(cancel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(inError)
+                .addGap(19, 19, 19)
+                .addComponent(jButton1))
+        );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, -1));
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         recipeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -433,6 +528,7 @@ public class AddRecipe extends javax.swing.JFrame {
         */
     }//GEN-LAST:event_recipeTableMouseClicked
 
+<<<<<<< HEAD
     private void editIngredientsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editIngredientsActionPerformed
                 int nrow = ingredientsTable.getRowCount();
         //System.out.println(nrow);
@@ -462,6 +558,8 @@ public class AddRecipe extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_editIngredientsActionPerformed
 
+=======
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     /**
      * * <--- JANERYS CODE STARTS HERE ---> **
      */
@@ -591,10 +689,17 @@ public class AddRecipe extends javax.swing.JFrame {
     private javax.swing.JButton cancel;
     private javax.swing.JComboBox categoryBox;
     private javax.swing.JTextField costField;
+<<<<<<< HEAD
     private javax.swing.JButton editIngredients;
+=======
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     private javax.swing.JLabel errorLabel2;
     private javax.swing.JLabel inError;
     private javax.swing.JTable ingredientsTable;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
@@ -608,5 +713,9 @@ public class AddRecipe extends javax.swing.JFrame {
     private javax.swing.JLabel nameError;
     private javax.swing.JTextField nameField;
     private javax.swing.JTable recipeTable;
+<<<<<<< HEAD
+=======
+    private javax.swing.JTextField stockField;
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     // End of variables declaration//GEN-END:variables
 }

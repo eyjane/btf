@@ -49,8 +49,11 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+<<<<<<< HEAD
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnExportVariance" min="-2" max="-2" attributes="0"/>
+=======
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
               <Group type="102" attributes="0">
@@ -61,7 +64,11 @@
                           <EmptySpace min="-2" pref="147" max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
+<<<<<<< HEAD
                           <Component id="dateCombo" min="-2" pref="237" max="-2" attributes="0"/>
+=======
+                          <Component id="jComboBox1" min="-2" pref="237" max="-2" attributes="0"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                       </Group>
                       <Component id="jScrollPane1" alignment="0" min="-2" pref="916" max="-2" attributes="0"/>
                   </Group>
@@ -77,13 +84,18 @@
                           <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+<<<<<<< HEAD
                               <Component id="dateCombo" alignment="3" min="-2" max="-2" attributes="0"/>
+=======
+                              <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       </Group>
+<<<<<<< HEAD
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
@@ -92,6 +104,13 @@
                       <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnExportVariance" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
+=======
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                   <EmptySpace pref="51" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -195,6 +214,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
           </Events>
         </Component>
+<<<<<<< HEAD
         <Component class="javax.swing.JButton" name="btnExportVariance">
           <Properties>
             <Property name="text" type="java.lang.String" value="Export Variance Report"/>
@@ -203,6 +223,8 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExportVarianceActionPerformed"/>
           </Events>
         </Component>
+=======
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
       </SubComponents>
     </Container>
   </SubComponents>

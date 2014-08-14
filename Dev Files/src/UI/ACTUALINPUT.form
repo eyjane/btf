@@ -89,6 +89,7 @@
           <Dimension value="[956, 555]"/>
         </Property>
       </Properties>
+<<<<<<< HEAD
 
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
@@ -161,6 +162,11 @@
           </Group>
         </DimensionLayout>
 
+=======
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="false"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel1">

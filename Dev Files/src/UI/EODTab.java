@@ -51,6 +51,7 @@ public class EODTab extends javax.swing.JFrame {
     RecipeDAOInterface rcImp = new RecipeDAOImplementation();
     IngredientDAOInterface inImp = new IngredientDAOImplementation();
     RawDAOInterface rwImp = new RawDAOImplementation();
+  
 
     /**
      * Creates new form EODTab
@@ -72,8 +73,19 @@ public class EODTab extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jPanel1 = new javax.swing.JPanel();
+<<<<<<< HEAD
+=======
+        jScrollPane3 = new javax.swing.JScrollPane();
+        notificationTable = new javax.swing.JTable(){
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        jLabel3 = new javax.swing.JLabel();
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         InventoryTab = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -93,25 +105,77 @@ public class EODTab extends javax.swing.JFrame {
         rcMgt = new javax.swing.JButton();
         rmMgt1 = new javax.swing.JButton();
         cMgt2 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         salesBtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+<<<<<<< HEAD
         actualBtn1 = new javax.swing.JButton();
         UTWbtn1 = new javax.swing.JButton();
         nextDayBtn = new javax.swing.JButton();
+=======
+        actualBtn = new javax.swing.JButton();
+        UTWbtn = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         jPanel3 = new javax.swing.JPanel();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
+<<<<<<< HEAD
         btnExportStock = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+=======
+        jButton10 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(null);
 
+<<<<<<< HEAD
         jPanel5.setOpaque(false);
+=======
+        notificationTable.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        notificationTable.setForeground(new java.awt.Color(255, 51, 51));
+        notificationTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(notificationTable);
+
+        jPanel1.add(jScrollPane3);
+        jScrollPane3.setBounds(663, 85, 256, 444);
+
+        jLabel3.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
+        jLabel3.setText("LOW SUPPLY NOTIFICATION");
+        jPanel1.add(jLabel3);
+        jLabel3.setBounds(663, 50, 253, 24);
+
+        jPanel5.setOpaque(false);
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, InventoryTab, org.jdesktop.beansbinding.ObjectProperty.create(), jPanel5, org.jdesktop.beansbinding.BeanProperty.create("background"));
+        bindingGroup.addBinding(binding);
+
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         jPanel5.setLayout(null);
 
         recipeTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -129,7 +193,11 @@ public class EODTab extends javax.swing.JFrame {
         jScrollPane2.setViewportView(recipeTable);
 
         jPanel5.add(jScrollPane2);
+<<<<<<< HEAD
         jScrollPane2.setBounds(170, 50, 454, 110);
+=======
+        jScrollPane2.setBounds(160, 50, 452, 160);
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         rawTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -148,15 +216,26 @@ public class EODTab extends javax.swing.JFrame {
         jPanel5.add(jScrollPane3);
         jScrollPane3.setBounds(170, 260, 454, 110);
 
+        jPanel5.add(jScrollPane1);
+        jScrollPane1.setBounds(160, 270, 452, 170);
+
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel1.setText("RECIPE STOCK");
         jPanel5.add(jLabel1);
+<<<<<<< HEAD
         jLabel1.setBounds(167, 16, 178, 30);
+=======
+        jLabel1.setBounds(167, 16, 179, 32);
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabel2.setText("RAW MATERIAL STOCK");
         jPanel5.add(jLabel2);
+<<<<<<< HEAD
         jLabel2.setBounds(170, 220, 286, 30);
+=======
+        jLabel2.setBounds(170, 230, 279, 32);
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         rcMgt.setText("Recipe Management");
         rcMgt.addActionListener(new java.awt.event.ActionListener() {
@@ -165,7 +244,11 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
         jPanel5.add(rcMgt);
+<<<<<<< HEAD
         rcMgt.setBounds(0, 20, 160, 50);
+=======
+        rcMgt.setBounds(0, 40, 160, 50);
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         rmMgt1.setText("Manage Raw Materials");
         rmMgt1.addActionListener(new java.awt.event.ActionListener() {
@@ -174,7 +257,11 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
         jPanel5.add(rmMgt1);
+<<<<<<< HEAD
         rmMgt1.setBounds(0, 90, 160, 50);
+=======
+        rmMgt1.setBounds(0, 130, 160, 50);
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         cMgt2.setText("Category Management");
         cMgt2.addActionListener(new java.awt.event.ActionListener() {
@@ -183,7 +270,16 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
         jPanel5.add(cMgt2);
+<<<<<<< HEAD
         cMgt2.setBounds(0, 160, 160, 50);
+=======
+        cMgt2.setBounds(0, 220, 160, 50);
+
+        jLabel4.setBackground(new java.awt.Color(51, 204, 255));
+        jLabel4.setOpaque(true);
+        jPanel5.add(jLabel4);
+        jLabel4.setBounds(0, 0, 160, 500);
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         InventoryTab.addTab("INVENTORY", jPanel5);
 
@@ -197,7 +293,11 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
         jPanel6.add(salesBtn);
+<<<<<<< HEAD
         salesBtn.setBounds(0, 160, 160, 50);
+=======
+        salesBtn.setBounds(0, 220, 160, 50);
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         jButton2.setText("DELIVERY");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -206,6 +306,7 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
         jPanel6.add(jButton2);
+<<<<<<< HEAD
         jButton2.setBounds(0, 20, 160, 50);
 
         actualBtn1.setText("INPUT RAW MATERIAL COUNT");
@@ -216,6 +317,9 @@ public class EODTab extends javax.swing.JFrame {
         });
         jPanel6.add(actualBtn1);
         actualBtn1.setBounds(0, 90, 160, 50);
+=======
+        jButton2.setBounds(0, 40, 160, 50);
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         UTWbtn1.setText("USED/TRANSFERED AND WASTAGES");
         UTWbtn1.addActionListener(new java.awt.event.ActionListener() {
@@ -223,8 +327,13 @@ public class EODTab extends javax.swing.JFrame {
                 UTWbtnActionPerformed(evt);
             }
         });
+<<<<<<< HEAD
         jPanel6.add(UTWbtn1);
         UTWbtn1.setBounds(0, 230, 160, 50);
+=======
+        jPanel6.add(actualBtn);
+        actualBtn.setBounds(0, 130, 160, 50);
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         nextDayBtn.setText("NEXT DAY");
         jPanel6.add(nextDayBtn);
@@ -234,7 +343,17 @@ public class EODTab extends javax.swing.JFrame {
                 nextDayBtnActionPerformed(evt);
             }
         });
+        jPanel6.add(UTWbtn);
+        UTWbtn.setBounds(0, 310, 160, 50);
 
+<<<<<<< HEAD
+=======
+        jLabel6.setBackground(new java.awt.Color(51, 204, 255));
+        jLabel6.setOpaque(true);
+        jPanel6.add(jLabel6);
+        jLabel6.setBounds(0, 0, 160, 500);
+
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         InventoryTab.addTab("EOD", jPanel6);
 
         jPanel3.setOpaque(false);
@@ -242,6 +361,7 @@ public class EODTab extends javax.swing.JFrame {
 
         jButton7.setText("Expenses");
         jPanel3.add(jButton7);
+<<<<<<< HEAD
         jButton7.setBounds(0, 30, 160, 50);
 
         jButton8.setText("Gross Income");
@@ -269,6 +389,35 @@ public class EODTab extends javax.swing.JFrame {
 
         jPanel1.add(InventoryTab);
         InventoryTab.setBounds(0, 130, 840, 480);
+=======
+        jButton7.setBounds(0, 40, 160, 50);
+
+        jButton8.setText("Gross Income");
+        jPanel3.add(jButton8);
+        jButton8.setBounds(0, 130, 160, 50);
+
+        jButton9.setText("Net Income");
+        jPanel3.add(jButton9);
+        jButton9.setBounds(0, 220, 160, 50);
+
+        jButton10.setText("EXPORT");
+        jPanel3.add(jButton10);
+        jButton10.setBounds(0, 400, 160, 50);
+
+        jButton1.setText("Variance");
+        jPanel3.add(jButton1);
+        jButton1.setBounds(0, 310, 160, 50);
+
+        jLabel5.setBackground(new java.awt.Color(51, 204, 255));
+        jLabel5.setOpaque(true);
+        jPanel3.add(jLabel5);
+        jLabel5.setBounds(0, 0, 160, 500);
+
+        InventoryTab.addTab("REPORT", jPanel3);
+
+        jPanel1.add(InventoryTab);
+        InventoryTab.setBounds(0, 70, 635, 480);
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Background.png"))); // NOI18N
         jLabel7.setText("jLabel7");
@@ -279,6 +428,7 @@ public class EODTab extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+<<<<<<< HEAD
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 955, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -286,15 +436,53 @@ public class EODTab extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
+=======
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 956, Short.MAX_VALUE)
         );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
+        );
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+<<<<<<< HEAD
+=======
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+
+        // DELIVERY
+        this.setVisible(false);
+        try {
+            DELIVERY deliveryWindow = new DELIVERY(this);
+            deliveryWindow.setVisible(true);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void salesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesBtnActionPerformed
+        this.setVisible(false);
+        try {
+            SALES saleswindow = new SALES(this);
+            saleswindow.setVisible(true);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }//GEN-LAST:event_salesBtnActionPerformed
+
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     private void rcMgtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rcMgtActionPerformed
         this.setVisible(false);
         try {
-            RCManagement rcmgt = new RCManagement();
+            RCManagement rcmgt = new RCManagement(this);
             rcmgt.setVisible(true);
         } catch (Exception e) {
             System.out.println(e);
@@ -701,12 +889,23 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JButton btnExportStock;
     private javax.swing.JButton cMgt2;
     private javax.swing.JButton jButton1;
+<<<<<<< HEAD
+=======
+    private javax.swing.JButton jButton10;
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+<<<<<<< HEAD
+=======
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
@@ -720,6 +919,7 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JTable recipeTable;
     private javax.swing.JButton rmMgt1;
     private javax.swing.JButton salesBtn;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
 }

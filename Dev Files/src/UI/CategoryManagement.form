@@ -56,16 +56,28 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
+<<<<<<< HEAD
                       <Component id="btnAddCategory" min="-2" pref="182" max="-2" attributes="0"/>
                       <Component id="btnEditCategory" min="-2" pref="182" max="-2" attributes="0"/>
                       <Component id="btnDeleteCategory" alignment="0" min="-2" pref="182" max="-2" attributes="0"/>
+=======
+                      <Component id="jButton1" min="-2" pref="182" max="-2" attributes="0"/>
+                      <Component id="jButton2" min="-2" pref="182" max="-2" attributes="0"/>
+                      <Component id="jButton3" alignment="0" min="-2" pref="182" max="-2" attributes="0"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+<<<<<<< HEAD
                       <Component id="jScrollPane1" min="-2" pref="720" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="0" pref="30" max="32767" attributes="0"/>
+=======
+                      <Component id="jScrollPane1" min="-2" pref="476" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="0" pref="326" max="32767" attributes="0"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
               </Group>
           </Group>
         </DimensionLayout>
@@ -77,11 +89,19 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
+<<<<<<< HEAD
                           <Component id="btnAddCategory" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnEditCategory" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnDeleteCategory" min="-2" pref="50" max="-2" attributes="0"/>
+=======
+                          <Component id="jButton1" min="-2" pref="50" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="jButton2" min="-2" pref="50" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="jButton3" min="-2" pref="50" max="-2" attributes="0"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                           <EmptySpace min="0" pref="132" max="32767" attributes="0"/>
                       </Group>
                       <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
@@ -122,14 +142,23 @@
             </Component>
           </SubComponents>
         </Container>
+<<<<<<< HEAD
         <Component class="javax.swing.JButton" name="btnAddCategory">
           <Properties>
             <Property name="text" type="java.lang.String" value="Add A Category"/>
+=======
+        <Component class="javax.swing.JButton" name="jButton1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Add A Category"/>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddCategoryActionPerformed"/>
-          </Events>
         </Component>
+        <Component class="javax.swing.JButton" name="jButton2">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Edit A Category"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
+          </Properties>
+        </Component>
+<<<<<<< HEAD
         <Component class="javax.swing.JButton" name="btnEditCategory">
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit A Category"/>
@@ -145,6 +174,20 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteCategoryActionPerformed"/>
           </Events>
+=======
+        <Component class="javax.swing.JButton" name="jButton3">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Delete This Category"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel9">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="24" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="CATEGORY"/>
+          </Properties>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>

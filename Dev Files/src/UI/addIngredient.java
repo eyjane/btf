@@ -29,7 +29,7 @@ public class addIngredient extends javax.swing.JFrame {
 
     private RawDAOInterface rwImp = new RawDAOImplementation();
     private AddRecipe ar;
-    private EditRecipe rcm;
+    private RCManagement rcm;
     private ArrayList<IngredientBean> ai;
 
     /**
@@ -45,7 +45,7 @@ public class addIngredient extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         errorLabel.setVisible(false);
-        errorLabel1.setVisible(false);
+ //       errorLabel1.setVisible(false);
         this.ar = a;
         this.ai = i;
         prepareTable();
@@ -53,12 +53,16 @@ public class addIngredient extends javax.swing.JFrame {
         //System.out.println("Opened from addrecipe");
     }
 
+<<<<<<< HEAD
     public addIngredient(EditRecipe r, ArrayList<IngredientBean> i, String rn) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+=======
+    public addIngredient(RCManagement r, ArrayList<IngredientBean> i) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
         errorLabel.setVisible(false);
-        errorLabel1.setVisible(false);
+ //       errorLabel1.setVisible(false);
         this.rcm = r;
         this.ai = i;
         prepareTable();
@@ -75,12 +79,6 @@ public class addIngredient extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        ingredientTable = new javax.swing.JTable(){
-            public boolean isCellEditable(int row, int column){
-                return false;
-            }
-        };
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         rawTable = new javax.swing.JTable(){
@@ -91,32 +89,30 @@ public class addIngredient extends javax.swing.JFrame {
         addRaw = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         quantityField = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        editField = new javax.swing.JTextField();
-        editQuantity = new javax.swing.JButton();
-        deleteIngredient = new javax.swing.JButton();
-        saveButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         errorLabel = new javax.swing.JLabel();
+<<<<<<< HEAD
         errorLabel1 = new javax.swing.JLabel();
         recipeLabel = new javax.swing.JLabel();
+=======
+        jLabel6 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        ingredientTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(ingredientTable);
+        setPreferredSize(new java.awt.Dimension(956, 555));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
+<<<<<<< HEAD
         jLabel1.setText("Ingredients");
+=======
+        jLabel1.setText("Add Ingredients");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 11, -1, -1));
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         rawTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -128,20 +124,25 @@ public class addIngredient extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(rawTable);
 
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 73, 390, 337));
+
         addRaw.setText("Add");
         addRaw.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addRawActionPerformed(evt);
             }
         });
+        getContentPane().add(addRaw, new org.netbeans.lib.awtextra.AbsoluteConstraints(147, 416, -1, -1));
 
         jLabel2.setText("Quantity: ");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, -1, -1));
 
         quantityField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 quantityFieldActionPerformed(evt);
             }
         });
+<<<<<<< HEAD
 
         jLabel3.setText("Edit quantity: ");
 
@@ -171,6 +172,9 @@ public class addIngredient extends javax.swing.JFrame {
                 saveButtonActionPerformed(evt);
             }
         });
+=======
+        getContentPane().add(quantityField, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 417, 66, -1));
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         cancelButton.setText("Back");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -178,14 +182,16 @@ public class addIngredient extends javax.swing.JFrame {
                 cancelButtonActionPerformed(evt);
             }
         });
+        getContentPane().add(cancelButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, -1, -1));
 
-        jLabel4.setText("Raw Material:");
-
-        jLabel5.setText("Ingredients");
+        jLabel4.setText("Choose Raw Material:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 53, -1, -1));
 
         errorLabel.setForeground(new java.awt.Color(204, 0, 51));
         errorLabel.setText("ERROR: Please enter valid number");
+        getContentPane().add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 445, -1, -1));
 
+<<<<<<< HEAD
         errorLabel1.setForeground(new java.awt.Color(204, 0, 51));
         errorLabel1.setText("ERROR: Please enter valid number");
 
@@ -280,13 +286,32 @@ public class addIngredient extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(121, Short.MAX_VALUE)))
         );
+=======
+        jLabel6.setText("Ingredients:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, -1, -1));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(428, 73, 420, 340));
+
+        jLabel7.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel7.setText("Recipe Name");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 30, -1, -1));
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void editFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editFieldActionPerformed
 
     private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
         // TODO add your handling code here:
@@ -316,77 +341,12 @@ public class addIngredient extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addRawActionPerformed
 
-    private void deleteIngredientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteIngredientActionPerformed
-        int rselect = ingredientTable.getSelectedRow();
-        if (rselect < 0) {
-            return;
-        } else {
-            deleteIngredient(rselect);
-        }
-
-    }//GEN-LAST:event_deleteIngredientActionPerformed
-
-    private void editQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editQuantityActionPerformed
-        String quantity = editField.getText().toString();
-        if (ingredientTable.getSelectedRow() < 0) {
-            return;
-        }
-        if (isNumber(quantity) && Float.parseFloat(quantity) > 0) {
-            int rselect = ingredientTable.getSelectedRow();
-            editQuantity(rselect, Float.parseFloat(quantity));
-            errorLabel1.setVisible(false);
-        } else {
-            errorLabel1.setVisible(true);
-        }
-    }//GEN-LAST:event_editQuantityActionPerformed
-
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        int nrow = ingredientTable.getRowCount();
-        
-        //System.out.println(nrow);
-        int i;
-        int rid;
-
-        ai.clear();
-        for (i = 0; i < nrow; i++) {
-            IngredientBean ibean = new IngredientBean();
-            RawBean rbean = new RawBean();
-
-            rid = Integer.parseInt(ingredientTable.getModel().getValueAt(i, 0).toString());
-            rbean = rwImp.getRaw(rid);
-            ibean.setRaw(rbean);
-            ibean.setAmount(Float.parseFloat(ingredientTable.getModel().getValueAt(i, 2).toString()));
-            ai.add(ibean);
-        }
-
-        this.setVisible(false);
-        if (ar != null) {
-            ar.setVisible(true);
-            ar.prepareCombo();
-            ar.computeActual();
-            if(nrow == 0){
-                ar.inErrorV(true);
-            }else{
-                ar.inErrorV(false);
-            }
-        } else {
-            rcm.setVisible(true);
-            rcm.reloadIngredients(ai);
-            rcm.computeActual(ai);
-            if(nrow == 0){
-                rcm.inErrorV(true);
-            }else{
-                rcm.inErrorV(false);
-            }
-        }
-    }//GEN-LAST:event_saveButtonActionPerformed
-
     /**
      * * <--- JANERYS CODE STARTS HERE ---> **
      */
     //edit quantity
     private void editQuantity(int r, float q) {
-        ingredientTable.getModel().setValueAt(q, r, 2);
+ //       ingredientTable.getModel().setValueAt(q, r, 2);
     }
 
     //add Ingredient
@@ -397,12 +357,12 @@ public class addIngredient extends javax.swing.JFrame {
         Object[] ingredient = {rm.getRawID(), rm.getRaw(), String.format("%.2f", q), rm.getUom(), String.format("%.2f", rm.getPrice()*q)};
 
         TableModel model = rawTable.getModel();
-        TableModel inmodel = ingredientTable.getModel();
+ //       TableModel inmodel = ingredientTable.getModel();
         DefaultTableModel imodel = (DefaultTableModel) model;
-        DefaultTableModel ingmodel = (DefaultTableModel) inmodel;
+ //       DefaultTableModel ingmodel = (DefaultTableModel) inmodel;
         //add to ingredientTable
-        ingmodel.addRow(ingredient);
-        ingredientTable.setModel(ingmodel);
+ //       ingmodel.addRow(ingredient);
+ //       ingredientTable.setModel(ingmodel);
         //remove from rawTable
         imodel.removeRow(r);
         rawTable.setModel(imodel);
@@ -411,22 +371,22 @@ public class addIngredient extends javax.swing.JFrame {
 
     //delete ingredient
     private void deleteIngredient(int r) {
-        int rID = Integer.parseInt(ingredientTable.getModel().getValueAt(r, 0).toString());
-        RawBean rm = rwImp.getRaw(rID);
+ //       int rID = Integer.parseInt(ingredientTable.getModel().getValueAt(r, 0).toString());
+  //      RawBean rm = rwImp.getRaw(rID);
 
-        Object[] raw = {rm.getRawID(), rm.getRaw()};
+ //       Object[] raw = {rm.getRawID(), rm.getRaw()};
 
         TableModel model = rawTable.getModel();
-        TableModel imodel = ingredientTable.getModel();
+ //       TableModel imodel = ingredientTable.getModel();
         DefaultTableModel rmodel = (DefaultTableModel) model;
-        DefaultTableModel ingmodel = (DefaultTableModel) imodel;
+  //      DefaultTableModel ingmodel = (DefaultTableModel) imodel;
 
         //add to rawTable
-        rmodel.addRow(raw);
+ //       rmodel.addRow(raw);
         rawTable.setModel(rmodel);
         //remove from ingredientTable
-        ingmodel.removeRow(r);
-        ingredientTable.setModel(ingmodel);
+  //      ingmodel.removeRow(r);
+  //      ingredientTable.setModel(ingmodel);
     }
 
     //check if number
@@ -472,10 +432,11 @@ public class addIngredient extends javax.swing.JFrame {
             Object[] ingredient = {ibean.getRaw().getRawID(), ibean.getRaw().getRaw(), String.format("%.2f", ibean.getAmount()), ibean.getRaw().getUom(), String.format("%.2f", ibean.getRaw().getPrice()*ibean.getAmount())};
             ingredientModel.addRow(ingredient);
         }
-        ingredientTable.setModel(ingredientModel);
+/*        ingredientTable.setModel(ingredientModel);
         ingredientTable.getColumnModel().getColumn(0).setMinWidth(0);
         ingredientTable.getColumnModel().getColumn(0).setMaxWidth(0);
         adjustTable(ingredientTable);
+ */
     }
 
     /* ADJUST TABLE TO MAX WIDTH*/
@@ -510,22 +471,21 @@ public class addIngredient extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addRaw;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JButton deleteIngredient;
-    private javax.swing.JTextField editField;
-    private javax.swing.JButton editQuantity;
     private javax.swing.JLabel errorLabel;
-    private javax.swing.JLabel errorLabel1;
-    private javax.swing.JTable ingredientTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField quantityField;
     private javax.swing.JTable rawTable;
+<<<<<<< HEAD
     private javax.swing.JLabel recipeLabel;
     private javax.swing.JButton saveButton;
+=======
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
     // End of variables declaration//GEN-END:variables
 }

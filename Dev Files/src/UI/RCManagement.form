@@ -46,7 +46,11 @@
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="deleteRecipe" min="-2" pref="182" max="-2" attributes="0"/>
+<<<<<<< HEAD
                       <Component id="editRC" min="-2" pref="182" max="-2" attributes="0"/>
+=======
+                      <Component id="jButton1" min="-2" pref="182" max="-2" attributes="0"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                       <Component id="addRecipeB" alignment="0" min="-2" pref="182" max="-2" attributes="0"/>
                       <Component id="backBtn" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -72,7 +76,11 @@
                       <Group type="102" attributes="0">
                           <Component id="addRecipeB" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
+<<<<<<< HEAD
                           <Component id="editRC" min="-2" pref="51" max="-2" attributes="0"/>
+=======
+                          <Component id="jButton1" min="-2" pref="51" max="-2" attributes="0"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="deleteRecipe" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="246" max="-2" attributes="0"/>
@@ -123,6 +131,7 @@
           </SubComponents>
         </Container>
         <Component class="javax.swing.JButton" name="addRecipeB">
+<<<<<<< HEAD
           <Properties>
             <Property name="text" type="java.lang.String" value="Add A Recipe"/>
             <Property name="focusPainted" type="boolean" value="false"/>
@@ -147,24 +156,64 @@
               <Font name="Lucida Grande" size="24" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="RECIPES"/>
+=======
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Add A Recipe"/>
+            <Property name="focusPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="false"/>
+            <Property name="requestFocusEnabled" type="boolean" value="false"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addRecipeBActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="deleteRecipe">
+          <Properties>
+<<<<<<< HEAD
+            <Property name="text" type="java.lang.String" value="BACK"/>
+=======
+            <Property name="text" type="java.lang.String" value="Delete This Recipe"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteRecipeActionPerformed"/>
+          </Events>
+        </Component>
+<<<<<<< HEAD
+        <Component class="javax.swing.JButton" name="editRC">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Edit A Recipe"/>
+=======
+        <Component class="javax.swing.JLabel" name="jLabel9">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="24" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="RECIPES"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="backBtn">
           <Properties>
             <Property name="text" type="java.lang.String" value="BACK"/>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backBtnActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="editRC">
+<<<<<<< HEAD
+=======
+        <Component class="javax.swing.JButton" name="jButton1">
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit A Recipe"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editRCActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
           </Events>
         </Component>
+>>>>>>> 48111f9bc2377ab9d7e49c9257c8a6b79128378b
       </SubComponents>
     </Container>
   </SubComponents>
