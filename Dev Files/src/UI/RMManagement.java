@@ -21,7 +21,6 @@ import javax.swing.table.TableModel;
 public class RMManagement extends javax.swing.JFrame {
     private RawDAOInterface rmImp = new RawDAOImplementation();
     private IngredientDAOInterface inImp = new IngredientDAOImplementation();
-    private RawBean selectedRaw = null;
     private DefaultTableModel defaultModel;
 
     //<--- CLARK'S CODE STARTS HERE --->
