@@ -1,9 +1,33 @@
 package UI;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.TableModel;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
 
 /**
  *
@@ -64,9 +88,9 @@ public class ReportsTab extends javax.swing.JFrame {
         jXDatePicker10 = new org.jdesktop.swingx.JXDatePicker();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        varianceTable = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        btnExportVariance = new javax.swing.JButton();
         jXDatePicker11 = new org.jdesktop.swingx.JXDatePicker();
         Background = new javax.swing.JLabel();
 
@@ -338,7 +362,7 @@ public class ReportsTab extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("NET INCOME", jPanel3);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        varianceTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -349,15 +373,15 @@ public class ReportsTab extends javax.swing.JFrame {
                 "Name", "Beginning", "Delivery", "Sales", "Wastages", "EOD", "Variance"
             }
         ));
-        jScrollPane6.setViewportView(jTable3);
+        jScrollPane6.setViewportView(varianceTable);
 
         jLabel8.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         jLabel8.setText("Date:");
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/ExportBtn.png"))); // NOI18N
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnExportVariance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/ExportBtn.png"))); // NOI18N
+        btnExportVariance.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnExportVarianceActionPerformed(evt);
             }
         });
 
@@ -374,7 +398,7 @@ public class ReportsTab extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jXDatePicker11, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnExportVariance, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -385,7 +409,7 @@ public class ReportsTab extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8)
                         .addComponent(jXDatePicker11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnExportVariance, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
                 .addContainerGap())
@@ -490,9 +514,14 @@ public class ReportsTab extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void btnExportVarianceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportVarianceActionPerformed
+       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+       Date d = new Date();
+       String path = dateFormat.format(d) + " btf reports.xls" ;
+            
+       //DateItem date = (DateItem) dateCombo.getSelectedItem();
+       //checkExcelExist(varianceTable, path, date.getValue());
+    }//GEN-LAST:event_btnExportVarianceActionPerformed
 
     private void EODBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EODBtnActionPerformed
         try {
@@ -514,6 +543,131 @@ public class ReportsTab extends javax.swing.JFrame {
 
     }//GEN-LAST:event_ReportsBtnActionPerformed
 
+    /**
+     * * <--- CLARK'S CODE STARTS HERE ---> **
+     */
+    
+    private void exportToExcel(JTable tables, String path, String date) throws FileNotFoundException, IOException, InvalidFormatException {
+        HSSFWorkbook wb;
+        HSSFSheet sheet;
+        JTable table = tables;
+        
+        wb = new HSSFWorkbook();
+        sheet = wb.createSheet("Variance"); 
+        sheet.setColumnWidth(0, 10000);
+        sheet.createFreezePane( 1, 0, 1, 0 );
+        
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 1, 8));
+        
+        CellStyle style = wb.createCellStyle();
+        style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        
+        Row header = sheet.createRow(0);
+        Cell headerCell = header.createCell(1);
+        headerCell.setCellValue(date);
+        headerCell.setCellStyle(style);
+        CellUtil.setAlignment(headerCell, wb, CellStyle.ALIGN_CENTER);
+        
+        Row row = sheet.createRow(3);
+        TableModel model = table.getModel();
+
+        Row headerRow = sheet.createRow(1);
+        for(int headings = 1; headings < model.getColumnCount(); headings++){
+            headerRow.createCell(headings - 1).setCellValue(model.getColumnName(headings));
+        }
+         
+        for(int rows = 0; rows < model.getRowCount(); rows++){ 
+            for(int cols = 1; cols < table.getColumnCount(); cols++){ 
+                sheet.setColumnWidth(cols, 3000);
+                String text = model.getValueAt(rows, cols).toString();
+                Cell cell = row.createCell(cols - 1); 
+                cell.setCellValue(text); 
+            }
+            row = sheet.createRow((rows + 4)); 
+        }
+        
+        try {
+            FileOutputStream fileOut =  new FileOutputStream(path);
+            wb.write(fileOut); 
+            fileOut.close();
+            JOptionPane.showMessageDialog(null, "Successfully exported the report!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch(FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
+    public void modifyExcel(JTable tables, String path, String date) {
+        InputStream inp;
+        JTable table = tables;
+        try {
+            inp = new FileInputStream(path);
+            Workbook wb = WorkbookFactory.create(inp);
+            Sheet sheet = wb.getSheetAt(0);
+            int c1 = sheet.getRow(3).getLastCellNum();
+            int c2 = c1 + 7;
+            Row row = sheet.getRow(3);
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
+            
+            CellStyle style = wb.createCellStyle();
+            style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            
+            Row header = sheet.getRow(0);
+            Cell headerCell = header.createCell(c1);
+            headerCell.setCellValue(date);
+            headerCell.setCellStyle(style);
+            CellUtil.setAlignment(headerCell, wb, CellStyle.ALIGN_CENTER);
+
+            TableModel model = table.getModel(); 
+
+            Row headerRow = sheet.getRow(1);
+            for(int headings = 2; headings < model.getColumnCount(); headings++){ 
+                headerRow.createCell(headings + c1 - 2).setCellValue(model.getColumnName(headings));
+            }
+            
+            for(int rows = 0; rows < model.getRowCount(); rows++){ 
+                for(int cols = 2; cols < table.getColumnCount(); cols++){ 
+                    sheet.setColumnWidth(cols + c1 - 1, 3000);
+                    String text = model.getValueAt(rows, cols).toString();
+                    Cell cell = row.createCell(cols + c1 - 2); 
+                    cell.setCellValue(text); 
+                }
+                
+                row = sheet.getRow((rows + 4)); 
+            }
+
+            FileOutputStream fileOut = new FileOutputStream(path);
+            wb.write(fileOut);
+            fileOut.close();
+            JOptionPane.showMessageDialog(null, "Successfully exported the report!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void checkExcelExist(JTable tables, String path, String date){
+        try{
+            File file = new File(path);
+            if(!file.exists()) {
+                exportToExcel(varianceTable, path, date);
+            } else {
+                modifyExcel(varianceTable, path, date);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    /**
+     * * <--- CLARK'S CODE ENDS HERE ---> **
+     */
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Background;
     private javax.swing.JButton CategoriesBtn;
@@ -522,10 +676,10 @@ public class ReportsTab extends javax.swing.JFrame {
     private javax.swing.JButton RMBtn;
     private javax.swing.JButton RecipesBtn;
     private javax.swing.JButton ReportsBtn;
+    private javax.swing.JButton btnExportVariance;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -545,7 +699,6 @@ public class ReportsTab extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
     private javax.swing.JTable jTable5;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
@@ -555,5 +708,6 @@ public class ReportsTab extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXDatePicker jXDatePicker7;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker8;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker9;
+    private javax.swing.JTable varianceTable;
     // End of variables declaration//GEN-END:variables
 }
