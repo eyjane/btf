@@ -6,6 +6,7 @@ import org.w3c.dom.*;
 import javax.swing.JOptionPane;
 import DBConnection.DBConnectionFactory;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -19,11 +20,26 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Login extends javax.swing.JFrame {
   private String currentPassword;
     private DBConnectionFactory dBConnectionFactory;
+    private boolean flag = true;
+    private KeyListener key;
     
     public Login() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
+        key = new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {  
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                passwordFieldKey(e);
+            }
+        };
+        passwordField.addKeyListener(key);
         
         try {
             File fXmlFile = new File("btf.xml");
@@ -46,10 +62,9 @@ public class Login extends javax.swing.JFrame {
     }
     
     public boolean authenticate(String _password) {
-        boolean flag = false;
         if(currentPassword.equals(_password))
-            flag = true;
-        return flag;
+            return true;
+        return false;
     }
     
     @SuppressWarnings("unchecked")
@@ -82,11 +97,6 @@ public class Login extends javax.swing.JFrame {
 
         passwordField.setFont(new java.awt.Font("Quicksand Light", 0, 18)); // NOI18N
         passwordField.setForeground(new java.awt.Color(102, 102, 102));
-        passwordField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                passwordFieldKeyReleased(evt);
-            }
-        });
         jPanel1.add(passwordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, 180, -1));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "MySQL Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Quicksand Book", 0, 14))); // NOI18N
@@ -224,34 +234,46 @@ public class Login extends javax.swing.JFrame {
             passwordField.setText("");
         }
     }//GEN-LAST:event_btnLoginActionPerformed
-
-    private void passwordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordFieldKeyReleased
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String pwd = new String(passwordField.getPassword());
-            //authenticate password
-            if(authenticate(pwd) == true){
-                try {
-                    InventoryTab i = new InventoryTab();
-                    i.setVisible(true);
-                    dispose();
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (UnsupportedLookAndFeelException ex) {
-                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+    
+    public void passwordFieldKey(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                String pwd = new String(passwordField.getPassword());
+                //authenticate password
+                if(authenticate(pwd) == true){
+                    try {
+                        InventoryTab i = new InventoryTab();
+                        i.setVisible(true);
+                        dispose();
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InstantiationException ex) {
+                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (UnsupportedLookAndFeelException ex) {
+                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    passwordField.removeKeyListener(key);
+                    JOptionPane.showMessageDialog(null, "The password that you have entered is incorrect. "
+                    + "Please contact the developer in case you forgot your password.", "Incorrect Password", JOptionPane.WARNING_MESSAGE);    
+                    try {
+                           Login l = new Login();
+                           l.setVisible(true);
+                           dispose();
+                       } catch (ClassNotFoundException ex) {
+                           Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                       } catch (InstantiationException ex) {
+                           Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                       } catch (IllegalAccessException ex) {
+                           Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                       } catch (UnsupportedLookAndFeelException ex) {
+                           Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-                //close the user authentication UI
-            } else{
-                JOptionPane.showMessageDialog(null, "The password that you have entered is incorrect. "
-                + "Please contact the developer in case you forgot your password.", "Incorrect Password", JOptionPane.WARNING_MESSAGE);
-                passwordField.setText("");
-            }
         }
-    }//GEN-LAST:event_passwordFieldKeyReleased
-
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Background;
     private javax.swing.JButton btnEditPassword;
