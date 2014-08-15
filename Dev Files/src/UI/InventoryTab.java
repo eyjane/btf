@@ -1,4 +1,3 @@
-
 package UI;
 
 import java.util.logging.Level;
@@ -17,7 +16,7 @@ public class InventoryTab extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -39,6 +38,14 @@ public class InventoryTab extends javax.swing.JFrame {
         CategoriesBtn = new javax.swing.JButton();
         EODBtn = new javax.swing.JButton();
         ReportsBtn = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jComboBox2 = new javax.swing.JComboBox();
         Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -61,9 +68,9 @@ public class InventoryTab extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, 600, 140));
 
-        jLabel2.setFont(new java.awt.Font("Quicksand Light", 1, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Quicksand Light", 1, 20)); // NOI18N
         jLabel2.setText("RECIPE STOCK");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 240, -1, -1));
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -77,9 +84,9 @@ public class InventoryTab extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 600, 140));
 
-        jLabel3.setFont(new java.awt.Font("Quicksand Light", 1, 24)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Quicksand Light", 1, 20)); // NOI18N
         jLabel3.setText("RAW MATERIAL STOCK");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 30, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Quicksand Light", 1, 14)); // NOI18N
         jLabel4.setText("LEGEND:");
@@ -148,6 +155,38 @@ public class InventoryTab extends javax.swing.JFrame {
         });
         jPanel1.add(ReportsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 239, 60));
 
+        jLabel7.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        jLabel7.setText("Sort by:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 30, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        jLabel8.setText("Sort by:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 240, -1, -1));
+
+        jLabel9.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        jLabel9.setText("Search:");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 30, -1, -1));
+
+        jLabel10.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        jLabel10.setText("Search:");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 240, -1, -1));
+
+        jComboBox1.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "name", "quantity", "category" }));
+        jComboBox1.setSelectedIndex(-1);
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 235, -1, -1));
+
+        jTextField1.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 25, 90, -1));
+
+        jTextField2.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
+        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 235, 90, -1));
+
+        jComboBox2.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "name", "quantity" }));
+        jComboBox2.setSelectedIndex(-1);
+        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 25, -1, -1));
+
         Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Background1.png"))); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, -1));
 
@@ -166,7 +205,7 @@ public class InventoryTab extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void InventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InventoryBtnActionPerformed
-        
+        // TODO add your handling code here:
     }//GEN-LAST:event_InventoryBtnActionPerformed
 
     private void RMBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RMBtnActionPerformed
@@ -301,16 +340,24 @@ public class InventoryTab extends javax.swing.JFrame {
     private javax.swing.JButton RMBtn;
     private javax.swing.JButton RecipesBtn;
     private javax.swing.JButton ReportsBtn;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

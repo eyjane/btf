@@ -215,17 +215,17 @@ public class Login extends javax.swing.JFrame {
         //authenticate password
         if(authenticate(pwd) == true){
             try {
-                InventoryTab i = new InventoryTab();
-                i.setVisible(true);
+                InventoryTab in = new InventoryTab();
+                in.setVisible(true);
                 dispose();
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InstantiationException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedLookAndFeelException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
             }
             //close the user authentication UI
         } else{
@@ -241,17 +241,17 @@ public class Login extends javax.swing.JFrame {
                 //authenticate password
                 if(authenticate(pwd) == true){
                     try {
-                        InventoryTab i = new InventoryTab();
-                        i.setVisible(true);
+                        InventoryTab in = new InventoryTab();
+                        in.setVisible(true);
                         dispose();
                     } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (InstantiationException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (UnsupportedLookAndFeelException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IllegalAccessException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (UnsupportedLookAndFeelException ex) {
+                        Logger.getLogger(InventoryTab.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
                     passwordField.removeKeyListener(key);
