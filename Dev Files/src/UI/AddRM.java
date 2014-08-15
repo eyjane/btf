@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -44,8 +47,32 @@ public class AddRM extends javax.swing.JFrame {
        rmTable.setModel(rm.getRMTable());
        rmTable.getColumnModel().getColumn(0).setMinWidth(0);
        rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
+       
+       /*rmTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+        public void valueChanged(ListSelectionEvent event) {
+            try {
+            DefaultTableModel defaultTableModel = (DefaultTableModel) rmTable.getModel();
+            if (rmTable.getSelectedRow() >= 0) { 
+                raw = rwImp.getRaw((int) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0));
+                setFields(raw);
+            } else {
+                raw = null;
+              }
+            } catch (Exception err) {
+                err.printStackTrace();
+            } 
+        }
+       });*/
    }
-    
+   
+   public void setFields(RawBean r){
+        nameField.setText(r.getRaw());
+        priceField.setText(Float.toString(r.getPrice()));
+        stockField.setText(Float.toString(r.getStock()));
+        criticalField.setText(Float.toString(r.getCritical()));
+        uomField.setText(r.getUom());
+    }
+   
     public boolean isNumber(String s) {
         try {
             Float.parseFloat(s);

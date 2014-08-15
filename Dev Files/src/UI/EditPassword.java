@@ -24,6 +24,10 @@ private String currentPassword;
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
+        errorLabel1.setVisible(false);
+        errorLabel2.setVisible(false);
+        errorLabel3.setVisible(false);
+        errorLabel4.setVisible(false);
         currentPassword = _currentPassword;
     }
 
@@ -38,9 +42,12 @@ private String currentPassword;
         boolean flag = false;
         if(!currentPassword.equals(_newpassword)){
             if(!_newpassword.equals("") || !_retype.equals("")) {
-                if(_newpassword.equals(_retype))
+                if(_newpassword.equals(_retype)) {
+                    errorLabel2.setVisible(false);
+                    errorLabel3.setVisible(false);
+                    errorLabel4.setVisible(false);
                     flag = true;
-                else {
+                } else {
                     errorLabel4.setVisible(true);
                 }
             } else {

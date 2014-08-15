@@ -155,19 +155,19 @@ public class CreatePassword extends javax.swing.JFrame {
                 date.appendChild(doc.createTextNode(curDate));
                 inputlockdown.appendChild(date);
                 
-                Element sales = doc.createElement("sales");
+                Element sales = doc.createElement("Sales");
                 sales.appendChild(doc.createTextNode("0"));
                 inputlockdown.appendChild(sales);
                 
-                Element actual = doc.createElement("actual");
+                Element actual = doc.createElement("Actual");
                 actual.appendChild(doc.createTextNode("0"));
                 inputlockdown.appendChild(actual);
                 
-                Element delivery = doc.createElement("delivery");
+                Element delivery = doc.createElement("Delivery");
                 delivery.appendChild(doc.createTextNode("0"));
                 inputlockdown.appendChild(delivery);
                 
-                Element used = doc.createElement("used");
+                Element used = doc.createElement("Materials");
                 used.appendChild(doc.createTextNode("0"));
                 inputlockdown.appendChild(used);
                 
