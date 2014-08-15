@@ -26,12 +26,12 @@ public class Btf {
     public static void main(String[] args) {
         //DONT FORGET TO CHANGE PASSWORD!!
        //instanstiate interface
-       RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+       //RecipeDAOInterface rcImp = new RecipeDAOImplementation();
        
        //variables 
-       ArrayList<RecipeBean> allRC = new ArrayList<RecipeBean> ();
-       float cost = (float) 125.00;
-       int i;
+       //ArrayList<RecipeBean> allRC = new ArrayList<RecipeBean> ();
+       //float cost = (float) 125.00;
+       //int i;
        
        //TEST: ADD RECIPE - CHECK!
       // RecipeBean newRC = new RecipeBean("Banana Split", (float) 125.00, (float) 7.5, "available");
@@ -64,11 +64,11 @@ public class Btf {
         //rcImp.editRecipe(gRC);
        
        //TEST: GET RECIPE - CHECK!
-       RecipeBean gRC = rcImp.getRecipeBean(20001);
+       //RecipeBean gRC = rcImp.getRecipeBean(20001);
       // System.out.println("AFTER EDIT... RECIPE: " + gRC.getRecipe());
        
        
-       java.util.Date now = new java.util.Date();
+       /*java.util.Date now = new java.util.Date();
        java.sql.Date today = new java.sql.Date(now.getTime());
        
        System.out.println("DATE: " + today);
@@ -83,7 +83,7 @@ public class Btf {
            System.out.println("INGREDIENT " + (i+1) + ": " + in.getAmount() + " " + in.getRaw().getUom() + " of " + in.getRaw().getRaw());
        }
        gRC.setIngredients(aIngredients);
-       System.out.println("ACTUAL PRICE: " + gRC.getActualPrice());
+       System.out.println("ACTUAL PRICE: " + gRC.getActualPrice());*/
        //System.out.println("STOCK: " + gRC.computeStock());
        
        //<--- CLARK'S CODE STARTS HERE --->

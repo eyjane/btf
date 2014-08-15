@@ -246,19 +246,7 @@ public class RMManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_InventoryBtnActionPerformed
 
     private void RMBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RMBtnActionPerformed
-        try {
-            RMManagement rm = new RMManagement();
-            rm.setVisible(true);
-            dispose();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }//GEN-LAST:event_RMBtnActionPerformed
 
     private void RecipesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipesBtnActionPerformed

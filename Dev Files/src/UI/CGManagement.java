@@ -285,19 +285,7 @@ public class CGManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_RecipesBtnActionPerformed
 
     private void CategoriesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CategoriesBtnActionPerformed
-        try {
-            CGManagement cg = new CGManagement();
-            cg.setVisible(true);
-            dispose();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }//GEN-LAST:event_CategoriesBtnActionPerformed
 
     private void EditCGBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditCGBtnActionPerformed
