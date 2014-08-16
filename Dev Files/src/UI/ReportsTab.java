@@ -1,5 +1,13 @@
 package UI;
 
+import Beans.RecipeBean;
+import DAO.Implementation.RecipeDAOImplementation;
+import DAO.Implementation.SalesDAOImplementation;
+import DAO.Interface.RecipeDAOInterface;
+import DAO.Interface.SalesDAOInterface;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +24,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -28,6 +40,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
+import org.joda.time.*;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  *
@@ -35,6 +54,10 @@ import org.apache.poi.ss.util.CellUtil;
  */
 public class ReportsTab extends javax.swing.JFrame {
 
+    ArrayList<RecipeBean> aSales = new ArrayList<RecipeBean>();
+    SalesDAOInterface sImp = new SalesDAOImplementation();
+    RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    
     /**
      * Creates new form RMManagement
      */
@@ -64,28 +87,23 @@ public class ReportsTab extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        expensesTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
-        jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
+        startDate = new org.jdesktop.swingx.JXDatePicker();
+        endDate = new org.jdesktop.swingx.JXDatePicker();
+        expensesPanel = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
-        jTable5 = new javax.swing.JTable();
+        grossIncomeTable = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        jXDatePicker7 = new org.jdesktop.swingx.JXDatePicker();
-        jLabel10 = new javax.swing.JLabel();
-        jXDatePicker8 = new org.jdesktop.swingx.JXDatePicker();
+        grossPanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        netIncomeTable = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
-        jXDatePicker9 = new org.jdesktop.swingx.JXDatePicker();
-        jLabel12 = new javax.swing.JLabel();
-        jXDatePicker10 = new org.jdesktop.swingx.JXDatePicker();
+        netPanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         varianceTable = new javax.swing.JTable();
@@ -156,18 +174,33 @@ public class ReportsTab extends javax.swing.JFrame {
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         jTabbedPane1.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        expensesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Name", "Amount"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Float.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(expensesTable);
 
         jLabel2.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         jLabel2.setText("From:");
@@ -182,24 +215,36 @@ public class ReportsTab extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout expensesPanelLayout = new javax.swing.GroupLayout(expensesPanel);
+        expensesPanel.setLayout(expensesPanelLayout);
+        expensesPanelLayout.setHorizontalGroup(
+            expensesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        expensesPanelLayout.setVerticalGroup(
+            expensesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 199, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(expensesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(51, 51, 51)
-                                .addComponent(jXDatePicker2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(endDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -211,31 +256,48 @@ public class ReportsTab extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
-                        .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(expensesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("EXPENSES", jPanel4);
 
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(
+        grossIncomeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Name", "Amount"
             }
-        ));
-        jScrollPane8.setViewportView(jTable5);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Float.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane8.setViewportView(grossIncomeTable);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/ExportBtn.png"))); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -244,67 +306,72 @@ public class ReportsTab extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jLabel9.setText("From:");
-
-        jLabel10.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jLabel10.setText("To:");
+        javax.swing.GroupLayout grossPanelLayout = new javax.swing.GroupLayout(grossPanel);
+        grossPanel.setLayout(grossPanelLayout);
+        grossPanelLayout.setHorizontalGroup(
+            grossPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        grossPanelLayout.setVerticalGroup(
+            grossPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 210, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jXDatePicker7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(51, 51, 51)
-                                .addComponent(jXDatePicker8, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(grossPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(jXDatePicker7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(jXDatePicker8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(34, 34, 34)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(grossPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("GROSS INCOME", jPanel5);
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        netIncomeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Name", "Amount"
             }
-        ));
-        jScrollPane7.setViewportView(jTable4);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Float.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane7.setViewportView(netIncomeTable);
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/ExportBtn.png"))); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -313,31 +380,28 @@ public class ReportsTab extends javax.swing.JFrame {
             }
         });
 
-        jLabel11.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jLabel11.setText("From:");
-
-        jLabel12.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jLabel12.setText("To:");
+        javax.swing.GroupLayout netPanelLayout = new javax.swing.GroupLayout(netPanel);
+        netPanel.setLayout(netPanelLayout);
+        netPanelLayout.setHorizontalGroup(
+            netPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        netPanelLayout.setVerticalGroup(
+            netPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 208, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jXDatePicker9, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addGap(51, 51, 51)
-                                .addComponent(jXDatePicker10, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(netPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -345,18 +409,11 @@ public class ReportsTab extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(jXDatePicker9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12)
-                            .addComponent(jXDatePicker10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(netPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -668,6 +725,255 @@ public class ReportsTab extends javax.swing.JFrame {
      * * <--- CLARK'S CODE ENDS HERE ---> **
      */
     
+    /**
+     * * <--- KIM'S CODE STARTS HERE ---> **
+     */
+    
+    // ----------------------- GENERIC CODES
+    
+    private void adjustTable(JTable table){
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = tableColumn.getMaxWidth();
+
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+
+        //  We've exceeded the maximum width, no need to check other rows
+                if (preferredWidth >= maxWidth) {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+    }
+    
+    // ------------------ EXPENSES TAB START
+    
+    public void expTable() {
+        
+       RecipeBean r = new RecipeBean(); 
+       // <!-- KIM DATEPICKER CODES START -->
+       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date sDate = startDate.getDate();
+       String start = t.format(sDate);
+
+       Date eDate = endDate.getDate();
+       LocalDate end = new LocalDate(eDate);
+       
+       DateTimeFormatter dispFmt = DateTimeFormat.forPattern("MMM, dd");
+       DateTimeFormatter compFmt = DateTimeFormat.forPattern("YYYY-MM-dd");
+       
+       String cols[] = {"Name", "Expenses"};
+       DefaultTableModel actualTable = new DefaultTableModel(cols,0)  {
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if(column == 0 || column == 1)
+                    return false;
+                else
+                    return true;
+            }
+            
+        };
+       
+       for (LocalDate date = new LocalDate(start); date.isBefore(end) || date.isEqual(end); date = date.plusDays(1)) {
+
+           String sumDate = date.toString(compFmt);
+           aSales = sImp.getAllSales(sumDate);
+           float total = 0;
+           
+           for(RecipeBean sale : aSales) {
+           
+               r = rcImp.getRecipeBean(sale.getRecipeID());
+               total = total + sImp.getExpensesByRecipeByDay(r, sumDate);
+               
+           }
+           
+               Object[] data = {date.toString(dispFmt), total};
+               actualTable.addRow(data);
+               expensesTable.setModel(actualTable);
+               adjustTable(expensesTable);
+           
+           
+       } 
+    }
+    
+    public void makeExpChart() {
+        
+        DefaultPieDataset objDataset = new DefaultPieDataset();
+        int rows = expensesTable.getRowCount();
+        
+        for (int c = 0; c < rows; c++) {
+            
+            objDataset.setValue(expensesTable.getValueAt(c, 0).toString(), Float.parseFloat(expensesTable.getValueAt(c, 1).toString())); // retrieve table contents and add to data set
+            
+        }
+        
+        JFreeChart expChart = ChartFactory.createPieChart("Expenses", objDataset, true, true, false); // makes chart
+        expensesPanel.setLayout(new java.awt.BorderLayout());
+        ChartPanel chartPanel = new ChartPanel(expChart);
+        chartPanel.setPreferredSize(new Dimension(442,310));
+        expensesPanel.add(chartPanel, BorderLayout.CENTER);
+        expensesPanel.validate();
+      
+        
+    }
+    
+    // -------------------- EXPENSES TAB END
+    
+    // -------------- GROSS INCOME TAB START
+    
+    public void GITable() {
+       RecipeBean r = new RecipeBean(); 
+       
+       // <!-- KIM DATEPICKER CODES START -->
+       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date sDate = startDate.getDate();
+       String start = t.format(sDate);
+
+       Date eDate = endDate.getDate();
+       LocalDate end = new LocalDate(eDate);
+       
+       DateTimeFormatter dispFmt = DateTimeFormat.forPattern("MMM, dd");
+       DateTimeFormatter compFmt = DateTimeFormat.forPattern("YYYY-MM-dd");
+       // <!-- KIM DATEPICKER CODES END -->
+       
+       String cols[] = {"Name", "Gross Income"};
+       DefaultTableModel actualTable = new DefaultTableModel(cols,0)  {
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if(column == 0 || column == 1)
+                    return false;
+                else
+                    return true;
+            }
+            
+        };
+       
+       
+       
+       for (LocalDate date = new LocalDate(start); date.isBefore(end) || date.isEqual(end); date = date.plusDays(1)) {
+           String sumDate = date.toString(compFmt);
+           aSales = sImp.getAllSales(sumDate);
+           float total = 0;
+           for(RecipeBean sale : aSales) {
+           
+               r = rcImp.getRecipeBean(sale.getRecipeID());
+               total = total + sImp.getSalesByRecipeByDay(r, sumDate);
+           }
+           // FILL TABLE
+           Object[] data = {date.toString(dispFmt), total};
+           actualTable.addRow(data);
+           grossIncomeTable.setModel(actualTable);
+           adjustTable(grossIncomeTable);
+           
+       }
+      
+    }
+    
+    public void makeGIChart() {
+        
+        DefaultPieDataset objDataset = new DefaultPieDataset();
+        int rows = grossIncomeTable.getRowCount();
+        
+        for (int c = 0; c < rows; c++) {
+            
+            objDataset.setValue(grossIncomeTable.getValueAt(c, 0).toString(), Float.parseFloat(grossIncomeTable.getValueAt(c, 1).toString())); // retrieve table contents and add to data set
+            
+        }
+        
+        JFreeChart grossChart = ChartFactory.createPieChart("Gross Income", objDataset, true, true, false); // makes chart
+        grossPanel.setLayout(new java.awt.BorderLayout());
+        ChartPanel chartPanel = new ChartPanel(grossChart);
+        chartPanel.setPreferredSize(new Dimension(442,310));
+        grossPanel.add(chartPanel, BorderLayout.CENTER);
+        grossPanel.validate();
+       
+        
+    }
+    // ---------------- GROSS INCOME TAB END
+    
+    // ---------------- NET INCOME TAB START
+    
+    public void netTable() {
+       
+       RecipeBean r = new RecipeBean(); 
+       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date sDate = startDate.getDate();
+       String start = t.format(sDate);
+
+       Date eDate = endDate.getDate();
+       LocalDate end = new LocalDate(eDate);
+       
+       DateTimeFormatter dispFmt = DateTimeFormat.forPattern("MMM, dd");
+       DateTimeFormatter compFmt = DateTimeFormat.forPattern("YYYY-MM-dd");
+       String cols[] = {"Name", "Net Income"};
+       DefaultTableModel actualTable = new DefaultTableModel(cols,0)  {
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if(column == 0 || column == 1)
+                    return false;
+                else
+                    return true;
+            }
+            
+        };
+       
+        for (LocalDate date = new LocalDate(start); date.isBefore(end) || date.isEqual(end); date = date.plusDays(1)) {
+
+           String sumDate = date.toString(compFmt);
+           aSales = sImp.getAllSales(sumDate);
+           float total = 0;
+           
+           for(RecipeBean sale : aSales) {
+           
+               r = rcImp.getRecipeBean(sale.getRecipeID());
+               total = total + (sImp.getSalesByRecipeByDay(r, sumDate) - sImp.getExpensesByRecipeByDay(r, sumDate));
+               
+           }
+        
+           Object[] data = {date.toString(dispFmt), total};
+           actualTable.addRow(data);
+           netIncomeTable.setModel(actualTable);
+           adjustTable(netIncomeTable);
+           
+       }
+       
+    }
+    
+    public void makeNetChart() {
+        
+        DefaultPieDataset objDataset = new DefaultPieDataset();
+        int rows = netIncomeTable.getRowCount();
+        
+        for (int c = 0; c < rows; c++) {
+            
+            objDataset.setValue(netIncomeTable.getValueAt(c, 0).toString(), Float.parseFloat(netIncomeTable.getValueAt(c, 1).toString())); // retrieve table contents and add to data set
+            
+        }
+        
+        JFreeChart netChart = ChartFactory.createPieChart("Net Income", objDataset, true, true, false); // makes chart
+        netPanel.setLayout(new java.awt.BorderLayout());
+        ChartPanel chartPanel = new ChartPanel(netChart);
+        netPanel.add(chartPanel, BorderLayout.CENTER);
+        netPanel.validate();
+       
+    }
+    // ------------------ NET INCOME TAB END
+    
+    
+    /**
+     * * <--- KIM'S CODE ENDS HERE ---> **
+     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Background;
     private javax.swing.JButton CategoriesBtn;
@@ -677,17 +983,18 @@ public class ReportsTab extends javax.swing.JFrame {
     private javax.swing.JButton RecipesBtn;
     private javax.swing.JButton ReportsBtn;
     private javax.swing.JButton btnExportVariance;
+    private org.jdesktop.swingx.JXDatePicker endDate;
+    private javax.swing.JPanel expensesPanel;
+    private javax.swing.JTable expensesTable;
+    private javax.swing.JTable grossIncomeTable;
+    private javax.swing.JPanel grossPanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -698,16 +1005,10 @@ public class ReportsTab extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTable jTable5;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker10;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker11;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker7;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker8;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker9;
+    private javax.swing.JTable netIncomeTable;
+    private javax.swing.JPanel netPanel;
+    private org.jdesktop.swingx.JXDatePicker startDate;
     private javax.swing.JTable varianceTable;
     // End of variables declaration//GEN-END:variables
 }

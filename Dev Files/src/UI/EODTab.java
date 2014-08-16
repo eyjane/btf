@@ -816,9 +816,9 @@ public class EODTab extends javax.swing.JFrame {
                         tclmp.addTransaction(t, raw, q);
                     }
                 }
-                if(inputLockDown()){
+                /*if(inputLockDown()){
                     utwSubmit.setVisible(false);
-                }
+                }*/
                 materialsSuccessLabel.setVisible(true);
                 makeRMTable();
             }
