@@ -56,8 +56,6 @@ public class EODTab extends javax.swing.JFrame {
     RawDAOInterface rmImp = new RawDAOImplementation();
     TransactionDAOInterface tclmp = new TransactionDAOImplementation();
     
-    // BEANS
-    
     // ARRAYLISTS
     ArrayList<TransactionBean> aTransact;
     ArrayList<RawBean> aRaw;
@@ -72,6 +70,18 @@ public class EODTab extends javax.swing.JFrame {
         initComponents();
         ViewAllStatus();
         checkDate();
+        makeActualTable();
+        makeRMTable();
+        makeDeliveryTable();
+        actualErrorLabel.setVisible(false);
+        actualSuccessLabel.setVisible(false);
+        actualAbortedLabel.setVisible(false);
+        materialsErrorLabel.setVisible(false);
+        materialsSuccessLabel.setVisible(false);
+        materialsAbortedLabel.setVisible(false);
+        deliveryErrorLabel.setVisible(false);
+        deliverySuccessLabel.setVisible(false);
+        deliveryAbortedLabel.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
