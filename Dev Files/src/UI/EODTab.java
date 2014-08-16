@@ -1,6 +1,13 @@
 package UI;
 
 import Beans.RawBean;
+import Beans.TransactionBean;
+import DAO.Implementation.RawDAOImplementation;
+import DAO.Implementation.TransactionDAOImplementation;
+import DAO.Interface.RawDAOInterface;
+import DAO.Interface.TransactionDAOInterface;
+import java.awt.Color;
+import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,7 +23,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,6 +51,20 @@ import org.w3c.dom.Document;
  */
 public class EODTab extends javax.swing.JFrame {
     
+    // INTERFACE + IMPLEMENTATION
+    RawDAOInterface rmImp = new RawDAOImplementation();
+    TransactionDAOInterface tclmp = new TransactionDAOImplementation();
+    
+    // BEANS
+    
+    // ARRAYLISTS
+    ArrayList<TransactionBean> aTransact;
+    ArrayList<RawBean> aRaw;
+    
+    // OTHERS
+    EODTab main; 
+    int[] rowEdit;
+    
     public EODTab() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
@@ -64,9 +88,11 @@ public class EODTab extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        inputActual = new javax.swing.JTable();
-        enterSales4 = new javax.swing.JButton();
-        jLabel15 = new javax.swing.JLabel();
+        inputTable = new javax.swing.JTable();
+        actualSubmit = new javax.swing.JButton();
+        actualErrorLabel = new javax.swing.JLabel();
+        actualSuccessLabel = new javax.swing.JLabel();
+        actualAbortedLabel = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         enterSales1 = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
@@ -75,13 +101,13 @@ public class EODTab extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         rmTable = new javax.swing.JTable();
-        enterSales2 = new javax.swing.JButton();
+        utwSubmit = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        deliverySubmit = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         newdayTable = new javax.swing.JTable();
@@ -150,23 +176,23 @@ public class EODTab extends javax.swing.JFrame {
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         jTabbedPane1.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
 
-        inputActual.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        inputActual.setModel(new javax.swing.table.DefaultTableModel(
+        inputTable.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        inputTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Name", "Quantity in Stock", "Actual Count"
+                "Status", "ID", "Name", "Quantity in Stock", "Actual Count"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Float.class
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true
+                false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -177,13 +203,27 @@ public class EODTab extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(inputActual);
+        jScrollPane4.setViewportView(inputTable);
+        if (inputTable.getColumnModel().getColumnCount() > 0) {
+            inputTable.getColumnModel().getColumn(0).setResizable(false);
+        }
 
-        enterSales4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
+        actualSubmit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
+        actualSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualSubmitActionPerformed(evt);
+            }
+        });
 
-        jLabel15.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(255, 0, 1));
-        jLabel15.setText("ERROR:");
+        actualErrorLabel.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        actualErrorLabel.setForeground(new java.awt.Color(255, 0, 1));
+        actualErrorLabel.setText("ERROR:");
+
+        actualSuccessLabel.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        actualSuccessLabel.setText("SUBMISSION WAS SUCCESSFUL.");
+
+        actualAbortedLabel.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        actualAbortedLabel.setText("SUBMISSION WAS ABORTED.");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -195,9 +235,15 @@ public class EODTab extends javax.swing.JFrame {
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(enterSales4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(actualSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel15)
+                        .addComponent(actualErrorLabel)
+                        .addGap(131, 131, 131)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(actualAbortedLabel))
+                            .addComponent(actualSuccessLabel))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -207,10 +253,14 @@ public class EODTab extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel15)
-                .addGap(46, 46, 46)
-                .addComponent(enterSales4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(actualErrorLabel)
+                    .addComponent(actualSuccessLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(actualAbortedLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(actualSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(104, 104, 104))
         );
 
         jTabbedPane1.addTab("ACTUAL COUNT", jPanel3);
@@ -299,7 +349,7 @@ public class EODTab extends javax.swing.JFrame {
         rmTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(rmTable);
 
-        enterSales2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
+        utwSubmit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         jLabel6.setText("USED/TRANSFERRED/WASTED MATERIALS");
@@ -314,7 +364,7 @@ public class EODTab extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(enterSales2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(utwSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -328,7 +378,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(enterSales2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(utwSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -355,7 +405,7 @@ public class EODTab extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jTable2);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/RestockBtn.png"))); // NOI18N
+        deliverySubmit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/RestockBtn.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -370,7 +420,7 @@ public class EODTab extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(deliverySubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -381,7 +431,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(deliverySubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
 
@@ -565,7 +615,77 @@ public class EODTab extends javax.swing.JFrame {
             e.printStackTrace();
         } 
     }//GEN-LAST:event_BtnNewDayActionPerformed
+
+    private void actualSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualSubmitActionPerformed
+        // ------------ SUBMIT ACTUAL INPUT
     
+        if (JOptionPane.showConfirmDialog(null, "Are you sure that you want to submit? You may only submit once a day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        
+            boolean submit = true;
+            boolean red = false;
+            int rows = inputTable.getRowCount();
+            int r = 0, index = 0;
+            rowEdit = new int[rmTable.getRowCount()];
+		
+            for (r = 0; r < rows; r++) {
+                
+                if(inputTable.getValueAt(r,4).toString().isEmpty() || Math.signum(Float.parseFloat(inputTable.getValueAt(r,4).toString())) == -1) {
+                        submit = false;
+                        red = true;
+                        inputTable.setValueAt(0, r, 0);
+                }
+                
+		if (red) {
+                    rowEdit[index] = r;
+                    index++;
+                    red = false;
+                }		
+            
+            }
+            
+        
+            if (submit) {
+            
+                for (r = 0; r < rows; r++) {
+            
+                    int ID = Integer.parseInt(inputTable.getValueAt(r, 1).toString());
+                    RawBean raw = rmImp.getRaw(ID);
+                    raw.setStock(Float.parseFloat(inputTable.getValueAt(r, 4).toString()));
+                    rmImp.editRaw(raw);
+                
+                }
+            
+                /*
+                if(inputLockDown()){
+                actualSubmit.setVisible(false);
+                main.setNextDayBtn();
+                }*/
+                actualSuccessLabel.setVisible(false);
+                makeActualTable();
+            }
+            else {
+		
+		for (int row = 0; row < inputTable.getRowCount(); row++) {
+                    
+                    for (int col = 0; col < inputTable.getColumnCount(); col++) {
+                        
+                        inputTable.getColumnModel().getColumn(col).setCellRenderer(new errorRenderer());
+                        
+                    }
+                
+                }
+			
+                actualErrorLabel.setVisible(true);
+                    
+            }
+        }
+        else {
+            
+            actualAbortedLabel.setVisible(true);
+        }
+        
+    }//GEN-LAST:event_actualSubmitActionPerformed
+
     /**
      * < -- CLARK'S FUNCTIONS START -- > *
      */
@@ -685,6 +805,128 @@ public class EODTab extends javax.swing.JFrame {
      * < -- CLARK'S FUNCTIONS END -- > *
      */
     
+    /**
+     * < -- KIM'S FUNCTIONS START -- > *
+     */
+    
+    // ------------------- GENERIC CODES
+    
+    private void adjustTable(JTable table){
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = tableColumn.getMaxWidth();
+
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+
+        //  We've exceeded the maximum width, no need to check other rows
+                if (preferredWidth >= maxWidth) {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+    }
+    
+    private boolean isNumber(String s) {
+        try {
+            
+            Float.parseFloat(s);
+            return true;
+        
+        } catch (Exception e) {
+            
+            return false;
+        
+        }
+    }
+    
+    public class errorRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (toEdit(row) && Integer.parseInt(table.getValueAt(row, 0).toString()) == 0) {
+                
+                c.setForeground(Color.red);
+                
+            }
+            else {
+                
+                c.setForeground(Color.BLACK);
+                
+            }
+            
+            return c;
+            
+        }
+        
+    }
+    
+    // CHECK IF ROW INDEX IS IN LIST OF ROW#S WITH ERRORS
+    private boolean toEdit(int x) {
+        
+        boolean edit;
+        for (int c = 0; c < rowEdit.length; c++) {
+            
+            if (x == rowEdit[c]) {
+                
+                return true;
+                
+            }
+            
+        }
+        
+        return false;
+        
+    }
+    
+    // ----------------- ACTUAL TAB START
+    
+    public void makeActualTable() {
+        aTransact = new ArrayList<>();
+        aRaw = new ArrayList<>();
+        aRaw = rmImp.getAllRaw();
+        String cols[] = {"Status", "ID","Name", "Quantity in Stock", "Actual Count"};
+        DefaultTableModel actualTable = new DefaultTableModel(cols,0) {
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if(column == 0 || column == 1 || column == 2 || column == 3)
+                    return false;
+                else
+                    return true;
+            }
+            
+        };
+        
+        for (RawBean raw : aRaw) {
+            
+            Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), ""};
+            actualTable.addRow(data);
+            inputTable.setModel(actualTable);
+            inputTable.getColumnModel().getColumn(0).setMinWidth(0);
+            inputTable.getColumnModel().getColumn(0).setMaxWidth(0);
+            inputTable.getColumnModel().getColumn(1).setMinWidth(0);
+            inputTable.getColumnModel().getColumn(1).setMaxWidth(0);
+            adjustTable(inputTable);
+        }
+        
+    }
+    
+    
+    
+    // ------------------- ACTUAL TAB END
+    
+    /**
+     * < -- KIM'S FUNCTIONS END -- > *
+     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Background;
     private javax.swing.JButton BtnNewDay;
@@ -694,14 +936,15 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JButton RMBtn;
     private javax.swing.JButton RecipesBtn;
     private javax.swing.JButton ReportsBtn;
+    private javax.swing.JLabel actualAbortedLabel;
+    private javax.swing.JLabel actualErrorLabel;
+    private javax.swing.JButton actualSubmit;
+    private javax.swing.JLabel actualSuccessLabel;
+    private javax.swing.JButton deliverySubmit;
     private javax.swing.JButton enterSales1;
-    private javax.swing.JButton enterSales2;
-    private javax.swing.JButton enterSales4;
-    private javax.swing.JTable inputActual;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTable inputTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
@@ -720,5 +963,6 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JTable newdayTable;
     private javax.swing.JTable rmTable;
+    private javax.swing.JButton utwSubmit;
     // End of variables declaration//GEN-END:variables
 }
