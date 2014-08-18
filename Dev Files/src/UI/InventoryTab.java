@@ -3,6 +3,12 @@ package UI;
 import Beans.IngredientBean;
 import Beans.RawBean;
 import Beans.RecipeBean;
+import DAO.Implementation.IngredientDAOImplementation;
+import DAO.Implementation.RawDAOImplementation;
+import DAO.Implementation.RecipeDAOImplementation;
+import DAO.Interface.IngredientDAOInterface;
+import DAO.Interface.RawDAOInterface;
+import DAO.Interface.RecipeDAOInterface;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,11 +22,17 @@ import javax.swing.table.DefaultTableModel;
  * @author Catherine
  */
 public class InventoryTab extends javax.swing.JFrame {
-
+    RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    IngredientDAOInterface inImp = new IngredientDAOImplementation();
+    RawDAOInterface rwImp = new RawDAOImplementation();
+    
+    
     public InventoryTab() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
+        prepareTable();
     }
     
     @SuppressWarnings("unchecked")
@@ -49,8 +61,8 @@ public class InventoryTab extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        rawSearchField = new javax.swing.JTextField();
+        recipeSearchField = new javax.swing.JTextField();
         jComboBox2 = new javax.swing.JComboBox();
         Background = new javax.swing.JLabel();
 
@@ -182,11 +194,21 @@ public class InventoryTab extends javax.swing.JFrame {
         jComboBox1.setSelectedIndex(-1);
         jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 235, -1, -1));
 
-        jTextField1.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 25, 90, -1));
+        rawSearchField.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
+        rawSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                rawSearchFieldKeyReleased(evt);
+            }
+        });
+        jPanel1.add(rawSearchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 25, 90, -1));
 
-        jTextField2.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 235, 90, -1));
+        recipeSearchField.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
+        recipeSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                recipeSearchFieldKeyReleased(evt);
+            }
+        });
+        jPanel1.add(recipeSearchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 235, 90, -1));
 
         jComboBox2.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "name", "quantity" }));
@@ -293,6 +315,92 @@ public class InventoryTab extends javax.swing.JFrame {
             Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_ReportsBtnActionPerformed
+
+    private void rawSearchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rawSearchFieldKeyReleased
+        String raw = rawSearchField.getText().toLowerCase();
+        searchRawTable(raw);
+    }//GEN-LAST:event_rawSearchFieldKeyReleased
+
+    private void recipeSearchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_recipeSearchFieldKeyReleased
+        String recipe = recipeSearchField.getText().toLowerCase();
+        searchRecipeTable(recipe);
+    }//GEN-LAST:event_recipeSearchFieldKeyReleased
+    /**
+     * < -- CLARK'S FUNCTIONS START -- > *
+     */
+    public void searchRawTable(String r) {
+        ArrayList<RawBean> avRaw = new ArrayList<RawBean>();
+        avRaw = rwImp.getRawByStatus("available");
+        int i; 
+        // raw material stock
+        String cols[] = {"Name", "Stock"};
+        DefaultTableModel rawModel = new DefaultTableModel(cols, 0);
+        
+        if (avRaw != null) {
+            for (i = 0; i < avRaw.size(); i++) {
+                RawBean rm = avRaw.get(i);
+                
+                if(rm.getRaw().toLowerCase().contains(r)) {
+                    String color = "black";
+
+                    if (rm.isCritical()) {
+                        color = "red";
+                    }else if(rm.isMedium()){
+                        color = "orange";
+                    }else{
+                        color = "green";
+                    }
+
+                    String shtml = "<html><p style=color:" + color + ">";
+                    String ehtml = "</p></html>";
+                    Object[] raw = {shtml + rm.getRaw() + ehtml, shtml + String.format("%.2f", rm.getStock()) + ehtml};
+                    rawModel.addRow(raw);
+                }
+            }
+        }
+
+        rawTable.setModel(rawModel);
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
+        rawTable.getColumn("Stock").setCellRenderer(rightRenderer);
+    }
+    
+    public void searchRecipeTable(String r) {
+        ArrayList<RecipeBean> avRecipes = new ArrayList<RecipeBean>();
+        avRecipes = rcImp.getRecipeByStatus("available");
+        int i, j; 
+        // raw material stock
+        String cols[] = {"Name", "Stock"};
+        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
+        
+        if (avRecipes != null) {
+            for (i = 0; i < avRecipes.size(); i++) {
+                RecipeBean rc = avRecipes.get(i);
+                if(rc.getRecipe().toLowerCase().contains(r)) {
+                    ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
+                    ingredients = rc.getIngredients();
+
+                    Object[] rec = {"<html><p style = 'color:red'><b>" + rc.getRecipe() + "</b></p></html>", "<html><p style = 'color:red'><b>" + String.format("%.2f", rc.computeStock()) + "</b></p></html>"};
+                    recipeModel.addRow(rec);
+
+                    for (j = 0; j < ingredients.size(); j++) {
+                        RawBean raw = ingredients.get(j).getRaw();
+                        Object[] rawm = {"     " + ingredients.get(j).getAmount() + " " + raw.getUom() + " of " + raw.getRaw(), String.format("%.2f", raw.getStock())};
+                        recipeModel.addRow(rawm);
+                    }
+                }
+            }
+        }
+
+        recipeTable.setModel(recipeModel);
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
+        recipeTable.getColumn("Stock").setCellRenderer(rightRenderer);
+        recipeTable.setRowSelectionAllowed(true);
+    }
+    /**
+     * < -- CLARK'S FUNCTIONS END -- > *
+     */
     /**
      * < -- JANERYS FUNCTIONS START -- > *
      */
@@ -432,9 +540,9 @@ public class InventoryTab extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField rawSearchField;
     private javax.swing.JTable rawTable;
+    private javax.swing.JTextField recipeSearchField;
     private javax.swing.JTable recipeTable;
     // End of variables declaration//GEN-END:variables
 }
