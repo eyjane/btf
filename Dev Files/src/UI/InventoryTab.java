@@ -1,9 +1,15 @@
 package UI;
 
+import Beans.IngredientBean;
+import Beans.RawBean;
+import Beans.RecipeBean;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,10 +29,10 @@ public class InventoryTab extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        rawTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        recipeTable = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -53,7 +59,7 @@ public class InventoryTab extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        rawTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -64,7 +70,7 @@ public class InventoryTab extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(rawTable);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, 600, 140));
 
@@ -72,7 +78,7 @@ public class InventoryTab extends javax.swing.JFrame {
         jLabel2.setText("RECIPE STOCK");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 240, -1, -1));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        recipeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -80,7 +86,7 @@ public class InventoryTab extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(recipeTable);
 
         jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 600, 140));
 
@@ -287,7 +293,78 @@ public class InventoryTab extends javax.swing.JFrame {
             Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_ReportsBtnActionPerformed
+    /**
+     * < -- JANERYS FUNCTIONS START -- > *
+     */
+    /* Prepare Table */
+    private void prepareTable() {
 
+        ArrayList<RecipeBean> avRecipes = new ArrayList<RecipeBean>();
+        ArrayList<RawBean> avRaw = new ArrayList<RawBean>();
+        int i, j;
+
+        // recipe Stocks
+        String cols[] = {"Name", "Stock"};
+        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
+        avRecipes = rcImp.getRecipeByStatus("available");
+
+        if (avRecipes != null) {
+            for (i = 0; i < avRecipes.size(); i++) {
+                RecipeBean rc = avRecipes.get(i);
+                ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
+                ingredients = rc.getIngredients();
+
+                Object[] rec = {"<html><p style = 'color:red'><b>" + rc.getRecipe() + "</b></p></html>", "<html><p style = 'color:red'><b>" + String.format("%.2f", rc.computeStock()) + "</b></p></html>"};
+                recipeModel.addRow(rec);
+
+                for (j = 0; j < ingredients.size(); j++) {
+                    RawBean raw = ingredients.get(j).getRaw();
+                    Object[] rawm = {"     " + ingredients.get(j).getAmount() + " " + raw.getUom() + " of " + raw.getRaw(), String.format("%.2f", raw.getStock())};
+                    recipeModel.addRow(rawm);
+                }
+            }
+        }
+
+        recipeTable.setModel(recipeModel);
+
+        // raw material stock
+        DefaultTableModel rawModel = new DefaultTableModel(cols, 0);
+        avRaw = rwImp.getRawByStatus("available");
+
+        if (avRaw != null) {
+            for (i = 0; i < avRaw.size(); i++) {
+                RawBean rm = avRaw.get(i);
+                String color = "black";
+                
+                
+                if (rm.isCritical()) {
+                    color = "red";
+                }else if(rm.isMedium()){
+                    color = "orange";
+                }else{
+                    color = "green";
+                }
+                
+                String shtml = "<html><p style=color:" + color + ">";
+                String ehtml = "</p></html>";
+                Object[] raw = {shtml + rm.getRaw() + ehtml, shtml + String.format("%.2f", rm.getStock()) + ehtml};
+                rawModel.addRow(raw);
+            }
+        }
+
+        rawTable.setModel(rawModel);
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
+        rawTable.getColumn("Stock").setCellRenderer(rightRenderer);
+        recipeTable.getColumn("Stock").setCellRenderer(rightRenderer);
+        recipeTable.setRowSelectionAllowed(true);
+        //System.out.println(recipeTable.getRowSelectionAllowed());
+    }
+
+    /**
+     * < -- JANERYS FUNCTIONS END -- > *
+     */
+    
     /**
      * @param args the command line arguments
      */
@@ -355,9 +432,9 @@ public class InventoryTab extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTable rawTable;
+    private javax.swing.JTable recipeTable;
     // End of variables declaration//GEN-END:variables
 }
