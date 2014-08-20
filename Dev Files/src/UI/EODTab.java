@@ -19,9 +19,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -223,7 +225,9 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
         jScrollPane4.setViewportView(inputTable);
-        inputTable.getColumnModel().getColumn(0).setResizable(false);
+        if (inputTable.getColumnModel().getColumnCount() > 0) {
+            inputTable.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         actualSuccessLabel.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         actualSuccessLabel.setText("SUBMISSION WAS SUCCESSFUL.");
@@ -362,7 +366,9 @@ public class EODTab extends javax.swing.JFrame {
         rmTable.setDragEnabled(true);
         rmTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(rmTable);
-        rmTable.getColumnModel().getColumn(0).setResizable(false);
+        if (rmTable.getColumnModel().getColumnCount() > 0) {
+            rmTable.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         utwSubmit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
         utwSubmit.addActionListener(new java.awt.event.ActionListener() {
@@ -898,7 +904,8 @@ public class EODTab extends javax.swing.JFrame {
                 
                     int ID = Integer.parseInt(deliveryTable.getValueAt(c, 1).toString());
                     RawBean raw = rmImp.getRaw(ID);
-                    raw.setStock(Float.parseFloat(deliveryTable.getValueAt(c, 4).toString()));
+                    float newRaw = Float.parseFloat(deliveryTable.getValueAt(c, 3).toString()) + Float.parseFloat(deliveryTable.getValueAt(c, 4).toString());
+                    raw.setStock(newRaw);
                     rmImp.editRaw(raw);
                 }
                 if(getValueXML("Delivery").equals("0")){
@@ -1271,14 +1278,20 @@ public class EODTab extends javax.swing.JFrame {
             allRaw.addRow(data);
             deliveryTable.setModel(allRaw);
             adjustTable(deliveryTable);
-            deliveryTable.getColumnModel().getColumn(0).setMinWidth(0);
-            deliveryTable.getColumnModel().getColumn(0).setMaxWidth(0);
         
         }
-        
+        deliveryTable.getColumnModel().getColumn(0).setMinWidth(0);
+        deliveryTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        deliveryTable.getColumnModel().getColumn(1).setMinWidth(0);
+        deliveryTable.getColumnModel().getColumn(1).setMaxWidth(0);
         deliveryTable.setColumnSelectionAllowed(true);
         deliveryTable.setRowSelectionAllowed(true);
         deliveryTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        DefaultCellEditor click = new DefaultCellEditor(new JTextField());
+        click.setClickCountToStart(1);
+        deliveryTable.setDefaultEditor(deliveryTable.getColumnClass(4), click);
+        
         
     }
     
