@@ -4,11 +4,44 @@
  */
 package UI;
 
+import Beans.CategoryBean;
+import Beans.IngredientBean;
+import Beans.RawBean;
+import Beans.RecipeBean;
+import DAO.Implementation.CategoryDAOImplementation;
+import DAO.Implementation.IngredientDAOImplementation;
+import DAO.Implementation.RawDAOImplementation;
+import DAO.Implementation.RecipeDAOImplementation;
+import DAO.Interface.CategoryDAOInterface;
+import DAO.Interface.IngredientDAOInterface;
+import DAO.Interface.RawDAOInterface;
+import DAO.Interface.RecipeDAOInterface;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author Catherine
  */
 public class EditRC extends javax.swing.JFrame {
+
+    private RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    private CategoryDAOInterface catImp = new CategoryDAOImplementation();
+    private RawDAOInterface rmImp = new RawDAOImplementation();
+    private IngredientDAOInterface inImp = new IngredientDAOImplementation();
+
+    private ArrayList<RecipeBean> avRecipes;
+    private ArrayList<IngredientBean> avIngredients;
+    private ArrayList<CategoryBean> aCategory;
 
     /**
      * Creates new form EditRM
@@ -34,7 +67,7 @@ public class EditRC extends javax.swing.JFrame {
         EODBtn = new javax.swing.JButton();
         ReportsBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        rmTable = new javax.swing.JTable(){
+        recipeTable = new javax.swing.JTable(){
             public boolean isCellEditable(int row, int column){
                 return false;
             }
@@ -45,26 +78,25 @@ public class EditRC extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox();
-        SaveRMBtn = new javax.swing.JButton();
+        nameField = new javax.swing.JTextField();
+        costField = new javax.swing.JTextField();
+        categoryBox = new javax.swing.JComboBox();
+        saveRecipe = new javax.swing.JButton();
         CancelBtn = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        actualLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         ingredientsTable = new javax.swing.JTable(){
             public boolean isCellEditable(int row, int column){
                 return false;
             }
         };
-        jButton1 = new javax.swing.JButton();
-        jLabel14 = new javax.swing.JLabel();
+        editIngredient = new javax.swing.JButton();
+        inError = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         Background = new javax.swing.JLabel();
 
@@ -105,6 +137,11 @@ public class EditRC extends javax.swing.JFrame {
         jPanel1.add(CategoriesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 239, 60));
 
         EODBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/EOD Btn.png"))); // NOI18N
+        EODBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EODBtnActionPerformed(evt);
+            }
+        });
         jPanel1.add(EODBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 239, 60));
 
         ReportsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Reports Btn.png"))); // NOI18N
@@ -113,7 +150,7 @@ public class EditRC extends javax.swing.JFrame {
         jScrollPane1.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
         jScrollPane1.setPreferredSize(new java.awt.Dimension(620, 402));
 
-        rmTable.setModel(new javax.swing.table.DefaultTableModel(
+        recipeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -129,9 +166,14 @@ public class EditRC extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(rmTable);
+        recipeTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                recipeTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(recipeTable);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 80, 600, 100));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 80, 610, 100));
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recipe Info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Quicksand Light", 0, 18), new java.awt.Color(51, 51, 51))); // NOI18N
         jPanel3.setOpaque(false);
@@ -151,23 +193,23 @@ public class EditRC extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         jLabel6.setText("Ingredients:");
 
-        jTextField1.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        nameField.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                nameFieldActionPerformed(evt);
             }
         });
 
-        jTextField3.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        costField.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
 
-        jComboBox1.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        categoryBox.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        categoryBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                categoryBoxActionPerformed(evt);
             }
         });
 
-        SaveRMBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SaveBtn.png"))); // NOI18N
+        saveRecipe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SaveBtn.png"))); // NOI18N
 
         CancelBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/CancelBtn.png"))); // NOI18N
         CancelBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -178,15 +220,11 @@ public class EditRC extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel9.setText("Please input valid number");
+        jLabel9.setText("ERROR: Required field. Please input valid number.");
 
         jLabel10.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel10.setText("*ERROR: Required field");
-
-        jLabel12.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel12.setText("Please input valid number");
+        jLabel10.setText("ERROR: Required field.");
 
         jLabel13.setFont(new java.awt.Font("Quicksand Light", 0, 18)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(204, 0, 0));
@@ -200,7 +238,7 @@ public class EditRC extends javax.swing.JFrame {
         jLabel16.setForeground(new java.awt.Color(204, 0, 0));
         jLabel16.setText("*");
 
-        jLabel11.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        actualLabel.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
 
         ingredientsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -220,11 +258,16 @@ public class EditRC extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(ingredientsTable);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/EditEngredientsBtn.png"))); // NOI18N
+        editIngredient.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/EditEngredientsBtn.png"))); // NOI18N
+        editIngredient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editIngredientActionPerformed(evt);
+            }
+        });
 
-        jLabel14.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel14.setText("ERROR: Recipe must have at least one ingredient");
+        inError.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        inError.setForeground(new java.awt.Color(204, 0, 0));
+        inError.setText("ERROR: Recipe must have at least one ingredient");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -234,54 +277,52 @@ public class EditRC extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel2))
-                        .addGap(13, 13, 13)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, 131, Short.MAX_VALUE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel12))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addGap(35, 35, 35)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel10)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(CancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(SaveRMBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(CancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(saveRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel2))
+                                .addGap(13, 13, 13)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                                    .addComponent(categoryBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 131, Short.MAX_VALUE)
+                                    .addComponent(costField, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel14)
-                                .addGap(0, 13, Short.MAX_VALUE))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel9)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel13)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel10)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(actualLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane2)))
+                                .addComponent(jLabel6)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(20, 20, 20)
+                                        .addComponent(editIngredient, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(inError)
+                                        .addGap(0, 63, Short.MAX_VALUE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jScrollPane2)))))
                         .addGap(10, 10, 10))))
         );
         jPanel3Layout.setVerticalGroup(
@@ -289,12 +330,13 @@ public class EditRC extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(actualLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
                         .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3)
-                        .addComponent(jTextField1)))
+                        .addComponent(nameField)
+                        .addComponent(jLabel10)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -302,43 +344,38 @@ public class EditRC extends javax.swing.JFrame {
                             .addComponent(jLabel9)
                             .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(28, 28, 28))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(costField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(categoryBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                    .addComponent(editIngredient, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inError, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(SaveRMBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveRecipe, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(CancelBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 200, 600, 350));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 200, 650, 350));
 
         jLabel1.setFont(new java.awt.Font("Quicksand Light", 0, 36)); // NOI18N
         jLabel1.setText("Recipes Management");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, -1, -1));
 
         Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Background3.png"))); // NOI18N
-        jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -355,37 +392,320 @@ public class EditRC extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void InventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InventoryBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            InventoryTab in = new InventoryTab();
+            in.setVisible(true);
+            dispose();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_InventoryBtnActionPerformed
 
     private void RMBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RMBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            RMManagement rm = new RMManagement();
+            rm.setVisible(true);
+            dispose();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_RMBtnActionPerformed
 
     private void RecipesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipesBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            RCManagement rc = new RCManagement();
+            rc.setVisible(true);
+            dispose();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(RCManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_RecipesBtnActionPerformed
 
     private void CategoriesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CategoriesBtnActionPerformed
-        // TODO add your handling code here:
+       try {
+            CGManagement cg = new CGManagement();
+            cg.setVisible(true);
+            dispose();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_CategoriesBtnActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    private void categoryBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryBoxActionPerformed
+        
+    }//GEN-LAST:event_categoryBoxActionPerformed
 
     private void ingredientsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingredientsTableMouseClicked
 
     }//GEN-LAST:event_ingredientsTableMouseClicked
 
     private void CancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            RCManagement rcman = new RCManagement();
+            rcman.setVisible(true);
+            dispose();
+        } catch (Exception e) {
+            //System.out.println(e);
+            return;
+        }
     }//GEN-LAST:event_CancelBtnActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_nameFieldActionPerformed
 
+    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
+        ArrayList<CategoryBean> aCategory = catImp.getAllCategory();
+        try {
+            int rselect = recipeTable.getSelectedRow();
+            int rID = Integer.parseInt(recipeTable.getModel().getValueAt(rselect, 0).toString());
+            RecipeBean r = rcImp.getRecipeBean(rID);
+            //recipeIDLabel.setText(String.valueOf(r.getRecipeID()));
+            nameField.setText(r.getRecipe());
+            costField.setText(String.format("%.2f", r.getCost()));
+            actualLabel.setText(String.format("%.2f", r.getActualPrice()));
+
+            for (CategoryBean c : aCategory) {
+                categoryBox.addItem(c);
+                if (c.getCategoryID() == r.getCategory()) {
+                    categoryBox.setSelectedIndex(categoryBox.getItemCount() - 1);
+                }
+            }
+            //CategoryBean ct = (CategoryBean)categoryBox.getSelectedItem();
+            //System.out.println("SELECTED " + ct.getCategoryID());
+
+            String cols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
+            DefaultTableModel model = new DefaultTableModel(cols, 0);
+
+            for (IngredientBean rw : r.getIngredients()) {
+                RawBean rwm = rw.getRaw();
+                Object[] i = {rwm.getRawID(), rwm.getRaw(), String.format("%.2f", rw.getAmount()), rwm.getUom()};
+                model.addRow(i);
+            }
+
+            ingredientsTable.setModel(model);
+            ingredientsTable.getColumnModel().getColumn(0).setMinWidth(0);
+            ingredientsTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
+            adjustTable(ingredientsTable);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }//GEN-LAST:event_recipeTableMouseClicked
+
+    private void editIngredientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editIngredientActionPerformed
+        int nrow = ingredientsTable.getRowCount();
+        //System.out.println(nrow);
+
+        if (recipeTable.getSelectedRow() == -1) {
+            return;
+        }
+        int i;
+        int rid;
+
+        ArrayList<IngredientBean> aIngredient = new ArrayList<IngredientBean>();
+
+        for (i = 0; i < nrow; i++) {
+            IngredientBean ibean = new IngredientBean();
+            RawBean rbean = new RawBean();
+            rid = Integer.parseInt(ingredientsTable.getModel().getValueAt(i, 0).toString());
+            rbean = rmImp.getRaw(rid);
+            ibean.setRaw(rbean);
+            ibean.setAmount(Float.parseFloat(ingredientsTable.getModel().getValueAt(i, 2).toString()));
+            aIngredient.add(ibean);
+        }
+
+        try {
+            addIngredient AddIngredient = new addIngredient(this, aIngredient, nameField.getText());
+            AddIngredient.setVisible(true);
+            this.setVisible(false);
+        } catch (Exception e) {
+            System.out.println(e);
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_editIngredientActionPerformed
+
+    private void EODBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EODBtnActionPerformed
+        try {
+            EODTab et = new EODTab();
+            et.setVisible(true);
+            dispose();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(CGManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_EODBtnActionPerformed
+
+    /**
+     * * <--- JANE CODE STARTS ---> **
+     */
+    private void updateIngredient(RecipeBean r, ArrayList<IngredientBean> in) {
+        ArrayList<IngredientBean> orig = inImp.getAllIngredients(r);
+        int i;
+
+        //add ingredients
+        for (i = 0; i < in.size(); i++) {
+            inImp.addIngredient(r, in.get(i));
+        }
+
+    }
+
+    private void deleteRecipe(int r) {
+        int rID = Integer.parseInt(recipeTable.getModel().getValueAt(r, 0).toString());
+        RecipeBean drecipe = rcImp.getRecipeBean(rID);
+
+        if (rcImp.deleteRecipe(drecipe)) {
+            JOptionPane.showMessageDialog(null, "Recipe successfully deleted!");
+            TableModel model = recipeTable.getModel();
+            DefaultTableModel rmodel = (DefaultTableModel) model;
+
+            rmodel.removeRow(r);
+            recipeTable.setModel(rmodel);
+            nameField.setText("");
+            costField.setText("");
+            categoryBox.setSelectedIndex(0);
+            actualLabel.setText("0.00");
+            DefaultTableModel iModel = (DefaultTableModel) ingredientsTable.getModel();
+            iModel.setRowCount(0);
+            prepareTable();
+        }
+    }
+
+    public void computeActual(ArrayList<IngredientBean> aIngredient) {
+        RecipeBean rtemp = new RecipeBean();
+        rtemp.setIngredients(aIngredient);
+        actualLabel.setText(String.format("%.2f", rtemp.getActualPrice()));
+
+    }
+
+    public void reloadIngredients(ArrayList<IngredientBean> aIngredient) {
+        String cols[] = {"Raw ID", "Raw Material", "Quantity"};
+        DefaultTableModel ingredientModel = new DefaultTableModel(cols, 0);
+        ingredientsTable.setModel(ingredientModel);
+        ingredientsTable.getColumnModel().getColumn(0).setMinWidth(0);
+        ingredientsTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
+        if (aIngredient != null) {
+            for (IngredientBean ibean : aIngredient) {
+                Object[] ingredient = {ibean.getRaw().getRawID(), ibean.getRaw().getRaw(), ibean.getAmount()};
+                ingredientModel.addRow(ingredient);
+            }
+            ingredientsTable.setModel(ingredientModel);
+
+        } else {
+            //System.out.println("aIngredient is null");
+        }
+    }
+
+    /* PREPARE TABLE */
+    public void prepareTable() {
+        avRecipes = new ArrayList<RecipeBean>();
+        aCategory = new ArrayList<CategoryBean>();
+        avIngredients = new ArrayList<IngredientBean>();
+
+        String rCategory = null;
+        int i, j;
+
+        aCategory = catImp.getAllCategory();
+        avRecipes = rcImp.getRecipeByStatus("available");
+
+        String cols[] = {"Recipe ID", "Recipe", "Stock", "Actual Price", "Cost", "Category"};
+        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
+        //System.out.println(avRecipes.get(1).getRecipe());
+
+        for (RecipeBean r : avRecipes) {
+
+            for (CategoryBean c : aCategory) {
+                if (r.getCategory() == c.getCategoryID()) {
+                    rCategory = c.getCategory();
+                    break;
+                }
+            }
+
+            Object[] data = {r.getRecipeID(), r.getRecipe(), String.format("%.2f", r.computeStock()), String.format("%.2f", r.getActualPrice()), String.format("%.2f", r.getCost()), rCategory};
+            recipeModel.addRow(data);
+        }
+
+        recipeTable.setModel(recipeModel);
+        recipeTable.getColumnModel().getColumn(0).setMinWidth(0);
+        recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
+        adjustTable(recipeTable);
+
+        String icols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
+        DefaultTableModel model = new DefaultTableModel(icols, 0);
+
+    }
+
+    /* ADJUST TABLE TO MAX WIDTH*/
+    private void adjustTable(JTable table) {
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = tableColumn.getMaxWidth();
+
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+
+                //  We've exceeded the maximum width, no need to check other rows
+                if (preferredWidth >= maxWidth) {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+    }
+
+    private boolean isNumber(String s) {
+        try {
+            Float.parseFloat(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void inErrorV(boolean b) {
+        inError.setVisible(b);
+    }
+
+    /**
+     * * <--- JANE CODE ENDS ---> **
+     */
     /**
      * @param args the command line arguments
      */
@@ -429,16 +749,15 @@ public class EditRC extends javax.swing.JFrame {
     private javax.swing.JButton RMBtn;
     private javax.swing.JButton RecipesBtn;
     private javax.swing.JButton ReportsBtn;
-    private javax.swing.JButton SaveRMBtn;
+    private javax.swing.JLabel actualLabel;
+    private javax.swing.JComboBox categoryBox;
+    private javax.swing.JTextField costField;
+    private javax.swing.JButton editIngredient;
+    private javax.swing.JLabel inError;
     private javax.swing.JTable ingredientsTable;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
@@ -451,8 +770,8 @@ public class EditRC extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTable rmTable;
+    private javax.swing.JTextField nameField;
+    private javax.swing.JTable recipeTable;
+    private javax.swing.JButton saveRecipe;
     // End of variables declaration//GEN-END:variables
 }
