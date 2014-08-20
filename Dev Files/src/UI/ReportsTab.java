@@ -8,6 +8,7 @@ import DAO.Interface.SalesDAOInterface;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -118,7 +119,7 @@ public class ReportsTab extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         expensesTable = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnExportExpenses = new javax.swing.JButton();
         expensesPanel = new javax.swing.JPanel();
         dateErrorLabel1 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -238,10 +239,10 @@ public class ReportsTab extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(expensesTable);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/ExportBtn.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnExportExpenses.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/ExportBtn.png"))); // NOI18N
+        btnExportExpenses.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnExportExpensesActionPerformed(evt);
             }
         });
 
@@ -272,7 +273,7 @@ public class ReportsTab extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(dateErrorLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnExportExpenses, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -280,7 +281,7 @@ public class ReportsTab extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExportExpenses, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dateErrorLabel1))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -632,9 +633,19 @@ public class ReportsTab extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_CategoriesBtnActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnExportExpensesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportExpensesActionPerformed
+       //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+       //Date d = new Date();
+       String path = "btf reports.xls" ;
+       
+       DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+       Date sDate = startDate.getDate();
+       Date eDate = endDate.getDate();   
+       String date = t.format(sDate) + t.format(eDate);
+       
+       //DateItem date = (DateItem) dateCombo.getSelectedItem();
+       checkExcelExist(varianceTable, path, date, "Expenses");
+    }//GEN-LAST:event_btnExportExpensesActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -645,12 +656,12 @@ public class ReportsTab extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnExportVarianceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportVarianceActionPerformed
-       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-       Date d = new Date();
-       String path = dateFormat.format(d) + " btf reports.xls" ;
+       //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+       //Date d = new Date();
+       String path = "btf reports.xls" ;
             
        //DateItem date = (DateItem) dateCombo.getSelectedItem();
-       //checkExcelExist(varianceTable, path, date.getValue());
+       //checkExcelExist(varianceTable, path, date.getValue(), "Variance");
     }//GEN-LAST:event_btnExportVarianceActionPerformed
 
     private void EODBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EODBtnActionPerformed
@@ -677,13 +688,13 @@ public class ReportsTab extends javax.swing.JFrame {
      * * <--- CLARK'S CODE STARTS HERE ---> **
      */
     
-    private void exportToExcel(JTable tables, String path, String date) throws FileNotFoundException, IOException, InvalidFormatException {
+    private void exportToExcel(JTable tables, String path, String date, String reportName) throws FileNotFoundException, IOException, InvalidFormatException {
         HSSFWorkbook wb;
         HSSFSheet sheet;
         JTable table = tables;
         
         wb = new HSSFWorkbook();
-        sheet = wb.createSheet("Variance"); 
+        sheet = wb.createSheet(reportName); 
         sheet.setColumnWidth(0, 10000);
         sheet.createFreezePane( 1, 0, 1, 0 );
         
@@ -729,13 +740,13 @@ public class ReportsTab extends javax.swing.JFrame {
         }
         
     }
-    public void modifyExcel(JTable tables, String path, String date) {
+    public void modifyExcel(JTable tables, String path, String date, String reportName) {
         InputStream inp;
         JTable table = tables;
         try {
             inp = new FileInputStream(path);
             Workbook wb = WorkbookFactory.create(inp);
-            Sheet sheet = wb.getSheetAt(0);
+            Sheet sheet = wb.getSheet(reportName);
             int c1 = sheet.getRow(3).getLastCellNum();
             int c2 = c1 + 7;
             Row row = sheet.getRow(3);
@@ -782,17 +793,35 @@ public class ReportsTab extends javax.swing.JFrame {
         }
     }
     
-    public void checkExcelExist(JTable tables, String path, String date){
+    public void checkExcelExist(JTable tables, String path, String date, String reportName){
         try{
             File file = new File(path);
             if(!file.exists()) {
-                exportToExcel(varianceTable, path, date);
+                exportToExcel(varianceTable, path, date, reportName);
             } else {
-                modifyExcel(varianceTable, path, date);
+                modifyExcel(varianceTable, path, date, reportName);
             }
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+    
+    public void exportToPDF(JFreeChart chart, String path, int width, int height) {
+        try {
+            Rectangle pageSize = new Rectangle(width, height);
+            Document document = new Document(pageSize, 50, 50, 50, 50);
+            PdfWriter writer = PdfWriter.getInstance(document, out);
+            document.open();
+            PdfContentByte cb = writer.getDirectContent();
+            PdfTemplate tp = cb.createTemplate(width, height);
+            Graphics2D g2 = tp.createGraphics(width, height, new DefaultFontMapper());
+            Rectangle2D r2D = new Rectangle2D.Double(0, 0, width, height);
+            chart.draw(g2, r2D);
+            g2.dispose();
+            cb.addTemplate(tp, 0, 0);
+            document.close();
+    } catch(Exception e) {
+        e.printStackTrace();
     }
     /**
      * * <--- CLARK'S CODE ENDS HERE ---> **
@@ -1055,6 +1084,7 @@ public class ReportsTab extends javax.swing.JFrame {
     private javax.swing.JButton RMBtn;
     private javax.swing.JButton RecipesBtn;
     private javax.swing.JButton ReportsBtn;
+    private javax.swing.JButton btnExportExpenses;
     private javax.swing.JButton btnExportVariance;
     private javax.swing.JLabel dateErrorLabel1;
     private javax.swing.JLabel dateErrorLabel2;
@@ -1064,7 +1094,6 @@ public class ReportsTab extends javax.swing.JFrame {
     private javax.swing.JTable expensesTable;
     private javax.swing.JTable grossIncomeTable;
     private javax.swing.JPanel grossPanel;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
