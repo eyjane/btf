@@ -1248,9 +1248,9 @@ public class EODTab extends javax.swing.JFrame {
 		
 		DefaultCellEditor click = new DefaultCellEditor(new JTextField());
 		click.setClickCountToStart(1);
-		rmTable.setDefaultEditor(table.getColumnClass(4), click);
-		rmTable.setDefaultEditor(table.getColumnClass(5), click);
-		rmTable.setDefaultEditor(table.getColumnClass(6), click);
+		rmTable.setDefaultEditor(rmTable.getColumnClass(4), click);
+		rmTable.setDefaultEditor(rmTable.getColumnClass(5), click);
+		rmTable.setDefaultEditor(rmTable.getColumnClass(6), click);
         
     }
     
