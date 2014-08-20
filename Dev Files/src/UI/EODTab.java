@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -82,6 +83,7 @@ public class EODTab extends javax.swing.JFrame {
         deliveryErrorLabel.setVisible(false);
         deliverySuccessLabel.setVisible(false);
         deliveryAbortedLabel.setVisible(false);
+        BtnNewDay.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -221,9 +223,7 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
         jScrollPane4.setViewportView(inputTable);
-        if (inputTable.getColumnModel().getColumnCount() > 0) {
-            inputTable.getColumnModel().getColumn(0).setResizable(false);
-        }
+        inputTable.getColumnModel().getColumn(0).setResizable(false);
 
         actualSuccessLabel.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         actualSuccessLabel.setText("SUBMISSION WAS SUCCESSFUL.");
@@ -324,7 +324,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(enterSales1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -362,9 +362,7 @@ public class EODTab extends javax.swing.JFrame {
         rmTable.setDragEnabled(true);
         rmTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(rmTable);
-        if (rmTable.getColumnModel().getColumnCount() > 0) {
-            rmTable.getColumnModel().getColumn(0).setResizable(false);
-        }
+        rmTable.getColumnModel().getColumn(0).setResizable(false);
 
         utwSubmit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
         utwSubmit.addActionListener(new java.awt.event.ActionListener() {
@@ -412,7 +410,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addGap(13, 13, 13)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(materialsErrorLabel)
                 .addGap(7, 7, 7)
@@ -490,7 +488,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deliveryErrorLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -507,7 +505,6 @@ public class EODTab extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("DELIVERY", jPanel2);
 
-        newdayTable.setFont(new java.awt.Font("Quicksand Light", 0, 18)); // NOI18N
         newdayTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -551,7 +548,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(BtnNewDay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addContainerGap(254, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("NEW DAY", jPanel6);
@@ -640,7 +637,12 @@ public class EODTab extends javax.swing.JFrame {
     }//GEN-LAST:event_CategoriesBtnActionPerformed
 
     private void enterSales1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterSales1ActionPerformed
-        // TODO add your handling code here:
+                if(getValueXML("Sales").equals("0")){
+                    setValueXML("Sales");
+                    //enterSales1.setVisible(false);
+                    ViewAllStatus();
+                    //BtnNewDay.setEnabled(true);
+                }
     }//GEN-LAST:event_enterSales1ActionPerformed
 
     private void EODBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EODBtnActionPerformed
@@ -675,10 +677,12 @@ public class EODTab extends javax.swing.JFrame {
             if(getDateXML().equals(curDate)) {
                 if(JOptionPane.showConfirmDialog(null, "Are you sure you're done for the day?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
                         nextDay(nextDate);
+                        ViewAllStatus();
                         JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
             } else if(!getDateXML().equals(nextDate) && !getDateXML().equals(curDate)) {
                 nextDay(curDate);
+                ViewAllStatus();
                 JOptionPane.showMessageDialog(null, "New date is " + curDate, "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
@@ -725,11 +729,14 @@ public class EODTab extends javax.swing.JFrame {
                 
                 }
             
-                /*
-                if(inputLockDown()){
-                actualSubmit.setVisible(false);
-                main.setNextDayBtn();
-                }*/
+                
+                if(getValueXML("Actual").equals("0")){
+                    setValueXML("Actual");
+                    actualSubmit.setVisible(false);
+                    ViewAllStatus();
+                    BtnNewDay.setVisible(true);
+                }
+                
                 actualSuccessLabel.setVisible(false);
                 makeActualTable();
             }
@@ -826,9 +833,13 @@ public class EODTab extends javax.swing.JFrame {
                         tclmp.addTransaction(t, raw, q);
                     }
                 }
-                /*if(inputLockDown()){
-                    utwSubmit.setVisible(false);
-                }*/
+                if(getValueXML("Materials").equals("0")){
+                    setValueXML("Materials");
+                    //utwSubmit.setVisible(false);
+                    ViewAllStatus();
+                    //BtnNewDay.setEnabled(true);
+                }
+                
                 materialsSuccessLabel.setVisible(true);
                 makeRMTable();
             }
@@ -890,7 +901,13 @@ public class EODTab extends javax.swing.JFrame {
                     raw.setStock(Float.parseFloat(deliveryTable.getValueAt(c, 4).toString()));
                     rmImp.editRaw(raw);
                 }
-            
+                if(getValueXML("Delivery").equals("0")){
+                    setValueXML("Delivery");
+                    //deliverySubmit.setVisible(false);
+                    ViewAllStatus();
+                    //BtnNewDay.setEnabled(true);
+                }
+                
                 deliverySuccessLabel.setVisible(true);
                 makeDeliveryTable();
             
@@ -933,17 +950,25 @@ public class EODTab extends javax.swing.JFrame {
     public void ViewAllStatus(){
        DefaultTableModel defaultModel = initializeTable();
        String eodList[] = new String[4];
+       JButton buttonList[] = new JButton[4];
        String text = "";
        eodList[0] = "Actual";
        eodList[1] = "Sales";
        eodList[2] = "Materials";
        eodList[3] = "Delivery";
+       buttonList[0] = actualSubmit;
+       buttonList[1] = enterSales1;
+       buttonList[2] = utwSubmit;
+       buttonList[3] = deliverySubmit;
        
        for (int i = 0; i < eodList.length; i++) {
-            if(getValueXML(eodList[i]).equals("1"))
+            if(getValueXML(eodList[i]).equals("1")) {
                  text = "Submitted";
-            else
+                 buttonList[i].setVisible(false);
+            } else {
                 text = "Not yet submitted";
+                buttonList[i].setVisible(true);
+            }
             defaultModel.addRow(new Object[] {eodList[i], text});
        }
        
@@ -956,7 +981,8 @@ public class EODTab extends javax.swing.JFrame {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-                       
+            
+            doc.getElementsByTagName("date").item(0).setTextContent(curDate);
             doc.getElementsByTagName("Delivery").item(0).setTextContent("0");
             doc.getElementsByTagName("Materials").item(0).setTextContent("0");
             doc.getElementsByTagName("Sales").item(0).setTextContent("0");
@@ -968,7 +994,7 @@ public class EODTab extends javax.swing.JFrame {
             StreamResult result = new StreamResult(new File(filepath));
             transformer.transform(source, result);
             
-            BtnNewDay.setEnabled(false);
+            BtnNewDay.setVisible(false);
         } catch (Exception e) {
              e.printStackTrace();
         } 
@@ -1004,6 +1030,24 @@ public class EODTab extends javax.swing.JFrame {
              e.printStackTrace();
         } 
         return value;
+    }
+    
+    public void setValueXML(String x) {
+        try {
+            String filepath = "btf.xml";
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(filepath);
+            
+            doc.getElementsByTagName(x).item(0).setTextContent("1");
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(filepath));
+            transformer.transform(source, result);            
+        } catch (Exception e) {
+             e.printStackTrace();
+        } 
     }
     
     public void checkDate() {
