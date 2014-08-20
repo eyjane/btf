@@ -19,9 +19,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -1233,13 +1235,22 @@ public class EODTab extends javax.swing.JFrame {
             actualTable.addRow(data);
             rmTable.setModel(actualTable);
             adjustTable(rmTable);
-            // HIDE COLUMNS
-            rmTable.getColumnModel().getColumn(0).setMinWidth(0);
-            rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
-            rmTable.getColumnModel().getColumn(1).setMinWidth(0);
-            rmTable.getColumnModel().getColumn(1).setMaxWidth(0);
         
         }
+		
+		rmTable.getColumnModel().getColumn(0).setMinWidth(0);
+        rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        rmTable.getColumnModel().getColumn(1).setMinWidth(0);
+        rmTable.getColumnModel().getColumn(1).setMaxWidth(0);
+		rmTable.setColumnSelectionAllowed(true);
+        rmTable.setRowSelectionAllowed(true);
+        rmTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		DefaultCellEditor click = new DefaultCellEditor(new JTextField());
+		click.setClickCountToStart(1);
+		rmTable.setDefaultEditor(table.getColumnClass(4), click);
+		rmTable.setDefaultEditor(table.getColumnClass(5), click);
+		rmTable.setDefaultEditor(table.getColumnClass(6), click);
         
     }
     
