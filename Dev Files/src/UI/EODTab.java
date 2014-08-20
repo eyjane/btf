@@ -1250,13 +1250,19 @@ public class EODTab extends javax.swing.JFrame {
             Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), ""};
             actualTable.addRow(data);
             inputTable.setModel(actualTable);
-            inputTable.getColumnModel().getColumn(0).setMinWidth(0);
-            inputTable.getColumnModel().getColumn(0).setMaxWidth(0);
-            inputTable.getColumnModel().getColumn(1).setMinWidth(0);
-            inputTable.getColumnModel().getColumn(1).setMaxWidth(0);
             adjustTable(inputTable);
         }
-        
+        inputTable.getColumnModel().getColumn(0).setMinWidth(0);
+        inputTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        inputTable.getColumnModel().getColumn(1).setMinWidth(0);
+        inputTable.getColumnModel().getColumn(1).setMaxWidth(0);
+        inputTable.setColumnSelectionAllowed(true);
+        inputTable.setRowSelectionAllowed(true);
+        inputTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+        DefaultCellEditor click = new DefaultCellEditor(new JTextField());
+        click.setClickCountToStart(1);
+        inputTable.setDefaultEditor(inputTable.getColumnClass(4), click);
         DefaultCellEditor deditor = new myChecker(new JTextField(), actualErrorLabel);
         inputTable.setDefaultEditor(Object.class, deditor);
 
@@ -1339,15 +1345,20 @@ public class EODTab extends javax.swing.JFrame {
             allRaw.addRow(data);
             deliveryTable.setModel(allRaw);
             adjustTable(deliveryTable);
-            deliveryTable.getColumnModel().getColumn(0).setMinWidth(0);
-            deliveryTable.getColumnModel().getColumn(0).setMaxWidth(0);
 
         }
 
+        deliveryTable.getColumnModel().getColumn(0).setMinWidth(0);
+        deliveryTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        deliveryTable.getColumnModel().getColumn(1).setMinWidth(0);
+        deliveryTable.getColumnModel().getColumn(1).setMaxWidth(0);
         deliveryTable.setColumnSelectionAllowed(true);
         deliveryTable.setRowSelectionAllowed(true);
         deliveryTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
+        
+        DefaultCellEditor click = new DefaultCellEditor(new JTextField());
+        click.setClickCountToStart(1);
+        deliveryTable.setDefaultEditor(deliveryTable.getColumnClass(4), click);
         DefaultCellEditor deditor = new myChecker(new JTextField(), deliveryErrorLabel);
         deliveryTable.setDefaultEditor(Object.class, deditor);
         
