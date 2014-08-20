@@ -114,6 +114,14 @@ public class EODTab extends javax.swing.JFrame {
         prepareTable();
         checkDate();
         date = getDateXML();
+        
+        //disable submit
+        if(getValueXML("Sales").equals("0")){
+            submitSales.setVisible(false);
+            errorLabel.setText("SALES REPORT HAS ALREADY BEEN SUBMITTED FOR TODAY (" + getDateXML() + ")");
+        }
+        
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -1248,7 +1256,11 @@ public class EODTab extends javax.swing.JFrame {
             inputTable.getColumnModel().getColumn(1).setMaxWidth(0);
             adjustTable(inputTable);
         }
+        
+        DefaultCellEditor deditor = new myChecker(new JTextField(), actualErrorLabel);
+        inputTable.setDefaultEditor(Object.class, deditor);
 
+        
     }
 
     // ------------------- ACTUAL TAB END
@@ -1284,6 +1296,9 @@ public class EODTab extends javax.swing.JFrame {
             rmTable.getColumnModel().getColumn(1).setMaxWidth(0);
 
         }
+        
+        DefaultCellEditor deditor = new myChecker(new JTextField(), materialsErrorLabel);
+        rmTable.setDefaultEditor(Object.class, deditor);
 
     }
 
@@ -1322,6 +1337,9 @@ public class EODTab extends javax.swing.JFrame {
         deliveryTable.setRowSelectionAllowed(true);
         deliveryTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+        DefaultCellEditor deditor = new myChecker(new JTextField(), deliveryErrorLabel);
+        deliveryTable.setDefaultEditor(Object.class, deditor);
+        
     }
 
     // ----------------- DELIVERY TAB END
@@ -1394,9 +1412,11 @@ public class EODTab extends javax.swing.JFrame {
                     throw new NumberFormatException();
                 }
                 textField.setText(String.format("%.02f", v));
+                eLabel.setText("ERROR: Required field. Please input valid number.");
                 eLabel.setVisible(false);
             } catch (NumberFormatException e) {
                 textField.setBorder(red);
+                eLabel.setText("ERROR: Required field. Please input valid number.");
                 eLabel.setVisible(true);
                 return false;
             }
