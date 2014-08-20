@@ -83,7 +83,7 @@ public class EODTab extends javax.swing.JFrame {
         deliveryErrorLabel.setVisible(false);
         deliverySuccessLabel.setVisible(false);
         deliveryAbortedLabel.setVisible(false);
-        BtnNewDay.setVisible(false);
+        //BtnNewDay.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -951,6 +951,10 @@ public class EODTab extends javax.swing.JFrame {
        DefaultTableModel defaultModel = initializeTable();
        String eodList[] = new String[4];
        JButton buttonList[] = new JButton[4];
+       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+       Calendar cal1 = Calendar.getInstance();
+       cal1.add(Calendar.DATE, +1);
+       String nextDate = dateFormat.format(cal1.getTime());
        String text = "";
        eodList[0] = "Actual";
        eodList[1] = "Sales";
@@ -967,7 +971,10 @@ public class EODTab extends javax.swing.JFrame {
                  buttonList[i].setVisible(false);
             } else {
                 text = "Not yet submitted";
-                buttonList[i].setVisible(true);
+                if(!getDateXML().equals(nextDate))
+                    buttonList[i].setVisible(true);
+                else
+                    buttonList[i].setVisible(false);
             }
             defaultModel.addRow(new Object[] {eodList[i], text});
        }
