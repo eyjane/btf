@@ -80,30 +80,7 @@ public class ReportsTab extends javax.swing.JFrame {
         endDate.setDate(new Date());
         dateErrorLabel1.setVisible(false);
         dateErrorLabel2.setVisible(false);
-        dateErrorLabel3.setVisible(false);
-
-        Date sDate = startDate.getDate();
-        Date eDate = endDate.getDate();
-
-        LocalDate start = new LocalDate(sDate);
-        LocalDate end = new LocalDate(eDate);
-        if (start.isBefore(end) || start.isEqual(end)) { // CHECK IF START IS <== END
-
-            GITable();
-            makeGIChart();
-            expTable();
-            makeExpChart();
-            netTable();
-            makeNetChart();
-
-        } else {
-
-            dateErrorLabel1.setVisible(true);
-            dateErrorLabel2.setVisible(true);
-            dateErrorLabel3.setVisible(true);
-
-        }
-        
+        dateErrorLabel3.setVisible(false);        
         jTabbedPane1.addChangeListener(changeListener);
 
     }
@@ -155,6 +132,7 @@ public class ReportsTab extends javax.swing.JFrame {
         startDate = new org.jdesktop.swingx.JXDatePicker();
         toLabel = new javax.swing.JLabel();
         endDate = new org.jdesktop.swingx.JXDatePicker();
+        generateBtn = new javax.swing.JButton();
         Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -261,7 +239,7 @@ public class ReportsTab extends javax.swing.JFrame {
         expensesPanel.setLayout(expensesPanelLayout);
         expensesPanelLayout.setHorizontalGroup(
             expensesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 565, Short.MAX_VALUE)
         );
         expensesPanelLayout.setVerticalGroup(
             expensesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -346,7 +324,7 @@ public class ReportsTab extends javax.swing.JFrame {
         );
         grossPanelLayout.setVerticalGroup(
             grossPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 182, Short.MAX_VALUE)
+            .addGap(0, 181, Short.MAX_VALUE)
         );
 
         dateErrorLabel2.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
@@ -378,8 +356,8 @@ public class ReportsTab extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(grossPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72))
+                .addComponent(grossPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("GROSS INCOME", jPanel5);
@@ -427,7 +405,7 @@ public class ReportsTab extends javax.swing.JFrame {
         );
         netIncomePanelLayout.setVerticalGroup(
             netIncomePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 185, Short.MAX_VALUE)
+            .addGap(0, 181, Short.MAX_VALUE)
         );
 
         dateErrorLabel3.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
@@ -459,7 +437,7 @@ public class ReportsTab extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(netIncomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(netIncomePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -538,33 +516,44 @@ public class ReportsTab extends javax.swing.JFrame {
         toLabel.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         toLabel.setText("To:");
 
+        generateBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/EnterBtn.png"))); // NOI18N
+        generateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(78, 78, 78)
-                .addComponent(fromLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(toLabel)
-                .addGap(18, 18, 18)
-                .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(132, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(fromLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)
+                        .addComponent(toLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(generateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addGap(0, 19, Short.MAX_VALUE)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fromLabel)
-                    .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(toLabel)
-                    .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 11, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(fromLabel)
+                        .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(toLabel)
+                        .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(generateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -718,6 +707,33 @@ public class ReportsTab extends javax.swing.JFrame {
         
         generateReport(vdate);
     }//GEN-LAST:event_varianceDateActionPerformed
+
+    private void generateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateBtnActionPerformed
+        // TODO add your handling code here:
+        Date sDate = startDate.getDate();
+        Date eDate = endDate.getDate();
+
+        LocalDate start = new LocalDate(sDate);
+        LocalDate end = new LocalDate(eDate);
+        if (start.isBefore(end) || start.isEqual(end)) { // CHECK IF START IS <== END
+
+            GITable();
+            makeGIChart();
+            expTable();
+            makeExpChart();
+            netTable();
+            makeNetChart();
+
+        } else {
+
+            dateErrorLabel1.setVisible(true);
+            dateErrorLabel2.setVisible(true);
+            dateErrorLabel3.setVisible(true);
+
+        }
+        
+        
+    }//GEN-LAST:event_generateBtnActionPerformed
 
     /**
      * * <--- CLARK'S CODE STARTS HERE ---> **
@@ -1175,6 +1191,7 @@ public class ReportsTab extends javax.swing.JFrame {
     private javax.swing.JPanel expensesPanel;
     private javax.swing.JTable expensesTable;
     private javax.swing.JLabel fromLabel;
+    private javax.swing.JButton generateBtn;
     private javax.swing.JTable grossIncomeTable;
     private javax.swing.JPanel grossPanel;
     private javax.swing.JButton jButton1;

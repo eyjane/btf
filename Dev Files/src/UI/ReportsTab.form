@@ -164,32 +164,38 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
-                      <Component id="fromLabel" min="-2" pref="67" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="startDate" min="-2" pref="120" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                      <Component id="toLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="endDate" min="-2" pref="119" max="-2" attributes="0"/>
-                      <EmptySpace pref="132" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTabbedPane1" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jTabbedPane1" alignment="1" pref="590" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="fromLabel" min="-2" pref="67" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="startDate" min="-2" pref="120" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                              <Component id="toLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="endDate" min="-2" pref="119" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="generateBtn" min="-2" pref="120" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="19" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="fromLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="startDate" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="toLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="endDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="11" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="fromLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="startDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="toLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="endDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="generateBtn" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jTabbedPane1" min="-2" pref="381" max="-2" attributes="0"/>
@@ -315,7 +321,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="565" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -376,8 +382,8 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jScrollPane8" min="-2" pref="91" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="grossPanel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
+                              <Component id="grossPanel" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -439,7 +445,7 @@
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="182" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="181" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
@@ -495,7 +501,7 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jScrollPane7" min="-2" pref="91" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="netIncomePanel" min="-2" max="-2" attributes="0"/>
+                              <Component id="netIncomePanel" max="32767" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -558,7 +564,7 @@
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="185" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="181" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
@@ -699,6 +705,16 @@
               </Properties>
             </Component>
             <Component class="org.jdesktop.swingx.JXDatePicker" name="endDate">
+            </Component>
+            <Component class="javax.swing.JButton" name="generateBtn">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Pictures/EnterBtn.png"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generateBtnActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
