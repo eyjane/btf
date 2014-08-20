@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,6 +30,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFPatriarch;
+import org.apache.poi.hssf.usermodel.HSSFPicture;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -41,8 +45,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import org.joda.time.*;
@@ -765,6 +771,7 @@ public class ReportsTab extends javax.swing.JFrame {
             TableModel model = table.getModel(); 
 
             Row headerRow = sheet.getRow(1);
+            
             for(int headings = 2; headings < model.getColumnCount(); headings++){ 
                 headerRow.createCell(headings + c1 - 2).setCellValue(model.getColumnName(headings));
             }
@@ -806,7 +813,38 @@ public class ReportsTab extends javax.swing.JFrame {
         }
     }
     
-    public void exportToPDF(JFreeChart chart, String path, int width, int height) {
+    public void exportChart(JFreeChart chart, String path, String reportName, int width, int height) {
+        InputStream inp;
+        try {
+            inp = new FileInputStream(path);
+            Workbook wb = WorkbookFactory.create(inp);
+            Sheet sheet = wb.getSheet(reportName);
+            int r = sheet.getLastRowNum() + 2;
+            Row row = sheet.getRow(r);
+            
+            ByteArrayOutputStream chart_out = new ByteArrayOutputStream();
+            ChartUtilities.writeChartAsJPEG(chart_out, chart, width, height);
+
+            int my_picture_id = wb.addPicture(chart_out.toByteArray(), Workbook.PICTURE_TYPE_JPEG);
+            chart_out.close();
+            HSSFPatriarch drawing = (HSSFPatriarch) sheet.createDrawingPatriarch();
+            HSSFClientAnchor a = new HSSFClientAnchor();
+            a.setCol1(1);
+            a.setRow1(r);
+            
+            HSSFPicture picture = drawing.createPicture(a, my_picture_id);
+            picture.resize();
+            
+            FileOutputStream fileOut = new FileOutputStream(path);
+            wb.write(fileOut);
+            fileOut.close();
+            
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /*public void exportToPDF(JFreeChart chart, String path, int width, int height) {
         try {
             Rectangle pageSize = new Rectangle(width, height);
             Document document = new Document(pageSize, 50, 50, 50, 50);
@@ -822,7 +860,7 @@ public class ReportsTab extends javax.swing.JFrame {
             document.close();
     } catch(Exception e) {
         e.printStackTrace();
-    }
+    } */
     /**
      * * <--- CLARK'S CODE ENDS HERE ---> **
      */
