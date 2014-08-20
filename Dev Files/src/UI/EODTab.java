@@ -1200,7 +1200,7 @@ public class EODTab extends javax.swing.JFrame {
         
         for (RawBean raw : aRaw) {
             
-            Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), ""};
+            Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), "0.00"};
             actualTable.addRow(data);
             inputTable.setModel(actualTable);
             inputTable.getColumnModel().getColumn(0).setMinWidth(0);
@@ -1209,6 +1209,18 @@ public class EODTab extends javax.swing.JFrame {
             inputTable.getColumnModel().getColumn(1).setMaxWidth(0);
             adjustTable(inputTable);
         }
+        
+        inputTable.getColumnModel().getColumn(0).setMinWidth(0);
+        inputTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        inputTable.getColumnModel().getColumn(1).setMinWidth(0);
+        inputTable.getColumnModel().getColumn(1).setMaxWidth(0);
+		inputTable.setColumnSelectionAllowed(true);
+        inputTable.setRowSelectionAllowed(true);
+        inputTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+        DefaultCellEditor click = new DefaultCellEditor(new JTextField());
+        click.setClickCountToStart(1);
+        inputTable.setDefaultEditor(inputTable.getColumnClass(4), click);
         
     }
     
