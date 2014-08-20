@@ -1,13 +1,26 @@
 package UI;
 
+import Beans.IngredientBean;
 import Beans.RawBean;
+import Beans.RecipeBean;
+import Beans.SalesBean;
 import Beans.TransactionBean;
+import DAO.Implementation.IngredientDAOImplementation;
 import DAO.Implementation.RawDAOImplementation;
+import DAO.Implementation.RecipeDAOImplementation;
+import DAO.Implementation.SalesDAOImplementation;
 import DAO.Implementation.TransactionDAOImplementation;
+import DAO.Interface.IngredientDAOInterface;
 import DAO.Interface.RawDAOInterface;
+import DAO.Interface.RecipeDAOInterface;
+import DAO.Interface.SalesDAOInterface;
 import DAO.Interface.TransactionDAOInterface;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,13 +33,19 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.TransferHandler;
+import static javax.swing.TransferHandler.COPY_OR_MOVE;
+import static javax.swing.TransferHandler.MOVE;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -54,19 +73,24 @@ import org.w3c.dom.Document;
  * @author Catherine
  */
 public class EODTab extends javax.swing.JFrame {
-    
+
     // INTERFACE + IMPLEMENTATION
-    RawDAOInterface rmImp = new RawDAOImplementation();
-    TransactionDAOInterface tclmp = new TransactionDAOImplementation();
-    
+    private RawDAOInterface rmImp = new RawDAOImplementation();
+    private TransactionDAOInterface tclmp = new TransactionDAOImplementation();
+    private RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    private IngredientDAOInterface inImp = new IngredientDAOImplementation();
+    private SalesDAOInterface tcImp = new SalesDAOImplementation();
+
     // ARRAYLISTS
     ArrayList<TransactionBean> aTransact;
     ArrayList<RawBean> aRaw;
-    
+    private ArrayList<RecipeBean> avRecipes;
+
     // OTHERS
-    EODTab main; 
-    int[] rowEdit;
-    
+    private EODTab main;
+    private int[] rowEdit;
+    private String date;
+
     public EODTab() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
@@ -85,7 +109,19 @@ public class EODTab extends javax.swing.JFrame {
         deliveryErrorLabel.setVisible(false);
         deliverySuccessLabel.setVisible(false);
         deliveryAbortedLabel.setVisible(false);
-        //BtnNewDay.setVisible(false);
+        
+        errorLabel.setVisible(false);
+        prepareTable();
+        checkDate();
+        date = getDateXML();
+        
+        //disable submit
+        if(getValueXML("Sales").equals("0")){
+            submitSales.setVisible(false);
+            errorLabel.setText("SALES REPORT HAS ALREADY BEEN SUBMITTED FOR TODAY (" + getDateXML() + ")");
+        }
+        
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -109,10 +145,11 @@ public class EODTab extends javax.swing.JFrame {
         actualErrorLabel = new javax.swing.JLabel();
         actualAbortedLabel = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        enterSales1 = new javax.swing.JButton();
+        submitSales = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        recipeTable = new javax.swing.JTable();
+        errorLabel = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         rmTable = new javax.swing.JTable();
@@ -283,17 +320,17 @@ public class EODTab extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("ACTUAL COUNT", jPanel3);
 
-        enterSales1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
-        enterSales1.addActionListener(new java.awt.event.ActionListener() {
+        submitSales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
+        submitSales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                enterSales1ActionPerformed(evt);
+                submitSalesActionPerformed(evt);
             }
         });
 
         jLabel14.setFont(new java.awt.Font("Quicksand Light", 2, 14)); // NOI18N
         jLabel14.setText("Drag and drop to re-arrange recipes");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        recipeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -304,7 +341,15 @@ public class EODTab extends javax.swing.JFrame {
                 "Recipe", "Sales", "Compliment"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        recipeTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                recipeTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(recipeTable);
+
+        errorLabel.setForeground(new java.awt.Color(204, 0, 0));
+        errorLabel.setText("ERROR: Please input valid number.");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -314,9 +359,11 @@ public class EODTab extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(enterSales1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(errorLabel)
+                        .addGap(62, 62, 62)
+                        .addComponent(submitSales, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -328,9 +375,11 @@ public class EODTab extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(enterSales1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(submitSales, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(errorLabel))
                 .addContainerGap())
         );
 
@@ -416,7 +465,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addGap(13, 13, 13)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(materialsErrorLabel)
                 .addGap(7, 7, 7)
@@ -494,7 +543,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deliveryErrorLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -511,6 +560,7 @@ public class EODTab extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("DELIVERY", jPanel2);
 
+        newdayTable.setFont(new java.awt.Font("Quicksand Light", 0, 18)); // NOI18N
         newdayTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -554,7 +604,7 @@ public class EODTab extends javax.swing.JFrame {
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(BtnNewDay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(254, Short.MAX_VALUE))
+                .addContainerGap(134, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("NEW DAY", jPanel6);
@@ -597,7 +647,7 @@ public class EODTab extends javax.swing.JFrame {
     private void RMBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RMBtnActionPerformed
         try {
             RMManagement rm = new RMManagement();
-            rm.setVisible(true);
+            rm.
             dispose();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
@@ -642,14 +692,61 @@ public class EODTab extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_CategoriesBtnActionPerformed
 
-    private void enterSales1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterSales1ActionPerformed
-                if(getValueXML("Sales").equals("0")){
-                    setValueXML("Sales");
-                    //enterSales1.setVisible(false);
-                    ViewAllStatus();
-                    //BtnNewDay.setEnabled(true);
+    private void submitSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitSalesActionPerformed
+        int rcount = recipeTable.getRowCount();
+        int i, j;
+
+        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this recipe?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+            for (i = 0; i < rcount; i++) {
+                SalesBean sbean = new SalesBean();
+                SalesBean cbean = new SalesBean();
+                float total = 0;
+                float d;
+                float a;
+                ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
+                int rID = Integer.parseInt(recipeTable.getModel().getValueAt(i, 0).toString());
+                float sales = Float.parseFloat(recipeTable.getModel().getValueAt(i, 2).toString());
+                float compliment = Float.parseFloat(recipeTable.getModel().getValueAt(i, 3).toString());
+
+                RecipeBean rbean = rcImp.getRecipeBean(rID);
+
+                //add sales
+                sbean.setOrder(i + 1);
+                sbean.setType("sales");
+                tcImp.addSales(sbean, rbean, sales);
+
+                //add compliment
+                cbean.setOrder(i + 1);
+                cbean.setType("complimentary");
+                tcImp.addSales(cbean, rbean, compliment, date);
+
+                //update rm stocks
+                total = sales + compliment;
+                ingredients = rbean.getIngredients();
+                for (j = 0; j < ingredients.size(); j++) {
+                    d = 0;
+                    a = 0;
+                    RawBean rwbean = new RawBean();
+                    rwbean = ingredients.get(j).getRaw();
+                    a = rwbean.getStock(); //original stock
+                    d = ingredients.get(j).getAmount() * total; //to be deducted
+                    a -= d;
+                    rwbean.setStock(a);
+                    rmImp.editRaw(rwbean);
                 }
-    }//GEN-LAST:event_enterSales1ActionPerformed
+
+            }
+            /*if (inputLockDown()) {
+                submitSales.setVisible(false);
+            }*/
+            //this.setVisible(false);
+            //main.setVisible(true);
+
+        } else {
+            return;
+        }
+    }//GEN-LAST:event_submitSalesActionPerformed
 
     private void EODBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EODBtnActionPerformed
         // TODO add your handling code here:
@@ -675,162 +772,151 @@ public class EODTab extends javax.swing.JFrame {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
-            String curDate = dateFormat.format(d) ;
+            String curDate = dateFormat.format(d);
             Calendar cal1 = Calendar.getInstance();
             cal1.add(Calendar.DATE, +1);
             String nextDate = dateFormat.format(cal1.getTime());
-        
-            if(getDateXML().equals(curDate)) {
-                if(JOptionPane.showConfirmDialog(null, "Are you sure you're done for the day?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-                        nextDay(nextDate);
-                        ViewAllStatus();
-                        JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            if (getDateXML().equals(curDate)) {
+                if (JOptionPane.showConfirmDialog(null, "Are you sure you're done for the day?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    nextDay(nextDate);
+                    JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
-            } else if(!getDateXML().equals(nextDate) && !getDateXML().equals(curDate)) {
+            } else if (!getDateXML().equals(nextDate) && !getDateXML().equals(curDate)) {
                 nextDay(curDate);
-                ViewAllStatus();
                 JOptionPane.showMessageDialog(null, "New date is " + curDate, "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } 
+        }
     }//GEN-LAST:event_BtnNewDayActionPerformed
 
     private void actualSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualSubmitActionPerformed
         // ------------ SUBMIT ACTUAL INPUT
-    
+
         if (JOptionPane.showConfirmDialog(null, "Are you sure that you want to submit? You may only submit once a day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-        
+
             boolean submit = true;
             boolean red = false;
             int rows = inputTable.getRowCount();
             int r = 0, index = 0;
             rowEdit = new int[rmTable.getRowCount()];
-		
+
             for (r = 0; r < rows; r++) {
-                
-                if(inputTable.getValueAt(r,4).toString().isEmpty() || Math.signum(Float.parseFloat(inputTable.getValueAt(r,4).toString())) == -1) {
-                        submit = false;
-                        red = true;
-                        inputTable.setValueAt(0, r, 0);
+
+                if (inputTable.getValueAt(r, 4).toString().isEmpty() || Math.signum(Float.parseFloat(inputTable.getValueAt(r, 4).toString())) == -1) {
+                    submit = false;
+                    red = true;
+                    inputTable.setValueAt(0, r, 0);
                 }
-                
-		if (red) {
+
+                if (red) {
                     rowEdit[index] = r;
                     index++;
                     red = false;
-                }		
-            
+                }
+
             }
-            
-        
+
             if (submit) {
-            
+
                 for (r = 0; r < rows; r++) {
-            
+
                     int ID = Integer.parseInt(inputTable.getValueAt(r, 1).toString());
                     RawBean raw = rmImp.getRaw(ID);
                     raw.setStock(Float.parseFloat(inputTable.getValueAt(r, 4).toString()));
                     rmImp.editRaw(raw);
-                
+
                 }
-            
-                
-                if(getValueXML("Actual").equals("0")){
-                    setValueXML("Actual");
-                    actualSubmit.setVisible(false);
-                    ViewAllStatus();
-                    BtnNewDay.setVisible(true);
-                }
-                
+
+                /*
+                 if(inputLockDown()){
+                 actualSubmit.setVisible(false);
+                 main.setNextDayBtn();
+                 }*/
                 actualSuccessLabel.setVisible(false);
                 makeActualTable();
-            }
-            else {
-		
-		for (int row = 0; row < inputTable.getRowCount(); row++) {
-                    
+            } else {
+
+                for (int row = 0; row < inputTable.getRowCount(); row++) {
+
                     for (int col = 0; col < inputTable.getColumnCount(); col++) {
-                        
+
                         inputTable.getColumnModel().getColumn(col).setCellRenderer(new errorRenderer());
-                        
+
                     }
-                
+
                 }
-			
+
                 actualErrorLabel.setVisible(true);
-                    
+
             }
-        }
-        else {
-            
+        } else {
+
             actualAbortedLabel.setVisible(true);
         }
-        
+
     }//GEN-LAST:event_actualSubmitActionPerformed
 
     private void utwSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_utwSubmitActionPerformed
         // TODO add your handling code here:
-        
+
         if (JOptionPane.showConfirmDialog(null, "Are you sure that you want to submit? You may only submit once a day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-        
+
             boolean submit = true;
             boolean red = false;
             int rows = rmTable.getRowCount();
             int r = 0, index = 0;
             rowEdit = new int[rmTable.getRowCount()];
-            
-            while(r < rows) {
-            
+
+            while (r < rows) {
+
                 for (int d = 4; d <= 6; d++) {
-                
-                    if(rmTable.getValueAt(r,d).toString().isEmpty() || Math.signum(Float.parseFloat(rmTable.getValueAt(r,d).toString())) == -1) {
+
+                    if (rmTable.getValueAt(r, d).toString().isEmpty() || Math.signum(Float.parseFloat(rmTable.getValueAt(r, d).toString())) == -1) {
                         submit = false;
                         red = true;
-                        rmTable.setValueAt(0,r,0);
+                        rmTable.setValueAt(0, r, 0);
                         System.out.println("Error at row " + r);
                     }
-                    
+
                 }
-                if(red) {
+                if (red) {
                     rowEdit[index] = r;
                     //System.out.println(rowEdit[index] + " / " + r);
                     index++;
                     red = false;
                 }
-                
+
                 r++;
-            
+
             }
-            
-            if(submit) {
-            
-                for(int a = 0; a < rows; a++) {
-            
+
+            if (submit) {
+
+                for (int a = 0; a < rows; a++) {
+
                     for (int b = 4; b <= 6; b++) {
-                    
+
                         RawBean raw = new RawBean();
-                    
+
                         String name = rmTable.getValueAt(a, 0).toString(); // raw material name
-                        float q = Float.parseFloat(rmTable.getValueAt(a,b).toString());
+                        float q = Float.parseFloat(rmTable.getValueAt(a, b).toString());
                         String type = new String();
-                        
-                        if(b == 4) {
+
+                        if (b == 4) {
                             type = "used";
-                        }
-                        else if (b == 5) {
+                        } else if (b == 5) {
                             type = "transfer";
-                        }
-                        else if(b == 6) {
+                        } else if (b == 6) {
                             type = "wastage";
                         }
-            
+
                         // REDUCE FROM RAW TABLE
-            
                         float s = rmImp.getStock(type);
                         float deduct = s - q;
                         rmImp.updateStock(name, deduct);
-            
+
                         // ADD TRANSACTION
                         TransactionBean t = new TransactionBean();
                         t.setType(type);
@@ -839,252 +925,216 @@ public class EODTab extends javax.swing.JFrame {
                         tclmp.addTransaction(t, raw, q);
                     }
                 }
-                if(getValueXML("Materials").equals("0")){
-                    setValueXML("Materials");
-                    //utwSubmit.setVisible(false);
-                    ViewAllStatus();
-                    //BtnNewDay.setEnabled(true);
-                }
-                
+                /*if(inputLockDown()){
+                 utwSubmit.setVisible(false);
+                 }*/
                 materialsSuccessLabel.setVisible(true);
                 makeRMTable();
-            }
-            else {
-               
+            } else {
+
                 for (int row = 0; row < rmTable.getRowCount(); row++) {
-                
+
                     for (int col = 0; col <= 6; col++) {
-                        
-                            rmTable.getColumnModel().getColumn(col).setCellRenderer(new errorRenderer());
-                            
+
+                        rmTable.getColumnModel().getColumn(col).setCellRenderer(new errorRenderer());
+
                     }
-                    
+
                 }
-                
+
                 materialsErrorLabel.setVisible(true);
             }
-        }
-        else {
-            
+        } else {
+
             materialsAbortedLabel.setVisible(true);
         }
-        
+
     }//GEN-LAST:event_utwSubmitActionPerformed
 
     private void deliverySubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deliverySubmitActionPerformed
         // TODO add your handling code here:
-        
+
         if (JOptionPane.showConfirmDialog(null, "Are you sure that you want to submit? You may only submit once a day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-        
+
             boolean submit = true;
             boolean red = false;
             int rows = inputTable.getRowCount();
             int c, r = 0, index = 0;
             rowEdit = new int[rmTable.getRowCount()];
-        
+
             for (r = 0; r < rows; r++) {
-             
-                if(deliveryTable.getValueAt(r,4).toString().isEmpty() || Math.signum(Float.parseFloat(deliveryTable.getValueAt(r,4).toString())) == -1) {
-                        submit = false;
-                        red = true;
-                        deliveryTable.setValueAt(0,r,0);
-		}
-				
-		if(red) {
+
+                if (deliveryTable.getValueAt(r, 4).toString().isEmpty() || Math.signum(Float.parseFloat(deliveryTable.getValueAt(r, 4).toString())) == -1) {
+                    submit = false;
+                    red = true;
+                    deliveryTable.setValueAt(0, r, 0);
+                }
+
+                if (red) {
                     rowEdit[index] = r;
                     index++;
                     red = false;
                 }
-                
+
             }
-            
+
             if (submit) {
-            
+
                 for (c = 0; c < rows; c++) {
-                
+
                     int ID = Integer.parseInt(deliveryTable.getValueAt(c, 1).toString());
                     RawBean raw = rmImp.getRaw(ID);
-                    float newRaw = Float.parseFloat(deliveryTable.getValueAt(c, 3).toString()) + Float.parseFloat(deliveryTable.getValueAt(c, 4).toString());
-                    raw.setStock(newRaw);
+                    raw.setStock(Float.parseFloat(deliveryTable.getValueAt(c, 4).toString()));
                     rmImp.editRaw(raw);
                 }
-                if(getValueXML("Delivery").equals("0")){
-                    setValueXML("Delivery");
-                    //deliverySubmit.setVisible(false);
-                    ViewAllStatus();
-                    //BtnNewDay.setEnabled(true);
-                }
-                
+
                 deliverySuccessLabel.setVisible(true);
                 makeDeliveryTable();
-            
-            }
-            else {
-		
-        	for (int row = 0; row < deliveryTable.getRowCount(); row++) {
-                
+
+            } else {
+
+                for (int row = 0; row < deliveryTable.getRowCount(); row++) {
+
                     for (int col = 0; col < deliveryTable.getColumnCount(); col++) {
-                        
+
                         deliveryTable.getColumnModel().getColumn(col).setCellRenderer(new errorRenderer());
-                            
+
                     }
-                    
+
                 }
-			
+
                 deliveryErrorLabel.setVisible(true);
             }
-        
-        }
-        else {
-            
+
+        } else {
+
             deliveryAbortedLabel.setVisible(true);
-     
+
         }
-            
-        
+
+
     }//GEN-LAST:event_deliverySubmitActionPerformed
+
+    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
+        try {
+            int rselect = recipeTable.getSelectedRow();
+
+            //recipeIDLabel.setText(String.valueOf(r.getRecipeID()));
+            //CategoryBean ct = (CategoryBean)categoryBox.getSelectedItem();
+            //System.out.println("SELECTED " + ct.getCategoryID());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_recipeTableMouseClicked
 
     /**
      * < -- CLARK'S FUNCTIONS START -- > *
      */
-    public DefaultTableModel initializeTable(){
+    public DefaultTableModel initializeTable() {
         DefaultTableModel defaultTableModel = new DefaultTableModel();
         defaultTableModel.addColumn("Name");
         defaultTableModel.addColumn("Status");
         return defaultTableModel;
     }
-    
-    public void ViewAllStatus(){
-       DefaultTableModel defaultModel = initializeTable();
-       String eodList[] = new String[4];
-       JButton buttonList[] = new JButton[4];
-       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-       Calendar cal1 = Calendar.getInstance();
-       cal1.add(Calendar.DATE, +1);
-       String nextDate = dateFormat.format(cal1.getTime());
-       String text = "";
-       eodList[0] = "Actual";
-       eodList[1] = "Sales";
-       eodList[2] = "Materials";
-       eodList[3] = "Delivery";
-       buttonList[0] = actualSubmit;
-       buttonList[1] = enterSales1;
-       buttonList[2] = utwSubmit;
-       buttonList[3] = deliverySubmit;
-       
-       for (int i = 0; i < eodList.length; i++) {
-            if(getValueXML(eodList[i]).equals("1")) {
-                 text = "Submitted";
-                 buttonList[i].setVisible(false);
+
+    public void ViewAllStatus() {
+        DefaultTableModel defaultModel = initializeTable();
+        String eodList[] = new String[4];
+        String text = "";
+        eodList[0] = "Actual";
+        eodList[1] = "Sales";
+        eodList[2] = "Materials";
+        eodList[3] = "Delivery";
+
+        for (int i = 0; i < eodList.length; i++) {
+            if (getValueXML(eodList[i]).equals("1")) {
+                text = "Submitted";
             } else {
                 text = "Not yet submitted";
-                if(!getDateXML().equals(nextDate))
-                    buttonList[i].setVisible(true);
-                else
-                    buttonList[i].setVisible(false);
             }
-            defaultModel.addRow(new Object[] {eodList[i], text});
-       }
-       
-       newdayTable.setModel(defaultModel);
+            defaultModel.addRow(new Object[]{eodList[i], text});
+        }
+
+        newdayTable.setModel(defaultModel);
     }
-    
+
     private void nextDay(String curDate) {
         try {
             String filepath = "btf.xml";
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-            
-            doc.getElementsByTagName("date").item(0).setTextContent(curDate);
+
             doc.getElementsByTagName("Delivery").item(0).setTextContent("0");
             doc.getElementsByTagName("Materials").item(0).setTextContent("0");
             doc.getElementsByTagName("Sales").item(0).setTextContent("0");
             doc.getElementsByTagName("Actual").item(0).setTextContent("0");
-            
+
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(filepath));
             transformer.transform(source, result);
-            
-            BtnNewDay.setVisible(false);
+
+            BtnNewDay.setEnabled(false);
         } catch (Exception e) {
-             e.printStackTrace();
-        } 
+            e.printStackTrace();
+        }
     }
-    
+
     public String getDateXML() {
-        String date = ""; 
+        String date = "";
         try {
             String filepath = "btf.xml";
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-            
+
             date = doc.getElementsByTagName("date").item(0).getTextContent();
-                        
+
         } catch (Exception e) {
-             e.printStackTrace();
-        } 
+            e.printStackTrace();
+        }
         return date;
     }
-    
+
     public String getValueXML(String x) {
-        String value = ""; 
+        String value = "";
         try {
             String filepath = "btf.xml";
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-            
+
             value = doc.getElementsByTagName(x).item(0).getTextContent();
-                        
+
         } catch (Exception e) {
-             e.printStackTrace();
-        } 
+            e.printStackTrace();
+        }
         return value;
     }
-    
-    public void setValueXML(String x) {
-        try {
-            String filepath = "btf.xml";
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse(filepath);
-            
-            doc.getElementsByTagName(x).item(0).setTextContent("1");
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(filepath));
-            transformer.transform(source, result);            
-        } catch (Exception e) {
-             e.printStackTrace();
-        } 
-    }
-    
+
     public void checkDate() {
-        try{
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
-            String curDate = dateFormat.format(d) ;
+            String curDate = dateFormat.format(d);
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, +1);
             String nextDate = dateFormat.format(cal.getTime());
 
             String actual = getValueXML("Actual");
 
-            if(getDateXML().equals(curDate)) {
-                if(actual.equals("0")) {
+            if (getDateXML().equals(curDate)) {
+                if (actual.equals("0")) {
                     BtnNewDay.setVisible(false);
-                } else if(actual.equals("1")) {
+                } else if (actual.equals("1")) {
                     BtnNewDay.setVisible(true);
                 }
-            } else if(getDateXML().equals(nextDate)) {
+            } else if (getDateXML().equals(nextDate)) {
                 BtnNewDay.setVisible(false);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -1092,18 +1142,15 @@ public class EODTab extends javax.swing.JFrame {
     public void setNextDayBtn() {
         BtnNewDay.setVisible(true);
     }
-    
+
     /**
      * < -- CLARK'S FUNCTIONS END -- > *
      */
-    
     /**
      * < -- KIM'S FUNCTIONS START -- > *
      */
-    
     // ------------------- GENERIC CODES
-    
-    private void adjustTable(JTable table){
+    private void adjustTable(JTable table) {
         for (int column = 0; column < table.getColumnCount(); column++) {
             TableColumn tableColumn = table.getColumnModel().getColumn(column);
             int preferredWidth = tableColumn.getMinWidth();
@@ -1115,7 +1162,7 @@ public class EODTab extends javax.swing.JFrame {
                 int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
                 preferredWidth = Math.max(preferredWidth, width);
 
-        //  We've exceeded the maximum width, no need to check other rows
+                //  We've exceeded the maximum width, no need to check other rows
                 if (preferredWidth >= maxWidth) {
                     preferredWidth = maxWidth;
                     break;
@@ -1125,82 +1172,82 @@ public class EODTab extends javax.swing.JFrame {
             tableColumn.setPreferredWidth(preferredWidth);
         }
     }
-    
+
     private boolean isNumber(String s) {
         try {
-            
+
             Float.parseFloat(s);
             return true;
-        
+
         } catch (Exception e) {
-            
+
             return false;
-        
+
         }
     }
-    
+
     public class errorRenderer extends DefaultTableCellRenderer {
+
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            
+
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             if (toEdit(row) && Integer.parseInt(table.getValueAt(row, 0).toString()) == 0) {
-                
+
                 c.setForeground(Color.red);
-                
-            }
-            else {
-                
+
+            } else {
+
                 c.setForeground(Color.BLACK);
-                
+
             }
-            
+
             return c;
-            
+
         }
-        
+
     }
-    
+
     // CHECK IF ROW INDEX IS IN LIST OF ROW#S WITH ERRORS
     private boolean toEdit(int x) {
-        
+
         boolean edit;
         for (int c = 0; c < rowEdit.length; c++) {
-            
+
             if (x == rowEdit[c]) {
-                
+
                 return true;
-                
+
             }
-            
+
         }
-        
+
         return false;
-        
+
     }
-    
+
     // ----------------- ACTUAL TAB START
-    
     public void makeActualTable() {
         aTransact = new ArrayList<>();
         aRaw = new ArrayList<>();
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"Status", "ID","Name", "Quantity in Stock", "Actual Count"};
-        DefaultTableModel actualTable = new DefaultTableModel(cols,0) {
-            
+        String cols[] = {"Status", "ID", "Name", "Quantity in Stock", "Actual Count"};
+        DefaultTableModel actualTable = new DefaultTableModel(cols, 0) {
+
             @Override
             public boolean isCellEditable(int row, int column) {
-                if(column == 0 || column == 1 || column == 2 || column == 3)
+                if (column == 0 || column == 1 || column == 2 || column == 3) {
                     return false;
-                else
+                } else {
                     return true;
+                }
             }
-            
+
         };
-        
+
         for (RawBean raw : aRaw) {
-            
-            Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), "0.00"};
+
+            Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), ""};
             actualTable.addRow(data);
             inputTable.setModel(actualTable);
             inputTable.getColumnModel().getColumn(0).setMinWidth(0);
@@ -1210,118 +1257,357 @@ public class EODTab extends javax.swing.JFrame {
             adjustTable(inputTable);
         }
         
-        inputTable.getColumnModel().getColumn(0).setMinWidth(0);
-        inputTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        inputTable.getColumnModel().getColumn(1).setMinWidth(0);
-        inputTable.getColumnModel().getColumn(1).setMaxWidth(0);
-		inputTable.setColumnSelectionAllowed(true);
-        inputTable.setRowSelectionAllowed(true);
-        inputTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-        DefaultCellEditor click = new DefaultCellEditor(new JTextField());
-        click.setClickCountToStart(1);
-        inputTable.setDefaultEditor(inputTable.getColumnClass(4), click);
+        DefaultCellEditor deditor = new myChecker(new JTextField(), actualErrorLabel);
+        inputTable.setDefaultEditor(Object.class, deditor);
+
         
     }
-    
+
     // ------------------- ACTUAL TAB END
     
     // -------------- MATERIALS TAB START
-    
     public void makeRMTable() {
-        
+
         aRaw = rmImp.getAllRaw();
         String cols[] = {"Status", "ID", "Name", "Quantity in Stock", "Used", "Transferred", "Wastage"};
         // MAKE CERTAIN COLUMNS NOT EDITABLE!!!!!
-        DefaultTableModel actualTable = new DefaultTableModel(cols,0) {
+        DefaultTableModel actualTable = new DefaultTableModel(cols, 0) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                if(column == 0 || column == 1 || column == 2 || column == 3)
+                if (column == 0 || column == 1 || column == 2 || column == 3) {
                     return false;
-                else
+                } else {
                     return true;
+                }
             }
 
-            
         };
 
         for (RawBean raw : aRaw) {
-            
-            Object[] data = {1,raw.getRawID(), raw.getRaw(), raw.getStock(), "0.00", "0.00", "0.00"};
+
+            Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), "0.00", "0.00", "0.00"};
             actualTable.addRow(data);
             rmTable.setModel(actualTable);
             adjustTable(rmTable);
-        
+            
         }
 		
-		rmTable.getColumnModel().getColumn(0).setMinWidth(0);
+        rmTable.getColumnModel().getColumn(0).setMinWidth(0);
         rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
         rmTable.getColumnModel().getColumn(1).setMinWidth(0);
         rmTable.getColumnModel().getColumn(1).setMaxWidth(0);
-		rmTable.setColumnSelectionAllowed(true);
+	rmTable.setColumnSelectionAllowed(true);
         rmTable.setRowSelectionAllowed(true);
         rmTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-		DefaultCellEditor click = new DefaultCellEditor(new JTextField());
-		click.setClickCountToStart(1);
-		rmTable.setDefaultEditor(rmTable.getColumnClass(4), click);
-		rmTable.setDefaultEditor(rmTable.getColumnClass(5), click);
-		rmTable.setDefaultEditor(rmTable.getColumnClass(6), click);
-        
+	
+        DefaultCellEditor click = new DefaultCellEditor(new JTextField());
+	click.setClickCountToStart(1);
+	rmTable.setDefaultEditor(rmTable.getColumnClass(4), click);
+	rmTable.setDefaultEditor(rmTable.getColumnClass(5), click);
+	rmTable.setDefaultEditor(rmTable.getColumnClass(6), click);
+
+        DefaultCellEditor deditor = new myChecker(new JTextField(), materialsErrorLabel);
+        rmTable.setDefaultEditor(Object.class, deditor);
+
     }
-    
+
     // ---------------- MATERIALS TAB END
     
     // --------------- DELIVERY TAB START
-    
     public void makeDeliveryTable() {
         aRaw = new ArrayList<RawBean>();
-        
+
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"Status","ID","Name", "Quantity in Stock", "Delivered Amount"};
+        String cols[] = {"Status", "ID", "Name", "Quantity in Stock", "Delivered Amount"};
         DefaultTableModel allRaw = new DefaultTableModel(cols, 0) {
-            
+
             @Override
             public boolean isCellEditable(int row, int column) {
-                if(column == 0 || column == 1 || column == 2 || column == 3)
+                if (column == 0 || column == 1 || column == 2 || column == 3) {
                     return false;
-                else
+                } else {
                     return true;
+                }
             }
-            
+
         };
-        
-        
+
         for (RawBean raw : aRaw) {
-            
-            Object[] data = {1,raw.getRawID(), raw.getRaw(), raw.getStock(), "0.00"};
+
+            Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), "0.00"};
             allRaw.addRow(data);
             deliveryTable.setModel(allRaw);
             adjustTable(deliveryTable);
-        
+            deliveryTable.getColumnModel().getColumn(0).setMinWidth(0);
+            deliveryTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
         }
-        deliveryTable.getColumnModel().getColumn(0).setMinWidth(0);
-        deliveryTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        deliveryTable.getColumnModel().getColumn(1).setMinWidth(0);
-        deliveryTable.getColumnModel().getColumn(1).setMaxWidth(0);
+
         deliveryTable.setColumnSelectionAllowed(true);
         deliveryTable.setRowSelectionAllowed(true);
         deliveryTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        DefaultCellEditor click = new DefaultCellEditor(new JTextField());
-        click.setClickCountToStart(1);
-        deliveryTable.setDefaultEditor(deliveryTable.getColumnClass(4), click);
-        
+
+        DefaultCellEditor deditor = new myChecker(new JTextField(), deliveryErrorLabel);
+        deliveryTable.setDefaultEditor(Object.class, deditor);
         
     }
-    
+
     // ----------------- DELIVERY TAB END
-    
     /**
      * < -- KIM'S FUNCTIONS END -- > *
      */
+    /**
+     * * <--- JANE CODE START ---> **
+     */
     
+    public void prepareTable() {
+        avRecipes = new ArrayList<RecipeBean>();
+
+        String rCategory = null;
+        int i, j;
+
+        avRecipes = rcImp.getRecipeByStatus("available");
+
+        String cols[] = {"Recipe ID", "Recipe", "Sales", "Compliment"};
+        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
+        //System.out.println(avRecipes.get(1).getRecipe());
+
+        for (RecipeBean r : avRecipes) {
+            Object[] data = {r.getRecipeID(), r.getRecipe(), "0", "0"};
+            recipeModel.addRow(data);
+        }
+
+        recipeTable.setModel(recipeModel);
+        recipeTable.getColumnModel().getColumn(0).setMinWidth(0);
+        recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
+        recipeTable.setDragEnabled(true);
+        recipeTable.setTransferHandler(new TableTransferHandler());
+        adjustTable(recipeTable);
+
+        /**
+         * * <--- KIM PLS NOTE: THIS HOW TO APPLY THE MYCHECKER TO YOUR TABLE..
+         * errorLabel = JLabel for displaying error ---> **
+         */
+        /* KAHIT ONE ERROR LABEL NA LANG THAT SAYS: ERROR: Please enter valid number. */
+        DefaultCellEditor deditor = new myChecker(new JTextField(), errorLabel);
+        recipeTable.setDefaultEditor(Object.class, deditor);
+        /**
+         * * <--- KIM PLS NOTE ENDS HERE ---> **
+         */
+    }
+    
+    /**
+     * <--- KIM PLS NOTE: COPY THIS WHOLE THING FOR THE ERROR CHECKING ---> **
+     */
+    private static class myChecker extends DefaultCellEditor {
+
+        private static final Border red = new LineBorder(Color.red);
+        private static final Border black = new LineBorder(Color.black);
+        private JTextField textField;
+        private JLabel eLabel;
+
+        public myChecker(JTextField textField, JLabel e) {
+            super(textField);
+            this.textField = textField;
+            this.textField.setHorizontalAlignment(JTextField.RIGHT);
+            eLabel = e;
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            try {
+                float v = Float.parseFloat(textField.getText());
+                if (v < 0) {
+                    throw new NumberFormatException();
+                }
+                textField.setText(String.format("%.02f", v));
+                eLabel.setText("ERROR: Required field. Please input valid number.");
+                eLabel.setVisible(false);
+            } catch (NumberFormatException e) {
+                textField.setBorder(red);
+                eLabel.setText("ERROR: Required field. Please input valid number.");
+                eLabel.setVisible(true);
+                return false;
+            }
+            return super.stopCellEditing();
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table,
+                Object value, boolean isSelected, int row, int column) {
+            textField.setBorder(black);
+            return super.getTableCellEditorComponent(
+                    table, value, isSelected, row, column);
+        }
+
+    }
+
+    /**
+     * <--- KIM PLS NOTE: COPY THIS WHOLE THING FOR THE ERROR CHECKING ---> **
+     */
+    
+    abstract class StringTransferHandler extends TransferHandler {
+
+        protected abstract String exportString(JComponent c);
+
+        protected abstract void importString(JComponent c, String str);
+
+        protected abstract void cleanup(JComponent c, boolean remove);
+
+        protected Transferable createTransferable(JComponent c) {
+            return new StringSelection(exportString(c));
+        }
+
+        public int getSourceActions(JComponent c) {
+            return COPY_OR_MOVE;
+        }
+
+        public boolean importData(JComponent c, Transferable t) {
+            if (canImport(c, t.getTransferDataFlavors())) {
+                try {
+                    String str = (String) t
+                            .getTransferData(DataFlavor.stringFlavor);
+                    importString(c, str);
+                    return true;
+                } catch (UnsupportedFlavorException ufe) {
+                } catch (IOException ioe) {
+                }
+            }
+
+            return false;
+        }
+
+        protected void exportDone(JComponent c, Transferable data, int action) {
+            cleanup(c, action == MOVE);
+        }
+
+        public boolean canImport(JComponent c, DataFlavor[] flavors) {
+            for (int i = 0; i < flavors.length; i++) {
+                if (DataFlavor.stringFlavor.equals(flavors[i])) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    /*
+     * TableTransferHandler.java is used by the 1.4 ExtendedDnDDemo.java example.
+     */
+    class TableTransferHandler extends StringTransferHandler {
+
+        private int[] rows = null;
+
+        private int addIndex = -1; //Location where items were added
+
+        private int addCount = 0; //Number of items added.
+
+        protected String exportString(JComponent c) {
+            //System.out.println("export");
+            JTable table = (JTable) c;
+            rows = table.getSelectedRows();
+            int colCount = table.getColumnCount();
+
+            StringBuffer buff = new StringBuffer();
+
+            for (int i = 0; i < rows.length; i++) {
+                for (int j = 0; j < colCount; j++) {
+                    Object val = table.getValueAt(rows[i], j);
+                    buff.append(val == null ? "" : val.toString());
+                    if (j != colCount - 1) {
+                        buff.append(",");
+                    }
+                }
+                if (i != rows.length - 1) {
+                    buff.append("\n");
+                }
+            }
+            System.out.println(rows[0]);
+
+            return buff.toString();
+        }
+
+        protected void importString(JComponent c, String str) {
+            //System.out.println("import");
+            JTable target = (JTable) c;
+            DefaultTableModel model = (DefaultTableModel) target.getModel();
+            int index = target.getSelectedRow();
+
+            //Prevent the user from dropping data back on itself.
+            //For example, if the user is moving rows #4,#5,#6 and #7 and
+            //attempts to insert the rows after row #5, this would
+            //be problematic when removing the original rows.
+            //So this is not allowed.
+            if (rows != null && index >= rows[0] - 1
+                    && index <= rows[rows.length - 1] & rows.length != 1) {
+                int x = rows[0] - 1;
+                int y = rows[rows.length - 1];
+                /*System.out.println("index (target row) = " + index);
+                 System.out.println("rows[0] (source row) = " + rows[0]);
+                 System.out.println("x = " + x);
+                 System.out.println("y = " + y);
+                 System.out.println("NOT ALLOWED");*/
+                System.out.println();
+                rows = null;
+                return;
+            }
+
+            int max = model.getRowCount();
+            if (index < 0) {
+                index = max;
+            } else {
+                index++;
+                if (index > max) {
+                    index = max;
+                }
+            }
+            addIndex = index;
+            //System.out.println(index);
+            String[] values = str.split("\n");
+            addCount = values.length;
+            int colCount = target.getColumnCount();
+            for (int i = 0; i < values.length && i < colCount; i++) {
+                model.insertRow(index++, values[i].split(","));
+
+            }
+        }
+
+        protected void cleanup(JComponent c, boolean remove) {
+
+            //System.out.println("clean");
+            JTable source = (JTable) c;
+            if (remove && rows != null) {
+                DefaultTableModel model = (DefaultTableModel) source.getModel();
+
+                //If we are moving items around in the same table, we
+                //need to adjust the rows accordingly, since those
+                //after the insertion point have moved.
+                if (addCount > 0) {
+                    for (int i = 0; i < rows.length; i++) {
+                        if (rows[i] >= addIndex) {
+                            rows[i] += addCount;
+                        }
+                    }
+                }
+
+                for (int i = rows.length - 1; i >= 0; i--) {
+                    model.removeRow(rows[i]);
+
+                }
+
+            }
+            rows = null;
+            addCount = 0;
+            addIndex = -1;
+        }
+    }
+    
+    /**
+     * * <--- JANE CODE END ---> **
+     */
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Background;
     private javax.swing.JButton BtnNewDay;
@@ -1340,7 +1626,7 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JButton deliverySubmit;
     private javax.swing.JLabel deliverySuccessLabel;
     private javax.swing.JTable deliveryTable;
-    private javax.swing.JButton enterSales1;
+    private javax.swing.JLabel errorLabel;
     private javax.swing.JTable inputTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
@@ -1358,12 +1644,13 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel materialsAbortedLabel;
     private javax.swing.JLabel materialsErrorLabel;
     private javax.swing.JLabel materialsSuccessLabel;
     private javax.swing.JTable newdayTable;
+    private javax.swing.JTable recipeTable;
     private javax.swing.JTable rmTable;
+    private javax.swing.JButton submitSales;
     private javax.swing.JButton utwSubmit;
     // End of variables declaration//GEN-END:variables
 }

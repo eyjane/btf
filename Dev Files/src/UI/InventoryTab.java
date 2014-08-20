@@ -469,6 +469,7 @@ public class InventoryTab extends javax.swing.JFrame {
         //System.out.println(recipeTable.getRowSelectionAllowed());
     }
 
+    
     /**
      * < -- JANERYS FUNCTIONS END -- > *
      */
