@@ -54,7 +54,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 int salesID = resultSet.getInt("max(salesID)");
-                String squery = "INSERT into sold(salesID, recipeID, quantity, price, actual) values (?, ?, ?, ?, ?);";
+                String squery = "INSERT into sold(salesID, recipeID, quantity, cost, actual) values (?, ?, ?, ?, ?);";
                 PreparedStatement spreparedStatement = connection.prepareStatement(squery);
                 spreparedStatement.setInt(1, salesID);
                 spreparedStatement.setInt(2, r.getRecipeID());
@@ -95,7 +95,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 int salesID = resultSet.getInt("max(salesID)");
-                String squery = "INSERT into sold(salesID, recipeID, quantity, price, actual) values (?, ?, ?, ?, ?);";
+                String squery = "INSERT into sold(salesID, recipeID, quantity, cost, actual) values (?, ?, ?, ?, ?);";
                 PreparedStatement spreparedStatement = connection.prepareStatement(squery);
                 spreparedStatement.setInt(1, salesID);
                 spreparedStatement.setInt(2, r.getRecipeID());
@@ -125,7 +125,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
         try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "select distinct r.recipeID, recipe, price, stock, rcstatus, categoryID, ordernum "
+            String query = "select distinct r.recipeID, recipe, sd.cost, stock, rcstatus, categoryID, ordernum "
                     + "from sales s, sold sd, recipe r "
                     + "where r.recipeID = sd.recipeID and s.salesID = sd.salesID and sales_date = ? "
                     + "order by 7;";
@@ -138,7 +138,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
                 ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
                 r.setRecipeID(resultSet.getInt("r.recipeID"));
                 r.setRecipe(resultSet.getString("recipe"));
-                r.setCost(resultSet.getFloat("price"));
+                r.setCost(resultSet.getFloat("sd.cost"));
                 r.setRcstatus(resultSet.getString("rcstatus"));
                 r.setCategory(resultSet.getInt("categoryID"));
                 ingredients = inImp.getAllIngredients(r);
