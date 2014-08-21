@@ -43,4 +43,6 @@ public interface SalesDAOInterface {
     
     public float getTotalRawSales(RawBean r, String d);
     //gets total sales of r
+    
+    
 }

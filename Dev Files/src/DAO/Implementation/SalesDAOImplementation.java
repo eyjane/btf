@@ -128,7 +128,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             String query = "select distinct r.recipeID, recipe, sd.cost, stock, rcstatus, categoryID, ordernum "
                     + "from sales s, sold sd, recipe r "
                     + "where r.recipeID = sd.recipeID and s.salesID = sd.salesID and sales_date = ? "
-                    + "order by 7;";
+                    + "order by 2;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, d);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -295,7 +295,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             String query = "select distinct(sales_date) "
                     + "from sales "
                     + "where sales_date >= '" + f + "' and sales_date <= '" + t + "' "
-                    + "order by 1 desc;";
+                    + "order by 1 asc;";
 
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
