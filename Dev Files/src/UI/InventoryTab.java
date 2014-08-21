@@ -33,6 +33,10 @@ public class InventoryTab extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         prepareTable();
+        
+        
+        recipeTable.getTableHeader().setResizingAllowed(false);
+        rawTable.getTableHeader().setResizingAllowed(false);
     }
     
     @SuppressWarnings("unchecked")
