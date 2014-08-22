@@ -131,10 +131,9 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
         RawDAOInterface rawImp = new RawDAOImplementation();
 
         try {
+            String date = getNearestDate(d);
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            
-            String date = getNearestDate(d);
             
             String query = "select * from ingredients where recipeID = ? and date_ingredient = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -217,5 +216,6 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
         }
         return false;
     }
+    
 
 }

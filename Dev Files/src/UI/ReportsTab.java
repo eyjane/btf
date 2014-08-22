@@ -1,10 +1,13 @@
 package UI;
 
+import Beans.IngredientBean;
 import Beans.RawBean;
 import Beans.RecipeBean;
+import DAO.Implementation.IngredientDAOImplementation;
 import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Implementation.SalesDAOImplementation;
 import DAO.Implementation.TransactionDAOImplementation;
+import DAO.Interface.IngredientDAOInterface;
 import DAO.Interface.RecipeDAOInterface;
 import DAO.Interface.SalesDAOInterface;
 import DAO.Interface.TransactionDAOInterface;
@@ -76,6 +79,7 @@ public class ReportsTab extends javax.swing.JFrame {
     ArrayList<RecipeBean> aSales = new ArrayList<RecipeBean>();
     SalesDAOInterface sImp = new SalesDAOImplementation();
     RecipeDAOInterface rcImp = new RecipeDAOImplementation();
+    IngredientDAOInterface inImp = new IngredientDAOImplementation();
     TransactionDAOInterface tcImp = new TransactionDAOImplementation();
     JFreeChart expChart, giChart, netChart;
 
@@ -1476,7 +1480,7 @@ public class ReportsTab extends javax.swing.JFrame {
         DefaultTableModel varianceModel = new DefaultTableModel(cols, 0);
 
         for (RawBean rw : aRaw) {
-            float sales = computeSales(rw); //!!!
+            float sales = computeSales(rw, d); //!!!
             float delivery = tcImp.getQuantityByDayByRaw(d, "delivery", rw);
             float used = tcImp.getQuantityByDayByRaw(d, "used", rw);
             float transferred = tcImp.getQuantityByDayByRaw(d, "transferred", rw);
@@ -1486,13 +1490,13 @@ public class ReportsTab extends javax.swing.JFrame {
 
             Object iRaw[] = {rw.getRawID(), rw.getRaw(),
                 rw.getStock(),
-                String.format("%.2f", sales),
-                String.format("%.2f", delivery),
-                String.format("%.2f", used),
-                String.format("%.2f", transferred),
-                String.format("%.2f", wastage),
-                String.format("%.2f", actual),
-                String.format("%.2f", variance)};
+                Float.parseFloat(String.format("%.2f", sales)),
+                Float.parseFloat(String.format("%.2f", delivery)),
+                Float.parseFloat(String.format("%.2f", used)),
+                Float.parseFloat(String.format("%.2f", transferred)),
+                Float.parseFloat(String.format("%.2f", wastage)),
+                Float.parseFloat(String.format("%.2f", actual)),
+                Float.parseFloat(String.format("%.2f", variance))};
 
             varianceModel.addRow(iRaw);
         }
@@ -1504,8 +1508,20 @@ public class ReportsTab extends javax.swing.JFrame {
         btnExportVariance.setVisible(true);
     }
 
-    private float computeSales(RawBean r) {
+    private float computeSales(RawBean r, String d) {
         float total = 0;
+        ArrayList<RecipeBean> sRecipe = sImp.getAllSales(d);
+        ArrayList<Integer> sRecipeID;
+        
+        for(RecipeBean rc: sRecipe){
+            for(IngredientBean i: inImp.getIngredientsBydate(rc, d)){
+                if(i.getRaw().getRawID() == r.getRawID()){
+                    total += sImp.getQuantityByRecipeByDay(d, "sales", rc)*i.getAmount();
+                    break;
+                }
+            }
+        }
+        
 
         //get a
         return total;
