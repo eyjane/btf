@@ -918,14 +918,20 @@ public class ReportsTab extends javax.swing.JFrame {
         style.setBorderRight(CellStyle.BORDER_THIN);
         Row header = sheet.createRow(0);
         Cell headerCell;
-        if(reportName.equalsIgnoreCase("Variance")) {
+        if(reportName.equalsIgnoreCase("Variance") || reportName.equalsIgnoreCase("Sales")) {
             sheet.setColumnHidden(1, true);
             sheet.setColumnWidth(3, 10000);
             sheet.createFreezePane(3, 0);
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 3, 10));
+            if(reportName.equalsIgnoreCase("Variance"))
+                sheet.addMergedRegion(new CellRangeAddress(0, 0, 3, 10));
+            else if(reportName.equalsIgnoreCase("Sales")) {
+                int x = salesTable.getColumnCount();
+                sheet.addMergedRegion(new CellRangeAddress(0, 0, 3, x));
+            }
+                
             headerCell = header.createCell(3);
         } else {
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 1, 8));
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 1, 2));
             headerCell = header.createCell(1);
         }
         
@@ -975,8 +981,12 @@ public class ReportsTab extends javax.swing.JFrame {
             Sheet sheet = wb.getSheet(reportName);
             CellRangeAddress merge = sheet.getMergedRegion(sheet.getNumMergedRegions() - 1);
             int c1 = merge.getLastColumn() + 1;
-            int c2 = c1 + 7;
+            int c2;
             Row row = sheet.getRow(3);
+            if(reportName.equalsIgnoreCase("Sales"))
+                c2 = c1 + salesTable.getColumnCount();
+            else
+                c2 = c1 + 7;
             
             sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
             
@@ -995,7 +1005,7 @@ public class ReportsTab extends javax.swing.JFrame {
 
             Row headerRow = sheet.getRow(1);
             
-            if(reportName.equals("Variance")) {
+            if(reportName.equals("Variance") || reportName.equals("Sales")) {
                 for(int headings = 2; headings < model.getColumnCount(); headings++){ 
                     headerRow.createCell(headings + c1 - 2).setCellValue(model.getColumnName(headings));
                 }

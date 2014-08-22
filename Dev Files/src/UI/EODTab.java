@@ -571,7 +571,6 @@ public class EODTab extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("DELIVERY", jPanel2);
 
-        newdayTable.setFont(new java.awt.Font("Quicksand Light", 0, 18)); // NOI18N
         newdayTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

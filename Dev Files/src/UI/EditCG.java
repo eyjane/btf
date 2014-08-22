@@ -288,11 +288,11 @@ public class EditCG extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Name", "Cost", "Stock", "Status"
+                "Name", "Cost", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
