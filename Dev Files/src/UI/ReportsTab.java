@@ -18,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -84,13 +86,20 @@ public class ReportsTab extends javax.swing.JFrame {
         dateErrorLabel2.setVisible(false);
         dateErrorLabel3.setVisible(false);
         jTabbedPane1.addChangeListener(changeListener);
-        
+
         //set tables unresizable
         salesTable.getTableHeader().setResizingAllowed(false);
         expensesTable.getTableHeader().setResizingAllowed(false);
         grossIncomeTable.getTableHeader().setResizingAllowed(false);
         netIncomeTable.getTableHeader().setResizingAllowed(false);
         varianceTable.getTableHeader().setResizingAllowed(false);
+
+        //set tables to be sortable
+        salesTable.setAutoCreateRowSorter(true);
+        expensesTable.setAutoCreateRowSorter(true);
+        grossIncomeTable.setAutoCreateRowSorter(true);
+        netIncomeTable.setAutoCreateRowSorter(true);
+        varianceTable.setAutoCreateRowSorter(true);
     }
 
     /**
@@ -1222,30 +1231,29 @@ public class ReportsTab extends javax.swing.JFrame {
     private ArrayList<RecipeBean> getAllRecipes(ArrayList<RecipeBean> o, ArrayList<RecipeBean> a) {
         ArrayList<Integer> oRC = new ArrayList<Integer>();
         ArrayList<Integer> aRC = new ArrayList<Integer>();
-        
-        for(RecipeBean r: o){
+
+        for (RecipeBean r : o) {
             oRC.add(r.getRecipeID());
         }
-        
-        for(RecipeBean r: a){
+
+        for (RecipeBean r : a) {
             aRC.add(r.getRecipeID());
         }
-        
+
         HashSet<Integer> nRC = new LinkedHashSet<Integer>();
         nRC.addAll(oRC);
         nRC.addAll(aRC);
-        
+
         oRC.clear();
         oRC.addAll(nRC);
-        
+
         o.clear();
-        for(int i: oRC){
+        for (int i : oRC) {
             o.add(rcImp.getRecipeBean(i));
         }
-        
-        
+
         return o;
-        
+
     }
 
     //** FOR SALES **//
@@ -1266,7 +1274,7 @@ public class ReportsTab extends javax.swing.JFrame {
             cols.add("Recipe ID");
             cols.add("Recipe");
 
-            int count = 1;
+            //int count = 1;
             //get all recipes
             for (String d : aSDates) {
                 cols.add(d);
@@ -1275,39 +1283,51 @@ public class ReportsTab extends javax.swing.JFrame {
                 }
                 aSRecipes = sImp.getAllSales(d);
                 oSRecipes = getAllRecipes(oSRecipes, aSRecipes);
-                
-                System.out.println("ROLL " + count);
-                for(RecipeBean h: oSRecipes){
-                    System.out.println(h.getRecipe());
-                }
-                System.out.println();
-                count++;
+                /*
+                 System.out.println("ROLL " + count);
+                 for (RecipeBean h : oSRecipes) {
+                 System.out.println(h.getRecipe());
+                 }
+                 System.out.println();
+                 count++;*/
             }
 
             String colmns[] = new String[cols.size()];
             colmns = cols.toArray(colmns);
 
-            DefaultTableModel salesModel = new DefaultTableModel(colmns, 0);
-            
+            DefaultTableModel salesModel = new DefaultTableModel(colmns, 0) {
+                @Override
+                public Class getColumnClass(int col) {
+                    if (col == 0) {
+                        return Integer.class;
+                    } else if (col == 1) {
+                        return String.class;
+                    }else{
+                        return Float.class;
+                    }
+                }
+            };
+
             for (RecipeBean r : oSRecipes) {
-                ArrayList<String> data = new ArrayList<String>();
-                data.add(String.valueOf(r.getRecipeID()));
+                ArrayList<Object> data = new ArrayList<Object>();
+                NumberFormat nFormatter = new DecimalFormat("#0.00");
+                data.add(r.getRecipeID());
                 data.add(r.getRecipe());
                 for (String d : aSDates) {
                     float s = sImp.getQuantityByRecipeByDay(d, "sales", r);
-                    data.add(String.format("%.2f", s));
+                    data.add(Float.parseFloat(nFormatter.format(s)));
                 }
 
-                String row[] = new String[data.size()];
+                Object row[] = new Object[data.size()];
                 row = data.toArray(row);
 
                 salesModel.addRow(row);
             }
 
             salesTable.setModel(salesModel);
-            adjustTable(salesTable);
+            //adjustTable(salesTable);
             salesTable.getColumnModel().getColumn(0).setMinWidth(0);
-        salesTable.getColumnModel().getColumn(0).setMaxWidth(0);
+            salesTable.getColumnModel().getColumn(0).setMaxWidth(0);
 
         }
 
