@@ -47,6 +47,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -89,9 +91,17 @@ public class EODTab extends javax.swing.JFrame {
 
     // OTHERS
     private EODTab main;
-    private int[] rowEdit;
     private String date;
+    private float totalActual = 0;
+    private float totalDelivery = 0;
+    private float totalUsed = 0;
+    private float totalTransfer = 0;
+    private float totalWastage = 0;
+    private float totalSales = 0;
+    private float totalComp = 0;
+    public ArrayList<record> oldA = new ArrayList<record>();
 
+    
     public EODTab() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
@@ -103,7 +113,7 @@ public class EODTab extends javax.swing.JFrame {
         makeDeliveryTable();
         actualErrorLabel.setVisible(false);
         materialsErrorLabel.setVisible(false);
-        deliveryErrorLabel.setVisible(false);;
+        deliveryErrorLabel.setVisible(false);
         
         errorLabel.setVisible(false);
         prepareTable();
@@ -137,24 +147,31 @@ public class EODTab extends javax.swing.JFrame {
         inputTable = new javax.swing.JTable();
         actualSubmit = new javax.swing.JButton();
         actualErrorLabel = new javax.swing.JLabel();
+        actualTotalLabel = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         submitSales = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         recipeTable = new javax.swing.JTable();
         errorLabel = new javax.swing.JLabel();
+        salesTotalLabel = new javax.swing.JLabel();
+        complimentTotalLabel = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         rmTable = new javax.swing.JTable();
         utwSubmit = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         materialsErrorLabel = new javax.swing.JLabel();
+        usedTotalLabel = new javax.swing.JLabel();
+        transferTotalLabel = new javax.swing.JLabel();
+        wastageTotalLabel = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         deliveryTable = new javax.swing.JTable();
         deliverySubmit = new javax.swing.JButton();
         deliveryErrorLabel = new javax.swing.JLabel();
+        deliveryTotalLabel = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         newdayTable = new javax.swing.JTable();
@@ -226,20 +243,20 @@ public class EODTab extends javax.swing.JFrame {
         inputTable.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         inputTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Status", "ID", "Name", "Quantity in Stock", "Actual Count"
+                "ID", "Name", "Quantity in Stock", "Actual Count"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Float.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -251,9 +268,6 @@ public class EODTab extends javax.swing.JFrame {
             }
         });
         jScrollPane4.setViewportView(inputTable);
-        if (inputTable.getColumnModel().getColumnCount() > 0) {
-            inputTable.getColumnModel().getColumn(0).setResizable(false);
-        }
 
         actualSubmit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
         actualSubmit.addActionListener(new java.awt.event.ActionListener() {
@@ -264,6 +278,8 @@ public class EODTab extends javax.swing.JFrame {
 
         actualErrorLabel.setForeground(new java.awt.Color(204, 0, 1));
         actualErrorLabel.setText("ERROR: Please input valid number.");
+
+        actualTotalLabel.setText("Total: 0");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -281,15 +297,21 @@ public class EODTab extends javax.swing.JFrame {
                         .addComponent(actualErrorLabel)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(253, 253, 253)
+                .addComponent(actualTotalLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(23, 23, 23)
+                .addComponent(actualTotalLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(actualErrorLabel)
-                .addGap(24, 24, 24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(actualSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(132, 132, 132))
         );
@@ -327,6 +349,10 @@ public class EODTab extends javax.swing.JFrame {
         errorLabel.setForeground(new java.awt.Color(204, 0, 0));
         errorLabel.setText("ERROR: Please input valid number.");
 
+        salesTotalLabel.setText("Sales Total: 0");
+
+        complimentTotalLabel.setText("Compliment Total: 0");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -334,15 +360,24 @@ public class EODTab extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(errorLabel)
-                        .addGap(62, 62, 62)
-                        .addComponent(submitSales, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(errorLabel)
+                                .addGap(90, 90, 90)
+                                .addComponent(submitSales, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(83, 83, 83)
+                        .addComponent(salesTotalLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(complimentTotalLabel)
+                        .addGap(101, 101, 101))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,8 +385,12 @@ public class EODTab extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(salesTotalLabel)
+                    .addComponent(complimentTotalLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(submitSales, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(errorLabel))
@@ -362,20 +401,20 @@ public class EODTab extends javax.swing.JFrame {
 
         rmTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Status", "Name", "Quantity in Stock", "Used", "Transferred", "Wastage"
+                "Name", "Quantity in Stock", "Used", "Transferred", "Wastage"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class
+                java.lang.Object.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, true, true
+                false, false, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -390,9 +429,6 @@ public class EODTab extends javax.swing.JFrame {
         rmTable.setDragEnabled(true);
         rmTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(rmTable);
-        if (rmTable.getColumnModel().getColumnCount() > 0) {
-            rmTable.getColumnModel().getColumn(0).setResizable(false);
-        }
 
         utwSubmit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SubmitBtn.png"))); // NOI18N
         utwSubmit.addActionListener(new java.awt.event.ActionListener() {
@@ -407,6 +443,12 @@ public class EODTab extends javax.swing.JFrame {
         materialsErrorLabel.setForeground(new java.awt.Color(204, 0, 1));
         materialsErrorLabel.setText("ERROR: Please input valid number.");
 
+        usedTotalLabel.setText("Used Total: 0");
+
+        transferTotalLabel.setText("Transferred Total: 0");
+
+        wastageTotalLabel.setText("Wastage Total: 0");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -415,17 +457,25 @@ public class EODTab extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(utwSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(materialsErrorLabel)
+                                .addGap(90, 90, 90))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(usedTotalLabel)
+                                .addGap(135, 135, 135)
+                                .addComponent(transferTotalLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(wastageTotalLabel)
+                            .addComponent(utwSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(206, 206, 206)
-                .addComponent(materialsErrorLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -435,9 +485,14 @@ public class EODTab extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(materialsErrorLabel)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(usedTotalLabel)
+                    .addComponent(transferTotalLabel)
+                    .addComponent(wastageTotalLabel))
                 .addGap(25, 25, 25)
-                .addComponent(utwSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(utwSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(materialsErrorLabel))
                 .addContainerGap())
         );
 
@@ -451,11 +506,11 @@ public class EODTab extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Name", "Amount"
+                "ID", "Name", "Amount"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true
+                false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -474,6 +529,8 @@ public class EODTab extends javax.swing.JFrame {
         deliveryErrorLabel.setForeground(new java.awt.Color(204, 0, 1));
         deliveryErrorLabel.setText("ERROR: Please input valid number.");
 
+        deliveryTotalLabel.setText("Total: 0");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -484,14 +541,16 @@ public class EODTab extends javax.swing.JFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(deliveryErrorLabel)
+                        .addGap(89, 89, 89)
                         .addComponent(deliverySubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(0, 461, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(208, 208, 208)
-                .addComponent(deliveryErrorLabel)
+                .addGap(257, 257, 257)
+                .addComponent(deliveryTotalLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -502,9 +561,11 @@ public class EODTab extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                 .addGap(28, 28, 28)
-                .addComponent(deliveryErrorLabel)
-                .addGap(11, 11, 11)
-                .addComponent(deliverySubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(deliveryTotalLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(deliverySubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deliveryErrorLabel))
                 .addContainerGap())
         );
 
@@ -750,23 +811,13 @@ public class EODTab extends javax.swing.JFrame {
         if (JOptionPane.showConfirmDialog(null, "Are you sure that you want to submit? You may only submit once a day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
             boolean submit = true;
-            boolean red = false;
             int rows = inputTable.getRowCount();
             int r = 0, index = 0;
-            rowEdit = new int[rmTable.getRowCount()];
 
             for (r = 0; r < rows; r++) {
 
-                if (inputTable.getValueAt(r, 4).toString().isEmpty() || Math.signum(Float.parseFloat(inputTable.getValueAt(r, 4).toString())) == -1) {
+                if (inputTable.getValueAt(r, 3).toString().isEmpty() || Math.signum(Float.parseFloat(inputTable.getValueAt(r, 3).toString())) == -1) {
                     submit = false;
-                    red = true;
-                    inputTable.setValueAt(0, r, 0);
-                }
-
-                if (red) {
-                    rowEdit[index] = r;
-                    index++;
-                    red = false;
                 }
 
             }
@@ -775,9 +826,9 @@ public class EODTab extends javax.swing.JFrame {
 
                 for (r = 0; r < rows; r++) {
 
-                    int ID = Integer.parseInt(inputTable.getValueAt(r, 1).toString());
+                    int ID = Integer.parseInt(inputTable.getValueAt(r, 0).toString());
                     RawBean raw = rmImp.getRaw(ID);
-                    float newRaw = Float.parseFloat(inputTable.getValueAt(r, 4).toString()) + Float.parseFloat(inputTable.getValueAt(r, 3).toString());
+                    float newRaw = Float.parseFloat(inputTable.getValueAt(r, 2).toString()) + Float.parseFloat(inputTable.getValueAt(r, 3).toString());
                     raw.setStock(newRaw);
                     rmImp.editRaw(raw);
 
@@ -793,16 +844,6 @@ public class EODTab extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Submission was successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 makeActualTable();
             } else {
-
-                for (int row = 0; row < inputTable.getRowCount(); row++) {
-
-                    for (int col = 0; col < inputTable.getColumnCount(); col++) {
-
-                        inputTable.getColumnModel().getColumn(col).setCellRenderer(new errorRenderer());
-
-                    }
-
-                }
 
                 actualErrorLabel.setVisible(true);
 
@@ -820,28 +861,17 @@ public class EODTab extends javax.swing.JFrame {
         if (JOptionPane.showConfirmDialog(null, "Are you sure that you want to submit? You may only submit once a day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
             boolean submit = true;
-            boolean red = false;
             int rows = rmTable.getRowCount();
             int r = 0, index = 0;
-            rowEdit = new int[rmTable.getRowCount()];
 
             while (r < rows) {
 
-                for (int d = 4; d <= 6; d++) {
+                for (int d = 3; d <= 5; d++) {
 
                     if (rmTable.getValueAt(r, d).toString().isEmpty() || Math.signum(Float.parseFloat(rmTable.getValueAt(r, d).toString())) == -1) {
                         submit = false;
-                        red = true;
-                        rmTable.setValueAt(0, r, 0);
-                        System.out.println("Error at row " + r);
                     }
 
-                }
-                if (red) {
-                    rowEdit[index] = r;
-                    //System.out.println(rowEdit[index] + " / " + r);
-                    index++;
-                    red = false;
                 }
 
                 r++;
@@ -852,19 +882,19 @@ public class EODTab extends javax.swing.JFrame {
 
                 for (int a = 0; a < rows; a++) {
 
-                    for (int b = 4; b <= 6; b++) {
+                    for (int b = 3; b <= 5; b++) {
 
                         RawBean raw = new RawBean();
 
-                        String name = rmTable.getValueAt(a, 0).toString(); // raw material name
+                        String name = rmTable.getValueAt(a, 1).toString(); // raw material name
                         float q = Float.parseFloat(rmTable.getValueAt(a, b).toString());
                         String type = new String();
 
-                        if (b == 4) {
+                        if (b == 3) {
                             type = "used";
-                        } else if (b == 5) {
+                        } else if (b == 4) {
                             type = "transfer";
-                        } else if (b == 6) {
+                        } else if (b == 5) {
                             type = "wastage";
                         }
 
@@ -876,7 +906,7 @@ public class EODTab extends javax.swing.JFrame {
                         // ADD TRANSACTION
                         TransactionBean t = new TransactionBean();
                         t.setType(type);
-                        int id = Integer.parseInt(rmTable.getValueAt(a, 1).toString());
+                        int id = Integer.parseInt(rmTable.getValueAt(a, 0).toString());
                         raw.setRawID(id);
                         tclmp.addTransaction(t, raw, q);
                     }
@@ -891,16 +921,6 @@ public class EODTab extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Submission was successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 makeRMTable();
             } else {
-
-                for (int row = 0; row < rmTable.getRowCount(); row++) {
-
-                    for (int col = 0; col <= 6; col++) {
-
-                        rmTable.getColumnModel().getColumn(col).setCellRenderer(new errorRenderer());
-
-                    }
-
-                }
 
                 materialsErrorLabel.setVisible(true);
             }
@@ -917,23 +937,13 @@ public class EODTab extends javax.swing.JFrame {
         if (JOptionPane.showConfirmDialog(null, "Are you sure that you want to submit? You may only submit once a day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
             boolean submit = true;
-            boolean red = false;
             int rows = inputTable.getRowCount();
-            int c, r = 0, index = 0;
-            rowEdit = new int[rmTable.getRowCount()];
+            int c, r = 0;
 
             for (r = 0; r < rows; r++) {
 
-                if (deliveryTable.getValueAt(r, 4).toString().isEmpty() || Math.signum(Float.parseFloat(deliveryTable.getValueAt(r, 4).toString())) == -1) {
+                if (deliveryTable.getValueAt(r, 3).toString().isEmpty() || Math.signum(Float.parseFloat(deliveryTable.getValueAt(r, 3).toString())) == -1) {
                     submit = false;
-                    red = true;
-                    deliveryTable.setValueAt(0, r, 0);
-                }
-
-                if (red) {
-                    rowEdit[index] = r;
-                    index++;
-                    red = false;
                 }
 
             }
@@ -942,9 +952,9 @@ public class EODTab extends javax.swing.JFrame {
 
                 for (c = 0; c < rows; c++) {
 
-                    int ID = Integer.parseInt(deliveryTable.getValueAt(c, 1).toString());
+                    int ID = Integer.parseInt(deliveryTable.getValueAt(c, 0).toString());
                     RawBean raw = rmImp.getRaw(ID);
-                    raw.setStock(Float.parseFloat(deliveryTable.getValueAt(c, 4).toString()));
+                    raw.setStock(Float.parseFloat(deliveryTable.getValueAt(c, 3).toString()));
                     rmImp.editRaw(raw);
                 }
                     
@@ -960,17 +970,8 @@ public class EODTab extends javax.swing.JFrame {
 
             } else {
 
-                for (int row = 0; row < deliveryTable.getRowCount(); row++) {
-
-                    for (int col = 0; col < deliveryTable.getColumnCount(); col++) {
-
-                        deliveryTable.getColumnModel().getColumn(col).setCellRenderer(new errorRenderer());
-
-                    }
-
-                }
-
                 deliveryErrorLabel.setVisible(true);
+            
             }
 
         } else {
@@ -1150,6 +1151,306 @@ public class EODTab extends javax.swing.JFrame {
      * < -- KIM'S FUNCTIONS START -- > *
      */
     // ------------------- GENERIC CODES
+    
+    public class record {
+        
+        public String type;
+        public int row;
+        public float x;
+        
+        public record() {}
+        
+        public record(String newType, int newRow, int oldValue) {
+            type = newType;
+            row = newRow;
+            x = oldValue;
+        }
+        
+        public String getType() {
+            return type;
+        }
+        
+        public int getRow() {
+            return row;
+        }
+        
+        public float getX() {
+            return x;
+        }
+        
+        public void setType(String newType) {
+            this.type = newType;
+        }
+        
+        public void setRow(int newRow) {
+            this.row = newRow;
+        }
+        
+        public void setX(float oldValue) {
+            this.x = oldValue;
+        }
+        
+        public float findOld(String newType, int newRow) {
+            
+            for (record d : oldA) {
+                
+                if(d.getRow() == newRow && d.getType() == newType)
+                    return d.getX();
+            }
+            return 0;
+        }
+        
+        public void replaceOld(String newType, int newRow, float newVal) {
+            
+            for (record d : oldA) {
+                
+                if(d.getRow() == newRow && d.getType() == newType)
+                    d.setX(newVal);
+            }
+            
+        }
+        
+    }
+    
+    public class checkActual implements TableModelListener {
+
+        @Override
+        public void tableChanged(TableModelEvent tme) {
+            
+            int row = tme.getFirstRow();
+            int column = tme.getColumn();
+            DefaultTableModel model = (DefaultTableModel)tme.getSource();
+            Object data = model.getValueAt(row, column);
+            
+            if(previouslyChanged("actual", row)) {
+                record old = new record();
+                totalActual = totalActual - old.findOld("actual",row);
+                totalActual = totalActual + Float.parseFloat(model.getValueAt(row, column).toString());
+                getActualTotal(totalActual);
+                old.replaceOld("actual", row, Float.parseFloat(model.getValueAt(row, column).toString()));
+            }
+            else {
+                record old = new record();
+                old.setType("actual");
+                old.setRow(row);
+                old.setX(Float.parseFloat(model.getValueAt(row, column).toString()));
+                oldA.add(old);
+                totalActual = totalActual + Float.parseFloat(model.getValueAt(row, column).toString());
+                getActualTotal(totalActual);
+            }
+            
+
+        }
+        
+    }
+    
+    public void getActualTotal(float add) {
+        
+        this.actualTotalLabel.setText("Total: " + add);
+        
+    }
+    
+    public class checkMaterials implements TableModelListener {
+
+        @Override
+        public void tableChanged(TableModelEvent tme) {
+            String u = "used";
+            String w = "waste";
+            String t = "transfer";
+            int row = tme.getFirstRow();
+            int column = tme.getColumn();
+            DefaultTableModel model = (DefaultTableModel)tme.getSource();
+            Object data = model.getValueAt(row, column);
+            if (column == 3) {
+                
+                if(previouslyChanged(u, row)) {
+                    record old = new record();
+                    totalUsed = totalUsed - old.findOld(u,row);
+                    totalUsed = totalUsed + Float.parseFloat(model.getValueAt(row, column).toString());
+                    getMaterialsTotal(totalUsed,column);
+                    old.replaceOld(u, row, Float.parseFloat(model.getValueAt(row, column).toString()));
+                }
+                else {
+                    record old = new record();
+                    old.setType(u);
+                    old.setRow(row);
+                    old.setX(Float.parseFloat(model.getValueAt(row, column).toString()));
+                    oldA.add(old);
+                    totalUsed = totalUsed + Float.parseFloat(model.getValueAt(row, column).toString());
+                    getMaterialsTotal(totalUsed, column);
+                }
+            }
+                
+            else if (column == 4) {
+                
+                if(previouslyChanged(t, row)) {
+                    record old = new record();
+                    totalTransfer = totalTransfer - old.findOld(t,row);
+                    totalTransfer = totalTransfer + Float.parseFloat(model.getValueAt(row, column).toString());
+                    getMaterialsTotal(totalTransfer,column);
+                    old.replaceOld(t, row, Float.parseFloat(model.getValueAt(row, column).toString()));
+                }
+                else {
+                    record old = new record();
+                    old.setType(t);
+                    old.setRow(row);
+                    old.setX(Float.parseFloat(model.getValueAt(row, column).toString()));
+                    oldA.add(old);
+                    totalTransfer = totalTransfer + Float.parseFloat(model.getValueAt(row, column).toString());
+                    getMaterialsTotal(totalTransfer, column);
+                }
+                
+            }
+            else if(column == 5) {
+                
+                if(previouslyChanged(w, row)) {
+                    record old = new record();
+                    totalWastage = totalWastage - old.findOld(w,row);
+                    totalWastage = totalWastage + Float.parseFloat(model.getValueAt(row, column).toString());
+                    getMaterialsTotal(totalWastage,column);
+                    old.replaceOld(w, row, Float.parseFloat(model.getValueAt(row, column).toString()));
+                }
+                else {
+                    record old = new record();
+                    old.setType(w);
+                    old.setRow(row);
+                    old.setX(Float.parseFloat(model.getValueAt(row, column).toString()));
+                    oldA.add(old);
+                    totalWastage = totalWastage + Float.parseFloat(model.getValueAt(row, column).toString());
+                    getMaterialsTotal(totalWastage, column);
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    public void getMaterialsTotal(float add, int type) {
+        if (type == 3)
+            this.usedTotalLabel.setText("Used Total: " + add);
+        else if (type == 4)
+            this.transferTotalLabel.setText("Transferred Total: " + add);
+        else if (type == 5)
+            this.wastageTotalLabel.setText("Wastage Total: " + add);
+    }
+    
+    public class checkDelivery implements TableModelListener {
+
+        @Override
+        public void tableChanged(TableModelEvent tme) {
+            String t = "delivery";
+            int row = tme.getFirstRow();
+            int column = tme.getColumn();
+            DefaultTableModel model = (DefaultTableModel)tme.getSource();
+            Object data = model.getValueAt(row, column);
+            
+            if(previouslyChanged(t, row)) {
+                record old = new record();
+                totalDelivery = totalDelivery - old.findOld(t,row);
+                totalDelivery = totalDelivery + Float.parseFloat(model.getValueAt(row, column).toString());
+                getDeliveryTotal(totalDelivery);
+                old.replaceOld(t, row, Float.parseFloat(model.getValueAt(row, column).toString()));
+            }
+            else {
+                record old = new record();
+                old.setType(t);
+                old.setRow(row);
+                old.setX(Float.parseFloat(model.getValueAt(row, column).toString()));
+                oldA.add(old);
+                totalDelivery = totalDelivery + Float.parseFloat(model.getValueAt(row, column).toString());
+                getDeliveryTotal(totalDelivery);
+            }
+        }
+        
+    }
+    
+    public void getDeliveryTotal(float add) {
+        
+        this.deliveryTotalLabel.setText("Total: " + add);
+        
+    }
+    
+    public class checkSales implements TableModelListener {
+
+        @Override
+        public void tableChanged(TableModelEvent tme) {
+            String s = "sales";
+            String comp = "compliment";
+            int row = tme.getFirstRow();
+            int column = tme.getColumn();
+            DefaultTableModel model = (DefaultTableModel)tme.getSource();
+            Object data = model.getValueAt(row, column);
+            if (column == 2) {
+                
+                if(previouslyChanged(s, row)) {
+                    record old = new record();
+                    totalSales = totalSales - old.findOld(s,row);
+                    totalSales = totalSales + Float.parseFloat(model.getValueAt(row, column).toString());
+                    getSalesTotal(totalSales,column);
+                    old.replaceOld(s, row, Float.parseFloat(model.getValueAt(row, column).toString()));
+                }
+                else {
+                    record old = new record();
+                    old.setType(s);
+                    old.setRow(row);
+                    old.setX(Float.parseFloat(model.getValueAt(row, column).toString()));
+                    oldA.add(old);
+                    totalSales = totalSales + Float.parseFloat(model.getValueAt(row, column).toString());
+                    getSalesTotal(totalSales, column);
+                }
+                
+            }
+                
+            else if (column == 3) {
+                
+                if(previouslyChanged(comp, row)) {
+                    record old = new record();
+                    totalComp = totalComp - old.findOld(comp,row);
+                    totalComp = totalComp + Float.parseFloat(model.getValueAt(row, column).toString());
+                    getSalesTotal(totalComp,column);
+                    old.replaceOld(comp, row, Float.parseFloat(model.getValueAt(row, column).toString()));
+                }
+                else {
+                    record old = new record();
+                    old.setType(comp);
+                    old.setRow(row);
+                    old.setX(Float.parseFloat(model.getValueAt(row, column).toString()));
+                    oldA.add(old);
+                    totalComp = totalComp + Float.parseFloat(model.getValueAt(row, column).toString());
+                    getSalesTotal(totalComp, column);
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    public void getSalesTotal(float add, int type) {
+        if (type == 2)
+            this.salesTotalLabel.setText("Sales Total: " + add);
+        else if (type == 3)
+            this.complimentTotalLabel.setText("Complimentary Total: " + add);
+        
+    }
+    
+    public boolean previouslyChanged(String t, int c) {
+        
+        if (oldA.isEmpty())
+            return false;
+        else {
+            
+            for (record d : oldA) {
+                
+                if(d.getType() == t && d.getRow() == c)
+                    return true;
+            }
+            
+        }
+        return false;
+    }
+    
     private void adjustTable(JTable table) {
         for (int column = 0; column < table.getColumnCount(); column++) {
             TableColumn tableColumn = table.getColumnModel().getColumn(column);
@@ -1186,57 +1487,17 @@ public class EODTab extends javax.swing.JFrame {
         }
     }
 
-    public class errorRenderer extends DefaultTableCellRenderer {
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-
-            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if (toEdit(row) && Integer.parseInt(table.getValueAt(row, 0).toString()) == 0) {
-
-                c.setForeground(Color.red);
-
-            } else {
-
-                c.setForeground(Color.BLACK);
-
-            }
-
-            return c;
-
-        }
-
-    }
-
-    // CHECK IF ROW INDEX IS IN LIST OF ROW#S WITH ERRORS
-    private boolean toEdit(int x) {
-
-        boolean edit;
-        for (int c = 0; c < rowEdit.length; c++) {
-
-            if (x == rowEdit[c]) {
-
-                return true;
-
-            }
-
-        }
-
-        return false;
-
-    }
-
     // ----------------- ACTUAL TAB START
     public void makeActualTable() {
         aTransact = new ArrayList<>();
         aRaw = new ArrayList<>();
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"Status", "ID", "Name", "Quantity in Stock", "Actual Count"};
+        String cols[] = {"ID", "Name", "Quantity in Stock", "Actual Count"};
         DefaultTableModel actualTable = new DefaultTableModel(cols, 0) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                if (column == 0 || column == 1 || column == 2 || column == 3) {
+                if (column == 0 || column == 1 || column == 2) {
                     return false;
                 } else {
                     return true;
@@ -1244,18 +1505,16 @@ public class EODTab extends javax.swing.JFrame {
             }
 
         };
-
+        
         for (RawBean raw : aRaw) {
 
-            Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), "0"};
+            Object[] data = {raw.getRawID(), raw.getRaw(), raw.getStock(), "0"};
             actualTable.addRow(data);
             inputTable.setModel(actualTable);
             adjustTable(inputTable);
         }
         inputTable.getColumnModel().getColumn(0).setMinWidth(0);
         inputTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        inputTable.getColumnModel().getColumn(1).setMinWidth(0);
-        inputTable.getColumnModel().getColumn(1).setMaxWidth(0);
         inputTable.setColumnSelectionAllowed(true);
         inputTable.setRowSelectionAllowed(true);
         inputTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -1263,7 +1522,8 @@ public class EODTab extends javax.swing.JFrame {
         DefaultCellEditor deditor = new myChecker(new JTextField(), actualErrorLabel);
         inputTable.setDefaultEditor(Object.class, deditor);
         deditor.setClickCountToStart(1);
-        
+        actualTable.addTableModelListener(new checkActual());
+    
     }
 
     // ------------------- ACTUAL TAB END
@@ -1272,13 +1532,13 @@ public class EODTab extends javax.swing.JFrame {
     public void makeRMTable() {
 
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"Status", "ID", "Name", "Quantity in Stock", "Used", "Transferred", "Wastage"};
+        String cols[] = {"ID", "Name", "Quantity in Stock", "Used", "Transferred", "Wastage"};
         // MAKE CERTAIN COLUMNS NOT EDITABLE!!!!!
         DefaultTableModel actualTable = new DefaultTableModel(cols, 0) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                if (column == 0 || column == 1 || column == 2 || column == 3) {
+                if (column == 0 || column == 1 || column == 2) {
                     return false;
                 } else {
                     return true;
@@ -1289,7 +1549,7 @@ public class EODTab extends javax.swing.JFrame {
 
         for (RawBean raw : aRaw) {
 
-            Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), "0", "0", "0"};
+            Object[] data = {raw.getRawID(), raw.getRaw(), raw.getStock(), "0", "0", "0"};
             actualTable.addRow(data);
             rmTable.setModel(actualTable);
             adjustTable(rmTable);
@@ -1298,8 +1558,6 @@ public class EODTab extends javax.swing.JFrame {
 		
         rmTable.getColumnModel().getColumn(0).setMinWidth(0);
         rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        rmTable.getColumnModel().getColumn(1).setMinWidth(0);
-        rmTable.getColumnModel().getColumn(1).setMaxWidth(0);
 	rmTable.setColumnSelectionAllowed(true);
         rmTable.setRowSelectionAllowed(true);
         rmTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -1307,7 +1565,7 @@ public class EODTab extends javax.swing.JFrame {
         DefaultCellEditor deditor = new myChecker(new JTextField(), materialsErrorLabel);
         rmTable.setDefaultEditor(Object.class, deditor);
         deditor.setClickCountToStart(1);
-        
+        actualTable.addTableModelListener(new checkMaterials());
     }
 
     // ---------------- MATERIALS TAB END
@@ -1317,12 +1575,12 @@ public class EODTab extends javax.swing.JFrame {
         aRaw = new ArrayList<RawBean>();
 
         aRaw = rmImp.getAllRaw();
-        String cols[] = {"Status", "ID", "Name", "Quantity in Stock", "Delivered Amount"};
+        String cols[] = {"ID", "Name", "Quantity in Stock", "Delivered Amount"};
         DefaultTableModel allRaw = new DefaultTableModel(cols, 0) {
-
+        
             @Override
             public boolean isCellEditable(int row, int column) {
-                if (column == 0 || column == 1 || column == 2 || column == 3) {
+                if (column == 0 || column == 1 || column == 2) {
                     return false;
                 } else {
                     return true;
@@ -1333,7 +1591,7 @@ public class EODTab extends javax.swing.JFrame {
 
         for (RawBean raw : aRaw) {
 
-            Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), "0"};
+            Object[] data = {raw.getRawID(), raw.getRaw(), raw.getStock(), "0"};
             allRaw.addRow(data);
             deliveryTable.setModel(allRaw);
             adjustTable(deliveryTable);
@@ -1342,8 +1600,6 @@ public class EODTab extends javax.swing.JFrame {
 
         deliveryTable.getColumnModel().getColumn(0).setMinWidth(0);
         deliveryTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        deliveryTable.getColumnModel().getColumn(1).setMinWidth(0);
-        deliveryTable.getColumnModel().getColumn(1).setMaxWidth(0);
         deliveryTable.setColumnSelectionAllowed(true);
         deliveryTable.setRowSelectionAllowed(true);
         deliveryTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -1351,6 +1607,7 @@ public class EODTab extends javax.swing.JFrame {
         DefaultCellEditor deditor = new myChecker(new JTextField(), deliveryErrorLabel);
         deliveryTable.setDefaultEditor(Object.class, deditor);
         deditor.setClickCountToStart(1);
+        allRaw.addTableModelListener(new checkDelivery());
     }
 
     // ----------------- DELIVERY TAB END
@@ -1398,6 +1655,7 @@ public class EODTab extends javax.swing.JFrame {
          */
         /* ONE CLICK EDIT */
         deditor.setClickCountToStart(1);
+        recipeModel.addTableModelListener(new checkSales());
     }
     
     /**
@@ -1621,9 +1879,12 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JButton ReportsBtn;
     private javax.swing.JLabel actualErrorLabel;
     private javax.swing.JButton actualSubmit;
+    private javax.swing.JLabel actualTotalLabel;
+    private javax.swing.JLabel complimentTotalLabel;
     private javax.swing.JLabel deliveryErrorLabel;
     private javax.swing.JButton deliverySubmit;
     private javax.swing.JTable deliveryTable;
+    private javax.swing.JLabel deliveryTotalLabel;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JTable inputTable;
     private javax.swing.JLabel jLabel1;
@@ -1646,7 +1907,11 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JTable newdayTable;
     private javax.swing.JTable recipeTable;
     private javax.swing.JTable rmTable;
+    private javax.swing.JLabel salesTotalLabel;
     private javax.swing.JButton submitSales;
+    private javax.swing.JLabel transferTotalLabel;
+    private javax.swing.JLabel usedTotalLabel;
     private javax.swing.JButton utwSubmit;
+    private javax.swing.JLabel wastageTotalLabel;
     // End of variables declaration//GEN-END:variables
 }
