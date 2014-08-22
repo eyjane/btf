@@ -46,6 +46,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -90,7 +92,7 @@ public class EODTab extends javax.swing.JFrame {
     private EODTab main;
     private int[] rowEdit;
     private String date;
-
+    private float add = 0;
     public EODTab() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
@@ -136,6 +138,7 @@ public class EODTab extends javax.swing.JFrame {
         inputTable = new javax.swing.JTable();
         actualSubmit = new javax.swing.JButton();
         actualErrorLabel = new javax.swing.JLabel();
+        totalLabel = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         submitSales = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
@@ -264,6 +267,8 @@ public class EODTab extends javax.swing.JFrame {
         actualErrorLabel.setForeground(new java.awt.Color(204, 0, 1));
         actualErrorLabel.setText("ERROR: Please input valid number.");
 
+        totalLabel.setText("Total:");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -280,15 +285,21 @@ public class EODTab extends javax.swing.JFrame {
                         .addComponent(actualErrorLabel)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(253, 253, 253)
+                .addComponent(totalLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(23, 23, 23)
+                .addComponent(totalLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(actualErrorLabel)
-                .addGap(24, 24, 24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(actualSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(132, 132, 132))
         );
@@ -1100,6 +1111,30 @@ public class EODTab extends javax.swing.JFrame {
      * < -- KIM'S FUNCTIONS START -- > *
      */
     // ------------------- GENERIC CODES
+    
+    
+    public class checkUpdate implements TableModelListener {
+
+        @Override
+        public void tableChanged(TableModelEvent tme) {
+        
+            int row = tme.getFirstRow();
+            int column = tme.getColumn();
+            DefaultTableModel model = (DefaultTableModel)tme.getSource();
+            Object data = model.getValueAt(row, column);
+            add = add + Float.parseFloat(model.getValueAt(row, column).toString());
+            getTotal(add);
+
+        }
+        
+    }
+    
+    public void getTotal(float add) {
+        
+        this.totalLabel.setText("Total: " + add);
+        
+    }
+    
     private void adjustTable(JTable table) {
         for (int column = 0; column < table.getColumnCount(); column++) {
             TableColumn tableColumn = table.getColumnModel().getColumn(column);
@@ -1194,7 +1229,7 @@ public class EODTab extends javax.swing.JFrame {
             }
 
         };
-
+        
         for (RawBean raw : aRaw) {
 
             Object[] data = {1, raw.getRawID(), raw.getRaw(), raw.getStock(), "0"};
@@ -1213,7 +1248,7 @@ public class EODTab extends javax.swing.JFrame {
         DefaultCellEditor deditor = new myChecker(new JTextField(), actualErrorLabel);
         inputTable.setDefaultEditor(Object.class, deditor);
         deditor.setClickCountToStart(1);
-        
+        actualTable.addTableModelListener(new checkUpdate());
     }
 
     // ------------------- ACTUAL TAB END
@@ -1269,7 +1304,7 @@ public class EODTab extends javax.swing.JFrame {
         aRaw = rmImp.getAllRaw();
         String cols[] = {"Status", "ID", "Name", "Quantity in Stock", "Delivered Amount"};
         DefaultTableModel allRaw = new DefaultTableModel(cols, 0) {
-
+        
             @Override
             public boolean isCellEditable(int row, int column) {
                 if (column == 0 || column == 1 || column == 2 || column == 3) {
@@ -1597,6 +1632,7 @@ public class EODTab extends javax.swing.JFrame {
     private javax.swing.JTable recipeTable;
     private javax.swing.JTable rmTable;
     private javax.swing.JButton submitSales;
+    private javax.swing.JLabel totalLabel;
     private javax.swing.JButton utwSubmit;
     // End of variables declaration//GEN-END:variables
 }
