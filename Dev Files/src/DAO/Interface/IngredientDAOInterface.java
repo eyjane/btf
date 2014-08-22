@@ -23,5 +23,5 @@ public interface IngredientDAOInterface {
     public ArrayList<IngredientBean> getAllIngredients(RecipeBean r);
     public ArrayList<IngredientBean> getIngredientsBydate(RecipeBean r, String d);
     public boolean isIngredient(RawBean r);
-   
+   public String getNearestDate(String d);
 }

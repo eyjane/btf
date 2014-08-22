@@ -18,11 +18,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -67,7 +72,6 @@ public class ReportsTab extends javax.swing.JFrame {
     SalesDAOInterface sImp = new SalesDAOImplementation();
     RecipeDAOInterface rcImp = new RecipeDAOImplementation();
     TransactionDAOInterface tcImp = new TransactionDAOImplementation();
-    
 
     /**
      * Creates new form RMManagement
@@ -81,31 +85,21 @@ public class ReportsTab extends javax.swing.JFrame {
         dateErrorLabel1.setVisible(false);
         dateErrorLabel2.setVisible(false);
         dateErrorLabel3.setVisible(false);
-
-        Date sDate = startDate.getDate();
-        Date eDate = endDate.getDate();
-
-        LocalDate start = new LocalDate(sDate);
-        LocalDate end = new LocalDate(eDate);
-        if (start.isBefore(end) || start.isEqual(end)) { // CHECK IF START IS <== END
-
-            GITable();
-            makeGIChart();
-            expTable();
-            makeExpChart();
-            netTable();
-            makeNetChart();
-
-        } else {
-
-            dateErrorLabel1.setVisible(true);
-            dateErrorLabel2.setVisible(true);
-            dateErrorLabel3.setVisible(true);
-
-        }
-        
         jTabbedPane1.addChangeListener(changeListener);
 
+        //set tables unresizable
+        salesTable.getTableHeader().setResizingAllowed(false);
+        expensesTable.getTableHeader().setResizingAllowed(false);
+        grossIncomeTable.getTableHeader().setResizingAllowed(false);
+        netIncomeTable.getTableHeader().setResizingAllowed(false);
+        varianceTable.getTableHeader().setResizingAllowed(false);
+
+        //set tables to be sortable
+        salesTable.setAutoCreateRowSorter(true);
+        expensesTable.setAutoCreateRowSorter(true);
+        grossIncomeTable.setAutoCreateRowSorter(true);
+        netIncomeTable.setAutoCreateRowSorter(true);
+        varianceTable.setAutoCreateRowSorter(true);
     }
 
     /**
@@ -127,6 +121,15 @@ public class ReportsTab extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        Sales = new javax.swing.JPanel();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        salesTable = new javax.swing.JTable(){
+            @Override
+            public boolean isCellEditable(int r, int c){
+                return false;
+            }
+        };
+        btnExportVariance1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         expensesTable = new javax.swing.JTable();
@@ -155,6 +158,8 @@ public class ReportsTab extends javax.swing.JFrame {
         startDate = new org.jdesktop.swingx.JXDatePicker();
         toLabel = new javax.swing.JLabel();
         endDate = new org.jdesktop.swingx.JXDatePicker();
+        generateBtn = new javax.swing.JButton();
+        dateError = new javax.swing.JLabel();
         Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -222,6 +227,51 @@ public class ReportsTab extends javax.swing.JFrame {
         jTabbedPane1.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(352, 438));
 
+        salesTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Name", "Beginning", "Delivery", "Sales", "Wastages", "EOD", "Variance"
+            }
+        ));
+        jScrollPane9.setViewportView(salesTable);
+
+        btnExportVariance1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/ExportBtn.png"))); // NOI18N
+        btnExportVariance1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportVariance1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout SalesLayout = new javax.swing.GroupLayout(Sales);
+        Sales.setLayout(SalesLayout);
+        SalesLayout.setHorizontalGroup(
+            SalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SalesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(SalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+                    .addGroup(SalesLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnExportVariance1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        SalesLayout.setVerticalGroup(
+            SalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SalesLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(btnExportVariance1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("SALES", Sales);
+
         expensesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
@@ -261,7 +311,7 @@ public class ReportsTab extends javax.swing.JFrame {
         expensesPanel.setLayout(expensesPanelLayout);
         expensesPanelLayout.setHorizontalGroup(
             expensesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 565, Short.MAX_VALUE)
         );
         expensesPanelLayout.setVerticalGroup(
             expensesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -346,7 +396,7 @@ public class ReportsTab extends javax.swing.JFrame {
         );
         grossPanelLayout.setVerticalGroup(
             grossPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 182, Short.MAX_VALUE)
+            .addGap(0, 181, Short.MAX_VALUE)
         );
 
         dateErrorLabel2.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
@@ -378,8 +428,8 @@ public class ReportsTab extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(grossPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72))
+                .addComponent(grossPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("GROSS INCOME", jPanel5);
@@ -427,7 +477,7 @@ public class ReportsTab extends javax.swing.JFrame {
         );
         netIncomePanelLayout.setVerticalGroup(
             netIncomePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 185, Short.MAX_VALUE)
+            .addGap(0, 181, Short.MAX_VALUE)
         );
 
         dateErrorLabel3.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
@@ -459,7 +509,7 @@ public class ReportsTab extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(netIncomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(netIncomePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -538,34 +588,63 @@ public class ReportsTab extends javax.swing.JFrame {
         toLabel.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         toLabel.setText("To:");
 
+        endDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                endDateActionPerformed(evt);
+            }
+        });
+
+        generateBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/EnterBtn.png"))); // NOI18N
+        generateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateBtnActionPerformed(evt);
+            }
+        });
+
+        dateError.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        dateError.setForeground(new java.awt.Color(255, 0, 1));
+        dateError.setText("ERROR: Range must be valid.");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(78, 78, 78)
-                .addComponent(fromLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(toLabel)
-                .addGap(18, 18, 18)
-                .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(132, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(fromLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(41, 41, 41)
+                                .addComponent(toLabel))
+                            .addComponent(dateError))
+                        .addGap(18, 18, 18)
+                        .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(generateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addGap(0, 19, Short.MAX_VALUE)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fromLabel)
-                    .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(toLabel)
-                    .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(0, 5, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(generateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(fromLabel)
+                            .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(toLabel)
+                            .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(dateError)
+                        .addGap(3, 3, 3)))
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -673,7 +752,7 @@ public class ReportsTab extends javax.swing.JFrame {
         Date d = new Date();
         String path = dateFormat.format(d) + " btf reports.xls";
 
-       //DateItem date = (DateItem) dateCombo.getSelectedItem();
+        //DateItem date = (DateItem) dateCombo.getSelectedItem();
         //checkExcelExist(varianceTable, path, date.getValue());
     }//GEN-LAST:event_btnExportVarianceActionPerformed
 
@@ -709,15 +788,63 @@ public class ReportsTab extends javax.swing.JFrame {
         //set minimum to current day
         endDate.getMonthView().setLowerBound(cal.getTime());
 
+        if (isValidDate()) {
+            generateSales();
+            dateError.setVisible(false);
+        } else {
+            dateError.setVisible(true);
+        }
+
+
     }//GEN-LAST:event_startDateActionPerformed
 
     private void varianceDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varianceDateActionPerformed
         DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
         Date sDate = varianceDate.getDate();
         String vdate = t.format(sDate);
-        
+
         generateReport(vdate);
     }//GEN-LAST:event_varianceDateActionPerformed
+
+    private void generateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateBtnActionPerformed
+        // TODO add your handling code here:
+        Date sDate = startDate.getDate();
+        Date eDate = endDate.getDate();
+
+        LocalDate start = new LocalDate(sDate);
+        LocalDate end = new LocalDate(eDate);
+        if (start.isBefore(end) || start.isEqual(end)) { // CHECK IF START IS <== END
+
+            GITable();
+            makeGIChart();
+            expTable();
+            makeExpChart();
+            netTable();
+            makeNetChart();
+
+        } else {
+
+            dateErrorLabel1.setVisible(true);
+            dateErrorLabel2.setVisible(true);
+            dateErrorLabel3.setVisible(true);
+
+        }
+
+
+    }//GEN-LAST:event_generateBtnActionPerformed
+
+    private void btnExportVariance1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportVariance1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnExportVariance1ActionPerformed
+
+    private void endDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDateActionPerformed
+        if (isValidDate()) {
+            generateSales();
+            dateError.setVisible(false);
+        } else {
+            dateError.setVisible(true);
+        }
+    }//GEN-LAST:event_endDateActionPerformed
 
     /**
      * * <--- CLARK'S CODE STARTS HERE ---> **
@@ -844,7 +971,6 @@ public class ReportsTab extends javax.swing.JFrame {
     /**
      * * <--- CLARK'S CODE ENDS HERE ---> **
      */
-
     /**
      * * <--- KIM'S CODE STARTS HERE ---> **
      */
@@ -957,7 +1083,7 @@ public class ReportsTab extends javax.swing.JFrame {
 
         DateTimeFormatter dispFmt = DateTimeFormat.forPattern("MMM, dd");
         DateTimeFormatter compFmt = DateTimeFormat.forPattern("YYYY-MM-dd");
-       // <!-- KIM DATEPICKER CODES END -->
+        // <!-- KIM DATEPICKER CODES END -->
 
         String cols[] = {"Name", "Gross Income"};
         DefaultTableModel actualTable = new DefaultTableModel(cols, 0) {
@@ -1088,14 +1214,133 @@ public class ReportsTab extends javax.swing.JFrame {
     /**
      * * <--- JANE CODE STARTS HERE ---> **
      */
-    
+    //**GENERIC **//
+    private boolean isValidDate() {
+        DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+        Date sDate = startDate.getDate();
+        Date eDate = endDate.getDate();
+        String start = t.format(sDate);
+        String end = t.format(eDate);
+        if (end.compareTo(start) < 0) { //if end date is before start
+            return false;
+        }
+
+        return true;
+    }
+
+    private ArrayList<RecipeBean> getAllRecipes(ArrayList<RecipeBean> o, ArrayList<RecipeBean> a) {
+        ArrayList<Integer> oRC = new ArrayList<Integer>();
+        ArrayList<Integer> aRC = new ArrayList<Integer>();
+
+        for (RecipeBean r : o) {
+            oRC.add(r.getRecipeID());
+        }
+
+        for (RecipeBean r : a) {
+            aRC.add(r.getRecipeID());
+        }
+
+        HashSet<Integer> nRC = new LinkedHashSet<Integer>();
+        nRC.addAll(oRC);
+        nRC.addAll(aRC);
+
+        oRC.clear();
+        oRC.addAll(nRC);
+
+        o.clear();
+        for (int i : oRC) {
+            o.add(rcImp.getRecipeBean(i));
+        }
+
+        return o;
+
+    }
+
+    //** FOR SALES **//
+    private void generateSales() {
+        DateFormat t = new SimpleDateFormat("yyyy-MM-dd");
+        Date sDate = startDate.getDate();
+        Date eDate = endDate.getDate();
+        String start = t.format(sDate);
+        String end = t.format(eDate);
+
+        ArrayList<String> aSDates = sImp.getRangeDates(start, end); //get range
+        if (aSDates != null) {
+            ArrayList<RecipeBean> oSRecipes = new ArrayList<RecipeBean>();
+            ArrayList<RecipeBean> aSRecipes = new ArrayList<RecipeBean>();
+            ArrayList<RecipeBean> pSRecipes = new ArrayList<RecipeBean>();
+
+            ArrayList<String> cols = new ArrayList<String>();
+            cols.add("Recipe ID");
+            cols.add("Recipe");
+
+            //int count = 1;
+            //get all recipes
+            for (String d : aSDates) {
+                cols.add(d);
+                if (!aSRecipes.isEmpty()) {
+                    aSRecipes.clear();
+                }
+                aSRecipes = sImp.getAllSales(d);
+                oSRecipes = getAllRecipes(oSRecipes, aSRecipes);
+                /*
+                 System.out.println("ROLL " + count);
+                 for (RecipeBean h : oSRecipes) {
+                 System.out.println(h.getRecipe());
+                 }
+                 System.out.println();
+                 count++;*/
+            }
+
+            String colmns[] = new String[cols.size()];
+            colmns = cols.toArray(colmns);
+
+            DefaultTableModel salesModel = new DefaultTableModel(colmns, 0) {
+                @Override
+                public Class getColumnClass(int col) {
+                    if (col == 0) {
+                        return Integer.class;
+                    } else if (col == 1) {
+                        return String.class;
+                    }else{
+                        return Float.class;
+                    }
+                }
+            };
+
+            for (RecipeBean r : oSRecipes) {
+                ArrayList<Object> data = new ArrayList<Object>();
+                NumberFormat nFormatter = new DecimalFormat("#0.00");
+                data.add(r.getRecipeID());
+                data.add(r.getRecipe());
+                for (String d : aSDates) {
+                    float s = sImp.getQuantityByRecipeByDay(d, "sales", r);
+                    data.add(Float.parseFloat(nFormatter.format(s)));
+                }
+
+                Object row[] = new Object[data.size()];
+                row = data.toArray(row);
+
+                salesModel.addRow(row);
+            }
+
+            salesTable.setModel(salesModel);
+            //adjustTable(salesTable);
+            salesTable.getColumnModel().getColumn(0).setMinWidth(0);
+            salesTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
+        }
+
+    }
+    //**FOR SALES END **/
+
     //** FOR VARIANCE START **//
-    private void generateReport(String d){
+    private void generateReport(String d) {
         ArrayList<RawBean> aRaw = tcImp.getAllTRaw(d); //recipes w beginning already set
         String cols[] = {"Raw ID", "Raw Material", "Beginning", "Sales", "Delivery", "Used", "Transfer", "Wastage", "Actual Count", "Variance"};
         DefaultTableModel varianceModel = new DefaultTableModel(cols, 0);
-        
-        for(RawBean rw: aRaw){
+
+        for (RawBean rw : aRaw) {
             float sales = computeSales(rw); //!!!
             float delivery = tcImp.getQuantityByDayByRaw(d, "delivery", rw);
             float used = tcImp.getQuantityByDayByRaw(d, "used", rw);
@@ -1103,57 +1348,55 @@ public class ReportsTab extends javax.swing.JFrame {
             float wastage = tcImp.getQuantityByDayByRaw(d, "delivery", rw);
             float actual = tcImp.getQuantityByDayByRaw(d, "actual", rw);
             float variance = rw.getStock() + delivery - sales - used - transferred - wastage - actual;
-            
-            Object iRaw[] = {rw.getRawID(), rw.getRaw(), 
-                rw.getStock(), 
-                String.format("%.2f", sales), 
-                String.format("%.2f", delivery), 
-                String.format("%.2f", used), 
-                String.format("%.2f", transferred), 
-                String.format("%.2f", wastage), 
-                String.format("%.2f", actual), 
-                String.format("%.2f", variance) };
-            
+
+            Object iRaw[] = {rw.getRawID(), rw.getRaw(),
+                rw.getStock(),
+                String.format("%.2f", sales),
+                String.format("%.2f", delivery),
+                String.format("%.2f", used),
+                String.format("%.2f", transferred),
+                String.format("%.2f", wastage),
+                String.format("%.2f", actual),
+                String.format("%.2f", variance)};
+
             varianceModel.addRow(iRaw);
         }
-        
+
         varianceTable.setModel(varianceModel);
         varianceTable.getColumnModel().getColumn(0).setMinWidth(0);
         varianceTable.getColumnModel().getColumn(0).setMaxWidth(0);
         adjustTable(varianceTable);
         btnExportVariance.setVisible(true);
     }
-    
-    private float computeSales(RawBean r){
+
+    private float computeSales(RawBean r) {
         float total = 0;
-        
+
         //get a
         return total;
     }
-    
-    
+
     //** FOR VARIANCE END **//
-    
     ChangeListener changeListener = new ChangeListener() {
-      public void stateChanged(ChangeEvent changeEvent) {
-        JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-        int index = sourceTabbedPane.getSelectedIndex();
-        //System.out.println("INDEX: "+ index);
-        if(sourceTabbedPane.getTitleAt(index).equals("VARIANCE")){
-            startDate.setVisible(false);
-            endDate.setVisible(false);
-            
-            fromLabel.setVisible(false);
-            toLabel.setVisible(false);
-        }else{
-            startDate.setVisible(true);
-            endDate.setVisible(true);
-            
-            fromLabel.setVisible(true);
-            toLabel.setVisible(true);
+        public void stateChanged(ChangeEvent changeEvent) {
+            JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+            int index = sourceTabbedPane.getSelectedIndex();
+            //System.out.println("INDEX: "+ index);
+            if (sourceTabbedPane.getTitleAt(index).equals("VARIANCE")) {
+                startDate.setVisible(false);
+                endDate.setVisible(false);
+
+                fromLabel.setVisible(false);
+                toLabel.setVisible(false);
+            } else {
+                startDate.setVisible(true);
+                endDate.setVisible(true);
+
+                fromLabel.setVisible(true);
+                toLabel.setVisible(true);
+            }
+            //System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
         }
-        //System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
-      }
     };
     /**
      * * <--- JANE CODE ENDS HERE ---> **
@@ -1167,7 +1410,10 @@ public class ReportsTab extends javax.swing.JFrame {
     private javax.swing.JButton RMBtn;
     private javax.swing.JButton RecipesBtn;
     private javax.swing.JButton ReportsBtn;
+    private javax.swing.JPanel Sales;
     private javax.swing.JButton btnExportVariance;
+    private javax.swing.JButton btnExportVariance1;
+    private javax.swing.JLabel dateError;
     private javax.swing.JLabel dateErrorLabel1;
     private javax.swing.JLabel dateErrorLabel2;
     private javax.swing.JLabel dateErrorLabel3;
@@ -1175,6 +1421,7 @@ public class ReportsTab extends javax.swing.JFrame {
     private javax.swing.JPanel expensesPanel;
     private javax.swing.JTable expensesTable;
     private javax.swing.JLabel fromLabel;
+    private javax.swing.JButton generateBtn;
     private javax.swing.JTable grossIncomeTable;
     private javax.swing.JPanel grossPanel;
     private javax.swing.JButton jButton1;
@@ -1192,9 +1439,11 @@ public class ReportsTab extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel netIncomePanel;
     private javax.swing.JTable netIncomeTable;
+    private javax.swing.JTable salesTable;
     private org.jdesktop.swingx.JXDatePicker startDate;
     private javax.swing.JLabel toLabel;
     private org.jdesktop.swingx.JXDatePicker varianceDate;

@@ -33,6 +33,10 @@ public class InventoryTab extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         prepareTable();
+        
+        
+        recipeTable.getTableHeader().setResizingAllowed(false);
+        rawTable.getTableHeader().setResizingAllowed(false);
     }
     
     @SuppressWarnings("unchecked")
@@ -41,7 +45,13 @@ public class InventoryTab extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        rawTable = new javax.swing.JTable();
+        rawTable = new javax.swing.JTable(){
+            @Override
+            public boolean isCellEditable(int r, int c){
+                return false;
+            }
+
+        };
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         recipeTable = new javax.swing.JTable();
@@ -414,6 +424,7 @@ public class InventoryTab extends javax.swing.JFrame {
         // recipe Stocks
         String cols[] = {"Name", "Stock"};
         DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
+        
         avRecipes = rcImp.getRecipeByStatus("available");
 
         if (avRecipes != null) {
@@ -467,7 +478,10 @@ public class InventoryTab extends javax.swing.JFrame {
         recipeTable.getColumn("Stock").setCellRenderer(rightRenderer);
         recipeTable.setRowSelectionAllowed(true);
         //System.out.println(recipeTable.getRowSelectionAllowed());
+        rawTable.setAutoCreateRowSorter(true);
     }
+    
+    
 
     
     /**

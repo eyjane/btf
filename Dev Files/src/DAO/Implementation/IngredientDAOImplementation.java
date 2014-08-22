@@ -133,11 +133,13 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
         try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-
+            
+            String date = getNearestDate(d);
+            
             String query = "select * from ingredients where recipeID = ? and date_ingredient = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, r.getRecipeID());
-            preparedStatement.setString(2, d);
+            preparedStatement.setString(2, date);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -156,6 +158,35 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
             Logger.getLogger(IngredientDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return aIngredient;
+    }
+    
+    @Override
+    public String getNearestDate(String d){
+        String n = "none";
+        
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+
+            String query = "select date_ingredient from ingredients where date_ingredient <= ? order by 1 desc;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+           
+            preparedStatement.setString(1, d);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            int count = 1;
+            while (resultSet.next()) {
+                if(count == 1){
+                    n = resultSet.getString("date_ingredient");
+                    break;
+                }
+            }
+            connection.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(IngredientDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return n;
     }
 
     @Override
