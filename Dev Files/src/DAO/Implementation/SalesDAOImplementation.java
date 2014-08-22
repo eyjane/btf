@@ -312,9 +312,4 @@ public class SalesDAOImplementation implements SalesDAOInterface {
         }
         return aDates;
     }
-
-    @Override
-    public float getTotalRawSales(RawBean r, String d) {
-        return (float) 3.4;
-    }
 }
