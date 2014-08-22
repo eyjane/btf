@@ -29,7 +29,7 @@ public class AddCG extends javax.swing.JFrame {
         prepareTable();
         errorLabel1.setVisible(false);
         errorLabel2.setVisible(false);
-        
+        errorLabel3.setVisible(false);
     }
     
     public void prepareTable(){
@@ -44,15 +44,17 @@ public class AddCG extends javax.swing.JFrame {
         cat = new CategoryBean();
         if(nameField.getText().equals("")) {
             errorLabel1.setVisible(true);
+            errorLabel2.setVisible(false);
+            errorLabel3.setVisible(true);
             flag = false;
         }
         else {
             cat.setCategory(nameField.getText());
             errorLabel1.setVisible(false);
             errorLabel2.setVisible(false);
+            errorLabel3.setVisible(false);
             for(int i = 0; i < c.size(); i++){
                 if(nameField.getText().equalsIgnoreCase(c.get(i).getCategory())) {
-                    errorLabel1.setVisible(true);
                     errorLabel2.setVisible(true);
                     flag = false;
                 } 

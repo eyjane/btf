@@ -39,6 +39,7 @@ private RawDAOInterface rwImp = new RawDAOImplementation();
         errorLabel8.setVisible(false);
         errorLabel9.setVisible(false);
         errorLabel10.setVisible(false);
+        disableFields();
         prepareTable();
     }
     
@@ -52,6 +53,7 @@ private RawDAOInterface rwImp = new RawDAOImplementation();
             try {
             DefaultTableModel defaultTableModel = (DefaultTableModel) rmTable.getModel();
             if (rmTable.getSelectedRow() >= 0) { 
+                enableFields();
                 raw = rwImp.getRaw((int) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0));
                 setFields(raw);
             } else {
@@ -79,6 +81,31 @@ private RawDAOInterface rwImp = new RawDAOImplementation();
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    public boolean checkError() {
+        if(nameField.getText().equals("") || priceField.getText().equals("") || 
+                stockField.getText().equals("") || criticalField.getText().equals("") ||
+                    uomField.getText().equals(""))
+            return false;
+        else
+            return true;
+    }
+    
+    public void disableFields() {
+        nameField.setEditable(false);
+        priceField.setEditable(false);
+        stockField.setEditable(false);
+        criticalField.setEditable(false);
+        uomField.setEditable(false);
+    }
+    
+    public void enableFields() {
+        nameField.setEditable(true);
+        priceField.setEditable(true);
+        stockField.setEditable(true);
+        criticalField.setEditable(true);
+        uomField.setEditable(true);
     }
     
     //<--- CLARK'S CODE ENDS HERE --->
@@ -498,24 +525,23 @@ private RawDAOInterface rwImp = new RawDAOImplementation();
         int select = rmTable.getSelectedRow();
         if (select <= 0) {
             JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+            nameField.setText("");
         } else{
             if(nameField.getText().equals("")) {
                 errorLabel1.setVisible(true);
                 errorLabel2.setVisible(false);
                 errorLabel10.setVisible(true);
             } else {
-                //errorLabel1.setVisible(false);
-                //errorLabel2.setVisible(false);
-                //errorLabel10.setVisible(false);
+                errorLabel1.setVisible(false);
+                errorLabel2.setVisible(false);
+                if(checkError())
+                    errorLabel10.setVisible(false);
                 raw.setRaw(nameField.getText());
                 ArrayList<RawBean> rList = new ArrayList<RawBean>();
                 rList = rwImp.getRawByStatus("available");
                 for(int i = 0; i < rList.size(); i++){
                     if(nameField.getText().equalsIgnoreCase(rList.get(i).getRaw())) {
-                            //&& Integer.parseInt(idField.getText()) != rwImp.getAllRaw().get(i).getRawID()) {
-                         errorLabel1.setVisible(false);
                          errorLabel2.setVisible(true);
-                         errorLabel10.setVisible(false);
                     }
                 }
             }
@@ -526,22 +552,28 @@ private RawDAOInterface rwImp = new RawDAOImplementation();
         int select = rmTable.getSelectedRow();
         if (select <= 0) {
             JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+            priceField.setText("");
         } else{
-            if(!priceField.getText().equals("") && isNumber(priceField.getText())) {
-                if(Float.parseFloat(priceField.getText()) > 0) {
-                    errorLabel3.setVisible(false);
-                    errorLabel4.setVisible(false);
-                    errorLabel10.setVisible(false);
-                    raw.setPrice(Float.parseFloat(priceField.getText()));
-                } else {
-                    errorLabel3.setVisible(false);
-                    errorLabel4.setVisible(true);
-                    errorLabel10.setVisible(false);
-                }
-            } else 
+            if(priceField.getText().equals("")) {
                 errorLabel3.setVisible(true);
                 errorLabel4.setVisible(false);
                 errorLabel10.setVisible(true);
+            } else {
+                if(isNumber(priceField.getText())) {
+                    if(Float.parseFloat(priceField.getText()) > 0) {
+                        errorLabel3.setVisible(false);
+                        errorLabel4.setVisible(false);
+                        if(checkError())
+                            errorLabel10.setVisible(false);
+                        raw.setPrice(Float.parseFloat(priceField.getText()));
+                    }
+                } else {
+                    errorLabel3.setVisible(false);
+                    errorLabel4.setVisible(true);
+                    if(checkError())
+                        errorLabel10.setVisible(false);
+                }
+            }
         }
     }//GEN-LAST:event_priceFieldKeyReleased
 
@@ -549,22 +581,28 @@ private RawDAOInterface rwImp = new RawDAOImplementation();
         int select = rmTable.getSelectedRow();
         if (select <= 0) {
             JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+            stockField.setText("");
         } else{
-            if(!stockField.getText().equals("") && isNumber(stockField.getText())) {
-                if(Float.parseFloat(stockField.getText()) > 0) {
-                    errorLabel5.setVisible(false);
-                    errorLabel6.setVisible(false);
-                    errorLabel10.setVisible(false);
-                    raw.setStock(Float.parseFloat(stockField.getText()));
-                } else {
-                    errorLabel5.setVisible(false);
-                    errorLabel6.setVisible(true);
-                    errorLabel10.setVisible(false);
-                }
-            } else
+            if(stockField.getText().equals("")) {
                 errorLabel5.setVisible(true);
                 errorLabel6.setVisible(false);
                 errorLabel10.setVisible(true);
+            } else {
+                if(isNumber(stockField.getText())) {
+                    if(Float.parseFloat(stockField.getText()) > 0) {
+                        errorLabel5.setVisible(false);
+                        errorLabel6.setVisible(false);
+                        if(checkError())
+                            errorLabel10.setVisible(false);
+                        raw.setStock(Float.parseFloat(stockField.getText()));
+                    }
+                } else {
+                    errorLabel5.setVisible(false);
+                    errorLabel6.setVisible(true);
+                    if(checkError())
+                        errorLabel10.setVisible(false);
+                }
+            }
         }
     }//GEN-LAST:event_stockFieldKeyReleased
 
@@ -572,22 +610,28 @@ private RawDAOInterface rwImp = new RawDAOImplementation();
         int select = rmTable.getSelectedRow();
         if (select <= 0) {
             JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+            criticalField.setText("");
         } else{
-            if(!criticalField.getText().equals("") && isNumber(criticalField.getText())) {
-                if(Float.parseFloat(criticalField.getText()) > 0) {
-                    errorLabel7.setVisible(false);
-                    errorLabel8.setVisible(false);
-                    errorLabel10.setVisible(false);
-                    raw.setCritical(Float.parseFloat(criticalField.getText()));
-                } else {
-                    errorLabel7.setVisible(false);
-                    errorLabel8.setVisible(true);
-                    errorLabel10.setVisible(false);
-                }
-            } else 
+            if(criticalField.getText().equals("")) {
                 errorLabel7.setVisible(true);
                 errorLabel8.setVisible(false);
                 errorLabel10.setVisible(true);
+            } else {
+                if(isNumber(criticalField.getText())) {
+                    if(Float.parseFloat(criticalField.getText()) > 0) {
+                        errorLabel7.setVisible(false);
+                        errorLabel8.setVisible(false);
+                        if(checkError())
+                            errorLabel10.setVisible(false);
+                        raw.setCritical(Float.parseFloat(criticalField.getText()));
+                    }
+                } else {
+                    errorLabel7.setVisible(false);
+                    errorLabel8.setVisible(true);
+                    if(checkError())
+                        errorLabel10.setVisible(false);
+                }
+            }
         }
     }//GEN-LAST:event_criticalFieldKeyReleased
 
@@ -595,14 +639,17 @@ private RawDAOInterface rwImp = new RawDAOImplementation();
         int select = rmTable.getSelectedRow();
         if (select <= 0) {
             JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+            uomField.setText("");
         } else{
-            if(!uomField.getText().equals("")) {
-                errorLabel9.setVisible(false);
-                errorLabel10.setVisible(false);
-                raw.setUom(uomField.getText());
-            } else 
+            if(uomField.getText().equals("")) {
                 errorLabel9.setVisible(true);
                 errorLabel10.setVisible(true);
+            } else {
+                raw.setUom(uomField.getText());
+                errorLabel9.setVisible(false);
+                if(checkError())
+                    errorLabel10.setVisible(false);
+            }
         }
     }//GEN-LAST:event_uomFieldKeyReleased
 

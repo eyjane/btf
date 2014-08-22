@@ -35,6 +35,7 @@ public class EditCG extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         cm = c;
+        disableFields();
         prepareTable();
         errorLabel1.setVisible(false);
         errorLabel2.setVisible(false);
@@ -76,6 +77,7 @@ public class EditCG extends javax.swing.JFrame {
             try {
             DefaultTableModel defaultTableModel = (DefaultTableModel) categoryTable.getModel();
             if (categoryTable.getSelectedRow() >= 0) { 
+                enableFields();
                 cat = ctImp.getCategory((int) defaultTableModel.getValueAt(categoryTable.getSelectedRow(), 0));
                 cat.setaRecipes(rcImp.getRecipeByCategory(cat));
                 nameField.setText(cat.getCategory());
@@ -94,10 +96,12 @@ public class EditCG extends javax.swing.JFrame {
         boolean flag = true;
         ArrayList<CategoryBean> c = ctImp.getAllCategory();
         int select = categoryTable.getSelectedRow();
-        if (select <= 0) {
-            JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
-            flag = false;
-        } else{
+        //if (select <= 0) {
+            //JOptionPane.showMessageDialog(null, "Please select an entry to delete.", "Blank Form", JOptionPane.WARNING_MESSAGE);
+            //nameField.setText("");
+            //flag = false;
+            
+       // } else{
             if(nameField.getText().equals("")) {
                 errorLabel1.setVisible(true);
                 errorLabel2.setVisible(false);
@@ -116,8 +120,18 @@ public class EditCG extends javax.swing.JFrame {
                     } 
                 }
             }
-        }
+        //}
         return flag;
+    }
+    
+    public void disableFields() {
+        nameField.setEditable(false);
+        EditRecipesBtn.setEnabled(false);
+    }
+    
+    public void enableFields() {
+        nameField.setEditable(true);
+        EditRecipesBtn.setEnabled(true);
     }
     
     public CategoryBean getCategory(){
