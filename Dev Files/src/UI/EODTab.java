@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -110,10 +111,10 @@ public class EODTab extends javax.swing.JFrame {
         date = getDateXML();
         
         //disable submit
-        if(getValueXML("Sales").equals("0")){
+        /*if(getValueXML("Sales").equals("0")){
             submitSales.setVisible(false);
             errorLabel.setText("SALES REPORT HAS ALREADY BEEN SUBMITTED FOR TODAY (" + getDateXML() + ")");
-        }
+        }*/
         
         
     }
@@ -686,11 +687,12 @@ public class EODTab extends javax.swing.JFrame {
                 }
 
             }
-            /*if (inputLockDown()) {
-                submitSales.setVisible(false);
-            }*/
-            //this.setVisible(false);
-            //main.setVisible(true);
+            if(getValueXML("Sales").equals("0")){
+                    setValueXML("Sales");
+                    //enterSales1.setVisible(false);
+                    ViewAllStatus();
+                    //BtnNewDay.setEnabled(true);
+            }
 
         } else {
             return;
@@ -721,23 +723,25 @@ public class EODTab extends javax.swing.JFrame {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
-            String curDate = dateFormat.format(d);
+            String curDate = dateFormat.format(d) ;
             Calendar cal1 = Calendar.getInstance();
             cal1.add(Calendar.DATE, +1);
             String nextDate = dateFormat.format(cal1.getTime());
-
-            if (getDateXML().equals(curDate)) {
-                if (JOptionPane.showConfirmDialog(null, "Are you sure you're done for the day?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    nextDay(nextDate);
-                    JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
+        
+            if(getDateXML().equals(curDate)) {
+                if(JOptionPane.showConfirmDialog(null, "Are you sure you're done for the day?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+                        nextDay(nextDate);
+                        ViewAllStatus();
+                        JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
-            } else if (!getDateXML().equals(nextDate) && !getDateXML().equals(curDate)) {
+            } else if(!getDateXML().equals(nextDate) && !getDateXML().equals(curDate)) {
                 nextDay(curDate);
+                ViewAllStatus();
                 JOptionPane.showMessageDialog(null, "New date is " + curDate, "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        } 
     }//GEN-LAST:event_BtnNewDayActionPerformed
 
     private void actualSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualSubmitActionPerformed
@@ -779,11 +783,13 @@ public class EODTab extends javax.swing.JFrame {
 
                 }
 
-                /*
-                 if(inputLockDown()){
-                 actualSubmit.setVisible(false);
-                 main.setNextDayBtn();
-                 }*/
+                if(getValueXML("Actual").equals("0")){
+                    setValueXML("Actual");
+                    actualSubmit.setVisible(false);
+                    ViewAllStatus();
+                    BtnNewDay.setVisible(true);
+                }
+                
                 JOptionPane.showMessageDialog(null, "Submission was successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 makeActualTable();
             } else {
@@ -875,9 +881,13 @@ public class EODTab extends javax.swing.JFrame {
                         tclmp.addTransaction(t, raw, q);
                     }
                 }
-                /*if(inputLockDown()){
-                 utwSubmit.setVisible(false);
-                 }*/
+                if(getValueXML("Materials").equals("0")){
+                    setValueXML("Materials");
+                    //utwSubmit.setVisible(false);
+                    ViewAllStatus();
+                    //BtnNewDay.setEnabled(true);
+                }
+                
                 JOptionPane.showMessageDialog(null, "Submission was successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 makeRMTable();
             } else {
@@ -937,7 +947,14 @@ public class EODTab extends javax.swing.JFrame {
                     raw.setStock(Float.parseFloat(deliveryTable.getValueAt(c, 4).toString()));
                     rmImp.editRaw(raw);
                 }
-
+                    
+                if(getValueXML("Delivery").equals("0")){
+                    setValueXML("Delivery");
+                    //deliverySubmit.setVisible(false);
+                    ViewAllStatus();
+                    //BtnNewDay.setEnabled(true);
+                }
+                
                 JOptionPane.showMessageDialog(null, "Submission was successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 makeDeliveryTable();
 
@@ -980,111 +997,144 @@ public class EODTab extends javax.swing.JFrame {
     /**
      * < -- CLARK'S FUNCTIONS START -- > *
      */
-    public DefaultTableModel initializeTable() {
+    public DefaultTableModel initializeTable(){
         DefaultTableModel defaultTableModel = new DefaultTableModel();
         defaultTableModel.addColumn("Name");
         defaultTableModel.addColumn("Status");
         return defaultTableModel;
     }
-
-    public void ViewAllStatus() {
-        DefaultTableModel defaultModel = initializeTable();
-        String eodList[] = new String[4];
-        String text = "";
-        eodList[0] = "Actual";
-        eodList[1] = "Sales";
-        eodList[2] = "Materials";
-        eodList[3] = "Delivery";
-
-        for (int i = 0; i < eodList.length; i++) {
-            if (getValueXML(eodList[i]).equals("1")) {
-                text = "Submitted";
+    
+    public void ViewAllStatus(){
+       DefaultTableModel defaultModel = initializeTable();
+       String eodList[] = new String[4];
+       JButton buttonList[] = new JButton[4];
+       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+       Calendar cal1 = Calendar.getInstance();
+       cal1.add(Calendar.DATE, +1);
+       String nextDate = dateFormat.format(cal1.getTime());
+       String text = "";
+       eodList[0] = "Actual";
+       eodList[1] = "Sales";
+       eodList[2] = "Materials";
+       eodList[3] = "Delivery";
+       buttonList[0] = actualSubmit;
+       buttonList[1] = submitSales;
+       buttonList[2] = utwSubmit;
+       buttonList[3] = deliverySubmit;
+       
+       for (int i = 0; i < eodList.length; i++) {
+            if(getValueXML(eodList[i]).equals("1")) {
+                 text = "Submitted";
+                 buttonList[i].setVisible(false);
             } else {
                 text = "Not yet submitted";
+                if(!getDateXML().equals(nextDate))
+                    buttonList[i].setVisible(true);
+                else
+                    buttonList[i].setVisible(false);
             }
-            defaultModel.addRow(new Object[]{eodList[i], text});
-        }
-
-        newdayTable.setModel(defaultModel);
+            defaultModel.addRow(new Object[] {eodList[i], text});
+       }
+       
+       newdayTable.setModel(defaultModel);
     }
-
+    
     private void nextDay(String curDate) {
         try {
             String filepath = "btf.xml";
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-
+            
+            doc.getElementsByTagName("date").item(0).setTextContent(curDate);
             doc.getElementsByTagName("Delivery").item(0).setTextContent("0");
             doc.getElementsByTagName("Materials").item(0).setTextContent("0");
             doc.getElementsByTagName("Sales").item(0).setTextContent("0");
             doc.getElementsByTagName("Actual").item(0).setTextContent("0");
-
+            
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(filepath));
             transformer.transform(source, result);
-
-            BtnNewDay.setEnabled(false);
+            
+            BtnNewDay.setVisible(false);
         } catch (Exception e) {
-            e.printStackTrace();
-        }
+             e.printStackTrace();
+        } 
     }
-
+    
     public String getDateXML() {
-        String date = "";
+        String date = ""; 
         try {
             String filepath = "btf.xml";
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-
+            
             date = doc.getElementsByTagName("date").item(0).getTextContent();
-
+                        
         } catch (Exception e) {
-            e.printStackTrace();
-        }
+             e.printStackTrace();
+        } 
         return date;
     }
-
+    
     public String getValueXML(String x) {
-        String value = "";
+        String value = ""; 
         try {
             String filepath = "btf.xml";
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-
+            
             value = doc.getElementsByTagName(x).item(0).getTextContent();
-
+                        
         } catch (Exception e) {
-            e.printStackTrace();
-        }
+             e.printStackTrace();
+        } 
         return value;
     }
-
-    public void checkDate() {
+    
+    public void setValueXML(String x) {
         try {
+            String filepath = "btf.xml";
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(filepath);
+            
+            doc.getElementsByTagName(x).item(0).setTextContent("1");
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(filepath));
+            transformer.transform(source, result);            
+        } catch (Exception e) {
+             e.printStackTrace();
+        } 
+    }
+    
+    public void checkDate() {
+        try{
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
-            String curDate = dateFormat.format(d);
+            String curDate = dateFormat.format(d) ;
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, +1);
             String nextDate = dateFormat.format(cal.getTime());
 
             String actual = getValueXML("Actual");
 
-            if (getDateXML().equals(curDate)) {
-                if (actual.equals("0")) {
+            if(getDateXML().equals(curDate)) {
+                if(actual.equals("0")) {
                     BtnNewDay.setVisible(false);
-                } else if (actual.equals("1")) {
+                } else if(actual.equals("1")) {
                     BtnNewDay.setVisible(true);
                 }
-            } else if (getDateXML().equals(nextDate)) {
+            } else if(getDateXML().equals(nextDate)) {
                 BtnNewDay.setVisible(false);
             }
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -1092,7 +1142,7 @@ public class EODTab extends javax.swing.JFrame {
     public void setNextDayBtn() {
         BtnNewDay.setVisible(true);
     }
-
+    
     /**
      * < -- CLARK'S FUNCTIONS END -- > *
      */
