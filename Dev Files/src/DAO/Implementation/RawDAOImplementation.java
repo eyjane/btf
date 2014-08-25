@@ -252,15 +252,15 @@ public class RawDAOImplementation implements RawDAOInterface {
     }
     
     @Override
-    public boolean updateStock (String s, float a) {
+    public boolean updateStock (int ID, float a) {
         
         try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "UPDATE raw SET stock = ? WHERE raw = ?;";
+            String query = "UPDATE raw SET stock = ? WHERE rawID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setFloat(1, a);
-            preparedStatement.setString(2, s);
+            preparedStatement.setInt(2, ID);
             preparedStatement.executeUpdate();
             connection.close();
             return true;
