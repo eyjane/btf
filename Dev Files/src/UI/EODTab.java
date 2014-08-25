@@ -40,6 +40,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import static javax.swing.TransferHandler.COPY_OR_MOVE;
 import static javax.swing.TransferHandler.MOVE;
@@ -101,7 +102,6 @@ public class EODTab extends javax.swing.JFrame {
     private float totalComp = 0;
     public ArrayList<record> oldA = new ArrayList<record>();
 
-    
     public EODTab() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
@@ -114,21 +114,17 @@ public class EODTab extends javax.swing.JFrame {
         actualErrorLabel.setVisible(false);
         materialsErrorLabel.setVisible(false);
         deliveryErrorLabel.setVisible(false);
-        
+
         errorLabel.setVisible(false);
         prepareTable();
         checkDate();
         date = getDateXML();
-        
+
         //disable submit
         /*if(getValueXML("Sales").equals("0")){
-            submitSales.setVisible(false);
-            errorLabel.setText("SALES REPORT HAS ALREADY BEEN SUBMITTED FOR TODAY (" + getDateXML() + ")");
-        }*/
-        
-        
-        
-        
+         submitSales.setVisible(false);
+         errorLabel.setText("SALES REPORT HAS ALREADY BEEN SUBMITTED FOR TODAY (" + getDateXML() + ")");
+         }*/
     }
 
     @SuppressWarnings("unchecked")
@@ -660,7 +656,7 @@ public class EODTab extends javax.swing.JFrame {
         try {
             RMManagement rm = new RMManagement();
             rm.
-            dispose();
+                    dispose();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(RMManagement.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -747,15 +743,15 @@ public class EODTab extends javax.swing.JFrame {
                     rwbean.setStock(a);
                     rmImp.editRaw(rwbean);
                 }
-                
+
                 JOptionPane.showMessageDialog(null, "Sales successfully submitted!");
 
             }
-            if(getValueXML("Sales").equals("0")){
-                    setValueXML("Sales");
-                    //enterSales1.setVisible(false);
-                    ViewAllStatus();
-                    //BtnNewDay.setEnabled(true);
+            if (getValueXML("Sales").equals("0")) {
+                setValueXML("Sales");
+                //enterSales1.setVisible(false);
+                ViewAllStatus();
+                //BtnNewDay.setEnabled(true);
             }
 
         } else {
@@ -787,25 +783,25 @@ public class EODTab extends javax.swing.JFrame {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
-            String curDate = dateFormat.format(d) ;
+            String curDate = dateFormat.format(d);
             Calendar cal1 = Calendar.getInstance();
             cal1.add(Calendar.DATE, +1);
             String nextDate = dateFormat.format(cal1.getTime());
-        
-            if(getDateXML().equals(curDate)) {
-                if(JOptionPane.showConfirmDialog(null, "Are you sure you're done for the day?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-                        nextDay(nextDate);
-                        ViewAllStatus();
-                        JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            if (getDateXML().equals(curDate)) {
+                if (JOptionPane.showConfirmDialog(null, "Are you sure you're done for the day?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    nextDay(nextDate);
+                    ViewAllStatus();
+                    JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
-            } else if(!getDateXML().equals(nextDate) && !getDateXML().equals(curDate)) {
+            } else if (!getDateXML().equals(nextDate) && !getDateXML().equals(curDate)) {
                 nextDay(curDate);
                 ViewAllStatus();
                 JOptionPane.showMessageDialog(null, "New date is " + curDate, "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } 
+        }
     }//GEN-LAST:event_BtnNewDayActionPerformed
 
     private void actualSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualSubmitActionPerformed
@@ -837,13 +833,13 @@ public class EODTab extends javax.swing.JFrame {
 
                 }
 
-                if(getValueXML("Actual").equals("0")){
+                if (getValueXML("Actual").equals("0")) {
                     setValueXML("Actual");
                     actualSubmit.setVisible(false);
                     ViewAllStatus();
                     BtnNewDay.setVisible(true);
                 }
-                
+
                 JOptionPane.showMessageDialog(null, "Submission was successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 makeActualTable();
             } else {
@@ -914,13 +910,13 @@ public class EODTab extends javax.swing.JFrame {
                         tclmp.addTransaction(t, raw, q);
                     }
                 }
-                if(getValueXML("Materials").equals("0")){
+                if (getValueXML("Materials").equals("0")) {
                     setValueXML("Materials");
                     //utwSubmit.setVisible(false);
                     ViewAllStatus();
                     //BtnNewDay.setEnabled(true);
                 }
-                
+
                 JOptionPane.showMessageDialog(null, "Submission was successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 makeRMTable();
             } else {
@@ -957,31 +953,31 @@ public class EODTab extends javax.swing.JFrame {
 
                     int ID = Integer.parseInt(deliveryTable.getValueAt(c, 0).toString());
                     RawBean raw = rmImp.getRaw(ID);
-					float newRaw = Float.parseFloat(deliveryTable.getValueAt(c, 3).toString()) + Float.parseFloat(deliveryTable.getValueAt(c, 2).toString());
+                    float newRaw = Float.parseFloat(deliveryTable.getValueAt(c, 3).toString()) + Float.parseFloat(deliveryTable.getValueAt(c, 2).toString());
                     raw.setStock(newRaw);
                     rmImp.editRaw(raw);
                 }
-                    
-                if(getValueXML("Delivery").equals("0")){
+
+                if (getValueXML("Delivery").equals("0")) {
                     setValueXML("Delivery");
                     //deliverySubmit.setVisible(false);
                     ViewAllStatus();
                     //BtnNewDay.setEnabled(true);
                 }
-                
+
                 JOptionPane.showMessageDialog(null, "Submission was successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 makeDeliveryTable();
 
             } else {
 
                 deliveryErrorLabel.setVisible(true);
-            
+
             }
 
         } else {
 
             return;
-            
+
         }
 
 
@@ -1002,144 +998,145 @@ public class EODTab extends javax.swing.JFrame {
     /**
      * < -- CLARK'S FUNCTIONS START -- > *
      */
-    public DefaultTableModel initializeTable(){
+    public DefaultTableModel initializeTable() {
         DefaultTableModel defaultTableModel = new DefaultTableModel();
         defaultTableModel.addColumn("Name");
         defaultTableModel.addColumn("Status");
         return defaultTableModel;
     }
-    
-    public void ViewAllStatus(){
-       DefaultTableModel defaultModel = initializeTable();
-       String eodList[] = new String[4];
-       JButton buttonList[] = new JButton[4];
-       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-       Calendar cal1 = Calendar.getInstance();
-       cal1.add(Calendar.DATE, +1);
-       String nextDate = dateFormat.format(cal1.getTime());
-       String text = "";
-       eodList[0] = "Actual";
-       eodList[1] = "Sales";
-       eodList[2] = "Materials";
-       eodList[3] = "Delivery";
-       buttonList[0] = actualSubmit;
-       buttonList[1] = submitSales;
-       buttonList[2] = utwSubmit;
-       buttonList[3] = deliverySubmit;
-       
-       for (int i = 0; i < eodList.length; i++) {
-            if(getValueXML(eodList[i]).equals("1")) {
-                 text = "Submitted";
-                 buttonList[i].setVisible(false);
+
+    public void ViewAllStatus() {
+        DefaultTableModel defaultModel = initializeTable();
+        String eodList[] = new String[4];
+        JButton buttonList[] = new JButton[4];
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal1 = Calendar.getInstance();
+        cal1.add(Calendar.DATE, +1);
+        String nextDate = dateFormat.format(cal1.getTime());
+        String text = "";
+        eodList[0] = "Actual";
+        eodList[1] = "Sales";
+        eodList[2] = "Materials";
+        eodList[3] = "Delivery";
+        buttonList[0] = actualSubmit;
+        buttonList[1] = submitSales;
+        buttonList[2] = utwSubmit;
+        buttonList[3] = deliverySubmit;
+
+        for (int i = 0; i < eodList.length; i++) {
+            if (getValueXML(eodList[i]).equals("1")) {
+                text = "Submitted";
+                buttonList[i].setVisible(false);
             } else {
                 text = "Not yet submitted";
-                if(!getDateXML().equals(nextDate))
+                if (!getDateXML().equals(nextDate)) {
                     buttonList[i].setVisible(true);
-                else
+                } else {
                     buttonList[i].setVisible(false);
+                }
             }
-            defaultModel.addRow(new Object[] {eodList[i], text});
-       }
-       
-       newdayTable.setModel(defaultModel);
+            defaultModel.addRow(new Object[]{eodList[i], text});
+        }
+
+        newdayTable.setModel(defaultModel);
     }
-    
+
     private void nextDay(String curDate) {
         try {
             String filepath = "btf.xml";
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-            
+
             doc.getElementsByTagName("date").item(0).setTextContent(curDate);
             doc.getElementsByTagName("Delivery").item(0).setTextContent("0");
             doc.getElementsByTagName("Materials").item(0).setTextContent("0");
             doc.getElementsByTagName("Sales").item(0).setTextContent("0");
             doc.getElementsByTagName("Actual").item(0).setTextContent("0");
-            
+
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(filepath));
             transformer.transform(source, result);
-            
+
             BtnNewDay.setVisible(false);
         } catch (Exception e) {
-             e.printStackTrace();
-        } 
+            e.printStackTrace();
+        }
     }
-    
+
     public String getDateXML() {
-        String date = ""; 
+        String date = "";
         try {
             String filepath = "btf.xml";
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-            
+
             date = doc.getElementsByTagName("date").item(0).getTextContent();
-                        
+
         } catch (Exception e) {
-             e.printStackTrace();
-        } 
+            e.printStackTrace();
+        }
         return date;
     }
-    
+
     public String getValueXML(String x) {
-        String value = ""; 
+        String value = "";
         try {
             String filepath = "btf.xml";
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-            
+
             value = doc.getElementsByTagName(x).item(0).getTextContent();
-                        
+
         } catch (Exception e) {
-             e.printStackTrace();
-        } 
+            e.printStackTrace();
+        }
         return value;
     }
-    
+
     public void setValueXML(String x) {
         try {
             String filepath = "btf.xml";
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filepath);
-            
+
             doc.getElementsByTagName(x).item(0).setTextContent("1");
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(filepath));
-            transformer.transform(source, result);            
+            transformer.transform(source, result);
         } catch (Exception e) {
-             e.printStackTrace();
-        } 
+            e.printStackTrace();
+        }
     }
-    
+
     public void checkDate() {
-        try{
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
-            String curDate = dateFormat.format(d) ;
+            String curDate = dateFormat.format(d);
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, +1);
             String nextDate = dateFormat.format(cal.getTime());
 
             String actual = getValueXML("Actual");
 
-            if(getDateXML().equals(curDate)) {
-                if(actual.equals("0")) {
+            if (getDateXML().equals(curDate)) {
+                if (actual.equals("0")) {
                     BtnNewDay.setVisible(false);
-                } else if(actual.equals("1")) {
+                } else if (actual.equals("1")) {
                     BtnNewDay.setVisible(true);
                 }
-            } else if(getDateXML().equals(nextDate)) {
+            } else if (getDateXML().equals(nextDate)) {
                 BtnNewDay.setVisible(false);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -1147,7 +1144,7 @@ public class EODTab extends javax.swing.JFrame {
     public void setNextDayBtn() {
         BtnNewDay.setVisible(true);
     }
-    
+
     /**
      * < -- CLARK'S FUNCTIONS END -- > *
      */
@@ -1155,85 +1152,86 @@ public class EODTab extends javax.swing.JFrame {
      * < -- KIM'S FUNCTIONS START -- > *
      */
     // ------------------- GENERIC CODES
-    
     public class record {
-        
+
         public String type;
         public int row;
         public float x;
-        
-        public record() {}
-        
+
+        public record() {
+        }
+
         public record(String newType, int newRow, int oldValue) {
             type = newType;
             row = newRow;
             x = oldValue;
         }
-        
+
         public String getType() {
             return type;
         }
-        
+
         public int getRow() {
             return row;
         }
-        
+
         public float getX() {
             return x;
         }
-        
+
         public void setType(String newType) {
             this.type = newType;
         }
-        
+
         public void setRow(int newRow) {
             this.row = newRow;
         }
-        
+
         public void setX(float oldValue) {
             this.x = oldValue;
         }
-        
+
         public float findOld(String newType, int newRow) {
-            
+
             for (record d : oldA) {
-                
-                if(d.getRow() == newRow && d.getType() == newType)
+
+                if (d.getRow() == newRow && d.getType() == newType) {
                     return d.getX();
+                }
             }
             return 0;
         }
-        
+
         public void replaceOld(String newType, int newRow, float newVal) {
-            
+
             for (record d : oldA) {
-                
-                if(d.getRow() == newRow && d.getType() == newType)
+
+                if (d.getRow() == newRow && d.getType() == newType) {
                     d.setX(newVal);
+                }
             }
-            
+
         }
-        
+
     }
-    
+
     public class checkActual implements TableModelListener {
 
         @Override
         public void tableChanged(TableModelEvent tme) {
-            
+
             int row = tme.getFirstRow();
             int column = tme.getColumn();
-            DefaultTableModel model = (DefaultTableModel)tme.getSource();
+            DefaultTableModel model = (DefaultTableModel) tme.getSource();
             Object data = model.getValueAt(row, column);
-            
-            if(previouslyChanged("actual", row)) {
+
+            if (previouslyChanged("actual", row)) {
                 record old = new record();
-                totalActual = totalActual - old.findOld("actual",row);
+                totalActual = totalActual - old.findOld("actual", row);
                 totalActual = totalActual + Float.parseFloat(model.getValueAt(row, column).toString());
                 getActualTotal(totalActual);
                 old.replaceOld("actual", row, Float.parseFloat(model.getValueAt(row, column).toString()));
-            }
-            else {
+            } else {
                 record old = new record();
                 old.setType("actual");
                 old.setRow(row);
@@ -1242,18 +1240,17 @@ public class EODTab extends javax.swing.JFrame {
                 totalActual = totalActual + Float.parseFloat(model.getValueAt(row, column).toString());
                 getActualTotal(totalActual);
             }
-            
 
         }
-        
+
     }
-    
+
     public void getActualTotal(float add) {
-        
+
         this.actualTotalLabel.setText("Total: " + add);
-        
+
     }
-    
+
     public class checkMaterials implements TableModelListener {
 
         @Override
@@ -1263,18 +1260,17 @@ public class EODTab extends javax.swing.JFrame {
             String t = "transfer";
             int row = tme.getFirstRow();
             int column = tme.getColumn();
-            DefaultTableModel model = (DefaultTableModel)tme.getSource();
+            DefaultTableModel model = (DefaultTableModel) tme.getSource();
             Object data = model.getValueAt(row, column);
             if (column == 3) {
-                
-                if(previouslyChanged(u, row)) {
+
+                if (previouslyChanged(u, row)) {
                     record old = new record();
-                    totalUsed = totalUsed - old.findOld(u,row);
+                    totalUsed = totalUsed - old.findOld(u, row);
                     totalUsed = totalUsed + Float.parseFloat(model.getValueAt(row, column).toString());
-                    getMaterialsTotal(totalUsed,column);
+                    getMaterialsTotal(totalUsed, column);
                     old.replaceOld(u, row, Float.parseFloat(model.getValueAt(row, column).toString()));
-                }
-                else {
+                } else {
                     record old = new record();
                     old.setType(u);
                     old.setRow(row);
@@ -1283,18 +1279,15 @@ public class EODTab extends javax.swing.JFrame {
                     totalUsed = totalUsed + Float.parseFloat(model.getValueAt(row, column).toString());
                     getMaterialsTotal(totalUsed, column);
                 }
-            }
-                
-            else if (column == 4) {
-                
-                if(previouslyChanged(t, row)) {
+            } else if (column == 4) {
+
+                if (previouslyChanged(t, row)) {
                     record old = new record();
-                    totalTransfer = totalTransfer - old.findOld(t,row);
+                    totalTransfer = totalTransfer - old.findOld(t, row);
                     totalTransfer = totalTransfer + Float.parseFloat(model.getValueAt(row, column).toString());
-                    getMaterialsTotal(totalTransfer,column);
+                    getMaterialsTotal(totalTransfer, column);
                     old.replaceOld(t, row, Float.parseFloat(model.getValueAt(row, column).toString()));
-                }
-                else {
+                } else {
                     record old = new record();
                     old.setType(t);
                     old.setRow(row);
@@ -1303,18 +1296,16 @@ public class EODTab extends javax.swing.JFrame {
                     totalTransfer = totalTransfer + Float.parseFloat(model.getValueAt(row, column).toString());
                     getMaterialsTotal(totalTransfer, column);
                 }
-                
-            }
-            else if(column == 5) {
-                
-                if(previouslyChanged(w, row)) {
+
+            } else if (column == 5) {
+
+                if (previouslyChanged(w, row)) {
                     record old = new record();
-                    totalWastage = totalWastage - old.findOld(w,row);
+                    totalWastage = totalWastage - old.findOld(w, row);
                     totalWastage = totalWastage + Float.parseFloat(model.getValueAt(row, column).toString());
-                    getMaterialsTotal(totalWastage,column);
+                    getMaterialsTotal(totalWastage, column);
                     old.replaceOld(w, row, Float.parseFloat(model.getValueAt(row, column).toString()));
-                }
-                else {
+                } else {
                     record old = new record();
                     old.setType(w);
                     old.setRow(row);
@@ -1323,22 +1314,23 @@ public class EODTab extends javax.swing.JFrame {
                     totalWastage = totalWastage + Float.parseFloat(model.getValueAt(row, column).toString());
                     getMaterialsTotal(totalWastage, column);
                 }
-                
+
             }
-            
+
         }
-        
+
     }
-    
+
     public void getMaterialsTotal(float add, int type) {
-        if (type == 3)
+        if (type == 3) {
             this.usedTotalLabel.setText("Used Total: " + add);
-        else if (type == 4)
+        } else if (type == 4) {
             this.transferTotalLabel.setText("Transferred Total: " + add);
-        else if (type == 5)
+        } else if (type == 5) {
             this.wastageTotalLabel.setText("Wastage Total: " + add);
+        }
     }
-    
+
     public class checkDelivery implements TableModelListener {
 
         @Override
@@ -1346,17 +1338,16 @@ public class EODTab extends javax.swing.JFrame {
             String t = "delivery";
             int row = tme.getFirstRow();
             int column = tme.getColumn();
-            DefaultTableModel model = (DefaultTableModel)tme.getSource();
+            DefaultTableModel model = (DefaultTableModel) tme.getSource();
             Object data = model.getValueAt(row, column);
-            
-            if(previouslyChanged(t, row)) {
+
+            if (previouslyChanged(t, row)) {
                 record old = new record();
-                totalDelivery = totalDelivery - old.findOld(t,row);
+                totalDelivery = totalDelivery - old.findOld(t, row);
                 totalDelivery = totalDelivery + Float.parseFloat(model.getValueAt(row, column).toString());
                 getDeliveryTotal(totalDelivery);
                 old.replaceOld(t, row, Float.parseFloat(model.getValueAt(row, column).toString()));
-            }
-            else {
+            } else {
                 record old = new record();
                 old.setType(t);
                 old.setRow(row);
@@ -1366,15 +1357,15 @@ public class EODTab extends javax.swing.JFrame {
                 getDeliveryTotal(totalDelivery);
             }
         }
-        
+
     }
-    
+
     public void getDeliveryTotal(float add) {
-        
+
         this.deliveryTotalLabel.setText("Total: " + add);
-        
+
     }
-    
+
     public class checkSales implements TableModelListener {
 
         @Override
@@ -1383,18 +1374,17 @@ public class EODTab extends javax.swing.JFrame {
             String comp = "compliment";
             int row = tme.getFirstRow();
             int column = tme.getColumn();
-            DefaultTableModel model = (DefaultTableModel)tme.getSource();
+            DefaultTableModel model = (DefaultTableModel) tme.getSource();
             Object data = model.getValueAt(row, column);
             if (column == 2) {
-                
-                if(previouslyChanged(s, row)) {
+
+                if (previouslyChanged(s, row)) {
                     record old = new record();
-                    totalSales = totalSales - old.findOld(s,row);
+                    totalSales = totalSales - old.findOld(s, row);
                     totalSales = totalSales + Float.parseFloat(model.getValueAt(row, column).toString());
-                    getSalesTotal(totalSales,column);
+                    getSalesTotal(totalSales, column);
                     old.replaceOld(s, row, Float.parseFloat(model.getValueAt(row, column).toString()));
-                }
-                else {
+                } else {
                     record old = new record();
                     old.setType(s);
                     old.setRow(row);
@@ -1403,19 +1393,16 @@ public class EODTab extends javax.swing.JFrame {
                     totalSales = totalSales + Float.parseFloat(model.getValueAt(row, column).toString());
                     getSalesTotal(totalSales, column);
                 }
-                
-            }
-                
-            else if (column == 3) {
-                
-                if(previouslyChanged(comp, row)) {
+
+            } else if (column == 3) {
+
+                if (previouslyChanged(comp, row)) {
                     record old = new record();
-                    totalComp = totalComp - old.findOld(comp,row);
+                    totalComp = totalComp - old.findOld(comp, row);
                     totalComp = totalComp + Float.parseFloat(model.getValueAt(row, column).toString());
-                    getSalesTotal(totalComp,column);
+                    getSalesTotal(totalComp, column);
                     old.replaceOld(comp, row, Float.parseFloat(model.getValueAt(row, column).toString()));
-                }
-                else {
+                } else {
                     record old = new record();
                     old.setType(comp);
                     old.setRow(row);
@@ -1424,37 +1411,39 @@ public class EODTab extends javax.swing.JFrame {
                     totalComp = totalComp + Float.parseFloat(model.getValueAt(row, column).toString());
                     getSalesTotal(totalComp, column);
                 }
-                
+
             }
-            
+
         }
-        
+
     }
-    
+
     public void getSalesTotal(float add, int type) {
-        if (type == 2)
+        if (type == 2) {
             this.salesTotalLabel.setText("Sales Total: " + add);
-        else if (type == 3)
+        } else if (type == 3) {
             this.complimentTotalLabel.setText("Complimentary Total: " + add);
-        
+        }
+
     }
-    
+
     public boolean previouslyChanged(String t, int c) {
-        
-        if (oldA.isEmpty())
+
+        if (oldA.isEmpty()) {
             return false;
-        else {
-            
+        } else {
+
             for (record d : oldA) {
-                
-                if(d.getType() == t && d.getRow() == c)
+
+                if (d.getType() == t && d.getRow() == c) {
                     return true;
+                }
             }
-            
+
         }
         return false;
     }
-    
+
     private void adjustTable(JTable table) {
         for (int column = 0; column < table.getColumnCount(); column++) {
             TableColumn tableColumn = table.getColumnModel().getColumn(column);
@@ -1509,7 +1498,7 @@ public class EODTab extends javax.swing.JFrame {
             }
 
         };
-        
+
         for (RawBean raw : aRaw) {
 
             Object[] data = {raw.getRawID(), raw.getRaw(), raw.getStock(), "0"};
@@ -1522,16 +1511,15 @@ public class EODTab extends javax.swing.JFrame {
         inputTable.setColumnSelectionAllowed(true);
         inputTable.setRowSelectionAllowed(true);
         inputTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
         DefaultCellEditor deditor = new myChecker(new JTextField(), actualErrorLabel);
         inputTable.setDefaultEditor(Object.class, deditor);
         deditor.setClickCountToStart(1);
         actualTable.addTableModelListener(new checkActual());
-    
+
     }
 
     // ------------------- ACTUAL TAB END
-    
     // -------------- MATERIALS TAB START
     public void makeRMTable() {
 
@@ -1557,15 +1545,15 @@ public class EODTab extends javax.swing.JFrame {
             actualTable.addRow(data);
             rmTable.setModel(actualTable);
             adjustTable(rmTable);
-            
+
         }
-		
+
         rmTable.getColumnModel().getColumn(0).setMinWidth(0);
         rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
-	rmTable.setColumnSelectionAllowed(true);
+        rmTable.setColumnSelectionAllowed(true);
         rmTable.setRowSelectionAllowed(true);
         rmTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	
+
         DefaultCellEditor deditor = new myChecker(new JTextField(), materialsErrorLabel);
         rmTable.setDefaultEditor(Object.class, deditor);
         deditor.setClickCountToStart(1);
@@ -1573,7 +1561,6 @@ public class EODTab extends javax.swing.JFrame {
     }
 
     // ---------------- MATERIALS TAB END
-    
     // --------------- DELIVERY TAB START
     public void makeDeliveryTable() {
         aRaw = new ArrayList<RawBean>();
@@ -1581,7 +1568,7 @@ public class EODTab extends javax.swing.JFrame {
         aRaw = rmImp.getAllRaw();
         String cols[] = {"ID", "Name", "Quantity in Stock", "Delivered Amount"};
         DefaultTableModel allRaw = new DefaultTableModel(cols, 0) {
-        
+
             @Override
             public boolean isCellEditable(int row, int column) {
                 if (column == 0 || column == 1 || column == 2) {
@@ -1607,7 +1594,7 @@ public class EODTab extends javax.swing.JFrame {
         deliveryTable.setColumnSelectionAllowed(true);
         deliveryTable.setRowSelectionAllowed(true);
         deliveryTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
+
         DefaultCellEditor deditor = new myChecker(new JTextField(), deliveryErrorLabel);
         deliveryTable.setDefaultEditor(Object.class, deditor);
         deditor.setClickCountToStart(1);
@@ -1621,7 +1608,6 @@ public class EODTab extends javax.swing.JFrame {
     /**
      * * <--- JANE CODE START ---> **
      */
-    
     public void prepareTable() {
         avRecipes = new ArrayList<RecipeBean>();
 
@@ -1661,7 +1647,7 @@ public class EODTab extends javax.swing.JFrame {
         deditor.setClickCountToStart(1);
         recipeModel.addTableModelListener(new checkSales());
     }
-    
+
     /**
      * <--- KIM PLS NOTE: COPY THIS WHOLE THING FOR THE ERROR CHECKING ---> **
      */
@@ -1701,7 +1687,22 @@ public class EODTab extends javax.swing.JFrame {
         @Override
         public Component getTableCellEditorComponent(JTable table,
                 Object value, boolean isSelected, int row, int column) {
+            textField.setText(value.toString());
             textField.setBorder(black);
+            textField.addFocusListener(new java.awt.event.FocusAdapter() {
+
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+
+                        public void run() {
+                            textField.selectAll();
+                            textField.requestFocus();
+                        }
+                    });
+                }
+            });
+
             return super.getTableCellEditorComponent(
                     table, value, isSelected, row, column);
         }
@@ -1711,7 +1712,6 @@ public class EODTab extends javax.swing.JFrame {
     /**
      * <--- KIM PLS NOTE: COPY THIS WHOLE THING FOR THE ERROR CHECKING ---> **
      */
-    
     abstract class StringTransferHandler extends TransferHandler {
 
         protected abstract String exportString(JComponent c);
@@ -1867,7 +1867,7 @@ public class EODTab extends javax.swing.JFrame {
             addIndex = -1;
         }
     }
-    
+
     /**
      * * <--- JANE CODE END ---> **
      */
