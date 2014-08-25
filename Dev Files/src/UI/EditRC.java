@@ -17,6 +17,8 @@ import DAO.Interface.IngredientDAOInterface;
 import DAO.Interface.RawDAOInterface;
 import DAO.Interface.RecipeDAOInterface;
 import java.awt.Component;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,13 +55,12 @@ public class EditRC extends javax.swing.JFrame {
         errorLabel2.setVisible(false);
         inError.setVisible(false);
         prepareTable();
-        
+
         recipeTable.getTableHeader().setResizingAllowed(false);
         recipeTable.setAutoCreateRowSorter(true);
-        
+
         ingredientsTable.getTableHeader().setResizingAllowed(false);
         ingredientsTable.setAutoCreateRowSorter(true);
-        
 
     }
 
@@ -566,7 +567,7 @@ public class EditRC extends javax.swing.JFrame {
             AddIngredient.setVisible(true);
             this.setVisible(false);
         } catch (Exception e) {
-           System.out.println(e);
+            System.out.println(e);
         }        // TODO add your handling code here:
     }//GEN-LAST:event_editIngredientActionPerformed
 
@@ -666,7 +667,7 @@ public class EditRC extends javax.swing.JFrame {
             RecipeBean r = new RecipeBean();
 
             int rID = Integer.parseInt(recipeTable.getModel().getValueAt(recipeTable.getSelectedRow(), 0).toString());
-            RecipeBean rtemp = rcImp.getRecipeBean(rID);
+            //RecipeBean rtemp = rcImp.getRecipeBean(rID);
             r.setRecipeID(rID);
             r.setRecipe(nameField.getText().toString());
             r.setCost(Float.parseFloat(costField.getText().toString()));
@@ -689,11 +690,23 @@ public class EditRC extends javax.swing.JFrame {
         ArrayList<IngredientBean> orig = inImp.getAllIngredients(r);
         int i;
 
-        //add ingredients
+        java.util.Date now = new java.util.Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String datestring = dateFormat.format(now);
+        //java.sql.Date today = new java.sql.Date(now.getTime());
+
+        if (inImp.getLastUpdate(r).equalsIgnoreCase(datestring)) //add ingredients
+        {
+            //get current ingedients
+            orig = inImp.getAllIngredients(r);
+            for (IngredientBean id : orig) {
+                inImp.deleteIngredient(r, id, datestring);
+            }
+        }
+
         for (i = 0; i < in.size(); i++) {
             inImp.addIngredient(r, in.get(i));
         }
-
     }
 
     private void deleteRecipe(int r) {
@@ -751,7 +764,7 @@ public class EditRC extends javax.swing.JFrame {
 
         String rCategory = null;
         int i, j;
-        
+
         String incols[] = {"Raw ID", "Raw Material", "Quantity"};
         DefaultTableModel ingredientModel = new DefaultTableModel(incols, 0);
         ingredientsTable.setModel(ingredientModel);
@@ -760,18 +773,19 @@ public class EditRC extends javax.swing.JFrame {
         avRecipes = rcImp.getRecipeByStatus("available");
 
         String cols[] = {"Recipe ID", "Recipe", "Stock", "Actual Price", "Cost", "Category"};
-        
-        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0){
+
+        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0) {
             @Override
-                public Class getColumnClass(int col) {
-                    if (col == 2 || col == 3 || col == 4) {
-                        return Float.class;
-                    } else if (col == 0) {
-                        return Integer.class;
-                    }else{
-                        return String.class;
-                    }
+            public Class
+                    getColumnClass(int col) {
+                if (col == 2 || col == 3 || col == 4) {
+                    return Float.class;
+                } else if (col == 0) {
+                    return Integer.class;
+                } else {
+                    return String.class;
                 }
+            }
         };
         //System.out.println(avRecipes.get(1).getRecipe());
 
@@ -796,8 +810,7 @@ public class EditRC extends javax.swing.JFrame {
 
         String icols[] = {"Raw ID", "Ingredient", "Quantity", "Unit of Measurement"};
         DefaultTableModel model = new DefaultTableModel(icols, 0);
-        
-        
+
     }
 
     /* ADJUST TABLE TO MAX WIDTH*/
@@ -854,16 +867,21 @@ public class EditRC extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditRC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditRC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditRC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditRC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditRC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditRC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditRC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditRC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
