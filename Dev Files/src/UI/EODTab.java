@@ -954,7 +954,8 @@ public class EODTab extends javax.swing.JFrame {
 
                     int ID = Integer.parseInt(deliveryTable.getValueAt(c, 0).toString());
                     RawBean raw = rmImp.getRaw(ID);
-                    raw.setStock(Float.parseFloat(deliveryTable.getValueAt(c, 3).toString()));
+					float r = Float.parseFloat(deliveryTable.getValueAt(c, 3).toString()) + Float.parseFloat(deliveryTable.getValueAt(c, 2).toString());
+                    raw.setStock(r);
                     rmImp.editRaw(raw);
                 }
                     
