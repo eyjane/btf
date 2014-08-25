@@ -504,7 +504,7 @@ public class addIngredient extends javax.swing.JFrame {
         };
 
         for (RawBean rm : avRaw) {
-            Object[] raw = {rm.getRawID(), rm.getRaw(), rm.getUom(), String.format("%.2f", rm.getPrice())};
+            Object[] raw = {rm.getRawID(), rm.getRaw(), rm.getUom(), Float.parseFloat(String.format("%.2f", rm.getPrice()))};
             boolean skip = false;
             for (IngredientBean ibean2 : ai) {
                 if (rm.getRawID() == ibean2.getRaw().getRawID()) {
@@ -525,20 +525,20 @@ public class addIngredient extends javax.swing.JFrame {
         //ingredient Tab
         String cols2[] = {"Raw ID", "Raw Material", "Quantity", "UOM", "Total Price"};
         DefaultTableModel ingredientModel = new DefaultTableModel(cols2, 0){
-            @Override
+           /* @Override
                 public Class getColumnClass(int col) {
                     if (col == 0) {
                         return Integer.class;
-                    } else if(col == 1 || col == 2) {
+                    } else if(col == 1 || col == 3) {
                         return String.class;
                     }else{
                         return Float.class;
                     }
-                }
+                }*/
         };
 
         for (IngredientBean ibean : ai) {
-            Object[] ingredient = {ibean.getRaw().getRawID(), ibean.getRaw().getRaw(), String.format("%.2f", ibean.getAmount()), ibean.getRaw().getUom(), String.format("%.2f", ibean.getRaw().getPrice() * ibean.getAmount())};
+            Object[] ingredient = {ibean.getRaw().getRawID(), ibean.getRaw().getRaw(), Float.parseFloat(String.format("%.2f", ibean.getAmount())), ibean.getRaw().getUom(), Float.parseFloat(String.format("%.2f", ibean.getRaw().getPrice() * ibean.getAmount()))};
             ingredientModel.addRow(ingredient);
         }
         ingredientTable.setModel(ingredientModel);

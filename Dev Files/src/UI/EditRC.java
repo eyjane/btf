@@ -566,7 +566,7 @@ public class EditRC extends javax.swing.JFrame {
             AddIngredient.setVisible(true);
             this.setVisible(false);
         } catch (Exception e) {
-            System.out.println(e);
+           System.out.println(e);
         }        // TODO add your handling code here:
     }//GEN-LAST:event_editIngredientActionPerformed
 
