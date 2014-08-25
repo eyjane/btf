@@ -828,7 +828,7 @@ public class EODTab extends javax.swing.JFrame {
 
                     int ID = Integer.parseInt(inputTable.getValueAt(r, 0).toString());
                     RawBean raw = rmImp.getRaw(ID);
-                    float newRaw = Float.parseFloat(inputTable.getValueAt(r, 2).toString()) + Float.parseFloat(inputTable.getValueAt(r, 3).toString());
+                    float newRaw = Float.parseFloat(inputTable.getValueAt(r, 3).toString());
                     raw.setStock(newRaw);
                     rmImp.editRaw(raw);
 
@@ -886,7 +886,7 @@ public class EODTab extends javax.swing.JFrame {
 
                         RawBean raw = new RawBean();
 
-                        String name = rmTable.getValueAt(a, 1).toString(); // raw material name
+                        int id = Integer.parseInt(rmTable.getValueAt(a, 0).toString());
                         float q = Float.parseFloat(rmTable.getValueAt(a, b).toString());
                         String type = new String();
 
@@ -899,15 +899,13 @@ public class EODTab extends javax.swing.JFrame {
                         }
 
                         // REDUCE FROM RAW TABLE
-                        float s = rmImp.getStock(type);
-                        float deduct = s - q;
-                        rmImp.updateStock(name, deduct);
-
-                        // ADD TRANSACTION
+                        raw = rmImp.getRaw(id);
+                        float deduct = raw.getStock() - q;
+                        rmImp.updateStock(raw.getRawID(), deduct);
+                        
+						// ADD TRANSACTION
                         TransactionBean t = new TransactionBean();
                         t.setType(type);
-                        int id = Integer.parseInt(rmTable.getValueAt(a, 0).toString());
-                        raw.setRawID(id);
                         tclmp.addTransaction(t, raw, q);
                     }
                 }
