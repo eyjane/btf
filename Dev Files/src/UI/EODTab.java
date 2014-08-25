@@ -127,6 +127,8 @@ public class EODTab extends javax.swing.JFrame {
         }*/
         
         
+        
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -706,7 +708,7 @@ public class EODTab extends javax.swing.JFrame {
         int rcount = recipeTable.getRowCount();
         int i, j;
 
-        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this recipe?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to submit? You can only submit one Sales report per day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
             for (i = 0; i < rcount; i++) {
                 SalesBean sbean = new SalesBean();
@@ -745,6 +747,8 @@ public class EODTab extends javax.swing.JFrame {
                     rwbean.setStock(a);
                     rmImp.editRaw(rwbean);
                 }
+                
+                JOptionPane.showMessageDialog(null, "Sales successfully submitted!");
 
             }
             if(getValueXML("Sales").equals("0")){
