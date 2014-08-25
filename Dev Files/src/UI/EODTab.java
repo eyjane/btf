@@ -1133,7 +1133,7 @@ public class EODTab extends javax.swing.JFrame {
                 } else if (actual.equals("1")) {
                     BtnNewDay.setVisible(true);
                 }
-            } else if (getDateXML().equals(nextDate)) {
+            } else /*if (getDateXML().equals(nextDate))*/ {
                 BtnNewDay.setVisible(false);
             }
         } catch (Exception e) {
