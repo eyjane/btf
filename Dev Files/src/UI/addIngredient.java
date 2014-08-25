@@ -329,7 +329,13 @@ public class addIngredient extends javax.swing.JFrame {
     }//GEN-LAST:event_addRawActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        // TODO add your handling code here:
+            if(ar != null){
+                ar.setVisible(true);
+                dispose();
+            }else{
+                rcm.setVisible(true);
+                dispose();
+            }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
