@@ -3,13 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/Kim/Documents/NetBeansProjects/btf/Dev%20Files/src/UI/EODTab.java</file>
-=======
             <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/UI/addIngredient.java</file>
             <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/UI/InventoryTab.java</file>
-            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/DAO/Implementation/RecipeDAOImplementation.java</file>
->>>>>>> 759b2f83519872c373de733d7cf958b430ce1ebf
+            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/UI/EditRC.java</file>
+            <file>file:/Users/earleenjanefuentes/Desktop/GitHub/btf/Dev%20Files/src/UI/EODTab.java</file>
         </group>
     </open-files>
 </project-private>

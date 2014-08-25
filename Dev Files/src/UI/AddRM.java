@@ -41,6 +41,9 @@ public class AddRM extends javax.swing.JFrame {
         errorLabel8.setVisible(false);
         errorLabel9.setVisible(false);
         errorLabel10.setVisible(false);
+        
+        rmTable.getTableHeader().setResizingAllowed(false);
+        rmTable.setAutoCreateRowSorter(true);
     }
    
    public void prepareTable(){
