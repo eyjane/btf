@@ -704,7 +704,7 @@ public class EODTab extends javax.swing.JFrame {
         int rcount = recipeTable.getRowCount();
         int i, j;
 
-        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to submit? You can only submit one Sales report per day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to submit? You can only submit once per day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
             for (i = 0; i < rcount; i++) {
                 SalesBean sbean = new SalesBean();
@@ -744,7 +744,7 @@ public class EODTab extends javax.swing.JFrame {
                     rmImp.editRaw(rwbean);
                 }
 
-                JOptionPane.showMessageDialog(null, "Sales successfully submitted!");
+                
 
             }
             if (getValueXML("Sales").equals("0")) {
@@ -753,6 +753,7 @@ public class EODTab extends javax.swing.JFrame {
                 ViewAllStatus();
                 //BtnNewDay.setEnabled(true);
             }
+            JOptionPane.showMessageDialog(null, "Sales successfully submitted!");
 
         } else {
             return;
