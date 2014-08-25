@@ -52,7 +52,6 @@ public class AddRCtoCG extends javax.swing.JFrame {
         defaultTableModel.addColumn("ID");
         defaultTableModel.addColumn("Name");
         defaultTableModel.addColumn("Cost");
-        defaultTableModel.addColumn("Stock");
         defaultTableModel.addColumn("Status");
         return defaultTableModel;
     }

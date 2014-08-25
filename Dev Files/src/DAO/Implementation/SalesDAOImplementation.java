@@ -74,7 +74,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
         }
         return false;
     }
-    
+
     @Override
     public boolean addSales(SalesBean s, RecipeBean r, float a, String d) {
         try {
@@ -141,9 +141,10 @@ public class SalesDAOImplementation implements SalesDAOInterface {
                 r.setCost(resultSet.getFloat("sd.cost"));
                 r.setRcstatus(resultSet.getString("rcstatus"));
                 r.setCategory(resultSet.getInt("categoryID"));
-                ingredients = inImp.getAllIngredients(r);
-                r.setIngredients(ingredients);
 
+                ingredients = inImp.getIngredientsBydate(r, d);
+                r.setIngredients(ingredients);
+                
                 aRecipe.add(r);
             }
 
@@ -311,10 +312,5 @@ public class SalesDAOImplementation implements SalesDAOInterface {
             Logger.getLogger(SalesDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return aDates;
-    }
-
-    @Override
-    public float getTotalRawSales(RawBean r, String d) {
-        return (float) 3.4;
     }
 }

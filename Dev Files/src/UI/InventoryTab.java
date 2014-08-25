@@ -9,36 +9,47 @@ import DAO.Implementation.RecipeDAOImplementation;
 import DAO.Interface.IngredientDAOInterface;
 import DAO.Interface.RawDAOInterface;
 import DAO.Interface.RecipeDAOInterface;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
 
 /**
  *
  * @author Catherine
  */
 public class InventoryTab extends javax.swing.JFrame {
+
     RecipeDAOInterface rcImp = new RecipeDAOImplementation();
     IngredientDAOInterface inImp = new IngredientDAOImplementation();
     RawDAOInterface rwImp = new RawDAOImplementation();
     
-    
+    int count = 0;
+    int count_n = 0;
+
     public InventoryTab() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        
+
         String laf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(laf);
         initComponents();
         prepareTable();
-        
-        
+
         recipeTable.getTableHeader().setResizingAllowed(false);
         rawTable.getTableHeader().setResizingAllowed(false);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -51,6 +62,26 @@ public class InventoryTab extends javax.swing.JFrame {
                 return false;
             }
 
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+
+                //  Color row based on a cell value
+                if (!isRowSelected(row)) {
+                    c.setBackground(getBackground());
+                    int modelRow = convertRowIndexToModel(row);
+                    String status = (String) getModel().getValueAt(modelRow, 0);
+                    if ("low".equals(status)) {
+                        c.setForeground(Color.RED);
+                    }
+                    else if ("medium".equals(status)) {
+                        c.setForeground(Color.ORANGE);
+                    }else{
+                        c.setForeground(Color.GREEN);
+                    }
+                }
+
+                return c;
+            }
         };
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -66,14 +97,10 @@ public class InventoryTab extends javax.swing.JFrame {
         CategoriesBtn = new javax.swing.JButton();
         EODBtn = new javax.swing.JButton();
         ReportsBtn = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
         rawSearchField = new javax.swing.JTextField();
         recipeSearchField = new javax.swing.JTextField();
-        jComboBox2 = new javax.swing.JComboBox();
         Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -183,14 +210,6 @@ public class InventoryTab extends javax.swing.JFrame {
         });
         jPanel1.add(ReportsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 239, 60));
 
-        jLabel7.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jLabel7.setText("Sort by:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 30, -1, -1));
-
-        jLabel8.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jLabel8.setText("Sort by:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 240, -1, -1));
-
         jLabel9.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         jLabel9.setText("Search:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 30, -1, -1));
@@ -198,11 +217,6 @@ public class InventoryTab extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
         jLabel10.setText("Search:");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 240, -1, -1));
-
-        jComboBox1.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "name", "quantity", "category" }));
-        jComboBox1.setSelectedIndex(-1);
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 235, -1, -1));
 
         rawSearchField.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
         rawSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -219,11 +233,6 @@ public class InventoryTab extends javax.swing.JFrame {
             }
         });
         jPanel1.add(recipeSearchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 235, 90, -1));
-
-        jComboBox2.setFont(new java.awt.Font("Quicksand Light", 0, 12)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "name", "quantity" }));
-        jComboBox2.setSelectedIndex(-1);
-        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 25, -1, -1));
 
         Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/Background1.png"))); // NOI18N
         jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, -1));
@@ -341,23 +350,23 @@ public class InventoryTab extends javax.swing.JFrame {
     public void searchRawTable(String r) {
         ArrayList<RawBean> avRaw = new ArrayList<RawBean>();
         avRaw = rwImp.getRawByStatus("available");
-        int i; 
+        int i;
         // raw material stock
         String cols[] = {"Name", "Stock"};
         DefaultTableModel rawModel = new DefaultTableModel(cols, 0);
-        
+
         if (avRaw != null) {
             for (i = 0; i < avRaw.size(); i++) {
                 RawBean rm = avRaw.get(i);
-                
-                if(rm.getRaw().toLowerCase().contains(r)) {
+
+                if (rm.getRaw().toLowerCase().contains(r)) {
                     String color = "black";
 
                     if (rm.isCritical()) {
                         color = "red";
-                    }else if(rm.isMedium()){
+                    } else if (rm.isMedium()) {
                         color = "orange";
-                    }else{
+                    } else {
                         color = "green";
                     }
 
@@ -374,19 +383,19 @@ public class InventoryTab extends javax.swing.JFrame {
         rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
         rawTable.getColumn("Stock").setCellRenderer(rightRenderer);
     }
-    
+
     public void searchRecipeTable(String r) {
         ArrayList<RecipeBean> avRecipes = new ArrayList<RecipeBean>();
         avRecipes = rcImp.getRecipeByStatus("available");
-        int i, j; 
+        int i, j;
         // raw material stock
         String cols[] = {"Name", "Stock"};
         DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
-        
+
         if (avRecipes != null) {
             for (i = 0; i < avRecipes.size(); i++) {
                 RecipeBean rc = avRecipes.get(i);
-                if(rc.getRecipe().toLowerCase().contains(r)) {
+                if (rc.getRecipe().toLowerCase().contains(r)) {
                     ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
                     ingredients = rc.getIngredients();
 
@@ -408,6 +417,7 @@ public class InventoryTab extends javax.swing.JFrame {
         recipeTable.getColumn("Stock").setCellRenderer(rightRenderer);
         recipeTable.setRowSelectionAllowed(true);
     }
+
     /**
      * < -- CLARK'S FUNCTIONS END -- > *
      */
@@ -416,17 +426,114 @@ public class InventoryTab extends javax.swing.JFrame {
      */
     /* Prepare Table */
     private void prepareTable() {
-
-        ArrayList<RecipeBean> avRecipes = new ArrayList<RecipeBean>();
         ArrayList<RawBean> avRaw = new ArrayList<RawBean>();
         int i, j;
-
-        // recipe Stocks
-        String cols[] = {"Name", "Stock"};
-        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
+         ArrayList<RecipeBean> avRecipes = rcImp.getRecipeByStatus("available");
         
-        avRecipes = rcImp.getRecipeByStatus("available");
+         String col[] = {"Name", "Stock"};
+        DefaultTableModel recipeModel = new DefaultTableModel(col, 0);
+        recipeTable.setModel(recipeModel);
+        
+        prepareRecipeTable(avRecipes);
+        
+        // recipe Stocks
+        String cols[] = {"Status", "Name", "Stock"};
 
+        // raw material stock
+        DefaultTableModel rawModel = new DefaultTableModel(cols, 0) {
+            @Override
+            public Class getColumnClass(int col) {
+                if (col == 2) {
+                    return Float.class;
+                } else {
+                    return String.class;
+                }
+            }
+        };
+        
+        avRaw = rwImp.getRawByStatus("available");
+
+        if (avRaw != null) {
+            for (i = 0; i < avRaw.size(); i++) {
+                RawBean rm = avRaw.get(i);
+                String color = "black";
+
+                if (rm.isCritical()) {
+                    color = "low";
+                } else if (rm.isMedium()) {
+                    color = "medium";
+                } else {
+                    color = "high";
+                }
+
+                String shtml = "<html><p style=color:" + color + ">";
+                String ehtml = "</p></html>";
+                Object[] raw = {color, rm.getRaw(), Float.parseFloat(String.format("%.2f", rm.getStock()))};
+                rawModel.addRow(raw);
+                //rawTable.setModel(rawModel);
+                //rawTable.getColumnModel().getColumn(0).setCellRenderer(new CustomRenderer(color));
+            }
+        }
+
+        rawTable.setModel(rawModel);
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
+        rawTable.getColumn("Stock").setCellRenderer(rightRenderer);
+        
+        //System.out.println(recipeTable.getRowSelectionAllowed());
+
+        rawTable.setAutoCreateRowSorter(true);
+        rawTable.getColumnModel().getColumn(0).setMinWidth(0);
+        rawTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
+        //add jtable header listener
+        recipeTable.getTableHeader().addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int col = recipeTable.columnAtPoint(e.getPoint());
+               
+                ArrayList<RecipeBean> aRecipes = rcImp.getRecipeByStatus("available");
+                String name = recipeTable.getColumnName(col);
+                //System.out.println("Column index selected " + col + " " + name);
+                //System.out.println();
+                
+                if(name.equals("Stock")){
+                    if(count % 2 == 0){
+                        sortRecipeByStockDsc(aRecipes);
+                       prepareRecipeTable(aRecipes);
+                       
+                        count++;
+                        //System.out.println("INCREMENTING COUNT... NEW COUNT = " + count);
+                    }else{
+                        sortRecipeByStockAsc(aRecipes);
+                       prepareRecipeTable(aRecipes);
+                        count++;
+                        //System.out.println("INCREMENTING COUNT... NEW COUNT = " + count);
+                    }   
+                }else{
+                    if(count_n % 2 == 0){
+                        sortRecipeByNameDsc(aRecipes);
+                       prepareRecipeTable(aRecipes);
+                        count_n++;
+                    }else{
+                        sortRecipeByNameAsc(aRecipes);
+                        prepareRecipeTable(aRecipes);
+                        count_n++;
+                    }  
+                }
+            }
+        });
+        
+
+    }
+    
+    public void prepareRecipeTable(ArrayList<RecipeBean> avRecipes){
+        int i, j;
+        
+        DefaultTableModel recipeModel = (DefaultTableModel) recipeTable.getModel();
+        recipeModel.setRowCount(0);
+        
         if (avRecipes != null) {
             for (i = 0; i < avRecipes.size(); i++) {
                 RecipeBean rc = avRecipes.get(i);
@@ -445,49 +552,72 @@ public class InventoryTab extends javax.swing.JFrame {
         }
 
         recipeTable.setModel(recipeModel);
-
-        // raw material stock
-        DefaultTableModel rawModel = new DefaultTableModel(cols, 0);
-        avRaw = rwImp.getRawByStatus("available");
-
-        if (avRaw != null) {
-            for (i = 0; i < avRaw.size(); i++) {
-                RawBean rm = avRaw.get(i);
-                String color = "black";
-                
-                
-                if (rm.isCritical()) {
-                    color = "red";
-                }else if(rm.isMedium()){
-                    color = "orange";
-                }else{
-                    color = "green";
-                }
-                
-                String shtml = "<html><p style=color:" + color + ">";
-                String ehtml = "</p></html>";
-                Object[] raw = {shtml + rm.getRaw() + ehtml, shtml + String.format("%.2f", rm.getStock()) + ehtml};
-                rawModel.addRow(raw);
-            }
-        }
-
-        rawTable.setModel(rawModel);
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
-        rawTable.getColumn("Stock").setCellRenderer(rightRenderer);
         recipeTable.getColumn("Stock").setCellRenderer(rightRenderer);
         recipeTable.setRowSelectionAllowed(true);
-        //System.out.println(recipeTable.getRowSelectionAllowed());
-        rawTable.setAutoCreateRowSorter(true);
+    }
+
+    //sort recipe
+    public ArrayList<RecipeBean> sortRecipeByStockAsc(ArrayList<RecipeBean> r) {
+        Collections.sort(r, new ACustomComparator());
+
+        return r;
     }
     
+    public ArrayList<RecipeBean> sortRecipeByStockDsc(ArrayList<RecipeBean> r) {
+        Collections.sort(r, new BCustomComparator());
+
+        return r;
+    }
+    
+    public ArrayList<RecipeBean> sortRecipeByNameDsc(ArrayList<RecipeBean> r) {
+        Collections.sort(r, new CCustomComparator());
+
+        return r;
+    }
+    public ArrayList<RecipeBean> sortRecipeByNameAsc(ArrayList<RecipeBean> r) {
+        Collections.sort(r, new DCustomComparator());
+
+        return r;
+    }
+
+    public class ACustomComparator implements Comparator<RecipeBean> {
+
+        @Override
+        public int compare(RecipeBean rc1, RecipeBean rc2) {
+            return (int) (rc1.computeStock() - rc2.computeStock());
+        }
+    }
+    
+    public class BCustomComparator implements Comparator<RecipeBean> {
+
+        @Override
+        public int compare(RecipeBean rc1, RecipeBean rc2) {
+            return (int) (rc2.computeStock() - rc1.computeStock());
+        }
+    }
+    
+    public class CCustomComparator implements Comparator<RecipeBean> {
+
+        @Override
+        public int compare(RecipeBean rc1, RecipeBean rc2) {
+            return rc1.getRecipe().compareToIgnoreCase(rc2.getRecipe());
+        }
+    }
+    
+    public class DCustomComparator implements Comparator<RecipeBean> {
+
+        @Override
+        public int compare(RecipeBean rc1, RecipeBean rc2) {
+            return rc2.getRecipe().compareToIgnoreCase(rc1.getRecipe());
+        }
+    }
     
 
-    
     /**
      * < -- JANERYS FUNCTIONS END -- > *
      */
-    
     /**
      * @param args the command line arguments
      */
@@ -540,8 +670,6 @@ public class InventoryTab extends javax.swing.JFrame {
     private javax.swing.JButton RMBtn;
     private javax.swing.JButton RecipesBtn;
     private javax.swing.JButton ReportsBtn;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -549,8 +677,6 @@ public class InventoryTab extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;

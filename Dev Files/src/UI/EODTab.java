@@ -127,6 +127,8 @@ public class EODTab extends javax.swing.JFrame {
         }*/
         
         
+        
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -373,7 +375,7 @@ public class EODTab extends javax.swing.JFrame {
                                 .addComponent(submitSales, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
+                        .addGap(0, 259, Short.MAX_VALUE)
                         .addComponent(salesTotalLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(complimentTotalLabel)
@@ -385,12 +387,12 @@ public class EODTab extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(salesTotalLabel)
                     .addComponent(complimentTotalLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(submitSales, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(errorLabel))
@@ -571,7 +573,6 @@ public class EODTab extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("DELIVERY", jPanel2);
 
-        newdayTable.setFont(new java.awt.Font("Quicksand Light", 0, 18)); // NOI18N
         newdayTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -707,7 +708,7 @@ public class EODTab extends javax.swing.JFrame {
         int rcount = recipeTable.getRowCount();
         int i, j;
 
-        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this recipe?", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to submit? You can only submit one Sales report per day.", "Confirm Submit", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
             for (i = 0; i < rcount; i++) {
                 SalesBean sbean = new SalesBean();
@@ -746,6 +747,8 @@ public class EODTab extends javax.swing.JFrame {
                     rwbean.setStock(a);
                     rmImp.editRaw(rwbean);
                 }
+                
+                JOptionPane.showMessageDialog(null, "Sales successfully submitted!");
 
             }
             if(getValueXML("Sales").equals("0")){
@@ -954,8 +957,8 @@ public class EODTab extends javax.swing.JFrame {
 
                     int ID = Integer.parseInt(deliveryTable.getValueAt(c, 0).toString());
                     RawBean raw = rmImp.getRaw(ID);
-					float r = Float.parseFloat(deliveryTable.getValueAt(c, 3).toString()) + Float.parseFloat(deliveryTable.getValueAt(c, 2).toString());
-                    raw.setStock(r);
+					float newRaw = Float.parseFloat(deliveryTable.getValueAt(c, 3).toString()) + Float.parseFloat(deliveryTable.getValueAt(c, 2).toString());
+                    raw.setStock(newRaw);
                     rmImp.editRaw(raw);
                 }
                     

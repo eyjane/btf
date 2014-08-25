@@ -47,22 +47,6 @@ public class AddRM extends javax.swing.JFrame {
        rmTable.setModel(rm.getRMTable());
        rmTable.getColumnModel().getColumn(0).setMinWidth(0);
        rmTable.getColumnModel().getColumn(0).setMaxWidth(0);
-       
-       /*rmTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-        public void valueChanged(ListSelectionEvent event) {
-            try {
-            DefaultTableModel defaultTableModel = (DefaultTableModel) rmTable.getModel();
-            if (rmTable.getSelectedRow() >= 0) { 
-                raw = rwImp.getRaw((int) defaultTableModel.getValueAt(rmTable.getSelectedRow(), 0));
-                setFields(raw);
-            } else {
-                raw = null;
-              }
-            } catch (Exception err) {
-                err.printStackTrace();
-            } 
-        }
-       });*/
    }
    
    public void setFields(RawBean r){
@@ -80,6 +64,15 @@ public class AddRM extends javax.swing.JFrame {
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    public boolean checkError() {
+        if(nameField.getText().equals("") || priceField.getText().equals("") || 
+                stockField.getText().equals("") || criticalField.getText().equals("") ||
+                    uomField.getText().equals(""))
+            return false;
+        else
+            return true;
     }
     
     //<--- CLARK'S CODE ENDS HERE --->
@@ -501,92 +494,102 @@ public class AddRM extends javax.swing.JFrame {
             errorLabel10.setVisible(true);
         }
         else {
-            //errorLabel1.setVisible(false);
-            //errorLabel2.setVisible(false);
-            //errorLabel10.setVisible(false);
+            errorLabel1.setVisible(false);
+            errorLabel2.setVisible(false);
+            
+            if(checkError())
+                errorLabel10.setVisible(false);
+            
             raw.setRaw(nameField.getText());
             ArrayList<RawBean> rList = new ArrayList<RawBean>();
             rList = rwImp.getRawByStatus("available");
             for(int i = 0; i < rList.size(); i++){
                 if(nameField.getText().equalsIgnoreCase(rList.get(i).getRaw())) {
-                        //&& Integer.parseInt(idField.getText()) != rwImp.getAllRaw().get(i).getRawID()) {
-                     errorLabel1.setVisible(false);
                      errorLabel2.setVisible(true);
-                     errorLabel10.setVisible(false);
                 }
             }
         }
     }//GEN-LAST:event_nameFieldKeyReleased
 
     private void priceFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_priceFieldKeyReleased
-        if(!priceField.getText().equals("") && isNumber(priceField.getText())) {
-            if(Float.parseFloat(priceField.getText()) > 0) {
-                errorLabel3.setVisible(false);
-                errorLabel4.setVisible(false);
-                errorLabel10.setVisible(false);
-                raw.setPrice(Float.parseFloat(priceField.getText()));
-            }
-            else {
-                errorLabel3.setVisible(false);
-                errorLabel4.setVisible(true);
-                errorLabel10.setVisible(false);
-            }
-        }
-        else 
+        if(priceField.getText().equals("")) {
             errorLabel3.setVisible(true);
             errorLabel4.setVisible(false);
             errorLabel10.setVisible(true);
+        } else {
+            if(isNumber(priceField.getText())) {
+                if(Float.parseFloat(priceField.getText()) > 0) {
+                    errorLabel3.setVisible(false);
+                    errorLabel4.setVisible(false);
+                    if(checkError())
+                        errorLabel10.setVisible(false);
+                    raw.setPrice(Float.parseFloat(priceField.getText()));
+                }
+            } else {
+                errorLabel3.setVisible(false);
+                errorLabel4.setVisible(true);
+                if(checkError())
+                    errorLabel10.setVisible(false);
+            }
+        }
     }//GEN-LAST:event_priceFieldKeyReleased
 
     private void stockFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_stockFieldKeyReleased
-        if(!stockField.getText().equals("") && isNumber(stockField.getText())) {
-            if(Float.parseFloat(stockField.getText()) > 0) {
-                errorLabel5.setVisible(false);
-                errorLabel6.setVisible(false);
-                errorLabel10.setVisible(false);
-                raw.setStock(Float.parseFloat(stockField.getText()));
-            }
-            else {
-                errorLabel5.setVisible(false);
-                errorLabel6.setVisible(true);
-                errorLabel10.setVisible(false);
-            }
-        }
-        else
+        if(stockField.getText().equals("")) {
             errorLabel5.setVisible(true);
             errorLabel6.setVisible(false);
             errorLabel10.setVisible(true);
+        } else {
+            if(isNumber(stockField.getText())) {
+                if(Float.parseFloat(stockField.getText()) > 0) {
+                    errorLabel5.setVisible(false);
+                    errorLabel6.setVisible(false);
+                    if(checkError())
+                        errorLabel10.setVisible(false);
+                    raw.setStock(Float.parseFloat(stockField.getText()));
+                }
+            } else {
+                errorLabel5.setVisible(false);
+                errorLabel6.setVisible(true);
+                if(checkError())
+                    errorLabel10.setVisible(false);
+            }
+        }
     }//GEN-LAST:event_stockFieldKeyReleased
 
     private void criticalFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_criticalFieldKeyReleased
-        if(!criticalField.getText().equals("") && isNumber(criticalField.getText())) {
-            if(Float.parseFloat(criticalField.getText()) > 0) {
-                errorLabel7.setVisible(false);
-                errorLabel8.setVisible(false);
-                errorLabel10.setVisible(false);
-                raw.setCritical(Float.parseFloat(criticalField.getText()));
-            }
-            else {
-                errorLabel7.setVisible(false);
-                errorLabel8.setVisible(true);
-                errorLabel10.setVisible(false);
-            }
-        }
-        else 
+        if(criticalField.getText().equals("")) {
             errorLabel7.setVisible(true);
             errorLabel8.setVisible(false);
             errorLabel10.setVisible(true);
+        } else {
+            if(isNumber(criticalField.getText())) {
+                if(Float.parseFloat(criticalField.getText()) > 0) {
+                    errorLabel7.setVisible(false);
+                    errorLabel8.setVisible(false);
+                    if(checkError())
+                        errorLabel10.setVisible(false);
+                    raw.setCritical(Float.parseFloat(criticalField.getText()));
+                }
+            } else {
+                errorLabel7.setVisible(false);
+                errorLabel8.setVisible(true);
+                if(checkError())
+                    errorLabel10.setVisible(false);
+            }
+        }
     }//GEN-LAST:event_criticalFieldKeyReleased
 
     private void uomFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_uomFieldKeyReleased
-        if(!uomField.getText().equals("")) {
-            errorLabel9.setVisible(false);
-            errorLabel10.setVisible(false);
-            raw.setUom(uomField.getText());
-        }
-        else 
+        if(uomField.getText().equals("")) {
             errorLabel9.setVisible(true);
             errorLabel10.setVisible(true);
+        } else {
+            raw.setUom(uomField.getText());
+            errorLabel9.setVisible(false);
+            if(checkError())
+                errorLabel10.setVisible(false);
+        }
     }//GEN-LAST:event_uomFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

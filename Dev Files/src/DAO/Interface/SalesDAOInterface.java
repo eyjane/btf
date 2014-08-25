@@ -41,8 +41,5 @@ public interface SalesDAOInterface {
     public ArrayList<String> getRangeDates(String f, String t);
     //gets dates from f to t
     
-    public float getTotalRawSales(RawBean r, String d);
-    //gets total sales of r
-    
     
 }
