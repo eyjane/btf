@@ -324,11 +324,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
-<<<<<<< HEAD
-                                  <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
-=======
                                   <EmptySpace min="0" pref="259" max="32767" attributes="0"/>
->>>>>>> 759b2f83519872c373de733d7cf958b430ce1ebf
                                   <Component id="salesTotalLabel" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Component id="complimentTotalLabel" min="-2" max="-2" attributes="0"/>
@@ -344,21 +340,13 @@
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-<<<<<<< HEAD
-                          <Component id="jScrollPane1" pref="254" max="32767" attributes="0"/>
-=======
                           <Component id="jScrollPane1" pref="248" max="32767" attributes="0"/>
->>>>>>> 759b2f83519872c373de733d7cf958b430ce1ebf
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="salesTotalLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="complimentTotalLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-<<<<<<< HEAD
-                          <EmptySpace max="32767" attributes="0"/>
-=======
                           <EmptySpace pref="12" max="32767" attributes="0"/>
->>>>>>> 759b2f83519872c373de733d7cf958b430ce1ebf
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="submitSales" min="-2" pref="30" max="-2" attributes="0"/>
                               <Component id="errorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
