@@ -337,7 +337,46 @@ public class addIngredient extends javax.swing.JFrame {
     }//GEN-LAST:event_quantityFieldActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        // TODO add your handling code here:
+        int nrow = ingredientTable.getRowCount();
+        
+        //System.out.println(nrow);
+        int i;
+        int rid;
+
+        ai.clear();
+        for (i = 0; i < nrow; i++) {
+            IngredientBean ibean = new IngredientBean();
+            RawBean rbean = new RawBean();
+
+            rid = Integer.parseInt(ingredientTable.getModel().getValueAt(i, 0).toString());
+            rbean = rwImp.getRaw(rid);
+            ibean.setRaw(rbean);
+            ibean.setAmount(Float.parseFloat(ingredientTable.getModel().getValueAt(i, 2).toString()));
+            ai.add(ibean);
+        }
+
+        
+        if (ar != null) {
+            ar.setVisible(true);
+            ar.prepareCombo();
+            ar.computeActual();
+            if(nrow == 0){
+                ar.inErrorV(true);
+            }else{
+                ar.inErrorV(false);
+            }
+        } else {
+            rcm.setVisible(true);
+            rcm.reloadIngredients(ai);
+            rcm.computeActual(ai);
+            if(nrow == 0){
+                rcm.inErrorV(true);
+            }else{
+                rcm.inErrorV(false);
+            }
+        }
+        dispose();
+
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void ingredientTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingredientTableMouseClicked
