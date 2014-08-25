@@ -17,6 +17,8 @@ import DAO.Interface.IngredientDAOInterface;
 import DAO.Interface.RawDAOInterface;
 import DAO.Interface.RecipeDAOInterface;
 import java.awt.Component;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,6 +50,18 @@ public class EditRC extends javax.swing.JFrame {
      */
     public EditRC() {
         initComponents();
+
+        nameError.setVisible(false);
+        errorLabel2.setVisible(false);
+        inError.setVisible(false);
+        prepareTable();
+
+        recipeTable.getTableHeader().setResizingAllowed(false);
+        recipeTable.setAutoCreateRowSorter(true);
+
+        ingredientsTable.getTableHeader().setResizingAllowed(false);
+        ingredientsTable.setAutoCreateRowSorter(true);
+
     }
 
     /**
@@ -83,8 +97,8 @@ public class EditRC extends javax.swing.JFrame {
         categoryBox = new javax.swing.JComboBox();
         saveRecipe = new javax.swing.JButton();
         CancelBtn = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        errorLabel2 = new javax.swing.JLabel();
+        nameError = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
@@ -210,6 +224,11 @@ public class EditRC extends javax.swing.JFrame {
         });
 
         saveRecipe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/SaveBtn.png"))); // NOI18N
+        saveRecipe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveRecipeActionPerformed(evt);
+            }
+        });
 
         CancelBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/CancelBtn.png"))); // NOI18N
         CancelBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -218,13 +237,13 @@ public class EditRC extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel9.setText("ERROR: Required field. Please input valid number.");
+        errorLabel2.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        errorLabel2.setForeground(new java.awt.Color(204, 0, 0));
+        errorLabel2.setText("ERROR: Required field. Please input valid number.");
 
-        jLabel10.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel10.setText("ERROR: Required field.");
+        nameError.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
+        nameError.setForeground(new java.awt.Color(204, 0, 0));
+        nameError.setText("ERROR: Required field.");
 
         jLabel13.setFont(new java.awt.Font("Quicksand Light", 0, 18)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(204, 0, 0));
@@ -301,12 +320,12 @@ public class EditRC extends javax.swing.JFrame {
                                             .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel9)
+                                        .addComponent(errorLabel2)
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(jPanel3Layout.createSequentialGroup()
                                         .addComponent(jLabel13)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel10)
+                                        .addComponent(nameError)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel3)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -336,12 +355,12 @@ public class EditRC extends javax.swing.JFrame {
                         .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addComponent(nameField)
-                        .addComponent(jLabel10)))
+                        .addComponent(nameError)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
+                            .addComponent(errorLabel2)
                             .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -440,7 +459,7 @@ public class EditRC extends javax.swing.JFrame {
     }//GEN-LAST:event_RecipesBtnActionPerformed
 
     private void CategoriesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CategoriesBtnActionPerformed
-       try {
+        try {
             CGManagement cg = new CGManagement();
             cg.setVisible(true);
             dispose();
@@ -456,7 +475,7 @@ public class EditRC extends javax.swing.JFrame {
     }//GEN-LAST:event_CategoriesBtnActionPerformed
 
     private void categoryBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryBoxActionPerformed
-        
+
     }//GEN-LAST:event_categoryBoxActionPerformed
 
     private void ingredientsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingredientsTableMouseClicked
@@ -464,14 +483,17 @@ public class EditRC extends javax.swing.JFrame {
     }//GEN-LAST:event_ingredientsTableMouseClicked
 
     private void CancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelBtnActionPerformed
+        //this.setVisible(false);
+        RCManagement rcmgt = null;
+
         try {
-            RCManagement rcman = new RCManagement();
-            rcman.setVisible(true);
-            dispose();
+            rcmgt = new RCManagement();
         } catch (Exception e) {
-            //System.out.println(e);
-            return;
+            System.out.println(e);
         }
+
+        rcmgt.setVisible(true);
+        dispose();
     }//GEN-LAST:event_CancelBtnActionPerformed
 
     private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
@@ -565,6 +587,102 @@ public class EditRC extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_EODBtnActionPerformed
 
+    private void saveRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveRecipeActionPerformed
+        boolean edit = true;
+        ArrayList<RecipeBean> avRecipe = rcImp.getAllRecipe();
+        int j;
+        String o;
+
+        if (recipeTable.getSelectedRow() < 0) {
+            return;
+        }
+
+        //get all ingredients
+        int nrow = ingredientsTable.getRowCount();
+
+        int i;
+        int rid;
+
+        ArrayList<IngredientBean> aIngredient = new ArrayList<IngredientBean>();
+        if (nrow != 0) {
+            for (i = 0; i < nrow; i++) {
+                IngredientBean ibean = new IngredientBean();
+                RawBean rbean = new RawBean();
+                rid = Integer.parseInt(ingredientsTable.getModel().getValueAt(i, 0).toString());
+                rbean = rmImp.getRaw(rid);
+                ibean.setRaw(rbean);
+                ibean.setAmount(Float.parseFloat(ingredientsTable.getModel().getValueAt(i, 2).toString()));
+                aIngredient.add(ibean);
+            }
+        }
+
+        o = recipeTable.getModel().getValueAt(recipeTable.getSelectedRow(), 1).toString();
+        if (!nameField.getText().toString().isEmpty()) {
+            if (avRecipe != null) {
+                for (j = 0; j < avRecipe.size(); j++) {
+                    if (o.equalsIgnoreCase(avRecipe.get(j).getRecipe())) {
+                        System.out.println("O: " + o);
+                        System.out.println("recipe: " + avRecipe.get(j).getRecipe());
+
+                    } else {
+                        //System.out.println("HERE " + avRecipe.get(j).getRecipe());
+                        String cur = avRecipe.get(j).getRecipe();
+                        if (cur.equalsIgnoreCase(nameField.getText().toString())) {
+
+                            nameError.setText("ERROR: Duplicate entry.");
+                            nameError.setVisible(true);
+                            edit = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (edit) {
+                nameError.setVisible(false);
+            }
+
+        } else {
+            nameError.setVisible(true);
+            nameError.setText("ERROR: Required Field");
+            edit = false;
+        }
+
+        String cost = costField.getText().toString();
+        if ((!costField.getText().toString().isEmpty()) && isNumber(cost) && Float.parseFloat(cost) > 0) {
+            errorLabel2.setVisible(false);
+        } else {
+            errorLabel2.setVisible(true);
+            edit = false;
+        }
+
+        if (!(aIngredient.isEmpty())) {
+            inError.setVisible(false);
+
+        } else {
+            inError.setVisible(true);
+            edit = false;
+        }
+
+        if (edit) {
+            RecipeBean r = new RecipeBean();
+
+            int rID = Integer.parseInt(recipeTable.getModel().getValueAt(recipeTable.getSelectedRow(), 0).toString());
+            //RecipeBean rtemp = rcImp.getRecipeBean(rID);
+            r.setRecipeID(rID);
+            r.setRecipe(nameField.getText().toString());
+            r.setCost(Float.parseFloat(costField.getText().toString()));
+            CategoryBean category = (CategoryBean) categoryBox.getSelectedItem();
+            r.setCategory(category.getCategoryID());
+            r.setRcstatus("available");
+
+            if (rcImp.editRecipe(r)) {
+                JOptionPane.showMessageDialog(null, "Recipe successfully edited!");
+                updateIngredient(r, aIngredient);
+                prepareTable();
+            }
+        }
+    }//GEN-LAST:event_saveRecipeActionPerformed
+
     /**
      * * <--- JANE CODE STARTS ---> **
      */
@@ -572,11 +690,23 @@ public class EditRC extends javax.swing.JFrame {
         ArrayList<IngredientBean> orig = inImp.getAllIngredients(r);
         int i;
 
-        //add ingredients
+        java.util.Date now = new java.util.Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String datestring = dateFormat.format(now);
+        //java.sql.Date today = new java.sql.Date(now.getTime());
+
+        if (inImp.getLastUpdate(r).equalsIgnoreCase(datestring)) //add ingredients
+        {
+            //get current ingedients
+            orig = inImp.getAllIngredients(r);
+            for (IngredientBean id : orig) {
+                inImp.deleteIngredient(r, id, datestring);
+            }
+        }
+
         for (i = 0; i < in.size(); i++) {
             inImp.addIngredient(r, in.get(i));
         }
-
     }
 
     private void deleteRecipe(int r) {
@@ -635,11 +765,28 @@ public class EditRC extends javax.swing.JFrame {
         String rCategory = null;
         int i, j;
 
+        String incols[] = {"Raw ID", "Raw Material", "Quantity"};
+        DefaultTableModel ingredientModel = new DefaultTableModel(incols, 0);
+        ingredientsTable.setModel(ingredientModel);
+
         aCategory = catImp.getAllCategory();
         avRecipes = rcImp.getRecipeByStatus("available");
 
         String cols[] = {"Recipe ID", "Recipe", "Stock", "Actual Price", "Cost", "Category"};
-        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0);
+
+        DefaultTableModel recipeModel = new DefaultTableModel(cols, 0) {
+            @Override
+            public Class
+                    getColumnClass(int col) {
+                if (col == 2 || col == 3 || col == 4) {
+                    return Float.class;
+                } else if (col == 0) {
+                    return Integer.class;
+                } else {
+                    return String.class;
+                }
+            }
+        };
         //System.out.println(avRecipes.get(1).getRecipe());
 
         for (RecipeBean r : avRecipes) {
@@ -651,7 +798,7 @@ public class EditRC extends javax.swing.JFrame {
                 }
             }
 
-            Object[] data = {r.getRecipeID(), r.getRecipe(), String.format("%.2f", r.computeStock()), String.format("%.2f", r.getActualPrice()), String.format("%.2f", r.getCost()), rCategory};
+            Object[] data = {r.getRecipeID(), r.getRecipe(), Float.parseFloat(String.format("%.2f", r.computeStock())), Float.parseFloat(String.format("%.2f", r.getActualPrice())), Float.parseFloat(String.format("%.2f", r.getCost())), rCategory};
             recipeModel.addRow(data);
         }
 
@@ -720,16 +867,21 @@ public class EditRC extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditRC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditRC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditRC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditRC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditRC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditRC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditRC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditRC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -753,10 +905,10 @@ public class EditRC extends javax.swing.JFrame {
     private javax.swing.JComboBox categoryBox;
     private javax.swing.JTextField costField;
     private javax.swing.JButton editIngredient;
+    private javax.swing.JLabel errorLabel2;
     private javax.swing.JLabel inError;
     private javax.swing.JTable ingredientsTable;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -765,11 +917,11 @@ public class EditRC extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel nameError;
     private javax.swing.JTextField nameField;
     private javax.swing.JTable recipeTable;
     private javax.swing.JButton saveRecipe;

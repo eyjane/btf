@@ -51,6 +51,9 @@ public class AddRC extends javax.swing.JFrame {
 
         prepareTable();
         prepareCombo();
+        
+        recipeTable.getTableHeader().setResizingAllowed(false);
+        recipeTable.setAutoCreateRowSorter(true);
     }
 
     /**

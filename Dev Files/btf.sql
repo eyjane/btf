@@ -20,29 +20,28 @@ CREATE TABLE IF NOT EXISTS btf.recipe(
 	recipeID int NOT NULL UNIQUE AUTO_INCREMENT,
 	recipe varchar(100) NOT NULL,
 	cost float NOT NULL,
-	stock float NOT NULL,
 	rcstatus varchar(50) NOT NULL,
 	categoryID int NOT NULL,
 	PRIMARY KEY (recipeID),
 	FOREIGN KEY (categoryID) REFERENCES btf.category(categoryID)
 );
 
-INSERT INTO btf.recipe(recipeID, recipe,cost, stock, rcstatus, categoryID) VALUES
-(20001, "Strawberry Ice Cream", 120, 7, "available", 1),
-(20002, "Chocolate Fountain", 140, 4, "available", 2),
-(20003, "Banana Split", 180, 4, "available", 2),
-(20004, "Vanilla Wonderland", 140, 4, "available", 3),
-(20005, "Sweet Peppermint", 140, 4, "available", 4),
-(20006, "Rock and Road", 150, 3, "available", 5),
-(20007, "Cherry Garcia", 180, 7, "available", 6),
-(20008, "The Simpsons", 140, 10, "available", 7),
-(20009, "The Blueberry Diaries", 170, 10, "available", 6),
-(20010, "White Collar", 120, 17, "available", 5),
-(20011, "Strawberry Stark", 140, 5, "deleted", 7),
-(20012, "Baelish", 130, 5, "available", 4),
-(20013, "Elsa", 140, 12, "deleted", 3),
-(20014, "Jon Snow", 120, 4, "deleted", 7),
-(20015, "Targaryen", 140, 6, "available", 3);
+INSERT INTO btf.recipe(recipeID, recipe,cost, rcstatus, categoryID) VALUES
+(20001, "Strawberry Ice Cream", 120, "available", 1),
+(20002, "Chocolate Fountain", 140, "available", 2),
+(20003, "Banana Split", 180, "available", 2),
+(20004, "Vanilla Wonderland", 140, "available", 3),
+(20005, "Sweet Peppermint", 140, "available", 4),
+(20006, "Rock and Road", 150, "available", 5),
+(20007, "Cherry Garcia", 180, "available", 6),
+(20008, "The Simpsons", 140, "available", 7),
+(20009, "The Blueberry Diaries", 170, "available", 6),
+(20010, "White Collar", 120, "available", 5),
+(20011, "Strawberry Stark", 140, "deleted", 7),
+(20012, "Baelish", 130, "available", 4),
+(20013, "Elsa", 140,"deleted", 3),
+(20014, "Jon Snow", 120, "deleted", 7),
+(20015, "Targaryen", 140, "available", 3);
 
 CREATE TABLE IF NOT EXISTS btf.raw(
 	rawID int NOT NULL UNIQUE AUTO_INCREMENT,

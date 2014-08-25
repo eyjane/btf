@@ -40,6 +40,12 @@ public class addIngredient extends javax.swing.JFrame {
     public addIngredient() {
         initComponents();
         prepareTable();
+        
+        rawTable.getTableHeader().setResizingAllowed(false);
+        rawTable.setAutoCreateRowSorter(true);
+        
+        ingredientTable.getTableHeader().setResizingAllowed(false);
+        ingredientTable.setAutoCreateRowSorter(true);
     }
     
     public addIngredient(AddRC a, ArrayList<IngredientBean> i, String r) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
@@ -329,7 +335,14 @@ public class addIngredient extends javax.swing.JFrame {
     }//GEN-LAST:event_addRawActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        // TODO add your handling code here:
+           if(ar != null){
+               ar.setVisible(true);
+               dispose();
+           }else{
+               rcm.setVisible(true);
+               dispose();
+           }
+                 
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
@@ -337,7 +350,46 @@ public class addIngredient extends javax.swing.JFrame {
     }//GEN-LAST:event_quantityFieldActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        // TODO add your handling code here:
+        int nrow = ingredientTable.getRowCount();
+        
+        //System.out.println(nrow);
+        int i;
+        int rid;
+
+        ai.clear();
+        for (i = 0; i < nrow; i++) {
+            IngredientBean ibean = new IngredientBean();
+            RawBean rbean = new RawBean();
+
+            rid = Integer.parseInt(ingredientTable.getModel().getValueAt(i, 0).toString());
+            rbean = rwImp.getRaw(rid);
+            ibean.setRaw(rbean);
+            ibean.setAmount(Float.parseFloat(ingredientTable.getModel().getValueAt(i, 2).toString()));
+            ai.add(ibean);
+        }
+
+        
+        if (ar != null) {
+            ar.setVisible(true);
+            ar.prepareCombo();
+            ar.computeActual();
+            if(nrow == 0){
+                ar.inErrorV(true);
+            }else{
+                ar.inErrorV(false);
+            }
+        } else {
+            rcm.setVisible(true);
+            rcm.reloadIngredients(ai);
+            rcm.computeActual(ai);
+            if(nrow == 0){
+                rcm.inErrorV(true);
+            }else{
+                rcm.inErrorV(false);
+            }
+        }
+        dispose();
+
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void ingredientTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingredientTableMouseClicked
@@ -389,7 +441,7 @@ public class addIngredient extends javax.swing.JFrame {
         int rID = Integer.parseInt(rawTable.getModel().getValueAt(r, 0).toString());
         RawBean rm = rwImp.getRaw(rID);
 
-        Object[] ingredient = {rm.getRawID(), rm.getRaw(), String.format("%.2f", q), rm.getUom(), String.format("%.2f", rm.getPrice() * q)};
+        Object[] ingredient = {rm.getRawID(), rm.getRaw(), Float.parseFloat(String.format("%.2f", q)), rm.getUom(), Float.parseFloat(String.format("%.2f", rm.getPrice() * q))};
 
         TableModel model = rawTable.getModel();
         TableModel inmodel = ingredientTable.getModel();
@@ -438,10 +490,21 @@ public class addIngredient extends javax.swing.JFrame {
     private void prepareTable() {
         String cols[] = {"Raw ID", "Raw Material", "UOM", "Price"};
         ArrayList<RawBean> avRaw = rwImp.getRawByStatus("available");
-        DefaultTableModel rawModel = new DefaultTableModel(cols, 0);
+        DefaultTableModel rawModel = new DefaultTableModel(cols, 0){
+             @Override
+                public Class getColumnClass(int col) {
+                    if (col == 0) {
+                        return Integer.class;
+                    } else if(col == 1 || col == 2) {
+                        return String.class;
+                    }else{
+                        return Float.class;
+                    }
+                }
+        };
 
         for (RawBean rm : avRaw) {
-            Object[] raw = {rm.getRawID(), rm.getRaw(), rm.getUom(), String.format("%.2f", rm.getPrice())};
+            Object[] raw = {rm.getRawID(), rm.getRaw(), rm.getUom(), Float.parseFloat(String.format("%.2f", rm.getPrice()))};
             boolean skip = false;
             for (IngredientBean ibean2 : ai) {
                 if (rm.getRawID() == ibean2.getRaw().getRawID()) {
@@ -461,10 +524,21 @@ public class addIngredient extends javax.swing.JFrame {
 
         //ingredient Tab
         String cols2[] = {"Raw ID", "Raw Material", "Quantity", "UOM", "Total Price"};
-        DefaultTableModel ingredientModel = new DefaultTableModel(cols2, 0);
+        DefaultTableModel ingredientModel = new DefaultTableModel(cols2, 0){
+           /* @Override
+                public Class getColumnClass(int col) {
+                    if (col == 0) {
+                        return Integer.class;
+                    } else if(col == 1 || col == 3) {
+                        return String.class;
+                    }else{
+                        return Float.class;
+                    }
+                }*/
+        };
 
         for (IngredientBean ibean : ai) {
-            Object[] ingredient = {ibean.getRaw().getRawID(), ibean.getRaw().getRaw(), String.format("%.2f", ibean.getAmount()), ibean.getRaw().getUom(), String.format("%.2f", ibean.getRaw().getPrice() * ibean.getAmount())};
+            Object[] ingredient = {ibean.getRaw().getRawID(), ibean.getRaw().getRaw(), Float.parseFloat(String.format("%.2f", ibean.getAmount())), ibean.getRaw().getUom(), Float.parseFloat(String.format("%.2f", ibean.getRaw().getPrice() * ibean.getAmount()))};
             ingredientModel.addRow(ingredient);
         }
         ingredientTable.setModel(ingredientModel);

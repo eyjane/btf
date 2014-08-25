@@ -19,9 +19,11 @@ public interface IngredientDAOInterface {
     
     public boolean addIngredient(RecipeBean r, IngredientBean i);
     public boolean deleteIngredient(RecipeBean r, IngredientBean i);
+    public boolean deleteIngredient(RecipeBean r, IngredientBean i, String d);
     public boolean editIngredient(RecipeBean r, IngredientBean i);
-    public ArrayList<IngredientBean> getAllIngredients(RecipeBean r);
+    public ArrayList<IngredientBean> getAllIngredients(RecipeBean r); 
     public ArrayList<IngredientBean> getIngredientsBydate(RecipeBean r, String d);
     public boolean isIngredient(RawBean r);
-   public String getNearestDate(String d);
+    public String getNearestDate(String d);
+    public String getLastUpdate(RecipeBean r);
 }

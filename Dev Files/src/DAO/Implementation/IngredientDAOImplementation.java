@@ -72,6 +72,26 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
         }
         return false;
     }
+    
+    @Override
+    public boolean deleteIngredient(RecipeBean r, IngredientBean i, String d) {
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            String query = "DELETE from ingredients where recipeID = ? and rawID = ? and date_ingredient = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, r.getRecipeID());
+            preparedStatement.setInt(2, i.getRaw().getRawID());
+            preparedStatement.setString(3, d);
+            preparedStatement.executeUpdate();
+            connection.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(IngredientDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
 
     @Override
     public boolean editIngredient(RecipeBean r, IngredientBean i) {
@@ -215,6 +235,30 @@ public class IngredientDAOImplementation implements IngredientDAOInterface {
             Logger.getLogger(IngredientDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+    
+    @Override
+    public String getLastUpdate(RecipeBean r){
+        String l = "today";
+        
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+
+            String query = "select max(date_ingredient) from ingredients where recipeID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, r.getRecipeID());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                l = resultSet.getString("max(date_ingredient)");
+            }
+            connection.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(IngredientDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return l;
     }
     
 

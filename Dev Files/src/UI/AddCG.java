@@ -30,6 +30,11 @@ public class AddCG extends javax.swing.JFrame {
         errorLabel1.setVisible(false);
         errorLabel2.setVisible(false);
         errorLabel3.setVisible(false);
+        
+        //set table not resizable and sortable
+        categoryTable.getTableHeader().setResizingAllowed(false);
+        categoryTable.setAutoCreateRowSorter(true);
+        
     }
     
     public void prepareTable(){
