@@ -263,6 +263,19 @@ public class AddRCtoCG extends javax.swing.JFrame {
     }//GEN-LAST:event_AddBtnActionPerformed
 
     private void BackBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackBtnActionPerformed
+        int nrow = recipeTable2.getRowCount();
+        int rid;
+        
+        ar = new ArrayList<RecipeBean>();
+        if (nrow != 0) {
+            for (int i = 0; i < nrow; i++) {
+                RecipeBean rbean = new RecipeBean();
+                rid = Integer.parseInt(recipeTable2.getModel().getValueAt(i, 0).toString());
+                rbean = rcImp.getRecipeBean(rid);
+                ar.add(rbean);
+            }
+        }
+        
         ec.setVisible(true);
         ec.ViewAllRecipes(ar);
         dispose();

@@ -469,16 +469,25 @@ public class AddRM extends javax.swing.JFrame {
     }//GEN-LAST:event_CategoriesBtnActionPerformed
 
     private void SaveRMBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveRMBtnActionPerformed
-        try{
-            raw.setRmstatus("available");
-            rwImp.addRaw(raw);
-            raw.setRawID(rwImp.getLatestAddedID());
-            JOptionPane.showMessageDialog(null, "Raw material successfully added!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            rm.setVisible(true);
-            rm.ViewAllRM();
-            dispose();
-        } catch(Exception err){
-                err.printStackTrace();
+        if(checkError()) {
+            try{
+                raw.setRmstatus("available");
+                rwImp.addRaw(raw);
+                raw.setRawID(rwImp.getLatestAddedID());
+                JOptionPane.showMessageDialog(null, "Raw material successfully added!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                rm.setVisible(true);
+                rm.ViewAllRM();
+                dispose();
+            } catch(Exception err){
+                    err.printStackTrace();
+            }
+        } else {
+            errorLabel1.setVisible(true);
+            errorLabel3.setVisible(true);
+            errorLabel5.setVisible(true);
+            errorLabel7.setVisible(true);
+            errorLabel9.setVisible(true);
+            errorLabel10.setVisible(true);
         }
     }//GEN-LAST:event_SaveRMBtnActionPerformed
 
