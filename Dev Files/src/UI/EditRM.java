@@ -41,6 +41,9 @@ private RawDAOInterface rwImp = new RawDAOImplementation();
         errorLabel10.setVisible(false);
         disableFields();
         prepareTable();
+        
+        rmTable.getTableHeader().setResizingAllowed(false);
+        rmTable.setAutoCreateRowSorter(true);
     }
     
     public void prepareTable(){

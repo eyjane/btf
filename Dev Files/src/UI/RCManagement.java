@@ -44,6 +44,10 @@ public class RCManagement extends javax.swing.JFrame {
         initComponents();
         
         prepareTable();
+        
+        recipeTable.getTableHeader().setResizingAllowed(false);
+        recipeTable.setAutoCreateRowSorter(true);
+        
     }
 
     @SuppressWarnings("unchecked")

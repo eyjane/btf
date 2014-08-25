@@ -41,6 +41,12 @@ public class EditCG extends javax.swing.JFrame {
         errorLabel2.setVisible(false);
         errorLabel3.setVisible(false);
         cat = null;
+        
+        recipeTable.getTableHeader().setResizingAllowed(false);
+        recipeTable.setAutoCreateRowSorter(true);
+        
+        categoryTable.getTableHeader().setResizingAllowed(false);
+        categoryTable.setAutoCreateRowSorter(true);
     }
     
     public DefaultTableModel initializeRecipeTable(){

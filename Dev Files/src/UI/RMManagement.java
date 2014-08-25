@@ -29,6 +29,9 @@ public class RMManagement extends javax.swing.JFrame {
         UIManager.setLookAndFeel(laf);
         initComponents();
         ViewAllRM();
+        
+        rmTable.getTableHeader().setResizingAllowed(false);
+        rmTable.setAutoCreateRowSorter(true);
     }
     
     public DefaultTableModel initializeTable(){

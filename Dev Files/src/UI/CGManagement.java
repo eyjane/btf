@@ -35,6 +35,9 @@ public class CGManagement extends javax.swing.JFrame {
         rcImp = new RecipeDAOImplementation();
         ctImp = new CategoryDAOImplementation();
         ViewAllCategories();
+        
+        categoryTable.getTableHeader().setResizingAllowed(false);
+        categoryTable.setAutoCreateRowSorter(true);
     }
     
     public DefaultTableModel initializeTableModel() {
