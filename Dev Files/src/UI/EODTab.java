@@ -901,7 +901,7 @@ public class EODTab extends javax.swing.JFrame {
                         // REDUCE FROM RAW TABLE
                         raw = rmImp.getRaw(id);
                         float deduct = raw.getStock() - q;
-                        rmImp.updateStock(raw.getRawID(), deduct);
+                        //rmImp.updateStock(raw.getRawID(), deduct);
                         
 						// ADD TRANSACTION
                         TransactionBean t = new TransactionBean();
@@ -1126,7 +1126,7 @@ public class EODTab extends javax.swing.JFrame {
 
             String actual = getValueXML("Actual");
 
-            if (getDateXML().equals(curDate)) {
+            if (!getDateXML().equals(nextDate)) {
                 if (actual.equals("0")) {
                     BtnNewDay.setVisible(false);
                 } else if (actual.equals("1")) {
