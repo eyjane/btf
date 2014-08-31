@@ -121,6 +121,12 @@ public class EODTab extends javax.swing.JFrame {
         checkDate();
         date = getDateXML();
 
+        //make unresizable
+        recipeTable.getTableHeader().setResizingAllowed(false);
+        inputTable.getTableHeader().setResizingAllowed(false);
+        rmTable.getTableHeader().setResizingAllowed(false);
+        deliveryTable.getTableHeader().setResizingAllowed(false);
+
         //disable submit
         /*if(getValueXML("Sales").equals("0")){
          submitSales.setVisible(false);
@@ -745,8 +751,6 @@ public class EODTab extends javax.swing.JFrame {
                     rmImp.editRaw(rwbean);
                 }
 
-                
-
             }
             if (getValueXML("Sales").equals("0")) {
                 setValueXML("Sales");
@@ -795,12 +799,12 @@ public class EODTab extends javax.swing.JFrame {
                     nextDay(nextDate);
                     ViewAllStatus();
                     /* <!-- KIM'S CODE STARTS HERE --> */
-		    /* CHANGES RAW STOCK TO ACTUAL COUNT INPUT */
-					
-		    for (RawBean r : actualList) {
-			rmImp.editRaw(r);
-		    }
-		    /* <!-- KIM'S CODE ENDS HERE --> */
+                    /* CHANGES RAW STOCK TO ACTUAL COUNT INPUT */
+
+                    for (RawBean r : actualList) {
+                        rmImp.editRaw(r);
+                    }
+                    /* <!-- KIM'S CODE ENDS HERE --> */
                     JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
             } else if (!getDateXML().equals(nextDate) && !getDateXML().equals(curDate)) {
@@ -839,7 +843,7 @@ public class EODTab extends javax.swing.JFrame {
                     float newRaw = Float.parseFloat(inputTable.getValueAt(r, 3).toString());
                     raw.setStock(newRaw);
                     rmImp.editRaw(raw);
-		    actualList.add(raw);
+                    actualList.add(raw);
                 }
 
                 if (getValueXML("Actual").equals("0")) {
@@ -911,11 +915,11 @@ public class EODTab extends javax.swing.JFrame {
                         float deduct = raw.getStock() - q;
                         raw.setStock(deduct);
                         rmImp.editRaw(raw);
-                        
-			// ADD TRANSACTION
+
+                        // ADD TRANSACTION
                         TransactionBean t = new TransactionBean();
                         t.setType(type);
-                        tclmp.addTransaction(t, raw, q);
+                        tclmp.addTransaction(t, raw, q, date);
                     }
                 }
                 if (getValueXML("Materials").equals("0")) {

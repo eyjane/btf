@@ -700,6 +700,9 @@
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable(){&#xa; @Override&#xa;        public boolean isCellEditable(int r, int c){&#xa;        return false;&#xa;    }&#xa;}&#xa;"/>
+                          </AuxValues>
                         </Component>
                       </SubComponents>
                     </Container>
