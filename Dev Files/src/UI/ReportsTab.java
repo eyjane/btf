@@ -155,7 +155,13 @@ public class ReportsTab extends javax.swing.JFrame {
         netIncomePanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        varianceTable = new javax.swing.JTable();
+        varianceTable = new javax.swing.JTable(){
+            @Override
+            public boolean isCellEditable(int r, int c){
+                return false;
+            }
+        }
+        ;
         jLabel8 = new javax.swing.JLabel();
         btnExportVariance = new javax.swing.JButton();
         varianceDate = new org.jdesktop.swingx.JXDatePicker();
