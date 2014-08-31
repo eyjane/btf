@@ -901,9 +901,10 @@ public class EODTab extends javax.swing.JFrame {
                         // REDUCE FROM RAW TABLE
                         raw = rmImp.getRaw(id);
                         float deduct = raw.getStock() - q;
-                        rmImp.updateStock(raw.getRawID(), deduct);
+                        raw.setStock(deduct);
+                        rmImp.editRaw(raw);
                         
-						// ADD TRANSACTION
+			// ADD TRANSACTION
                         TransactionBean t = new TransactionBean();
                         t.setType(type);
                         tclmp.addTransaction(t, raw, q);
