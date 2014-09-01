@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -1454,7 +1455,10 @@ public class EODTab extends javax.swing.JFrame {
         public void propertyChange(PropertyChangeEvent e) {
             
             if("tableCellEditor".equals(e.getPropertyName())) {
-                
+                if(table.isEditing())
+                    editingStarted();
+                else
+                    editingStopped();
             }
             
         }
@@ -1465,11 +1469,14 @@ public class EODTab extends javax.swing.JFrame {
         
         public void editingStopped() {
             
+            newVal = table.getModel().getValueAt(row, col);
+            
             if(!newVal.equals(oldVal)) {
                 
                 checkSales s = new checkSales(getTable(), getRow(), getCol(), getOldVal(), getNewVal());
                 ActionEvent event = new ActionEvent(s, ActionEvent.ACTION_PERFORMED, "");
                 action.actionPerformed(event);
+                
                 if(col == 2) {
                     totalSales = totalSales - Float.parseFloat(oldVal.toString()) + Float.parseFloat(newVal.toString());
                     getSalesTotal(totalSales, col);
@@ -1478,12 +1485,18 @@ public class EODTab extends javax.swing.JFrame {
                     totalComp = totalComp - Float.parseFloat(oldVal.toString()) + Float.parseFloat(newVal.toString());
                     getSalesTotal(totalComp, col);
                 }
+                
             }
             
         }
         
         @Override
         public void run() {
+            
+            row = table.convertRowIndexToModel(table.getEditingRow());
+            col = table.convertColumnIndexToModel(table.getEditingColumn());
+            oldVal = table.getModel().getValueAt(row, col);
+            newVal = null;
             
         }
         
@@ -1695,7 +1708,7 @@ public class EODTab extends javax.swing.JFrame {
             Object[] data = {r.getRecipeID(), r.getRecipe(), "0", "0"};
             recipeModel.addRow(data);
         }
-
+        
         recipeTable.setModel(recipeModel);
         recipeTable.getColumnModel().getColumn(0).setMinWidth(0);
         recipeTable.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -1704,6 +1717,15 @@ public class EODTab extends javax.swing.JFrame {
         recipeTable.setTransferHandler(new TableTransferHandler());
         adjustTable(recipeTable);
 
+        Action a = new AbstractAction() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+            
+        };
+        checkSales s = new checkSales(recipeTable, a);
         /**
          * * <--- KIM PLS NOTE: THIS HOW TO APPLY THE MYCHECKER TO YOUR TABLE..
          * errorLabel = JLabel for displaying error ---> **
