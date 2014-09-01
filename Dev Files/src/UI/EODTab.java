@@ -21,6 +21,9 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,6 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Action;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -759,7 +763,10 @@ public class EODTab extends javax.swing.JFrame {
                 //BtnNewDay.setEnabled(true);
             }
             JOptionPane.showMessageDialog(null, "Sales successfully submitted!");
-
+            makeDeliveryTable();
+            makeRMTable();
+            //prepareTable();
+            makeActualTable();
         } else {
             return;
         }
@@ -843,8 +850,12 @@ public class EODTab extends javax.swing.JFrame {
                     float newRaw = Float.parseFloat(inputTable.getValueAt(r, 3).toString());
                     raw.setStock(newRaw);
                     rmImp.editRaw(raw);
-					actualList.add(raw);
-					
+                    actualList.add(raw);
+                    // ADD TRANSACTION
+
+                    TransactionBean t = new TransactionBean();
+                    t.setType("actual");
+                    tclmp.addTransaction(t, raw, newRaw, date);
                 }
 
                 if (getValueXML("Actual").equals("0")) {
@@ -854,7 +865,10 @@ public class EODTab extends javax.swing.JFrame {
                     BtnNewDay.setVisible(true);
                 }
 
-                JOptionPane.showMessageDialog(null, "Submission was successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Actual Count successfully submitted!");
+                makeDeliveryTable();
+                makeRMTable();
+                prepareTable();
                 makeActualTable();
             } else {
 
@@ -917,7 +931,7 @@ public class EODTab extends javax.swing.JFrame {
                         raw.setStock(deduct);
                         rmImp.editRaw(raw);
 
-						// ADD TRANSACTION
+			// ADD TRANSACTION
 
                         TransactionBean t = new TransactionBean();
                         t.setType(type);
@@ -931,8 +945,11 @@ public class EODTab extends javax.swing.JFrame {
                     //BtnNewDay.setEnabled(true);
                 }
 
-                JOptionPane.showMessageDialog(null, "Submission was successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Materials successfully submitted!");
+                makeDeliveryTable();
                 makeRMTable();
+                prepareTable();
+                makeActualTable();
             } else {
 
                 materialsErrorLabel.setVisible(true);
@@ -970,6 +987,10 @@ public class EODTab extends javax.swing.JFrame {
                     float newRaw = Float.parseFloat(deliveryTable.getValueAt(c, 3).toString()) + Float.parseFloat(deliveryTable.getValueAt(c, 2).toString());
                     raw.setStock(newRaw);
                     rmImp.editRaw(raw);
+                    // ADD TRANSACTION
+                    TransactionBean t = new TransactionBean();
+                    t.setType("delivery");
+                    tclmp.addTransaction(t, raw, newRaw, date);
                 }
 
                 if (getValueXML("Delivery").equals("0")) {
@@ -979,9 +1000,11 @@ public class EODTab extends javax.swing.JFrame {
                     //BtnNewDay.setEnabled(true);
                 }
 
-                JOptionPane.showMessageDialog(null, "Submission was successful.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Delivery successfully submitted!");
                 makeDeliveryTable();
-
+                makeRMTable();
+                prepareTable();
+                makeActualTable();
             } else {
 
                 deliveryErrorLabel.setVisible(true);
@@ -1380,58 +1403,92 @@ public class EODTab extends javax.swing.JFrame {
 
     }
 
-    public class checkSales implements TableModelListener {
-
-        @Override
-        public void tableChanged(TableModelEvent tme) {
-            String s = "sales";
-            String comp = "compliment";
-            int row = tme.getFirstRow();
-            int column = tme.getColumn();
-            DefaultTableModel model = (DefaultTableModel) tme.getSource();
-            Object data = model.getValueAt(row, column);
-            if (column == 2) {
-
-                if (previouslyChanged(s, row)) {
-                    record old = new record();
-                    totalSales = totalSales - old.findOld(s, row);
-                    totalSales = totalSales + Float.parseFloat(model.getValueAt(row, column).toString());
-                    getSalesTotal(totalSales, column);
-                    old.replaceOld(s, row, Float.parseFloat(model.getValueAt(row, column).toString()));
-                } else {
-                    record old = new record();
-                    old.setType(s);
-                    old.setRow(row);
-                    old.setX(Float.parseFloat(model.getValueAt(row, column).toString()));
-                    oldA.add(old);
-                    totalSales = totalSales + Float.parseFloat(model.getValueAt(row, column).toString());
-                    getSalesTotal(totalSales, column);
-                }
-
-            } else if (column == 3) {
-
-                if (previouslyChanged(comp, row)) {
-                    record old = new record();
-                    totalComp = totalComp - old.findOld(comp, row);
-                    totalComp = totalComp + Float.parseFloat(model.getValueAt(row, column).toString());
-                    getSalesTotal(totalComp, column);
-                    old.replaceOld(comp, row, Float.parseFloat(model.getValueAt(row, column).toString()));
-                } else {
-                    record old = new record();
-                    old.setType(comp);
-                    old.setRow(row);
-                    old.setX(Float.parseFloat(model.getValueAt(row, column).toString()));
-                    oldA.add(old);
-                    totalComp = totalComp + Float.parseFloat(model.getValueAt(row, column).toString());
-                    getSalesTotal(totalComp, column);
-                }
-
-            }
-
+    public class checkSales implements PropertyChangeListener, Runnable {
+        
+        JTable table;
+        Action action;
+        int row;
+        int col;
+        Object oldVal;
+        Object newVal;
+        
+        public checkSales(JTable table, Action action) {
+            
+            this.table = table;
+            this.action = action;
+            this.table.addPropertyChangeListener(this);
+            
         }
-
+        
+        private checkSales(JTable table, int row, int col, Object oldV, Object newV) {
+            
+            this.table = table;
+            this.row = row;
+            this.col = col;
+            this.oldVal = oldV;
+            this.newVal = newV;
+            
+        }
+        
+        public JTable getTable() {
+            return table;
+        }
+        
+        public int getRow() {
+            return row;
+        }
+        
+        public int getCol() {
+            return col;
+        }
+        
+        public Object getOldVal() {
+            return oldVal;
+        }
+        
+        public Object getNewVal() {
+            return newVal;
+        }
+        
+        @Override
+        public void propertyChange(PropertyChangeEvent e) {
+            
+            if("tableCellEditor".equals(e.getPropertyName())) {
+                
+            }
+            
+        }
+        
+        public void editingStarted() {
+            SwingUtilities.invokeLater(this);
+        }
+        
+        public void editingStopped() {
+            
+            if(!newVal.equals(oldVal)) {
+                
+                checkSales s = new checkSales(getTable(), getRow(), getCol(), getOldVal(), getNewVal());
+                ActionEvent event = new ActionEvent(s, ActionEvent.ACTION_PERFORMED, "");
+                action.actionPerformed(event);
+                if(col == 2) {
+                    totalSales = totalSales - Float.parseFloat(oldVal.toString()) + Float.parseFloat(newVal.toString());
+                    getSalesTotal(totalSales, col);
+                }
+                else if(col == 3) {
+                    totalComp = totalComp - Float.parseFloat(oldVal.toString()) + Float.parseFloat(newVal.toString());
+                    getSalesTotal(totalComp, col);
+                }
+            }
+            
+        }
+        
+        @Override
+        public void run() {
+            
+        }
+        
     }
-
+    
     public void getSalesTotal(float add, int type) {
         if (type == 2) {
             this.salesTotalLabel.setText("Sales Total: " + add);
@@ -1659,7 +1716,7 @@ public class EODTab extends javax.swing.JFrame {
          */
         /* ONE CLICK EDIT */
         deditor.setClickCountToStart(1);
-        recipeModel.addTableModelListener(new checkSales());
+        //recipeModel.addTableModelListener(new checkSales());
     }
 
     /**
