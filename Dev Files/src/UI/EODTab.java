@@ -89,7 +89,8 @@ public class EODTab extends javax.swing.JFrame {
     ArrayList<TransactionBean> aTransact;
     ArrayList<RawBean> aRaw;
     private ArrayList<RecipeBean> avRecipes;
-
+	ArrayList<RawBean> actualList = new ArrayList<RawBean>();
+	
     // OTHERS
     private EODTab main;
     private String date;
@@ -793,6 +794,15 @@ public class EODTab extends javax.swing.JFrame {
                 if (JOptionPane.showConfirmDialog(null, "Are you sure you're done for the day?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     nextDay(nextDate);
                     ViewAllStatus();
+					
+					/* <!-- KIM'S CODE STARTS HERE --> */
+					/* CHANGES RAW STOCK TO ACTUAL COUNT INPUT */
+					
+					for (RawBean r : actualList) {
+						rmImp.editRaw(r);
+					}
+					/* <!-- KIM'S CODE ENDS HERE --> */
+					
                     JOptionPane.showMessageDialog(null, "Tomorrow's date is " + nextDate, "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
             } else if (!getDateXML().equals(nextDate) && !getDateXML().equals(curDate)) {
@@ -831,7 +841,8 @@ public class EODTab extends javax.swing.JFrame {
                     float newRaw = Float.parseFloat(inputTable.getValueAt(r, 3).toString());
                     raw.setStock(newRaw);
                     rmImp.editRaw(raw);
-
+					actualList.add(raw);
+					
                 }
 
                 if (getValueXML("Actual").equals("0")) {
