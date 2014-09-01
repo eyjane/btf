@@ -89,7 +89,12 @@ public class addIngredient extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        rawTable = new javax.swing.JTable();
+        rawTable = new javax.swing.JTable(){
+            @Override
+            public boolean isCellEditable(int r, int c){
+                return false;
+            }
+        };
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         nameLabel = new javax.swing.JLabel();
@@ -160,7 +165,7 @@ public class addIngredient extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 90, 590, 140));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ingredient Info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Quicksand Light", 0, 18), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ingredient Info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Quicksand Light", 0, 18))); // NOI18N
         jPanel2.setOpaque(false);
 
         jLabel4.setFont(new java.awt.Font("Quicksand Light", 0, 14)); // NOI18N
