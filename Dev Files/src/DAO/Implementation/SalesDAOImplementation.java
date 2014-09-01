@@ -125,7 +125,7 @@ public class SalesDAOImplementation implements SalesDAOInterface {
         try {
             dBConnectionFactory = DBConnectionFactory.getInstance();
             connection = dBConnectionFactory.getConnection();
-            String query = "select distinct r.recipeID, recipe, sd.cost, stock, rcstatus, categoryID, ordernum "
+            String query = "select distinct r.recipeID, recipe, sd.cost, rcstatus, categoryID, ordernum "
                     + "from sales s, sold sd, recipe r "
                     + "where r.recipeID = sd.recipeID and s.salesID = sd.salesID and sales_date = ? "
                     + "order by 2;";
