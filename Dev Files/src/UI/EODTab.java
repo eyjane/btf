@@ -89,8 +89,8 @@ public class EODTab extends javax.swing.JFrame {
     ArrayList<TransactionBean> aTransact;
     ArrayList<RawBean> aRaw;
     private ArrayList<RecipeBean> avRecipes;
-    ArrayList<RawBean> actualList = new ArrayList<RawBean>();
-
+	ArrayList<RawBean> actualList = new ArrayList<RawBean>();
+	
     // OTHERS
     private EODTab main;
     private String date;
@@ -843,7 +843,8 @@ public class EODTab extends javax.swing.JFrame {
                     float newRaw = Float.parseFloat(inputTable.getValueAt(r, 3).toString());
                     raw.setStock(newRaw);
                     rmImp.editRaw(raw);
-                    actualList.add(raw);
+					actualList.add(raw);
+					
                 }
 
                 if (getValueXML("Actual").equals("0")) {
@@ -913,7 +914,7 @@ public class EODTab extends javax.swing.JFrame {
                         // REDUCE FROM RAW TABLE
                         raw = rmImp.getRaw(id);
                         float deduct = raw.getStock() - q;
-						raw.setStock(deduct);
+                        raw.setStock(deduct);
                         rmImp.editRaw(raw);
 
 						// ADD TRANSACTION
