@@ -890,7 +890,7 @@ is divided into following sections:
     </target>
     <target depends="init,-deps-jar-init" name="deps-jar" unless="no.deps">
         <mkdir dir="${build.dir}"/>
-        <touch file="${built-jar.properties}" verbose="false"/>
+        <touch file="${built-jar.properties}" verbose="false" mkdirs="true"/>
         <property file="${built-jar.properties}" prefix="already.built.jar."/>
         <antcall target="-warn-already-built-jar"/>
         <propertyfile file="${built-jar.properties}">
