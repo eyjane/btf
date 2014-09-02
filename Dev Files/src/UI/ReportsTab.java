@@ -253,10 +253,7 @@ public class ReportsTab extends javax.swing.JFrame {
 
         salesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Name", "Beginning", "Delivery", "Sales", "Wastages", "EOD", "Variance"
@@ -290,7 +287,7 @@ public class ReportsTab extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(btnExportSales, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -298,10 +295,7 @@ public class ReportsTab extends javax.swing.JFrame {
 
         expensesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "Name", "Amount"
@@ -339,7 +333,7 @@ public class ReportsTab extends javax.swing.JFrame {
         );
         expensesPanelLayout.setVerticalGroup(
             expensesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 178, Short.MAX_VALUE)
+            .addGap(0, 185, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -350,7 +344,7 @@ public class ReportsTab extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(expensesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnExportExpenses, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -372,10 +366,7 @@ public class ReportsTab extends javax.swing.JFrame {
 
         grossIncomeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "Name", "Amount"
@@ -413,7 +404,7 @@ public class ReportsTab extends javax.swing.JFrame {
         );
         grossPanelLayout.setVerticalGroup(
             grossPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 178, Short.MAX_VALUE)
+            .addGap(0, 181, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -424,7 +415,7 @@ public class ReportsTab extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(grossPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnExportGrossIncome, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -433,7 +424,7 @@ public class ReportsTab extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addComponent(btnExportGrossIncome, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -446,10 +437,7 @@ public class ReportsTab extends javax.swing.JFrame {
 
         netIncomeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "Name", "Amount"
@@ -487,7 +475,7 @@ public class ReportsTab extends javax.swing.JFrame {
         );
         netIncomePanelLayout.setVerticalGroup(
             netIncomePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 178, Short.MAX_VALUE)
+            .addGap(0, 181, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -500,7 +488,7 @@ public class ReportsTab extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnExportNetIncome, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
                     .addComponent(netIncomePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -513,17 +501,14 @@ public class ReportsTab extends javax.swing.JFrame {
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(netIncomePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         reportsPane.addTab("NET INCOME", jPanel3);
 
         varianceTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Name", "Beginning", "Delivery", "Sales", "Wastages", "EOD", "Variance"
@@ -556,7 +541,7 @@ public class ReportsTab extends javax.swing.JFrame {
                 .addGroup(variancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(variancePanelLayout.createSequentialGroup()
                         .addGap(51, 51, 51)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 857, Short.MAX_VALUE))
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE))
                     .addGroup(variancePanelLayout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -575,7 +560,7 @@ public class ReportsTab extends javax.swing.JFrame {
                         .addComponent(varianceDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnExportVariance, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -629,14 +614,14 @@ public class ReportsTab extends javax.swing.JFrame {
                             .addComponent(dateError))
                         .addGap(18, 18, 18)
                         .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 422, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                         .addComponent(generateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addGap(0, 5, Short.MAX_VALUE)
+                .addGap(0, 11, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(generateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -751,8 +736,11 @@ public class ReportsTab extends javax.swing.JFrame {
         String date = t.format(sDate) + " to " + t.format(eDate);
 
         //DateItem date = (DateItem) dateCombo.getSelectedItem();
-        checkExcelExist(expensesTable, path, date, "Expenses");
-        exportChart(expChart, path, "Expenses", 442, 310);
+        if(expensesTable.getModel().getRowCount() > 0) {
+            checkExcelExist(expensesTable, path, date, "Expenses");
+            exportChart(expChart, path, "Expenses", 442, 310);
+        } else 
+            JOptionPane.showMessageDialog(null, "Please generate a report first.");
     }//GEN-LAST:event_btnExportExpensesActionPerformed
 
     private void btnExportGrossIncomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportGrossIncomeActionPerformed
@@ -764,8 +752,11 @@ public class ReportsTab extends javax.swing.JFrame {
         String date = t.format(sDate) + " to " + t.format(eDate);
 
         //DateItem date = (DateItem) dateCombo.getSelectedItem();
-        checkExcelExist(grossIncomeTable, path, date, "Gross");
-        exportChart(giChart, path, "Gross", 442, 310);
+        if(grossIncomeTable.getModel().getRowCount() > 0) {
+            checkExcelExist(grossIncomeTable, path, date, "Gross");
+            exportChart(giChart, path, "Gross", 442, 310);
+        } else
+            JOptionPane.showMessageDialog(null, "Please generate a report first.");
     }//GEN-LAST:event_btnExportGrossIncomeActionPerformed
 
     private void btnExportNetIncomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportNetIncomeActionPerformed
@@ -777,8 +768,11 @@ public class ReportsTab extends javax.swing.JFrame {
         String date = t.format(sDate) + " to " + t.format(eDate);
 
         //DateItem date = (DateItem) dateCombo.getSelectedItem();
-        checkExcelExist(netIncomeTable, path, date, "Net");
-        exportChart(netChart, path, "Net", 442, 310);
+        if(netIncomeTable.getModel().getRowCount() > 0) {
+            checkExcelExist(netIncomeTable, path, date, "Net");
+            exportChart(netChart, path, "Net", 442, 310);
+        } else
+            JOptionPane.showMessageDialog(null, "Please generate a report first.");
     }//GEN-LAST:event_btnExportNetIncomeActionPerformed
 
     private void btnExportVarianceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportVarianceActionPerformed
@@ -792,7 +786,10 @@ public class ReportsTab extends javax.swing.JFrame {
         String date = t.format(sDate) + " to " + t.format(eDate);
 
         //DateItem date = (DateItem) dateCombo.getSelectedItem();
-        checkExcelExist(varianceTable, path, date, "Variance");
+        if(varianceTable.getModel().getRowCount() > 0)
+            checkExcelExist(varianceTable, path, date, "Variance");
+        else 
+            JOptionPane.showMessageDialog(null, "Please generate a report first.");
        //exportChart(netChart, path, "Variance", 442, 310);
 
         //DateItem date = (DateItem) dateCombo.getSelectedItem();
@@ -917,7 +914,10 @@ public class ReportsTab extends javax.swing.JFrame {
         String date = t.format(sDate) + " to " + t.format(eDate);
 
         //DateItem date = (DateItem) dateCombo.getSelectedItem();
-        checkExcelExist(salesTable, path, date, "Sales");
+        if(salesTable.getModel().getRowCount() > 0)
+            checkExcelExist(salesTable, path, date, "Sales");
+        else 
+            JOptionPane.showMessageDialog(null, "Please generate a report first.");
     }//GEN-LAST:event_btnExportSalesActionPerformed
 
     private void endDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDateActionPerformed
@@ -1009,15 +1009,23 @@ public class ReportsTab extends javax.swing.JFrame {
             Sheet sheet = wb.getSheet(reportName);
             CellRangeAddress merge = sheet.getMergedRegion(sheet.getNumMergedRegions() - 1);
             int c1 = merge.getLastColumn() + 1;
+            if(!reportName.equalsIgnoreCase("Sales") && !reportName.equalsIgnoreCase("Variance"))
+                c1 = merge.getLastColumn() + 6;
             int c2;
             Row row = sheet.getRow(3);
             if (reportName.equalsIgnoreCase("Sales")) {
-                c2 = c1 + salesTable.getColumnCount();
-            } else {
+                c2 = c1 + salesTable.getColumnCount() - 3;
+                System.out.println(c2);
+                sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
+            } else if (reportName.equalsIgnoreCase("Variance")){
                 c2 = c1 + 7;
+                System.out.println("CHECK");
+                sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
+            } else {
+                c2 = c1 + 1;
+                System.out.println("CHECK");
+                sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
             }
-
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
 
             CellStyle style = wb.createCellStyle();
             style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
@@ -1034,7 +1042,7 @@ public class ReportsTab extends javax.swing.JFrame {
 
             Row headerRow = sheet.getRow(1);
 
-            if (reportName.equals("Variance") || reportName.equals("Sales")) {
+            if (reportName.equalsIgnoreCase("Variance") || reportName.equalsIgnoreCase("Sales")) {
                 for (int headings = 2; headings < model.getColumnCount(); headings++) {
                     headerRow.createCell(headings + c1 - 2).setCellValue(model.getColumnName(headings));
                 }
@@ -1043,6 +1051,10 @@ public class ReportsTab extends javax.swing.JFrame {
                     for (int cols = 2; cols < table.getColumnCount(); cols++) {
                         sheet.setColumnWidth(cols + c1 - 1, 3000);
                         String text = model.getValueAt(rows, cols).toString();
+                        
+                        System.out.println(cols);
+                        System.out.println(c1);
+                        System.out.println(cols+c1-2) ;
                         Cell cell = row.createCell(cols + c1 - 2);
                         cell.setCellValue(text);
                     }
@@ -1057,6 +1069,8 @@ public class ReportsTab extends javax.swing.JFrame {
                 for (int rows = 0; rows < model.getRowCount(); rows++) {
                     for (int cols = 0; cols < table.getColumnCount(); cols++) {
                         sheet.setColumnWidth(cols + c1, 3000);
+                        System.out.println(cols);
+                        System.out.println(rows);
                         String text = model.getValueAt(rows, cols).toString();
                         Cell cell = row.createCell(cols + c1);
                         cell.setCellValue(text);
@@ -1100,7 +1114,7 @@ public class ReportsTab extends javax.swing.JFrame {
             Sheet sheet = wb.getSheet(reportName);
             int r = sheet.getLastRowNum();
             CellRangeAddress merge = sheet.getMergedRegion(sheet.getNumMergedRegions() - 1);
-            int c1 = merge.getLastColumn() - 7;
+            int c1 = merge.getLastColumn() - 1;
             Row row = sheet.getRow(r);
 
             ByteArrayOutputStream chart_out = new ByteArrayOutputStream();
