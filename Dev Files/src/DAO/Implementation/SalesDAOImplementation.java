@@ -158,6 +158,47 @@ public class SalesDAOImplementation implements SalesDAOInterface {
     }
 
     @Override
+    public ArrayList<RecipeBean> getAllSales(String d, String type) {
+        IngredientDAOInterface inImp = new IngredientDAOImplementation();
+        ArrayList<RecipeBean> aRecipe = new ArrayList<RecipeBean>();
+
+        try {
+            dBConnectionFactory = DBConnectionFactory.getInstance();
+            connection = dBConnectionFactory.getConnection();
+            String query = "select distinct r.recipeID, recipe, sd.cost, rcstatus, categoryID, ordernum "
+                    + "from sales s, sold sd, recipe r "
+                    + "where r.recipeID = sd.recipeID and s.salesID = sd.salesID and sales_date = ? and sales_type = ?"
+                    + "order by 2;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, d);
+            preparedStatement.setString(2, type);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                RecipeBean r = new RecipeBean();
+                ArrayList<IngredientBean> ingredients = new ArrayList<IngredientBean>();
+                r.setRecipeID(resultSet.getInt("r.recipeID"));
+                r.setRecipe(resultSet.getString("recipe"));
+                r.setCost(resultSet.getFloat("sd.cost"));
+                r.setRcstatus(resultSet.getString("rcstatus"));
+                r.setCategory(resultSet.getInt("categoryID"));
+
+                ingredients = inImp.getIngredientsBydate(r, d);
+                r.setIngredients(ingredients);
+                
+                aRecipe.add(r);
+            }
+
+            connection.close();
+            return aRecipe;
+        } catch (SQLException ex) {
+            Logger.getLogger(SalesDAOImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return aRecipe;
+
+    }
+    
+    @Override
     public float getSalesByRecipeByDay(RecipeBean r, String d) {
         try {
             float s = 0;

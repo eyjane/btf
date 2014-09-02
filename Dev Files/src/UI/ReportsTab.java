@@ -887,6 +887,9 @@ public class ReportsTab extends javax.swing.JFrame {
         LocalDate end = new LocalDate(eDate);
         if (start.isBefore(end) || start.isEqual(end)) { // CHECK IF START IS <== END
 
+            expensesPanel.removeAll();
+            grossPanel.removeAll();
+            netIncomePanel.removeAll();
             GITable();
             giChart = makeGIChart();
             expTable();
@@ -1210,11 +1213,15 @@ public class ReportsTab extends javax.swing.JFrame {
                 total = total + sImp.getExpensesByRecipeByDay(r, sumDate);
 
             }
-
-            Object[] data = {date.toString(dispFmt), total};
-            actualTable.addRow(data);
-            expensesTable.setModel(actualTable);
-            adjustTable(expensesTable);
+            if(total > 0) {
+            
+                Object[] data = {date.toString(dispFmt), total};
+                actualTable.addRow(data);
+                expensesTable.setModel(actualTable);
+                adjustTable(expensesTable);
+                
+            }
+            
 
         }
     }
@@ -1273,18 +1280,22 @@ public class ReportsTab extends javax.swing.JFrame {
 
         for (LocalDate date = new LocalDate(start); date.isBefore(end) || date.isEqual(end); date = date.plusDays(1)) {
             String sumDate = date.toString(compFmt);
-            aSales = sImp.getAllSales(sumDate);
+            aSales = sImp.getAllSales(sumDate, "sales");
             float total = 0;
             for (RecipeBean sale : aSales) {
-
+                
                 r = rcImp.getRecipeBean(sale.getRecipeID());
                 total = total + sImp.getSalesByRecipeByDay(r, sumDate);
+                
             }
-            // FILL TABLE
-            Object[] data = {date.toString(dispFmt), total};
-            actualTable.addRow(data);
-            grossIncomeTable.setModel(actualTable);
-            adjustTable(grossIncomeTable);
+            if(total > 0) {
+                
+                Object[] data = {date.toString(dispFmt), total};
+                actualTable.addRow(data);
+                grossIncomeTable.setModel(actualTable);
+                adjustTable(grossIncomeTable);
+                
+            }
 
         }
 
@@ -1342,7 +1353,7 @@ public class ReportsTab extends javax.swing.JFrame {
         for (LocalDate date = new LocalDate(start); date.isBefore(end) || date.isEqual(end); date = date.plusDays(1)) {
 
             String sumDate = date.toString(compFmt);
-            aSales = sImp.getAllSales(sumDate);
+            aSales = sImp.getAllSales(sumDate, "sales");
             float total = 0;
 
             for (RecipeBean sale : aSales) {
@@ -1352,11 +1363,15 @@ public class ReportsTab extends javax.swing.JFrame {
 
             }
 
-            Object[] data = {date.toString(dispFmt), total};
-            actualTable.addRow(data);
-            netIncomeTable.setModel(actualTable);
-            adjustTable(netIncomeTable);
-
+            if(total > 0) {
+                
+                Object[] data = {date.toString(dispFmt), total};
+                actualTable.addRow(data);
+                netIncomeTable.setModel(actualTable);
+                adjustTable(netIncomeTable);
+            
+            }
+            
         }
 
     }

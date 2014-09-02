@@ -23,6 +23,9 @@ public interface SalesDAOInterface {
     public ArrayList<RecipeBean> getAllSales(String d);
     //gets the recipeBean in order
 
+    public ArrayList<RecipeBean> getAllSales(String d, String type);
+    // gets recipeBean in sales by type (sales or compliment)
+    
     public float getSalesByRecipeByDay(RecipeBean r, String d);
     //gets quantity of sales * cost (for one recipe only)
 
