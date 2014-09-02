@@ -1006,14 +1006,20 @@ public class ReportsTab extends javax.swing.JFrame {
             Sheet sheet = wb.getSheet(reportName);
             CellRangeAddress merge = sheet.getMergedRegion(sheet.getNumMergedRegions() - 1);
             int c1 = merge.getLastColumn() + 1;
+            if(!reportName.equalsIgnoreCase("Sales") && !reportName.equalsIgnoreCase("Variance"))
+                c1 = merge.getLastColumn() + 6;
             int c2;
             Row row = sheet.getRow(3);
             if (reportName.equalsIgnoreCase("Sales")) {
                 c2 = c1 + salesTable.getColumnCount() - 3;
                 System.out.println(c2);
                 sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
-            } else {
+            } else if (reportName.equalsIgnoreCase("Variance")){
                 c2 = c1 + 7;
+                System.out.println("CHECK");
+                sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
+            } else {
+                c2 = c1 + 1;
                 System.out.println("CHECK");
                 sheet.addMergedRegion(new CellRangeAddress(0, 0, c1, c2));
             }
@@ -1042,6 +1048,10 @@ public class ReportsTab extends javax.swing.JFrame {
                     for (int cols = 2; cols < table.getColumnCount(); cols++) {
                         sheet.setColumnWidth(cols + c1 - 1, 3000);
                         String text = model.getValueAt(rows, cols).toString();
+                        
+                        System.out.println(cols);
+                        System.out.println(c1);
+                        System.out.println(cols+c1-2) ;
                         Cell cell = row.createCell(cols + c1 - 2);
                         cell.setCellValue(text);
                     }
@@ -1056,6 +1066,8 @@ public class ReportsTab extends javax.swing.JFrame {
                 for (int rows = 0; rows < model.getRowCount(); rows++) {
                     for (int cols = 0; cols < table.getColumnCount(); cols++) {
                         sheet.setColumnWidth(cols + c1, 3000);
+                        System.out.println(cols);
+                        System.out.println(rows);
                         String text = model.getValueAt(rows, cols).toString();
                         Cell cell = row.createCell(cols + c1);
                         cell.setCellValue(text);
